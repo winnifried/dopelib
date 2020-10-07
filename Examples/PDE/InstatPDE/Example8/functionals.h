@@ -33,12 +33,21 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, HP,
+  VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
+#endif
 {
   double lame_coefficient_mu_, lame_coefficient_lambda_;
 
@@ -67,7 +76,11 @@ public:
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
+#else
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

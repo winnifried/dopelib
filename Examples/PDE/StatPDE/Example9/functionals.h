@@ -37,12 +37,21 @@ using namespace DOpE;
 /**
  * This functional evaluates the first displacement component at (2,1).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, HP, VECTOR,
+  dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dealdim>
+#endif
 {
 public:
   LocalPointFunctionalX()
@@ -51,12 +60,17 @@ public:
   }
 
   double
-  PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> &
-             /*control_dof_handler*/,
-             const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-             const std::map<std::string, const dealii::Vector<double>*> &
-             /*param_values*/,
-             const std::map<std::string, const VECTOR *> &domain_values)
+  PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+     const DOpEWrapper::DoFHandler<dealdim> &/*control_dof_handler*/,
+     const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
+     const DOpEWrapper::DoFHandler<dealdim, DH> &/*control_dof_handler*/,
+     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
+     const std::map<std::string, const dealii::Vector<double>*> &
+     /*param_values*/,
+     const std::map<std::string, const VECTOR *> &domain_values)
   {
     const dealii::Point<2> p1(2.0, 1.0);
 
@@ -94,12 +108,21 @@ public:
  * This functional evaluates the flux over the outflow boundary.
  */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalBoundaryFluxFunctional : public FunctionalInterface<EDC, FDC, HP,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalBoundaryFluxFunctional : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 public:
   LocalBoundaryFluxFunctional()
@@ -108,7 +131,11 @@ public:
   }
 
   double
-  BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
+#else
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     const unsigned int color = fdc.GetBoundaryIndicator();
     //auto = FEValues

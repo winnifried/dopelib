@@ -46,11 +46,16 @@ public:
    * used after the first grid generation.
    *
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  virtual void
+  SetActiveFEIndexState(
+    typename dealii::DoFHandler<dealdim>::active_cell_iterator &element) const
+#else
   virtual void
   SetActiveFEIndexState(
     typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &element) const
+#endif
   {
-
     if (element->center()[0] < 0)
       element->set_active_fe_index(0);
     else
@@ -59,5 +64,4 @@ public:
 
 };
 
-#endif /* INDEXSETT
-ER_H_ */
+#endif /* INDEXSETTER_H_ */

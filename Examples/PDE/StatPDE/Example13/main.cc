@@ -67,9 +67,14 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -81,7 +86,7 @@ typedef Vector<double> VECTOR;
 //Second number denotes the number of unknowns per element (the blocksize we want to use)
 typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,4> PRECONDITIONERSSOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
         VECTOR, DIM> IDC;
@@ -160,11 +165,11 @@ main(int argc, char **argv)
   //**************************************************************************
 
   //Functionals*************************************************
-  MeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF;
+  MeanValueFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> MVF;
   //*************************************************
 
   //pde*************************************************
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -231,6 +236,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

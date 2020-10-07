@@ -91,9 +91,14 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 
@@ -105,18 +110,18 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 #define TSP CrankNicolsonProblem
 #define DTSP CrankNicolsonProblem
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN,
         VECTOR, DIM> OP;
 #undef TSP
@@ -161,9 +166,9 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   NonHomoDirichletData::declare_params(pr);
-  LocalBoundaryFunctionalStressX<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
+  LocalBoundaryFunctionalStressX<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
     pr);
   pr.read_parameters(paramfile);
 
@@ -188,11 +193,11 @@ main(int argc, char **argv)
 
   /*********************************************************************************/
   // Defining the specific PDE
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
   /*********************************************************************************/
   // Defining goal functional
-  LocalBoundaryFunctionalStressX<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFSX(pr);
+  LocalBoundaryFunctionalStressX<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFSX(pr);
 
 
   /*********************************************************************************/
@@ -320,7 +325,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

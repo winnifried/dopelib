@@ -72,9 +72,14 @@ using namespace DOpE;
 // Define dimensions for control- and state problem
 const static int DIM = 1;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -83,15 +88,15 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-//typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
+//typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 // Typedefs for timestep problem
 
@@ -108,27 +113,27 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 #define DTSP5 FractionalStepThetaProblem
 
 typedef InstatPDEProblemContainer<TSP1, DTSP1,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP1;
 typedef InstatPDEProblemContainer<TSP2, DTSP2,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP2;
 typedef InstatPDEProblemContainer<TSP3, DTSP3,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP3;
 typedef InstatPDEProblemContainer<TSP4, DTSP4,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP4;
 typedef InstatPDEProblemContainer<TSP5, DTSP5,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP5;
@@ -214,8 +219,8 @@ main(int argc, char **argv)
 
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
 
   //Time grid of [0,1]
   Triangulation<1> times;
@@ -224,7 +229,7 @@ main(int argc, char **argv)
   triangulation.refine_global(4);
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times);
-
+  
   OP1 P1(LPDE, DOFH);
   OP2 P2(LPDE, DOFH);
   OP3 P3(LPDE, DOFH);
@@ -415,7 +420,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

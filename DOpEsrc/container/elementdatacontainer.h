@@ -40,6 +40,21 @@ using namespace dealii;
 
 namespace DOpE
 {
+#if DEAL_II_VERSION_GTE(9,3,0)
+  /**
+   * Dummy Template Class, acts as kind of interface.
+   * Through template specialization for DH, we
+   * distinguish between the 'classic' and the 'hp' case.
+   *
+   * @template HP         false for normal DoFHandler true for HP.
+   * @template VECTOR     Type of the vector we use in our computations
+   *                      (i.e. Vector<double> or BlockVector<double>)
+   * @template dim        The dimension of the integral we are actually
+   *                      interested in.
+   */
+
+  template<bool HP, typename VECTOR, int dim>
+#else
   /**
    * Dummy Template Class, acts as kind of interface.
    * Through template specialization for DH, we
@@ -55,7 +70,8 @@ namespace DOpE
    */
 
   template<template<int, int> class DH, typename VECTOR, int dim>
-  class ElementDataContainer : public edcinternal::ElementDataContainerInternal<
+#endif
+    class ElementDataContainer : public edcinternal::ElementDataContainerInternal<
     VECTOR, dim>
   {
   public:
@@ -63,7 +79,11 @@ namespace DOpE
     {
       throw (DOpE::DOpEException(
                "Dummy class, this constructor should never get called.",
-               "ElementDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::ElementDataContainer"));
+#if DEAL_II_VERSION_GTE(9,3,0)
+	       "ElementDataContainer<HP , VECTOR, dim>::ElementDataContainer"));
+#else
+	       "ElementDataContainer<DH , VECTOR, dim>::ElementDataContainer"));
+#endif
     }
   };
 
@@ -77,8 +97,11 @@ namespace DOpE
    */
 
   template<typename VECTOR, int dim>
-  class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
-    VECTOR, dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+    class ElementDataContainer<false, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+#else
+    class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+#endif
   {
 
   public:
@@ -106,7 +129,11 @@ namespace DOpE
     template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
     ElementDataContainer(const Quadrature<dim> &quad,
                          UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         SpaceTimeHandler<FE, false, SPARSITYPATTERN, VECTOR,
+#else
                          SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
+#endif
                          dopedim, dealdim>& sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
@@ -150,7 +177,11 @@ namespace DOpE
     template<template<int, int> class FE, typename SPARSITYPATTERN>
     ElementDataContainer(const Quadrature<dim> &quad,
                          UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         StateSpaceTimeHandler<FE, false, SPARSITYPATTERN,
+#else
                          StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
+#endif
                          VECTOR, dim>& sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
@@ -229,179 +260,13 @@ namespace DOpE
     unsigned int n_dofs_per_element_;
   };
 
-  /*****************************************************************/
-  /* MGDofHandler */
-//
-//
-//  /**
-//   * This two classes hold all the information we need in the integrator to
-//   * integrate something over a element (could be a functional, a PDE, etc.).
-//   * Of particular importance: This class holds the FEValues objects.
-//   *
-//   * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
-//   * @template dim        The dimension of the integral we are actually interested in.
-//   */
-//
-//  template<typename VECTOR, int dim>
-//    class ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
-//        VECTOR, dim>
-//    {
-//
-//      public:
-//        /**
-//         * Constructor. Initializes the FEValues objects.
-//         *
-//         * @template FE                   Type of the finite element in use. Must be compatible with dealii::DofHandler. //TODO Should we fix this?
-//         * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
-//         * @template dopedim              The dimension of the control variable.
-//         * @template dealdim              The dimension of the state variable.
-//         *
-//         * @param quad                    Reference to the quadrature-rule which we use at the moment.
-//         * @param update_flags            The update flags we need to initialize the FEValues obejcts
-//         * @param sth                     A reference to the SpaceTimeHandler in use.
-//         * @param element                    A vector of element iterators through which we gain most of the needed information (like
-//         *                                material_ids, n_dfos, etc.)
-//         * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
-//         *                                is done by parameters, it is contained in this map at the position "control".
-//         * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-//         *                                is distributed, it is contained in this map at the position "control". The state may always
-//         *                                be found in this map at the position "state"
-//         *
-//         */
-//      template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-//          ElementDataContainer(
-//              const Quadrature<dim>& quad,
-//              UpdateFlags update_flags,
-//              SpaceTimeHandler<FE, dealii::MGDoFHandler, SPARSITYPATTERN,
-//                  VECTOR, dopedim, dealdim>& sth
-//              ,
-//              const std::vector<
-//                  typename dealii::MGDoFHandler<dim>::active_cell_iterator>& element,
-//              const std::map<std::string, const Vector<double>*> &param_values,
-//              const std::map<std::string, const VECTOR*> &domain_values)
-//              : edcinternal::ElementDataContainerInternal<VECTOR, dim>(
-//                  param_values, domain_values), element_(element), state_fe_values_(
-//                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
-//                  update_flags), control_fe_values_(sth.GetMapping(),
-//                  (sth.GetFESystem("control")), quad, update_flags)
-//                  {
-//                    state_index_ = sth.GetStateIndex();
-//                    if (state_index_ == 1)
-//                    control_index_ = 0;
-//                    else
-//                    control_index_ = 1;
-//                    n_q_points_per_element_ = quad.size();
-//                    n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
-//                  }
-//
-//
-//
-//
-//
-//                  /**
-//                   * Constructor. Initializes the FEValues objects. When only a PDE is used.
-//                   *
-//                   * @template FE                   Type of the finite element in use.
-//                   * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
-//                   *
-//                   * @param quad                    Reference to the quadrature-rule which we use at the moment.
-//                   * @param update_flags            The update flags we need to initialize the FEValues obejcts
-//                   * @param sth                     A reference to the SpaceTimeHandler in use.
-//                   * @param element                    A vector of element iterators through which we gain most of the needed information (like
-//                   *                                material_ids, n_dfos, etc.)
-//                   * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
-//                   *                                is done by parameters, it is contained in this map at the position "control".
-//                   * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-//                   *                                is distributed, it is contained in this map at the position "control". The state may always
-//                   *                                be found in this map at the position "state"
-//                   *
-//                   */
-//                  template<template<int, int> class FE, typename SPARSITYPATTERN>
-//            ElementDataContainer(const Quadrature<dim>& quad,
-//                UpdateFlags update_flags,
-//                StateSpaceTimeHandler<FE, dealii::MGDoFHandler,
-//                SPARSITYPATTERN, VECTOR, dim>& sth,
-//                const std::vector<
-//                typename dealii::MGDoFHandler<dim>::active_cell_iterator>& element,
-//                const std::map<std::string, const Vector<double>*> &param_values,
-//              const std::map<std::string, const VECTOR*> &domain_values)
-//              : edcinternal::ElementDataContainerInternal<VECTOR, dim>(
-//                  param_values, domain_values), element_(element), state_fe_values_(
-//                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
-//                  update_flags), control_fe_values_(sth.GetMapping(),
-//                  (sth.GetFESystem("state")), quad, update_flags)
-//          {
-//            state_index_ = sth.GetStateIndex();
-//            control_index_ = element.size(); //Make sure they are never used ...
-//            n_q_points_per_element_ = quad.size();
-//            n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
-//          }
-//
-//
-//        ~ElementDataContainer()
-//        {
-//        }
-//        /*********************************************/
-//        /*
-//         * This function reinits the FEValues on the actual element. Should
-//         * be called prior to any of the get-functions.
-//         */
-//        inline void
-//        ReInit();
-//
-//        /*********************************************/
-//        /**
-//         * Get functions to extract data. They all assume that ReInit
-//         * is executed before calling them. Self explanatory.
-//         */
-//        inline unsigned int
-//        GetNDoFsPerElement() const;
-//        inline unsigned int
-//        GetNQPoints() const;
-//        inline unsigned int
-//        GetMaterialId() const;
-//        inline unsigned int
-//        GetNbrMaterialId(unsigned int face) const;
-//        inline unsigned int
-//        GetFaceBoundaryIndicator(unsigned int face) const;
-//        inline bool
-//        GetIsAtBoundary() const;
-//        inline double
-//        GetElementDiameter() const;
-//        inline Point<dim> GetCenter() const;
-//        inline const DOpEWrapper::FEValues<dim>&
-//        GetFEValuesState() const;
-//        inline const DOpEWrapper::FEValues<dim>&
-//        GetFEValuesControl() const;
-//      private:
-//        /*
-//         * Helper Functions
-//         */
-//        unsigned int
-//        GetStateIndex() const;
-//        unsigned int
-//        GetControlIndex() const;
-//
-//        /***********************************************************/
-//        //"global" member data, part of every instantiation
-//        unsigned int state_index_;
-//        unsigned int control_index_;
-//
-//        const std::vector<typename dealii::MGDoFHandler<dim>::active_cell_iterator> & element_;
-//        DOpEWrapper::FEValues<dim> state_fe_values_;
-//        DOpEWrapper::FEValues<dim> control_fe_values_;
-//
-//        unsigned int n_q_points_per_element_;
-//        unsigned int n_dofs_per_element_;
-//    };
-//
-  /*  end MGDofHandler */
-  /*************************************************************************/
-
 
   template<typename VECTOR, int dim>
-  class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
-    VECTOR, dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+    class ElementDataContainer<true, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+#else
+    class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+#endif
   {
 
   public:
@@ -428,10 +293,18 @@ namespace DOpE
     template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
     ElementDataContainer(const hp::QCollection<dim> &q_collection,
                          UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         SpaceTimeHandler<FE, true, SPARSITYPATTERN,
+#else
                          SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
+#endif
                          VECTOR, dopedim, dealdim>& sth,
                          const std::vector<
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
+#endif
                          const std::map<std::string, const Vector<double>*> &param_values,
                          const std::map<std::string, const VECTOR *> &domain_values,
                          bool need_vertices) :
@@ -469,10 +342,18 @@ namespace DOpE
     template<template<int, int> class FE, typename SPARSITYPATTERN>
     ElementDataContainer(const hp::QCollection<dim> &q_collection,
                          UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         StateSpaceTimeHandler<FE, true, SPARSITYPATTERN,
+#else
                          StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
+#endif
                          VECTOR, dim>& sth,
                          const std::vector<
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
+#endif
                          const std::map<std::string, const Vector<double>*> &param_values,
                          const std::map<std::string, const VECTOR *> &domain_values,
                          bool need_vertices) :
@@ -572,8 +453,11 @@ namespace DOpE
     unsigned int state_index_;
     unsigned int control_index_;
 
-    const std::vector<
-    typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & element_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> & element_;
+#else
+    const std::vector<typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & element_;
+#endif
     DOpEWrapper::HpFEValues<dim> state_hp_fe_values_;
     DOpEWrapper::HpFEValues<dim> control_hp_fe_values_;
 
@@ -586,7 +470,11 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   void
+#if DEAL_II_VERSION_GTE(9,3,0)
+  DOpE::ElementDataContainer<false, VECTOR, dim>::ReInit()
+#else
   DOpE::ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit()
+#endif
   {
     state_fe_values_.reinit(element_[this->GetStateIndex()]);
     //Make sure that the Control must be initialized.
@@ -600,7 +488,11 @@ namespace DOpE
   /***********************************************************************/
   template<typename VECTOR, int dim>
   unsigned int
-  ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+    ElementDataContainer<false, VECTOR, dim>::GetNDoFsPerElement() const
+#else
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+#endif
   {
     return n_dofs_per_element_;
   }
@@ -608,7 +500,11 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetNQPoints() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
+#endif
   {
     return n_q_points_per_element_;
   }
@@ -616,7 +512,11 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetMaterialId() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
+#endif
   {
     return element_[0]->material_id();
   }
@@ -624,8 +524,13 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetNbrMaterialId(
+    unsigned int face) const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
     unsigned int face) const
+#endif
   {
     if (element_[0]->neighbor_index(face) != -1)
       return element_[0]->neighbor(face)->material_id();
@@ -641,8 +546,13 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetFaceBoundaryIndicator(
+    unsigned int face) const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
     unsigned int face) const
+#endif
   {
     return element_[0]->face(face)->boundary_indicator();
   }
@@ -650,21 +560,33 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   bool
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetIsAtBoundary() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+#endif
   {
     return element_[0]->at_boundary();
   }
   /**********************************************/
   template<typename VECTOR, int dim>
   double
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetElementDiameter() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
+#endif
   {
     return element_[0]->diameter();
   }
   /**********************************************/
   template<typename VECTOR, int dim>
   Point<dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetCenter() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
+#endif
   {
     return element_[0]->center();
   }
@@ -672,7 +594,11 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetFEValuesState() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
+#endif
   {
     return state_fe_values_;
   }
@@ -680,7 +606,11 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetFEValuesControl() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+#endif
   {
     return control_fe_values_;
   }
@@ -689,7 +619,11 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetStateIndex() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
+#endif
   {
     return state_index_;
   }
@@ -698,7 +632,11 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<false, VECTOR, dim>::GetControlIndex() const
+#else
   ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
+#endif
   {
     return control_index_;
   }
@@ -711,140 +649,13 @@ namespace DOpE
   /***********************************************************************/
 
 
-
-//  /***********************************************************************/
-//  /************************IMPLEMENTATION for MGDoFHandler*********************************/
-//  /***********************************************************************/
-//
-//  template<typename VECTOR, int dim>
-//    void
-//    DOpE::ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::ReInit()
-//    {
-//      state_fe_values_.reinit(element_[this->GetStateIndex()]);
-//      //Make sure that the Control must be initialized.
-//      if (this->GetControlIndex() < element_.size())
-//        control_fe_values_.reinit(element_[this->GetControlIndex()]);
-//    }
-//
-//  /***********************************************************************/
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
-//    {
-//      return n_dofs_per_element_;
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNQPoints() const
-//    {
-//      return n_q_points_per_element_;
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetMaterialId() const
-//    {
-//      return element_[0]->material_id();
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNbrMaterialId(
-//        unsigned int face) const
-//    {
-//      if (element_[0]->neighbor_index(face) != -1)
-//        return element_[0]->neighbor(face)->material_id();
-//      else
-//       {
-//    std::stringstream out;
-//    out << "There is no neighbor with number " << face;
-//    throw DOpEException(out.str(),
-//           "ElementDataContainer::GetNbrMaterialId");
-//  }
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
-//        unsigned int face) const
-//    {
-//      return element_[0]->face(face)->boundary_indicator();
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    bool
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetIsAtBoundary() const
-//    {
-//      return element_[0]->at_boundary();
-//    }
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    double
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetElementDiameter() const
-//    {
-//      return element_[0]->diameter();
-//    }
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    Point<dim>
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetCenter() const
-//    {
-//      return element_[0]->center();
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    const DOpEWrapper::FEValues<dim>&
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesState() const
-//    {
-//      return state_fe_values_;
-//    }
-//
-//  /**********************************************/
-//  template<typename VECTOR, int dim>
-//    const DOpEWrapper::FEValues<dim>&
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesControl() const
-//    {
-//      return control_fe_values_;
-//    }
-//
-//  /***********************************************************************/
-//
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetStateIndex() const
-//    {
-//      return state_index_;
-//    }
-//
-//  /***********************************************************************/
-//
-//  template<typename VECTOR, int dim>
-//    unsigned int
-//    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetControlIndex() const
-//    {
-//      return control_index_;
-//    }
-//
-  /***********************************************************************/
-  /************************END*OF*IMPLEMENTATION**************************/
-  /***********************************************************************/
-  /***********************************************************************/
-  /************************IMPLEMENTATION*********************************/
-  /***********************************************************************/
-
-
-
-
   template<typename VECTOR, int dim>
   void
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::ReInit()
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit()
+#endif
   {
     state_hp_fe_values_.reinit(element_[this->GetStateIndex()]);
     //Make sure that the Control must be initialized.
@@ -858,14 +669,22 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetNDoFsPerElement() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+#endif
   {
     return element_[0]->get_fe().dofs_per_cell;
   }
   /*********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetNQPoints() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNQPoints() const
+#endif
   {
     return (q_collection_[element_[0]->active_fe_index()]).size();
   }
@@ -873,7 +692,11 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetMaterialId() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetMaterialId() const
+#endif
   {
     return element_[0]->material_id();
   }
@@ -881,8 +704,13 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetNbrMaterialId(
+    unsigned int face) const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
     unsigned int face) const
+#endif
   {
     if (element_[0]->neighbor_index(face) != -1)
       return element_[0]->neighbor(face)->material_id();
@@ -898,8 +726,13 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetFaceBoundaryIndicator(
+    unsigned int face) const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
     unsigned int face) const
+#endif
   {
     return element_[0]->face(face)->boundary_indicator();
   }
@@ -908,7 +741,11 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   bool
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetIsAtBoundary() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+#endif
   {
     return element_[0]->at_boundary();
   }
@@ -917,7 +754,11 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   double
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetElementDiameter() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetElementDiameter() const
+#endif
   {
     return element_[0]->diameter();
   }
@@ -925,7 +766,11 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
   Point<dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetCenter() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCenter() const
+#endif
   {
     return element_[0]->center();
   }
@@ -933,14 +778,22 @@ namespace DOpE
   /*********************************************/
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetFEValuesState() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesState() const
+#endif
   {
     return static_cast<const DOpEWrapper::FEValues<dim>&>(state_hp_fe_values_.get_present_fe_values());
   }
   /*********************************************/
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetFEValuesControl() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+#endif
   {
     return static_cast<const DOpEWrapper::FEValues<dim>&>(control_hp_fe_values_.get_present_fe_values());
   }
@@ -948,14 +801,22 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetStateIndex() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetStateIndex() const
+#endif
   {
     return state_index_;
   }
   /*********************************************/
   template<typename VECTOR, int dim>
   unsigned int
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementDataContainer<true, VECTOR, dim>::GetControlIndex() const
+#else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetControlIndex() const
+#endif
   {
     return control_index_;
   }

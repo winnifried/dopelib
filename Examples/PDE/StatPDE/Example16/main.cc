@@ -68,9 +68,14 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGaussLobatto<DIM> QUADRATURE;
@@ -79,7 +84,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
         VECTOR, DIM> IDC;
@@ -166,8 +171,8 @@ main(int argc, char **argv)
   //**************************************************************************
 
   //Functionals*************************************************
-  LocalFaceFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalFaceFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -308,7 +313,11 @@ main(int argc, char **argv)
       store[i]->GetSpacialVector() -=SE.GetU().GetSpacialVector();
 	VectorTools::integrate_difference( DOFH.GetStateDoFHandler(),
 					   store[i]->GetSpacialVector(),
+#if DEAL_II_VERSION_GTE(9,3,0)
+					   Functions::ZeroFunction<2>(2),
+#else
 					   ZeroFunction<2>(2),
+#endif
 					   difference_per_element,
 					   QGaussLobatto<2>(5),
 					   VectorTools::H1_norm,
@@ -329,6 +338,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

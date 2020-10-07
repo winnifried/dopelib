@@ -66,7 +66,12 @@ const static int DIM = 2;
 
 //Abbreviations of deal.II types
 //The dofhandler and finite element we want to use.
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 //The qudrature rules we want to use.
@@ -83,13 +88,12 @@ typedef BlockVector<double> VECTOR;
 
 //Elementdatacontainer and Facedatacontainer handle all the informations we need
 //to integrate or evaluate an FE function on a element resp. face.
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 //The PDEProblemContainer holds all the information regarding the PDE.
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-        DOFHANDLER> OP;
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 
 //The IntegratorDataContainer holds quadrature formulas as
 //well as element- and facedatacontainer.
@@ -165,11 +169,11 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   //Definition of the pde we want to solve.
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
 
   //Definition of the functionals we want to evaluate.
-  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX;
-  LocalBoundaryFluxFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> LBFF;
+  LocalPointFunctionalX<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX;
+  LocalBoundaryFluxFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> LBFF;
 
   STH DOFH(triangulation, state_fe);
 
@@ -257,6 +261,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

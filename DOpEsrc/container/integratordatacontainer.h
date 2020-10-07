@@ -43,8 +43,13 @@ namespace DOpE
    * This class manages the different kind of element- and facedatacontainers
    * needed in the integrator.
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool HP, typename QUADRATURE, typename FACEQUADRATURE,
+           typename VECTOR, int dim>
+#else
   template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
            typename VECTOR, int dim>
+#endif
   class IntegratorDataContainer
   {
   public:
@@ -87,13 +92,21 @@ namespace DOpE
     InitializeFDC(const FACEQUADRATURE &fquad, UpdateFlags update_flags,
                   STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
                   bool need_interfaces = false)
     {
       delete fdc_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      fdc_ = new FaceDataContainer<HP, VECTOR, dim>(fquad,
+#else
       fdc_ = new FaceDataContainer<DH, VECTOR, dim>(fquad,
+#endif
                                                     update_flags, sth, element, param_values, domain_values,
                                                     need_interfaces);
     }
@@ -106,7 +119,11 @@ namespace DOpE
     void
     InitializeFDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
                   bool need_interfaces = false)
@@ -123,14 +140,22 @@ namespace DOpE
     InitializeEDC(const QUADRATURE &quad, UpdateFlags update_flags,
                   STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
 		  bool need_vertices)
     {
       if (edc_ != NULL)
         delete edc_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      edc_ = new ElementDataContainer<HP, VECTOR, dim>(quad,
+#else
       edc_ = new ElementDataContainer<DH, VECTOR, dim>(quad,
+#endif
                                                        update_flags, sth, element, param_values, domain_values,need_vertices);
     }
 
@@ -142,7 +167,11 @@ namespace DOpE
     void
     InitializeEDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
 		  bool need_vertices)
@@ -157,7 +186,11 @@ namespace DOpE
     template<typename STH>
     void
     InitializeMMFDC(UpdateFlags update_flags, STH &sth,
-                    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
+		    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
                     const typename std::vector<
                     typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
                     const std::map<std::string, const Vector<double>*> &param_values,
@@ -166,7 +199,11 @@ namespace DOpE
     {
       if (mm_fdc_ != NULL)
         delete mm_fdc_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      mm_fdc_ = new Multimesh_FaceDataContainer<HP, VECTOR, dim>(
+#else
       mm_fdc_ = new Multimesh_FaceDataContainer<DH, VECTOR, dim>(
+#endif
         GetFaceQuad(), update_flags, sth, element, tria_element, param_values,
         domain_values, need_interfaces);
     }
@@ -177,7 +214,11 @@ namespace DOpE
     template<typename STH>
     void
     InitializeMMEDC(UpdateFlags update_flags, STH &sth,
-                    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
+		    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
                     const typename std::vector<
                     typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
                     const std::map<std::string, const Vector<double>*> &param_values,
@@ -185,7 +226,11 @@ namespace DOpE
     {
       if (mm_edc_ != NULL)
         delete mm_edc_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      mm_edc_ = new Multimesh_ElementDataContainer<HP, VECTOR, dim>(
+#else
       mm_edc_ = new Multimesh_ElementDataContainer<DH, VECTOR, dim>(
+#endif
         GetQuad(), update_flags, sth, element, tria_element, param_values,
         domain_values);
     }
@@ -202,7 +247,11 @@ namespace DOpE
       return *face_quad_;
     }
 
-    FaceDataContainer<DH, VECTOR, dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+      FaceDataContainer<HP, VECTOR, dim> &
+#else
+      FaceDataContainer<DH, VECTOR, dim> &
+#endif
     GetFaceDataContainer() const
     {
       if (fdc_ != NULL)
@@ -212,7 +261,11 @@ namespace DOpE
                             "IntegratorDataContainer::GetFaceDataContainer");
     }
 
-    ElementDataContainer<DH, VECTOR, dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+      ElementDataContainer<HP, VECTOR, dim> &
+#else
+      ElementDataContainer<DH, VECTOR, dim> &
+#endif
     GetElementDataContainer() const
     {
       if (edc_ != NULL)
@@ -222,7 +275,11 @@ namespace DOpE
                             "IntegratorDataContainer::GetElementDataContainer");
     }
 
-    Multimesh_FaceDataContainer<DH, VECTOR, dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &
+#else
+      Multimesh_FaceDataContainer<DH, VECTOR, dim> &
+#endif
     GetMultimeshFaceDataContainer() const
     {
       if (mm_fdc_ != NULL)
@@ -232,7 +289,11 @@ namespace DOpE
                             "IntegratorDataContainer::GetMultimeshFaceDataContainer");
     }
 
-    Multimesh_ElementDataContainer<DH, VECTOR, dim> &
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &
+#else
+      Multimesh_ElementDataContainer<DH, VECTOR, dim> &
+#endif
     GetMultimeshElementDataContainer() const
     {
       if (mm_edc_ != NULL)
@@ -244,10 +305,26 @@ namespace DOpE
   private:
     QUADRATURE const *quad_;
     FACEQUADRATURE const *face_quad_;
-    FaceDataContainer<DH, VECTOR, dim> *fdc_;
-    ElementDataContainer<DH, VECTOR, dim> *edc_;
-    Multimesh_FaceDataContainer<DH, VECTOR, dim> *mm_fdc_;
-    Multimesh_ElementDataContainer<DH, VECTOR, dim> *mm_edc_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      FaceDataContainer<HP, VECTOR, dim> *fdc_;
+#else
+      FaceDataContainer<DH, VECTOR, dim> *fdc_;
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      ElementDataContainer<HP, VECTOR, dim> *edc_;
+#else
+      ElementDataContainer<DH, VECTOR, dim> *edc_;
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> *mm_fdc_;
+#else
+      Multimesh_FaceDataContainer<DH, VECTOR, dim> *mm_fdc_;
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> *mm_edc_;
+#else
+      Multimesh_ElementDataContainer<DH, VECTOR, dim> *mm_edc_;
+#endif
   };
 
 } //end of namespace

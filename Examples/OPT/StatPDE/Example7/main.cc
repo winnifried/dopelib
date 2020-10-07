@@ -56,7 +56,12 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 const static int DIM = 2;
@@ -69,15 +74,15 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 
 typedef SimpleDirichletData<VECTOR, DIM> DD;
-typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
-typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
+typedef LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
+typedef ConstraintInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM, DIM> STH;
 
@@ -187,9 +192,9 @@ main(int argc, char **argv)
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, constraints,
                                            DOpEtypes::stationary);
-
+  
   LocalConstraintAccessor CA;
-  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC(CA);
+  LocalConstraint<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC(CA);
 
   OP P(LFunc, LPDE, LC, DOFH);
 
@@ -268,6 +273,6 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

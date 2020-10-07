@@ -46,7 +46,11 @@ namespace DOpE
      *
      */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<bool HP, typename VECTOR, int dim>
+#else
     template<template<int, int> class DH, typename VECTOR, int dim>
+#endif
     class Network_FaceDataContainer : public fdcinternal::Network_FaceDataContainerInternal<
       dim>
     {
@@ -68,8 +72,11 @@ namespace DOpE
      */
 
     template<typename VECTOR, int dim>
-    class Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim> : public fdcinternal::Network_FaceDataContainerInternal<
-      dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+      class Network_FaceDataContainer<false, VECTOR, dim> : public fdcinternal::Network_FaceDataContainerInternal<dim>
+#else
+      class Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim> : public fdcinternal::Network_FaceDataContainerInternal<dim>
+#endif
     {
 
     public:
@@ -100,10 +107,18 @@ namespace DOpE
                                 unsigned int n_comp,
                                 const Quadrature<dim - 1>& quad,
                                 UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                                SpaceTimeHandler<FE, false, SPARSITYPATTERN, dealii::Vector<double>,
+                                dopedim, dealdim> &sth,
+#else
                                 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
                                 dopedim, dealdim> &sth,
-                                const std::vector<
-                                typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+				const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+				const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+#endif
                                 const std::map<std::string, const Vector<double>*> &param_values,
                                 const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
                                 bool need_neighbour) :
@@ -154,10 +169,18 @@ namespace DOpE
                                 unsigned int n_comp,
                                 const Quadrature<dim - 1>& quad,
                                 UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                                StateSpaceTimeHandler<FE, false, SPARSITYPATTERN, dealii::Vector<double>,
+                                dim> &sth,
+#else
                                 StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
                                 dim> &sth,
-                                const std::vector<
-                                typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+				const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+				const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+#endif
                                 const std::map<std::string, const Vector<double>*> &param_values,
                                 const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
                                 bool need_neighbour) :
@@ -333,8 +356,11 @@ namespace DOpE
       unsigned int state_index_;
       unsigned int control_index_;
 
-      const std::vector<
-      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> & element_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> & element_;
+#else
+      const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> & element_;
+#endif
       DOpEWrapper::FEFaceValues<dim> state_fe_values_;
       DOpEWrapper::FEFaceValues<dim> control_fe_values_;
 
@@ -363,6 +389,32 @@ namespace DOpE
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+      template<int dim>
+      bool sanity_check(const
+                        typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator &element_,
+                        unsigned int face,
+                        unsigned int subface)
+      {
+        const auto neighbor_child =
+          element_->neighbor_child_on_subface(
+            face, subface);
+
+        bool ret = false;
+        if (neighbor_child->face(element_->neighbor_of_neighbor(face)) == element_->face(face)->child(subface))
+          ret = true;
+        return  ret;
+      }
+
+      template<>
+      bool sanity_check<1>(const
+                                              typename DOpEWrapper::DoFHandler<1>::active_cell_iterator &,
+                                              unsigned int,
+                                              unsigned int)
+      {
+        return  true;
+      }
+#else
       template<int dim, template<int, int> class DH>
       bool sanity_check(const
                         typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator &element_,
@@ -387,13 +439,18 @@ namespace DOpE
       {
         return  true;
       }
+#endif
 //Reenable warning or unused functions
 #pragma GCC diagnostic pop
     }
 
     template<typename VECTOR, int dim>
     void
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::ReInit(
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+#endif
       unsigned int face_no)
     {
       this->SetFace(face_no);
@@ -411,7 +468,11 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
     void
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::ReInit(
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+#endif
       unsigned int face_no, unsigned int subface_no)
     {
       this->SetFace(face_no);
@@ -432,7 +493,11 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
     void
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInitNbr()
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::ReInitNbr()
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInitNbr()
+#endif
     {
       Assert(this->NeedNeighbour(), ExcInternalError());
       Assert(
@@ -448,9 +513,15 @@ namespace DOpE
 
           // some sanity checks: Check, that the face and subface match and that the neighbour child
           // is not more refined.
+#if DEAL_II_VERSION_GTE(9,3,0)
+          Assert((sanity_check<dim>(element_[this->GetStateIndex()],
+				    this->GetFace(),
+				    this->GetSubFace()) == true), ExcInternalError());
+#else
           Assert((sanity_check<dim, dealii::DoFHandler>(element_[this->GetStateIndex()],
                                                         this->GetFace(),
                                                         this->GetSubFace()) == true), ExcInternalError());
+#endif
           Assert(neighbor_child->has_children() == false, ExcInternalError());
 
           nbr_state_fe_values_->reinit(neighbor_child,
@@ -530,7 +601,11 @@ namespace DOpE
     /***********************************************************************/
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNDoFsPerElement() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+#endif
     {
       return n_dofs_per_element_;
     }
@@ -539,7 +614,11 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNbrNDoFsPerElement() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement() const
+#endif
     {
       return n_dofs_per_element_;
     }
@@ -547,7 +626,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNQPoints() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
+#endif
     {
       return n_q_points_per_element_;
     }
@@ -555,7 +638,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNQPoints() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNbrNQPoints() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNQPoints() const
+#endif
     {
       return n_q_points_per_element_;
     }
@@ -563,7 +650,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetMaterialId() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
+#endif
     {
       return element_[0]->material_id();
     }
@@ -571,7 +662,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNbrMaterialId() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId() const
+#endif
     {
       return this->GetNbrMaterialId(this->GetFace());
     }
@@ -579,7 +674,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNbrMaterialId(
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+#endif
       unsigned int face) const
     {
       if (element_[0]->neighbor_index(face) != -1)
@@ -596,7 +695,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     bool
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetIsAtBoundary() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+#endif
     {
       return element_[0]->face(this->GetFace())->at_boundary();
     }
@@ -604,7 +707,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     double
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetElementDiameter() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
+#endif
     {
 //      return element_[0]->face(this->GetFace())->diameter();
       return element_[0]->diameter();
@@ -614,7 +721,11 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetBoundaryIndicator() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetBoundaryIndicator() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetBoundaryIndicator() const
+#endif
     {
 #if DEAL_II_VERSION_GTE(8,3,0)
       return element_[0]->face(this->GetFace())->boundary_id();
@@ -626,7 +737,11 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     const FEFaceValuesBase<dim> &
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesState() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetFEFaceValuesState() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesState() const
+#endif
     {
       return *state_fe_values_ptr_;
     }
@@ -634,14 +749,22 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     const FEFaceValuesBase<dim> &
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesControl() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetFEFaceValuesControl() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesControl() const
+#endif
     {
       return *control_fe_values_ptr_;
     }
     /**********************************************/
     template<typename VECTOR, int dim>
     const FEFaceValuesBase<dim> &
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesState() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNbrFEFaceValuesState() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesState() const
+#endif
     {
       return *nbr_state_fe_values_ptr_;
     }
@@ -649,14 +772,22 @@ namespace DOpE
     /**********************************************/
     template<typename VECTOR, int dim>
     const FEFaceValuesBase<dim> &
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesControl() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetNbrFEFaceValuesControl() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesControl() const
+#endif
     {
       return *nbr_control_fe_values_ptr_;
     }
 
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetStateIndex() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
+#endif
     {
       return state_index_;
     }
@@ -665,7 +796,11 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
     unsigned int
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetControlIndex() const
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
+#endif
     {
       return control_index_;
     }
@@ -674,7 +809,11 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
     void
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFluxValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetFluxValues(
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFluxValues(
+#endif
       std::string name,
       std::vector<double> &values) const
     {
@@ -704,7 +843,11 @@ namespace DOpE
     /***********************************************************************/
     template<typename VECTOR, int dim>
     void
-    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFluxValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Network_FaceDataContainer<false, VECTOR, dim>::GetFluxValues(
+#else
+      Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFluxValues(
+#endif
       std::string name,
       std::vector<dealii::Vector<double> > &values) const
     {

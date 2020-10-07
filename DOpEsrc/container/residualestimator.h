@@ -26,6 +26,7 @@
 
 #include <container/dwrdatacontainer.h>
 #include <deal.II/fe/fe_tools.h>
+#include <deal.II/base/function.h>
 
 namespace DOpE
 {
@@ -248,14 +249,29 @@ namespace DOpE
       return sth_;
     }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#else
     template<template<int, int> class DH>
+#endif
     void
-    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
+#else
+      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+#endif
                         VECTOR &vals)
     {
       VectorTools::interpolate(sth_.GetMapping(),
-                               *(static_cast<const DH<dim, dim>*>(dofh)),
+#if DEAL_II_VERSION_GTE(9,3,0)
+			       *(static_cast<const dealii::DoFHandler<dim, dim>*>(dofh)),
+#else
+			       *(static_cast<const DH<dim, dim>*>(dofh)),
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+                               Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#else
                                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#endif
     }
 
   private:
@@ -458,14 +474,26 @@ namespace DOpE
       return sth_;
     }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+
+#else
     template<template<int, int> class DH>
+#endif
     void
-    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
+#else
+      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+#endif
                         VECTOR &vals)
     {
       VectorTools::interpolate(sth_.GetMapping(),
                                dofh->GetDEALDoFHandler(),
+#if DEAL_II_VERSION_GTE(9,3,0)
+                               Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#else
                                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#endif
     }
 
   private:

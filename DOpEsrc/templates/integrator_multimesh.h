@@ -130,10 +130,17 @@ namespace DOpE
     inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
   private:
+#if DEAL_II_VERSION_GTE(9,3,0)
+#else
     template<template<int, int> class DH>
+#endif
     void
     InterpolateBoundaryValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dim>  *dof_handler,
+#else
       const DOpEWrapper::DoFHandler<dim, DH>  *dof_handler,
+#endif
       const unsigned int color, const dealii::Function<dim> &function,
       std::map<unsigned int, SCALAR> &boundary_values,
       const std::vector<bool> &comp_mask) const;
@@ -142,67 +149,129 @@ namespace DOpE
      * Used by to ComputeNonlinearResidual to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
     template<typename PROBLEM, template<int, int> class DH>
+#endif
     inline void ComputeNonlinearResidual_Recursive(
       PROBLEM &pde,
       VECTOR &residual,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
+#else
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element_iter,
+#endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
+#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc);
+#endif
 
     /**
      * Used by to ComputeNonlinearRhs to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
     template<typename PROBLEM, template<int, int> class DH>
-    inline void ComputeNonlinearRhs_Recursive(
+#endif
+      inline void ComputeNonlinearRhs_Recursive(
       PROBLEM &pde,
       VECTOR &residual,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
+#else
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element_iter,
+#endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
+#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc);
+#endif
 
     /**
      * Used by to ComputeMatrix to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
-    template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
-    inline void ComputeMatrix_Recursive(
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<typename PROBLEM, typename MATRIX, bool HP>
+#else
+template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
+#endif
+  inline void ComputeMatrix_Recursive(
       PROBLEM &pde,
       MATRIX &matrix,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
+#else
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element_iter,
+#endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
+#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc);
+#endif
 
     /**
      * Used by to ComputeDomainScalar to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
     template<typename PROBLEM, template<int, int> class DH>
-    inline SCALAR ComputeDomainScalar_Recursive(
+#endif
+      inline SCALAR ComputeDomainScalar_Recursive(
       PROBLEM &pde,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
+#else
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element_iter,
+#endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc);
+#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc);
-
+#endif
     /**
      * Used by to ComputeBoundaryScalar to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
     template<typename PROBLEM, template<int, int> class DH>
-    inline SCALAR ComputeBoundaryScalar_Recursive(
+#endif
+      inline SCALAR ComputeBoundaryScalar_Recursive(
       PROBLEM &pde,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
+#else
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element_iter,
+#endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
+#else
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &edc);
+#endif
 
     INTEGRATORDATACONT &idc_;
 
@@ -983,10 +1052,17 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
            int dim>
-  template<template<int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+#else
+    template<template<int, int> class DH>
+#endif
   void
   IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
     const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
     const unsigned int color, const dealii::Function<dim> &function,
     std::map<unsigned int, SCALAR> &boundary_values,
     const std::vector<bool> &comp_mask) const
@@ -999,14 +1075,28 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
-  template<typename PROBLEM, template<int, int> class DH>
-  void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual_Recursive(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
+    template<typename PROBLEM, template<int, int> class DH>
+#endif
+    void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual_Recursive(
     PROBLEM &pde,
     VECTOR &residual,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
     typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-    Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
+    Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
+#else
+    Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
+    Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
+#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1121,7 +1211,11 @@ namespace DOpE
 
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
-        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#if DEAL_II_VERSION_GTE(9,3,0)
+	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#else
+	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
 
         for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell; ++child)
@@ -1139,14 +1233,28 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<typename PROBLEM, bool HP>
+#else
   template<typename PROBLEM, template<int, int> class DH>
+#endif
   void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs_Recursive(
     PROBLEM &pde,
     VECTOR &residual,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
     typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-    Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
+#else
+    Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
+    Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
+#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1248,7 +1356,11 @@ namespace DOpE
 
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
-        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#if DEAL_II_VERSION_GTE(9,3,0)
+	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#else
+	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
 
         for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell; ++child)
@@ -1268,14 +1380,28 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
            int dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<typename PROBLEM, typename MATRIX, bool HP>
+#else
   template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
+#endif
   void
   IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix_Recursive(
-    PROBLEM &pde, MATRIX &matrix, typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+    PROBLEM &pde, MATRIX &matrix,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
+    typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
+      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
+#else
     Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
     Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
+#endif
   {
 
     if (!element[0]->has_children() && ! element[1]->has_children())
@@ -1405,7 +1531,11 @@ namespace DOpE
 
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
-        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#if DEAL_II_VERSION_GTE(9,3,0)
+	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#else
+	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
 
         for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell; ++child)
@@ -1424,13 +1554,25 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
   template<typename PROBLEM, template<int, int> class DH>
-  SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar_Recursive(
+#endif
+ SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar_Recursive(
     PROBLEM &pde,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
     typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc)
+#else
     Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc)
+#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1449,7 +1591,11 @@ namespace DOpE
 
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
-        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#if DEAL_II_VERSION_GTE(9,3,0)
+	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#else
+	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
         SCALAR ret = 0.;
         for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell; ++child)
@@ -1468,13 +1614,25 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<typename PROBLEM, bool HP>
+#else
   template<typename PROBLEM, template<int, int> class DH>
+#endif
   SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar_Recursive(
     PROBLEM &pde,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
     typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
+#else
     Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
+#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1512,7 +1670,11 @@ namespace DOpE
 
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
-        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#if DEAL_II_VERSION_GTE(9,3,0)
+	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#else
+	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+#endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
         SCALAR ret = 0.;
         for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell; ++child)

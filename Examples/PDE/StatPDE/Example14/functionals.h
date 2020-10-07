@@ -33,11 +33,19 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR, 0, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
+#endif
 {
 public:
   LocalFunctional(ParameterReader &param_reader)
@@ -49,7 +57,11 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    ElementValue(const EDC<HP,VECTOR,dealdim> &edc)
+#else
+    ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+#endif
   {
     unsigned int n_q_points = edc.GetNQPoints();
 
@@ -104,11 +116,19 @@ private:
   double w_in_, p_in_;
 };
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalFunctional2 : public FunctionalInterface<EDC, FDC, HP, VECTOR, 0, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
+#endif
 {
 public:
   LocalFunctional2(ParameterReader &param_reader)
@@ -119,7 +139,11 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    ElementValue(const EDC<HP,VECTOR,dealdim> &edc)
+#else
+    ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+#endif
   {
     unsigned int n_q_points = edc.GetNQPoints();
 

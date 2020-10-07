@@ -58,7 +58,11 @@ const static int DIM = 2;
 const static int CDIM = 2;
 //stands for the dimension of the controlvariable;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -81,18 +85,18 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 #endif
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 //We use an optproblemcontainer instead of a pdeproblemcontainer, as we solve an optimization
 //problem. The optproblemcontainer holds all the information regarding the opt-problem.
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
@@ -122,7 +126,7 @@ typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
 
-typedef HigherOrderDWRContainerControl<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
+typedef HigherOrderDWRContainerControl<STH, IDC, EDC<DOFHANDLER, VECTOR, DIM>,
         FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
 
 int
@@ -180,21 +184,21 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
   const double alpha = 1.e-3;
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(alpha);
-
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(alpha);
+  
   // New in comparison to pure PDE problems
   COSTFUNCTIONAL LFunc(alpha);
 
   //AuxFunctionals
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
-  LocalMeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
-
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
+  LocalMeanValueFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
+  
   triangulation.refine_global(5);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
-
+  NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
+  
   OP P(LFunc, LPDE, Constraints, DOFH);
 
   P.AddFunctional(&LPF);
@@ -303,6 +307,6 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

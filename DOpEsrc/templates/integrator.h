@@ -428,14 +428,26 @@ protected:
   inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
 private:
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <bool HP>
+#else
   template <template <int, int> class DH>
-  void
-  InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
-                            const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
-                            const unsigned int color,
-                            const dealii::Function<dim> &function,
-                            std::map<unsigned int, SCALAR> &boundary_values,
-                            const std::vector<bool> &comp_mask) const;
+#endif
+    void
+#if DEAL_II_VERSION_GTE(9,3,0)
+    InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, HP> &mapping,
+#else
+    InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+     			      const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+     			      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
+			      const unsigned int color,
+			      const dealii::Function<dim> &function,
+			      std::map<unsigned int, SCALAR> &boundary_values,
+			      const std::vector<bool> &comp_mask) const;
 
   //        /**
   //         * Given a vector of active element iterators and a facenumber,
@@ -2125,11 +2137,23 @@ INTEGRATORDATACONT &Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
 template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
           int dim>
-template <template <int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <bool HP>
+#else
+  template <template <int, int> class DH>
+#endif
 void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
     InterpolateBoundaryValues(
-        const DOpEWrapper::Mapping<dim, DH> &mapping,
-        const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#if DEAL_II_VERSION_GTE(9,3,0)
+        const DOpEWrapper::Mapping<dim, HP> &mapping,
+#else
+	const DOpEWrapper::Mapping<dim, DH> &mapping,
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
         const std::vector<bool> &comp_mask) const {

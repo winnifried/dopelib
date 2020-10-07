@@ -47,17 +47,30 @@ namespace DOpE
    * Or any Functional that should be evaluated. For evaluation only *Value routines are required, but none  of
    * the derivatives thereof.
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<
+    template<bool HP, typename VECTOR, int dealdim> class EDC,
+    template<bool HP, typename VECTOR, int dealdim> class FDC,
+    bool HP, typename VECTOR, int dopedim, int dealdim =
+    dopedim>
+#else
   template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
     dopedim>
+#endif
   class FunctionalInterface
   {
   public:
-    FunctionalInterface();
-    virtual
-    ~FunctionalInterface();
+  FunctionalInterface(){
+    
+  }
+
+  virtual
+  ~FunctionalInterface() {
+    
+  }
 
     /**
      * This evaluates the Cost Functional J(q,u) = \int_\Omega j(q(x),u(x)) \dx on a given element T.
@@ -66,7 +79,14 @@ namespace DOpE
      *                a element.
      */
     virtual double
-    ElementValue(const EDC<DH, VECTOR, dealdim> &edc);
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementValue(const EDC<HP, VECTOR, dealdim> &/*edc*/)
+#else
+  ElementValue(const EDC<DH, VECTOR, dealdim> &/*edc*/)
+#endif
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue");
+  }
 
     /**
      * This evaluates the Cost Functional J_u'(q,u)(.) = \int_\Omega j_u'(q(x),u(x))(.) \dx on a given element T.
@@ -79,8 +99,15 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
-                   dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+  ElementValue_U(const EDC<HP, VECTOR, dealdim> &/*edc*/,
+#else
+  ElementValue_U(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+#endif
+		 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_U");
+  }
 
     /**
      * This evaluates the Cost Functional J_q'(q,u)(.) = \int_\Omega j_q'(q(x),u(x))(.) \dx on a given element T.
@@ -93,8 +120,15 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
-                   dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+ ElementValue_Q(const EDC<HP, VECTOR, dealdim> &/*edc*/,
+#else
+ ElementValue_Q(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+#endif
+		dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_Q");
+  }
 
     /**
      * This evaluates the Cost Functional J_uu'(q,u)(.,DU) = \int_\Omega j_uu'(q(x),u(x))(.,DU) \dx on a given element T.
@@ -107,8 +141,15 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   ElementValue_UU(const EDC<HP, VECTOR, dealdim> &/*edc*/,
+#else
+   ElementValue_UU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+#endif
+                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UU");
+  }
 
     /**
      * This evaluates the Cost Functional J_qu'(q,u)(.,DQ) = \int_\Omega j_qu'(q(x),u(x))(.,DQ) \dx on a given element T.
@@ -121,8 +162,15 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    ElementValue_QU(const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   ElementValue_QU(const EDC<HP, VECTOR, dealdim> &/*edc*/,
+#else
+   ElementValue_QU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+#endif
+                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QU");
+  }
 
     /**
      * This evaluates the Cost Functional J_uq'(q,u)(.,DU) = \int_\Omega j_uq'(q(x),u(x))(.,DU) \dx on a given element T.
@@ -135,8 +183,15 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   ElementValue_UQ(const EDC<HP, VECTOR, dealdim> &/*edc*/,
+#else
+   ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+#endif
+                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UQ");
+  }
 
     /**
      * This evaluates the Cost Functional J_qq'(q,u)(.,DQ) = \int_\Omega j_qq'(q(x),u(x))(.,DQ) \dx on a given element T.
@@ -149,8 +204,15 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   ElementValue_QQ(const EDC<HP, VECTOR, dealdim> &/*edc*/,
+#else
+   ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+#endif
+                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QQ");
+  }
 
     /**
      * This evaluates the Cost Functional J(q,u) = \sum_i j(q(x_i),u(x_i)). For given points x_i.
@@ -166,10 +228,18 @@ namespace DOpE
      */
     virtual double
     PointValue(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/)
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::PointValue");
+  }
 
     /**
      * This evaluates the Cost Functional J_u'(q,u)(.) = \sum_i j_u'(q(x_i),u(x_i))(.). For given points x_i.
@@ -186,11 +256,20 @@ namespace DOpE
      */
     virtual void
     PointValue_U(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/,
+      VECTOR &/*rhs*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented",
+                        "FunctionalInterface::PointValue_U");
+  }
 
     /**
      * This evaluates the Cost Functional J_q'(q,u)(.) = \sum_i j_q'(q(x_i),u(x_i))(.). For given points x_i.
@@ -207,11 +286,20 @@ namespace DOpE
      */
     virtual void
     PointValue_Q(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/,
+      VECTOR &/*rhs*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented",
+                        "FunctionalInterface::PointValue_Q");
+  }
 
     /**
      * This evaluates the Cost Functional J_uu''(q,u)(.,Du) = \sum_i j_uu''(q(x_i),u(x_i))(., Du). For given points x_i.
@@ -228,11 +316,20 @@ namespace DOpE
      */
     virtual void
     PointValue_UU(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/,
+      VECTOR &/*rhs*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented",
+                        "FunctionalInterface::PointValue_UU");
+  }
 
     /**
      * This evaluates the Cost Functional J_qu''(q,u)(.,Dq) = \sum_i j_qu''(q(x_i),u(x_i))(., Dq). For given points x_i.
@@ -250,11 +347,20 @@ namespace DOpE
      */
     virtual void
     PointValue_QU(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/,
+      VECTOR &/*rhs*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented",
+                        "FunctionalInterface::PointValue_QU");
+  }
 
     /**
      * This evaluates the Cost Functional J_uq''(q,u)(.,Du) = \sum_i j_uq''(q(x_i),u(x_i))(., Du). For given points x_i.
@@ -272,11 +378,21 @@ namespace DOpE
      */
     virtual void
     PointValue_UQ(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/,
+      VECTOR &/*rhs*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented",
+                        "FunctionalInterface::PointValue_UQ");
+  }
+
 
     /**
      * This evaluates the Cost Functional J_qq''(q,u)(.,Dq) = \sum_i j_qq''(q(x_i),u(x_i))(., Dq). For given points x_i.
@@ -294,22 +410,38 @@ namespace DOpE
      */
     virtual void
     PointValue_QQ(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/,
+      VECTOR &/*rhs*/, double /*scale*/)
+  {
+    throw DOpEException("Not implemented",
+                        "FunctionalInterface::PointValue_QQ");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue only on boundaries.
      *
      * @param fdc                      A FaceDataContainer containing all the information to evaluate
      *                                 the functional on a face.
-     * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
     virtual double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   BoundaryValue(const FDC<HP, VECTOR, dealdim> &/*fdc*/)
+#else
+   BoundaryValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
+#endif
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_U only on boundaries.
@@ -320,8 +452,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &fdc,
-                    dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   BoundaryValue_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+   BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue_U");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_Q only on boundaries.
@@ -332,8 +472,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &fdc,
-                    dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   BoundaryValue_Q(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+   BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue_Q");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_UU only on boundaries.
@@ -344,8 +492,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> &fdc,
-                     dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   BoundaryValue_UU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+   BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue_UU");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_QU only on boundaries.
@@ -356,8 +512,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> &fdc,
-                     dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+    BoundaryValue_QU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+    BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue_QU");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_UQ only on boundaries.
@@ -368,8 +532,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> &fdc,
-                     dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+     BoundaryValue_UQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+     BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue_UQ");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_QQ only on boundaries.
@@ -380,8 +552,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &fdc,
-                     dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      BoundaryValue_QQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+      BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::BoundaryValue_QQ");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue only on a faces between elements.
@@ -391,7 +571,14 @@ namespace DOpE
      *                                 the functional on a face.
      */
     virtual double
-    FaceValue(const FDC<DH, VECTOR, dealdim> &fdc);
+#if DEAL_II_VERSION_GTE(9,3,0)
+       FaceValue(const FDC<HP, VECTOR, dealdim> &/*fdc*/)
+#else
+       FaceValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
+#endif
+  {
+    throw DOpEException("Not Implemented", "FunctionalInterface::FaceValue");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_U only on a faces between elements.
@@ -403,8 +590,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    FaceValue_U(const FDC<DH, VECTOR, dealdim> &fdc,
-                dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+       FaceValue_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+       FaceValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::FaceValue_U");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_Q only on a faces between elements.
@@ -416,8 +611,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    FaceValue_Q(const FDC<DH, VECTOR, dealdim> &fdc,
-                dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+   FaceValue_Q(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+   FaceValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::FaceValue_Q");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_UU only on a faces between elements.
@@ -429,8 +632,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    FaceValue_UU(const FDC<DH, VECTOR, dealdim> &fdc,
-                 dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+       FaceValue_UU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+       FaceValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::FaceValue_UU");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_QU only on a faces between elements.
@@ -442,8 +653,16 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    FaceValue_QU(const FDC<DH, VECTOR, dealdim> &fdc,
-                 dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+    FaceValue_QU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+     FaceValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::FaceValue_QU");
+  }
 
     /**
      * The same as FunctionalInterface::ElementValue_UQ only on a faces between elements.
@@ -455,8 +674,17 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    FaceValue_UQ(const FDC<DH, VECTOR, dealdim> &fdc,
-                 dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+	 FaceValue_UQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+	  FaceValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::FaceValue_UQ");
+  }
+ 
 
     /**
      * The same as FunctionalInterface::ElementValue_QQ only on a faces between elements.
@@ -468,23 +696,41 @@ namespace DOpE
      * @param scale                    A factor by which the result is scaled.
      */
     virtual void
-    FaceValue_QQ(const FDC<DH, VECTOR, dealdim> &fdc,
-                 dealii::Vector<double> &local_vector, double scale);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      FaceValue_QQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
+#else
+      FaceValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+#endif
+                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::FaceValue_QQ");
+  }
 
     /**
      * Implements a functional that can be computed by the values in some given Vectors or BlockVectors
      */
     virtual double
     AlgebraicValue(
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values);
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR *> &/*domain_values*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::AlgebraicValue");
+  }
+
     /**
      * Implements the gradient of a functional that can be computed by the values in some given Vectors or BlockVectors
      */
     virtual void
-    AlgebraicGradient_Q(VECTOR &gradient,
-                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values);
+   AlgebraicGradient_Q(VECTOR &/*gradient*/,
+                        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+                        const std::map<std::string, const VECTOR *> &/*domain_values*/)
+  {
+    throw DOpEException("Not Implemented",
+                        "FunctionalInterface::AlgebraicGradient_Q");
+  }
+  
 
     /**
      * This function describes what type of Functional is considered
@@ -498,14 +744,20 @@ namespace DOpE
      *
      */
     virtual std::string
-    GetType() const;
+    GetType() const
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::GetType");
+  }
     /**
      * This function is used to name the Functional, this is helpful to distinguish different Functionals in the output.
      *
      * @return A string. This is the name being displayed next to the computed values.
      */
     virtual std::string
-    GetName() const;
+    GetName() const
+  {
+    throw DOpEException("Not implemented", "FunctionalInterface::GetName");
+  }
 
     /**
      * This Function is used to determine whether the current time is required by the functional.
@@ -540,14 +792,20 @@ namespace DOpE
      * DOpEWrapper::FEValues on an element.
      */
     virtual dealii::UpdateFlags
-    GetUpdateFlags() const;
+    GetUpdateFlags() const
+  {
+    return update_default; //no update
+  }
 
     /**
      * This function tells what dealii::UpdateFlags are required by the functional to be used when initializing the
      * DOpEWrapper::FEFaceValues on a face.
      */
     virtual dealii::UpdateFlags
-    GetFaceUpdateFlags() const;
+    GetFaceUpdateFlags() const
+  {
+    return update_default; //no update
+  }
 
     /**
      * This function determines whether a loop over all faces is required or not.
@@ -557,7 +815,17 @@ namespace DOpE
      *         signal 'face' is found in GetType(), false otherwise.
      */
     virtual bool
-    HasFaces() const;
+    HasFaces() const
+  {
+    bool retrn;
+    //we check if the functional is of type face
+    if (GetType().find("face") != std::string::npos)
+      retrn = true;
+    else
+      retrn = false;
+
+    return retrn;
+  }
 
     /**
      * This function determines whether the face evaluation needs neighbour information
@@ -565,7 +833,11 @@ namespace DOpE
      * @return true if in a loop over faces neighbour information should be assembled.
      */
     virtual bool
-    HasInterfaces() const;
+    HasInterfaces() const
+  {
+    //By default this is not needed
+    return false;
+  }
 
     /**
      * This function determines whether an evaluation of PointRhs is required or not.
@@ -575,8 +847,17 @@ namespace DOpE
      *         signal 'face' is found in GetType(), false otherwise.
      */
     virtual bool
-    HasPoints() const;
+    HasPoints() const
+  {
+    bool retrn;
+    //we check if the functional is of type point
+    if (GetType().find("point") != std::string::npos)
+      retrn = true;
+    else
+      retrn = false;
 
+    return retrn;
+  }
     /**
      * This function determines whether the functional needs multiple evaluation runs.
      * This method needs to return values larger than zero to evaluate functionals like
@@ -587,7 +868,10 @@ namespace DOpE
      *
      */
     virtual unsigned int
-    NeedPrecomputations() const;
+    NeedPrecomputations() const
+  {
+    return 0;
+  }
 
     /**
      * This function needs to return true if control in the initial value is done with a
@@ -600,15 +884,30 @@ namespace DOpE
      *
      */
     virtual bool
-    NeedFinalValue() const;
+    NeedFinalValue() const
+  {
+    return false;
+  }
 
     void
-    SetProblemType(std::string type,unsigned int num);
+    SetProblemType(std::string p_type, unsigned int num)
+  {
+    problem_type_ = p_type;
+    problem_num_ = num;
+  }
 
   protected:
     std::string
-    GetProblemType() const;
-    unsigned int GetProblemNum() const;
+    GetProblemType() const
+  {
+    return problem_type_;
+  }
+  
+    unsigned int GetProblemNum() const
+  {
+    return problem_num_;
+  }
+  
     double GetTime() const
     {
       return time_;

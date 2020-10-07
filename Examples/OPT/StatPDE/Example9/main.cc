@@ -71,7 +71,12 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 0;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -81,16 +86,16 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
-typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<DIM>, Quadrature<1>,
@@ -108,8 +113,10 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
+
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
+
 
 void
 declare_params(ParameterReader &param_reader)
@@ -154,9 +161,9 @@ main(int argc, char **argv)
   PDE::declare_params(pr);
   COSTFUNCTIONAL::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
     pr);
 
   // Declare parameter for this section
@@ -207,16 +214,16 @@ main(int argc, char **argv)
   PDE LPDE(pr);
   COSTFUNCTIONAL LFunc(pr);
 
-  LocalPointFunctionalDeflectionX<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDX;
-  LocalPointFunctionalDeflectionY<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDY;
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFD(
+  LocalPointFunctionalDeflectionX<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDX;
+  LocalPointFunctionalDeflectionY<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDY;
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFD(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
     pr);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
-  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
+  NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
@@ -327,6 +334,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

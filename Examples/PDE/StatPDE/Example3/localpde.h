@@ -32,11 +32,19 @@ using namespace DOpE;
  * This class describes elementwise the weak formulation of the PDE.
  * See pdeinterface.h for more information.
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalPDE() :
@@ -54,9 +62,14 @@ public:
    * weak formulation of the Stokes equation.
    */
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double scale_ico)
+  ElementEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale,
+    double scale_ico)
   {
     //Get the number of dofs, the number of quad points as
     //well as the finite element values on this element from the edc.
@@ -118,9 +131,14 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale,
-                double scale_ico)
+  ElementMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    FullMatrix<double> &local_matrix, double scale,
+    double scale_ico)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -170,8 +188,13 @@ public:
    * As we have f=0 in our example, this method is empty.
    */
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &
-                       /*edc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &
+#else
+    const EDC<DH, VECTOR, dealdim> &
+#endif
+    /*edc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
@@ -182,9 +205,14 @@ public:
    * for Stokes equation together with a free outflow condition.
    */
   void
-  BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
-                   dealii::Vector<double> &local_vector, double scale,
-                   double /*scale_ico*/)
+  BoundaryEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     //auto = FEValues
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -233,9 +261,14 @@ public:
    * The matrix term corresponding to the above defined boundaryequation.
    */
   void
-  BoundaryMatrix(const FDC<DH, VECTOR, dealdim> &fdc,
-                 dealii::FullMatrix<double> &local_matrix, double scale,
-                 double /*scale_ico*/)
+  BoundaryMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::FullMatrix<double> &local_matrix, double scale,
+    double /*scale_ico*/)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     const unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -277,8 +310,13 @@ public:
    * (f,phi)_\partial\Omega. As we have f=0 in our example, this method is empty.
    */
   void
-  BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 

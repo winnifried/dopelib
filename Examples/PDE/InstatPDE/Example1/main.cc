@@ -76,9 +76,14 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -88,12 +93,12 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
@@ -101,7 +106,7 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN,
         VECTOR, DIM> OP;
 #undef TSP
@@ -140,11 +145,11 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
+  LocalBoundaryFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
     pr);
-  LocalBoundaryFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
+  LocalBoundaryFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
     pr);
   pr.read_parameters(paramfile);
 
@@ -175,11 +180,11 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFP;
-  LocalBoundaryFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFD(pr);
-  LocalBoundaryFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFL(pr);
+  LocalPointFunctionalPressure<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFP;
+  LocalBoundaryFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFD(pr);
+  LocalBoundaryFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFL(pr);
 
   // Create a time grid of [0,8] with
   // 80 subintervalls for the timediscretization.
@@ -191,7 +196,7 @@ main(int argc, char **argv)
   // the type of the control, see dopetypes.h for more information.
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   DOFH(triangulation, state_fe, times);
-
+  
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFP);
@@ -273,7 +278,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

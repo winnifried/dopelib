@@ -48,8 +48,16 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
     void
     MapDoFsToSupportPoints(
-      const DOpEWrapper::Mapping<dealdim, dealii::DoFHandler > &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dealdim, false > &mapping,
+#else
+      const DOpEWrapper::Mapping<dealdim,  dealii::DoFHandler > &mapping,
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> &dh,
+#else
       const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &dh,
+#endif
       VECTOR &support_points)
     {
 
@@ -58,23 +66,6 @@ namespace DOpE
       DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
     }
 
-//    /**
-//     * Calls the deal.II map_dofs_to_support_points routine.
-//     * For MGDoFHandler (Experimental)
-//     */
-//    template<typename VECTOR, int dealdim>
-//      void
-//      MapDoFsToSupportPoints(
-//          const DOpEWrapper::Mapping<dealdim, dealii::MGDoFHandler >& mapping,
-//          const DOpEWrapper::DoFHandler<dealdim, dealii::MGDoFHandler >& dh,
-//          VECTOR& support_points)
-//      {
-//
-////        MappingQ1 < dealdim > mapping;
-//
-//        DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
-//      }
-
     /**
      * Calls the deal.II map_dofs_to_support_points routine.
      * For hp::DoFHandler
@@ -82,8 +73,13 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
     void
     MapDoFsToSupportPoints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dealdim, true > &mapping,
+      const DOpEWrapper::DoFHandler<dealdim> &dh,
+#else
       const DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler > &mapping,
       const DOpEWrapper::DoFHandler<dealdim, dealii::hp::DoFHandler > &dh,
+#endif
       VECTOR &support_points)
     {
 

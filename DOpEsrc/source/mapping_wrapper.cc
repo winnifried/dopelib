@@ -27,6 +27,35 @@
 //#include <deal.II/multigrid/mg_dof_handler.h>
 #include <deal.II/hp/dof_handler.h>
 
+
+#if DEAL_II_VERSION_GTE(9,3,0)
+namespace DOpEWrapper
+{
+
+  template<int dim>
+  Mapping<dim, false> StaticMappingQ1<dim, false>::mapping_q1 (
+    1);
+
+  template<int dim>
+  Mapping<dim, true>
+  StaticMappingQ1<dim, true>::mapping_q1(
+    StaticMappingQ1<dim, false >::mapping_q1);
+
+}
+template class DOpEWrapper::Mapping<1, false>;
+template class DOpEWrapper::Mapping<2, false>;
+template class DOpEWrapper::Mapping<3, false>;
+template class DOpEWrapper::Mapping<1, true>;
+template class DOpEWrapper::Mapping<2, true>;
+template class DOpEWrapper::Mapping<3, true>;
+
+template struct DOpEWrapper::StaticMappingQ1<1, false>;
+template struct DOpEWrapper::StaticMappingQ1<2, false>;
+template struct DOpEWrapper::StaticMappingQ1<3, false>;
+template struct DOpEWrapper::StaticMappingQ1<1, true>;
+template struct DOpEWrapper::StaticMappingQ1<2, true>;
+template struct DOpEWrapper::StaticMappingQ1<3, true>;
+#else
 namespace DOpEWrapper
 {
 
@@ -39,20 +68,10 @@ namespace DOpEWrapper
   StaticMappingQ1<dim, dealii::hp::DoFHandler>::mapping_q1(
     StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
 
-//  template<int dim>
-//    Mapping<dim, dealii::MGDoFHandler>
-//    StaticMappingQ1<dim, dealii::MGDoFHandler >::mapping_q1(
-//        StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
-
 }
-
 template class DOpEWrapper::Mapping<1, dealii::DoFHandler>;
 template class DOpEWrapper::Mapping<2, dealii::DoFHandler>;
 template class DOpEWrapper::Mapping<3, dealii::DoFHandler>;
-
-//template class DOpEWrapper::Mapping<1, dealii::MGDoFHandler>;
-//template class DOpEWrapper::Mapping<2, dealii::MGDoFHandler>;
-//template class DOpEWrapper::Mapping<3, dealii::MGDoFHandler>;
 
 template class DOpEWrapper::Mapping<1, dealii::hp::DoFHandler>;
 template class DOpEWrapper::Mapping<2, dealii::hp::DoFHandler>;
@@ -62,10 +81,7 @@ template struct DOpEWrapper::StaticMappingQ1<1, dealii::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<2, dealii::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<3, dealii::DoFHandler>;
 
-//template struct DOpEWrapper::StaticMappingQ1<1, dealii::MGDoFHandler>;
-//template struct DOpEWrapper::StaticMappingQ1<2, dealii::MGDoFHandler>;
-//template struct DOpEWrapper::StaticMappingQ1<3, dealii::MGDoFHandler>;
-
 template struct DOpEWrapper::StaticMappingQ1<1, dealii::hp::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<2, dealii::hp::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<3, dealii::hp::DoFHandler>;
+#endif

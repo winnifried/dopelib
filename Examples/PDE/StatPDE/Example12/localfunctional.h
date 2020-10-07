@@ -30,11 +30,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,dealdim>
+#endif
 {
 public:
   LocalFunctional()
@@ -42,7 +50,12 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+  ElementValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc)
+#else
+    const EDC<DH, VECTOR, dealdim> &edc)
+#endif
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();

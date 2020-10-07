@@ -31,12 +31,21 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
   LocalFunctional()
@@ -48,8 +57,9 @@ public:
   {
     return true;
   }
-  double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/)
+  double AlgebraicValue(
+    const std::map<std::string, const dealii::Vector<double>*> &param_values,
+    const std::map<std::string, const VECTOR *> &/*domain_values*/)
   {
     assert(this->GetProblemType() == "cost_functional");
     //Search the vector with the precomputed functional values
@@ -59,7 +69,12 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+    ElementValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const EDC<HP, VECTOR, dealdim> &edc)
+#else
+      const EDC<DH, VECTOR, dealdim> &edc)
+#endif
   {
     if ( this->GetProblemType() == "cost_functional_pre" ||
          this->GetProblemType() == "cost_functional_pre_tangent" )
@@ -125,8 +140,13 @@ public:
   }
 
   void
-  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
-                 dealii::Vector<double> &local_vector, double scale)
+  ElementValue_U(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -150,8 +170,13 @@ public:
   }
 
   void
-  ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
-                 dealii::Vector<double> &local_vector, double scale)
+  ElementValue_Q(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesControl();
@@ -190,8 +215,13 @@ public:
   }
 
   void
-  ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale)
+  ElementValue_UU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -218,20 +248,35 @@ public:
   }
 
   void
-  ElementValue_QU(const EDC<DH, VECTOR, dealdim> &,
-                  dealii::Vector<double> &, double)
+  ElementValue_QU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &,
+#else
+    const EDC<DH, VECTOR, dealdim> &,
+#endif
+    dealii::Vector<double> &, double)
   {
   }
 
   void
-  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &,
-                  dealii::Vector<double> &, double)
+  ElementValue_UQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &,
+#else
+    const EDC<DH, VECTOR, dealdim> &,
+#endif
+    dealii::Vector<double> &, double)
   {
   }
 
   void
-  ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale)
+  ElementValue_QQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesControl();

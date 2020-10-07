@@ -30,11 +30,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
 
@@ -71,9 +79,14 @@ public:
 
   // Domain values for elements
   void
-  ElementEquation(const EDC<DH, VECTOR, 2> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double /*scale_ico*/)
+  ElementEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, 2> &edc,
+#else
+    const EDC<DH, VECTOR, 2> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
 
@@ -234,9 +247,14 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, 2> &edc,
-                dealii::FullMatrix<double> &local_matrix, double scale,
-                double /*scale_ico*/)
+  ElementMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, 2> &edc,
+#else
+    const EDC<DH, VECTOR, 2> &edc,
+#endif
+    dealii::FullMatrix<double> &local_matrix, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
 
@@ -487,16 +505,26 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, 2> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, VECTOR, 2> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, 2> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   // Values for Boundary integrals
   void
-  BoundaryEquation(const FDC<DH, VECTOR, 2> &fdc,
-                   dealii::Vector<double> &local_vector, double scale,
-                   double /*scale_ico*/)
+  BoundaryEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, VECTOR, 2> &fdc,
+#else
+    const FDC<DH, VECTOR, 2> &fdc,
+#endif
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -552,9 +580,14 @@ public:
   }
 
   void
-  BoundaryMatrix(const FDC<DH, VECTOR, 2> &fdc,
-                 dealii::FullMatrix<double> &local_matrix, double scale,
-                 double /*scale_ico*/)
+  BoundaryMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, VECTOR, 2> &fdc,
+#else
+    const FDC<DH, VECTOR, 2> &fdc,
+#endif
+    dealii::FullMatrix<double> &local_matrix, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -657,8 +690,13 @@ public:
   }
 
   void
-  BoundaryRightHandSide(const FDC<DH, VECTOR, 2> &,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, VECTOR, 2> &,
+#else
+    const FDC<DH, VECTOR, 2> &,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 

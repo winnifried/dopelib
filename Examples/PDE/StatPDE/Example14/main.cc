@@ -75,9 +75,14 @@ using namespace DOpE;
 const static int CDIM = 0;
 const static int DIM = 1;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC Networks::Network_ElementDataContainer
+#define EDC Networks::Network_ElementDataContainer
 #define FDC Networks::Network_FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -86,7 +91,7 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
 
 // Typedefs for timestep problem
 //#define TSP ShiftedCrankNicolsonProblem
@@ -115,10 +120,10 @@ typedef Networks::MethodOfLines_Network_SpaceTimeHandler<FE, DOFHANDLER,
 
 typedef OptProblemContainer<
 FUNC,
-LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
 SimpleDirichletData<VECTOR, DIM>,
-NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
 VECTOR, CDIM, DIM> OP;
 
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
@@ -158,7 +163,7 @@ main(int argc, char **argv)
 
   RP::declare_params(pr);
   RNA::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   declare_params(pr);
 
@@ -194,8 +199,8 @@ main(int argc, char **argv)
   //**************************************************************************
 
   //Functionals*************************************************
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF(pr);
-  LocalFunctional2<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF2(pr);
+  LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> MVF(pr);
+  LocalFunctional2<EDC, FDC, DOFHANDLER, VECTOR, DIM> MVF2(pr);
   //*************************************************
 
   //Network-description
@@ -203,13 +208,13 @@ main(int argc, char **argv)
   LocalNetwork mynet(pr);
 
   //pde*************************************************
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr,mynet);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr,mynet);
   //*************************************************
 
   //space time handler***********************************/
   STH DOFH(tria_s, control_fe, state_fe, DOpEtypes::stationary, mynet, true);
   /***********************************/
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
+  NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
 
   OP P(MVF, LPDE, Constraints, DOFH);
   //Boundary conditions************************************************
@@ -254,6 +259,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
