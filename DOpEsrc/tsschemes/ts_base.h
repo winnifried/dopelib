@@ -37,15 +37,11 @@ namespace DOpE
    *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    * @tparam <dealdim>          The dimension of the state variable.
    * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
-   * @tparam <DH>               The type of the DoFHandler in use
-   *                            (to be more precise: The type of the dealii-DoFhandler which forms
-   *                            the base class of the DOpEWrapper::DoFHandler in use.)
    */
 
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim,
-           template <int, int> class FE = dealii::FESystem,
-           template <int, int> class DH = dealii::DoFHandler>
+           template <int, int> class FE = dealii::FESystem>
   class TSBase
   {
   public:

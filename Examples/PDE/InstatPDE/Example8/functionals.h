@@ -35,10 +35,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, HP, DH,
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, HP,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -77,7 +77,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
 #else
     BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
 #endif

@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class QErrorFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+  class QErrorFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -53,7 +53,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+ElementValue(const EDC<HP, VECTOR, dealdim> &edc)
 #else
 ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
 #endif
@@ -107,10 +107,10 @@ private:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class UErrorFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+  class UErrorFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -128,7 +128,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+ElementValue(const EDC<HP, VECTOR, dealdim> &edc)
 #else
 ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
 #endif
@@ -180,10 +180,10 @@ private:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, HP, DH,
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+  class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, HP,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -201,7 +201,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+ElementValue(const EDC<HP, VECTOR, dealdim> &edc)
 #else
 ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
 #endif
@@ -247,10 +247,10 @@ private:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -265,8 +265,13 @@ public:
 
   double
   PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
   {

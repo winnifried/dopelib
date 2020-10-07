@@ -214,9 +214,16 @@ namespace DOpE
       return sth_;
     }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#else
     template<template<int, int> class DH>
+#endif
     void
-    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
+#else
+      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+#endif
                         VECTOR &vals)
     {
       VectorTools::interpolate(sth_.GetMapping(),

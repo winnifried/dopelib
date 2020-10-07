@@ -59,7 +59,7 @@ const static int CDIM = 2;
 //stands for the dimension of the controlvariable;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-#define DOFHANDLER false,DoFHandler
+#define DOFHANDLER false
 #else
 #define DOFHANDLER DoFHandler
 #endif

@@ -31,6 +31,21 @@
 
 namespace DOpEWrapper
 {
+#if DEAL_II_VERSION_GTE(9,3,0)
+  /**
+   * @class DataOut
+   *
+   * This class provides a wrapper for the dealii::DataOut
+   * objects. It is used to cope with the non existing instantiation
+   * of the dealii::DataOut<dim,MGDoFHandler> object.
+   *
+   * For all values of DH it simply is the corresponding dealii::DataOut
+   * object, except for the MGDoFHandler, when instead the DoFHandler
+   * is used.
+   *
+   * @tparam <dim>              The dimension in which the problem is posed.
+   */
+#else
   /**
    * @class DataOut
    *
@@ -45,25 +60,20 @@ namespace DOpEWrapper
    * @tparam <dim>              The dimension in which the problem is posed.
    * @tparam <DH>               The dealii DofHandler type used.
    */
-
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <int dim>
+  class DataOut : public dealii::DataOut<dim, dealii::DoFHandler<dim, dim> >
+#else
   template <int dim, template <int, int> class DH = dealii::DoFHandler>
   class DataOut : public dealii::DataOut<dim, DH<dim, dim> >
+#endif
   {
   public:
     DataOut ()
     {
     }
   };
-//TODO: This makes no sense if MGDoFHandler is no longer present
-//  //Special treatment of MGDoFHandler...
-//  template <int dim>
-//    class DataOut<dim, dealii::MGDoFHandler> : public dealii::DataOut<dim, dealii::DoFHandler<dim,dim> >
-//    {
-//     public:
-//      DataOut()
-//      {
-//      }
-//    };
 
 }//Endof Namespace DOpEWrapper
 #endif

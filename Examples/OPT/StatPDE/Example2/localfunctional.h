@@ -39,11 +39,11 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -74,7 +74,7 @@ public:
   double
   ElementValue(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc)
+    const EDC<HP, VECTOR, dealdim> &edc)
 #else
     const EDC<DH, VECTOR, dealdim> &edc)
 #endif
@@ -100,8 +100,13 @@ public:
 
   double
   PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
   {
@@ -135,7 +140,7 @@ public:
   void
   ElementValue_U(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -145,8 +150,13 @@ public:
 
   virtual void
   PointValue_U(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values,
     VECTOR &rhs, double scale)
@@ -191,8 +201,13 @@ public:
 
   virtual void
   PointValue_Q(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &,
     const std::map<std::string, const VECTOR *> &, VECTOR &, double)
   {
@@ -201,7 +216,7 @@ public:
   void
   ElementValue_Q(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -229,7 +244,7 @@ public:
   void
   ElementValue_UU(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &, dealii::Vector<double> &,
+    const EDC<HP, VECTOR, dealdim> &, dealii::Vector<double> &,
 #else
     const EDC<DH, VECTOR, dealdim> &, dealii::Vector<double> &,
 #endif
@@ -239,8 +254,13 @@ public:
 
   virtual void
   PointValue_UU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values,
     VECTOR &rhs, double scale)
@@ -280,8 +300,13 @@ public:
 
   virtual void
   PointValue_QU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &/*domain_values*/,
     VECTOR & /*rhs*/, double /*scale*/)
@@ -291,8 +316,13 @@ public:
 
   virtual void
   PointValue_UQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &/*domain_values*/,
     VECTOR & /*rhs*/, double /*scale*/)
@@ -302,8 +332,13 @@ public:
 
   virtual void
   PointValue_QQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
     const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &/*domain_values*/,
     VECTOR & /*rhs*/, double /*scale*/)
@@ -314,7 +349,7 @@ public:
   void
   ElementValue_QU(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -325,7 +360,7 @@ public:
   void
   ElementValue_UQ(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -336,7 +371,7 @@ public:
   void
   ElementValue_QQ(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -380,7 +415,11 @@ public:
 
 private:
   void
+#if DEAL_II_VERSION_GTE(9,3,0)
+  create_point_source(const dealii::DoFHandler<dealdim, dealdim> &dof_handler,
+#else
   create_point_source(const DH<dealdim, dealdim> &dof_handler,
+#endif
                       const Point<dealdim> point, const unsigned int component,
                       VECTOR &rhs_vector)
   {
@@ -389,11 +428,18 @@ private:
 
     rhs_vector = 0;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+    std::pair<typename dealii::DoFHandler<dealdim, dealdim>::active_cell_iterator,
+        Point<dealdim> > element_point =
+          GridTools::find_active_cell_around_point(
+            StaticMappingQ1<dealdim>::mapping, dof_handler, point);
+#else
     std::pair<typename DH<dealdim, dealdim>::active_cell_iterator,
         Point<dealdim> > element_point =
           GridTools::find_active_cell_around_point(
             StaticMappingQ1<dealdim>::mapping, dof_handler, point);
-
+#endif
+    
     Quadrature<dealdim> q(
       GeometryInfo<dealdim>::project_to_unit_cell(element_point.second));
 

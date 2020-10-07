@@ -69,7 +69,7 @@ const static int DIM = 2;
 //Abbreviations of deal.II types
 //The dofhandler and finite element we want to use.
 #if DEAL_II_VERSION_GTE(9,3,0)
-#define DOFHANDLER true,DoFHandler
+#define DOFHANDLER true
 #else
 #define DOFHANDLER hp::DoFHandler
 #endif

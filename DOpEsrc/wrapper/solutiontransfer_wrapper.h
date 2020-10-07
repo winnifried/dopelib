@@ -47,25 +47,23 @@ namespace DOpEWrapper
    * @tparam <DH>               The dealii DofHandler type used.
    */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <int dim, typename VECTOR>
+    class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
+#else
   template <int dim, typename VECTOR, template<int, int> class DH = dealii::DoFHandler>
-  class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
+    class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
+#endif
   {
   public:
-    SolutionTransfer(const DH<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >(dof)
-    {
+#if DEAL_II_VERSION_GTE(9,3,0)
+  SolutionTransfer(const dealii::DoFHandler<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
+#else
+  SolutionTransfer(const DH<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >(dof)
+#endif
+  {
     }
   };
-
-// //Special treatment of MGDoFHandler...
-// template <int dim, typename VECTOR>
-//   class SolutionTransfer<dim,VECTOR,MGDoFHandler> : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
-//   {
-//    public:
-//     SolutionTransfer(const MGDoFHandler<dim,dim> &dof) :
-//          dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
-//    {
-//    }
-//   };
 
 }//Endof Namespace DOpEWrapper
 #endif

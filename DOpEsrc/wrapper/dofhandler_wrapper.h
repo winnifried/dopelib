@@ -42,21 +42,13 @@ namespace DOpEWrapper
    * DoFHandlers.
    *
    * @template dim              Dimension of the dofhandler.
-   * @template DOFHANDLER       With this template argument we distinguish
-   *                            between the 'normal' as well as the hp case.
-   *                            The class DOFHANDLER is for dim>0 the base class
-   *                            of DoFHandler. Feasible at the moment are
-   *                            dealii::DoFHandler<dim> - the other DoFHandlers in 
-   *                            dealii heave been merged.
-   *                            It has the default value dealii::DoFHandler<dim>
    */
-  template<int dim,
-           template<int DIM, int spacedim> class DOFHANDLER = dealii::DoFHandler>
-  class DoFHandler : public DOFHANDLER<dim, dim>
+  template<int dim>
+  class DoFHandler : public dealii::DoFHandler<dim, dim>
   {
   public:
   DoFHandler(const dealii::Triangulation<dim, dim> &tria, const bool hp_capability_enabled=false) :
-      DOFHANDLER<dim, dim>(tria,hp_capability_enabled)
+      dealii::DoFHandler<dim, dim>(tria,hp_capability_enabled)
     {
     }
 
@@ -69,7 +61,7 @@ namespace DOpEWrapper
      * DoFHandler as a template which is deduced by the
      * arguments passed to the function
      */
-    const DOFHANDLER<dim, dim> &
+    const dealii::DoFHandler<dim, dim> &
     GetDEALDoFHandler() const
     {
       return *this;
@@ -91,7 +83,7 @@ namespace DOpEWrapper
    * Template specializations for dim=0.
    */
   template<>
-  class DoFHandler<0, dealii::DoFHandler>
+  class DoFHandler<0>
   {
   private:
     unsigned int dofs_ = 0;

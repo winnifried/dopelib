@@ -98,7 +98,7 @@ namespace DOpE
 
       dealii::SparseDirectUMFPACK *A_direct_;
 #if DEAL_II_VERSION_GTE(9,3,0)
-      MethodOfLines_Network_SpaceTimeHandler<FESystem,false,DoFHandler,BlockVector<double>,0,1> *sth_ = nullptr;
+      MethodOfLines_Network_SpaceTimeHandler<FESystem,false,BlockVector<double>,0,1> *sth_ = nullptr;
 #else
       MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> *sth_ = nullptr;
 #endif
@@ -135,7 +135,7 @@ namespace DOpE
     void  DirectLinearSolverWithMatrix::ReInit(PROBLEM &pde)
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
-      sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,false,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
+      sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,false,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
 #else
       sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
 #endif

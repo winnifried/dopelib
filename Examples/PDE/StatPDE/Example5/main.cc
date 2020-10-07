@@ -72,7 +72,7 @@ using namespace DOpE;
 const static int DIM = 2;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-#define DOFHANDLER false,DoFHandler
+#define DOFHANDLER false
 #else
 #define DOFHANDLER DoFHandler
 #endif

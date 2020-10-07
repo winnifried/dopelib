@@ -36,11 +36,11 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
 class LocalBoundaryFunctionalMassFlux : public FunctionalInterface<EDC, FDC,
-  HP, DH, VECTOR, dealdim>
+  HP, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -58,7 +58,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
 #else
     BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
 #endif

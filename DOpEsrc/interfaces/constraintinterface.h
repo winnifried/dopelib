@@ -47,6 +47,7 @@ namespace DOpE
    *                           needed by the base class.
    * @tparam <FDC>             The FaceDataContainer object
    *                           needed by the base class.
+   * @tparam <HP>              false for normal, true for HP DoFHandler
    * @tparam <DH>              The DoFHandler object used by the
    *                           FunctionalInterface.
    * @tparam <VECTOR>          The vector class on which
@@ -57,10 +58,10 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    bool HP, template<int, int> class DH, typename VECTOR,  int dopedim,  int dealdim>
-    class ConstraintInterface : public FunctionalInterface<EDC, FDC, HP, DH,
+    template<bool HP, typename VECTOR, int dealdim> class EDC,
+    template<bool HP, typename VECTOR, int dealdim> class FDC,
+    bool HP, typename VECTOR,  int dopedim,  int dealdim>
+    class ConstraintInterface : public FunctionalInterface<EDC, FDC, HP,
     VECTOR, dopedim, dealdim>
 #else
   template<

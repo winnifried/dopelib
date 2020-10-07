@@ -150,7 +150,7 @@ namespace DOpE
 
       typedef StatReducedProblem<CONTROLNONLINEARSOLVER,NONLINEARSOLVER,CONTROLINTEGRATOR,INTEGRATOR,PROBLEM,dealii::BlockVector<double>,dopedim,dealdim> BASE_;
 #if DEAL_II_VERSION_GTE(9,3,0)
-      typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,false,DoFHandler,BlockVector<double>,0,1> STH_;
+      typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,false,BlockVector<double>,0,1> STH_;
 #else
       typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> STH_;
 #endif

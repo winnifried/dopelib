@@ -53,7 +53,11 @@ namespace DOpE
 #else
       const DOpEWrapper::Mapping<dealdim,  dealii::DoFHandler > &mapping,
 #endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> &dh,
+#else
       const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &dh,
+#endif
       VECTOR &support_points)
     {
 
@@ -71,7 +75,7 @@ namespace DOpE
     MapDoFsToSupportPoints(
 #if DEAL_II_VERSION_GTE(9,3,0)
       const DOpEWrapper::Mapping<dealdim, true > &mapping,
-      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &dh,
+      const DOpEWrapper::DoFHandler<dealdim> &dh,
 #else
       const DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler > &mapping,
       const DOpEWrapper::DoFHandler<dealdim, dealii::hp::DoFHandler > &dh,

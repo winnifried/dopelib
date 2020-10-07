@@ -32,11 +32,11 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -57,7 +57,7 @@ public:
   double
   ElementValue(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc)
+    const EDC<HP, VECTOR, dealdim> &edc)
 #else
     const EDC<DH, VECTOR, dealdim> &edc)
 #endif
@@ -102,7 +102,7 @@ public:
   void
   ElementValue_U(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -147,7 +147,7 @@ public:
   void
   ElementValue_Q(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -175,7 +175,7 @@ public:
   void
   ElementValue_UU(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -210,7 +210,7 @@ public:
   void
   ElementValue_QU(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -221,7 +221,7 @@ public:
   void
   ElementValue_UQ(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -232,7 +232,7 @@ public:
   void
   ElementValue_QQ(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif

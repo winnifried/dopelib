@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -54,7 +54,7 @@ public:
   // Domain values for elements
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation(const EDC<HP, DH, VECTOR, dealdim> &edc,
+    ElementEquation(const EDC<HP, VECTOR, dealdim> &edc,
 #else
     ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -114,7 +114,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementMatrix(const EDC<HP, DH, VECTOR, dealdim> &edc,
+    ElementMatrix(const EDC<HP, VECTOR, dealdim> &edc,
 #else
     ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -176,7 +176,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementRightHandSide(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+  ElementRightHandSide(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
   ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -187,7 +187,7 @@ public:
   // Values for boundary integrals
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryEquation(const FDC<HP, DH, VECTOR, dealdim> &fdc,
+   BoundaryEquation(const FDC<HP, VECTOR, dealdim> &fdc,
 #else
    BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
 #endif
@@ -227,7 +227,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+   BoundaryMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
    BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -239,7 +239,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  BoundaryRightHandSide(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+  BoundaryRightHandSide(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
   BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif

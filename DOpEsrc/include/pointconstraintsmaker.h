@@ -39,8 +39,8 @@ namespace DOpE
    *                     Both vetors are assumed to be in identical order!
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, template<int, int> class DH, int dopedim, int dealdim = dopedim>
-    class PointConstraints : public UserDefinedDoFConstraints<HP, DH,dopedim,dealdim>
+  template<bool HP, int dopedim, int dealdim = dopedim>
+    class PointConstraints : public UserDefinedDoFConstraints<HP,dopedim,dealdim>
 #else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
   class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
@@ -50,7 +50,7 @@ namespace DOpE
     PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
                      const std::vector<std::vector<bool> > &c_comps)
 #if DEAL_II_VERSION_GTE(9,3,0)
-  : UserDefinedDoFConstraints<HP, DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
+  : UserDefinedDoFConstraints<HP,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
 #else
   : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
 #endif
@@ -63,7 +63,11 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void MakeStateDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
+#else
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
+#endif
       dealii::AffineConstraints<double> &constraint_matrix) const;
 #else
     virtual void MakeStateDoFConstraints(
@@ -74,7 +78,11 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void
     MakeControlDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+#endif
       dealii::AffineConstraints<double> & /*dof_constraints*/) const {}
 #else
     virtual void
@@ -89,9 +97,9 @@ namespace DOpE
   };
   
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, template<int, int> class DH, int dopedim, int dealdim>
-    void PointConstraints<HP, DH, dopedim, dealdim>::MakeStateDoFConstraints(
-    const DOpEWrapper::DoFHandler<dealdim, DH > &dof_handler,
+  template<bool HP, int dopedim, int dealdim>
+    void PointConstraints<HP, dopedim, dealdim>::MakeStateDoFConstraints(
+    const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
     dealii::AffineConstraints<double> &constraint_matrix) const
 
 #else
@@ -128,8 +136,8 @@ namespace DOpE
         DoFTools::extract_dofs(dof_handler,components,selected_dofs);
 #else //Less than 7.3
         DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
-#endif
-#endif
+#endif//Less than 7.3
+#endif//Less than 8.0
 #endif
 
         bool found = false;

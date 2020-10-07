@@ -46,6 +46,7 @@ namespace DOpE
      * Through template specialization for DH, we
      * distinguish between the 'classic' and the 'hp' case.
      *
+     * @template HP         false for normal DoFHandler true for HP.
      * @template DH The type of the dealii-dofhandler we use in
      *                      our DOpEWrapper::DoFHandler, at the moment
      *                      DoFHandler and hp::DoFHandler.
@@ -54,7 +55,7 @@ namespace DOpE
      */
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dim>
+    template<bool HP, typename VECTOR, int dim>
 #else
     template<template<int, int> class DH, typename VECTOR, int dim>
 #endif
@@ -80,7 +81,7 @@ namespace DOpE
 
     template<typename VECTOR, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-      class Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim> : public edcinternal::Network_ElementDataContainerInternal<
+      class Network_ElementDataContainer<false, VECTOR, dim> : public edcinternal::Network_ElementDataContainerInternal<
       dim>
 #else
       class Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::Network_ElementDataContainerInternal<
@@ -113,7 +114,7 @@ namespace DOpE
       Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
                                    UpdateFlags update_flags,
 #if DEAL_II_VERSION_GTE(9,3,0)
-                                   SpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+                                   SpaceTimeHandler<FE, false, SPARSITYPATTERN, dealii::Vector<double>,
 #else
                                    SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
 #endif
@@ -159,7 +160,7 @@ namespace DOpE
       Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
                                    UpdateFlags update_flags,
 #if DEAL_II_VERSION_GTE(9,3,0)
-                                   StateSpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+                                   StateSpaceTimeHandler<FE, false, SPARSITYPATTERN, dealii::Vector<double>,
 #else
                                    StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
 #endif
@@ -245,7 +246,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::ReInit()
+      Network_ElementDataContainer<false, VECTOR, dim>::ReInit()
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit()
 #endif
@@ -260,7 +261,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetNDoFsPerElement() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
 #endif
@@ -272,7 +273,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetNQPoints() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
 #endif
@@ -284,7 +285,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetMaterialId() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
 #endif
@@ -296,7 +297,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+      Network_ElementDataContainer<false, VECTOR, dim>::GetNbrMaterialId(
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
 #endif
@@ -317,7 +318,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+      Network_ElementDataContainer<false, VECTOR, dim>::GetFaceBoundaryIndicator(
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
 #endif
@@ -330,7 +331,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     bool
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetIsAtBoundary() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
 #endif
@@ -341,7 +342,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     double
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetElementDiameter() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
 #endif
@@ -352,7 +353,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     Point<dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetCenter() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetCenter() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
 #endif
@@ -364,7 +365,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetFEValuesState() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
 #endif
@@ -376,7 +377,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetFEValuesControl() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
 #endif
@@ -389,7 +390,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetStateIndex() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
 #endif
@@ -402,7 +403,7 @@ namespace DOpE
     template<typename VECTOR, int dim>
     unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
+      Network_ElementDataContainer<false, VECTOR, dim>::GetControlIndex() const
 #else
       Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
 #endif

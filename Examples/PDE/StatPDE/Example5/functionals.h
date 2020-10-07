@@ -36,10 +36,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalFaceFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalFaceFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -55,7 +55,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceValue(const FDC<HP, DH,VECTOR,dealdim> &fdc)
+    FaceValue(const FDC<HP,VECTOR,dealdim> &fdc)
 #else
     FaceValue(const FDC<DH,VECTOR,dealdim> &fdc)
 #endif
@@ -91,7 +91,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceValue_U(const FDC<HP, DH,VECTOR,dealdim> &fdc,
+    FaceValue_U(const FDC<HP,VECTOR,dealdim> &fdc,
 #else
     FaceValue_U(const FDC<DH,VECTOR,dealdim> &fdc,
 #endif

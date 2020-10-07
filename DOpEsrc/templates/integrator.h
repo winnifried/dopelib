@@ -429,7 +429,7 @@ protected:
 
 private:
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template <bool HP, template <int, int> class DH>
+  template <bool HP>
 #else
   template <template <int, int> class DH>
 #endif
@@ -439,7 +439,11 @@ private:
 #else
     InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
 #endif
-			      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#if DEAL_II_VERSION_GTE(9,3,0)
+     			      const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+     			      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
 			      const unsigned int color,
 			      const dealii::Function<dim> &function,
 			      std::map<unsigned int, SCALAR> &boundary_values,
@@ -2134,7 +2138,7 @@ INTEGRATORDATACONT &Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
           int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template <bool HP, template <int, int> class DH>
+  template <bool HP>
 #else
   template <template <int, int> class DH>
 #endif
@@ -2145,7 +2149,11 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
 #else
 	const DOpEWrapper::Mapping<dim, DH> &mapping,
 #endif
-        const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#if DEAL_II_VERSION_GTE(9,3,0)
+	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
         const std::vector<bool> &comp_mask) const {

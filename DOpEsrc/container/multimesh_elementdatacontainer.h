@@ -49,12 +49,11 @@ namespace DOpE
    * by calculation of the respective values on a common refinement.
    *
    * @template HP         false for normal DoFHandler true for HP.
-   * @template DH         The type of the dealii-dofhandler we use in our DoPEWrapper::DoFHandler, at the moment DoFHandler and hp::DoFHandler.
    * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
    * @template dim        The dimension of the integral we are actually interested in.
    */
 
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dim>
+  template<bool HP, typename VECTOR, int dim>
 #else
   /**
    * Dummy Template Class, acts as kind of interface. Through template specialization for
@@ -94,7 +93,7 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    class Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>
+    class Multimesh_ElementDataContainer<false, VECTOR, dim>
 #else
     class Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>
 #endif
@@ -127,7 +126,7 @@ namespace DOpE
       const Quadrature<dim> &quad,
       UpdateFlags update_flags,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN,
+      SpaceTimeHandler<FE, false, SPARSITYPATTERN,
       VECTOR, dopedim, dealdim> &sth,
 #else
       SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
@@ -354,7 +353,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    DOpE::Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::ReInit(unsigned int coarse_index,unsigned int fine_index, const FullMatrix<double> &prolongation_matrix)
+    DOpE::Multimesh_ElementDataContainer<false, VECTOR, dim>::ReInit(unsigned int coarse_index,unsigned int fine_index, const FullMatrix<double> &prolongation_matrix)
 #else
     DOpE::Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(unsigned int coarse_index,unsigned int fine_index, const FullMatrix<double> &prolongation_matrix)
 #endif
@@ -389,7 +388,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetNDoFsPerElement() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
 #endif
@@ -401,7 +400,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetNQPoints() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
 #endif
@@ -413,7 +412,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetMaterialId() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
 #endif
@@ -425,7 +424,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetNbrMaterialId(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
 #endif
@@ -446,7 +445,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   bool
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetIsAtBoundary() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
 #endif
@@ -457,7 +456,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetElementDiameter() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
 #endif
@@ -471,7 +470,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetFEValuesState() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
 #endif
@@ -483,7 +482,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetFEValuesControl() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
 #endif
@@ -496,7 +495,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetParamValues(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetParamValues(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetParamValues(
 #endif
@@ -516,7 +515,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetValuesState(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetValuesState(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesState(
 #endif
@@ -528,7 +527,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetValuesState(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetValuesState(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesState(
 #endif
@@ -542,7 +541,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetValuesControl(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetValuesControl(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesControl(
 #endif
@@ -555,7 +554,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetValuesControl(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetValuesControl(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesControl(
 #endif
@@ -569,7 +568,7 @@ namespace DOpE
   template<int targetdim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetGradsState(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetGradsState(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsState(
 #endif
@@ -583,7 +582,7 @@ namespace DOpE
   template<int targetdim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetGradsState(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetGradsState(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsState(
 #endif
@@ -598,7 +597,7 @@ namespace DOpE
   template<int targetdim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetGradsControl(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetGradsControl(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsControl(
 #endif
@@ -612,7 +611,7 @@ namespace DOpE
   template<int targetdim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetGradsControl(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetGradsControl(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsControl(
 #endif
@@ -626,7 +625,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetStateIndex() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
 #endif
@@ -639,7 +638,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetControlIndex() const
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
 #endif
@@ -651,7 +650,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetValues(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetValues(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValues(
 #endif
@@ -696,7 +695,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetValues(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetValues(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValues(
 #endif
@@ -757,7 +756,7 @@ namespace DOpE
   template<int targetdim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetGrads(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetGrads(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGrads(
 #endif
@@ -806,7 +805,7 @@ namespace DOpE
   template<int targetdim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<false, dealii::DoFHandler, VECTOR, dim>::GetGrads(
+    Multimesh_ElementDataContainer<false, VECTOR, dim>::GetGrads(
 #else
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGrads(
 #endif

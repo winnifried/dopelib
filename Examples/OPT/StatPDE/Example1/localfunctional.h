@@ -32,11 +32,11 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -56,7 +56,7 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+ElementValue(const EDC<HP, VECTOR, dealdim> &edc)
 #else
 ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
 #endif
@@ -94,7 +94,7 @@ ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-ElementValue_U(const EDC<HP, DH, VECTOR, dealdim> &edc,
+ElementValue_U(const EDC<HP, VECTOR, dealdim> &edc,
 #else
 ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -130,7 +130,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	       ElementValue_Q(const EDC<HP, DH, VECTOR, dealdim> &edc,
+	       ElementValue_Q(const EDC<HP, VECTOR, dealdim> &edc,
 #else
 	       ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -161,7 +161,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementValue_UU(const EDC<HP, DH, VECTOR, dealdim> &edc,
+     ElementValue_UU(const EDC<HP, VECTOR, dealdim> &edc,
 #else
      ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -189,7 +189,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementValue_QU(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementValue_QU(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -199,7 +199,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_UQ(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+   ElementValue_UQ(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
    ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -209,7 +209,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementValue_QQ(const EDC<HP, DH, VECTOR, dealdim> &edc,
+  ElementValue_QQ(const EDC<HP, VECTOR, dealdim> &edc,
 #else
   ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &edc,
 #endif

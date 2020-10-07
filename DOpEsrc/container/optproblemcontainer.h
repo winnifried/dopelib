@@ -100,15 +100,12 @@ namespace DOpE
    * @tparam dealdim                The dimension of the domain in which the PDE is considered.
    * @tparam FE                     The finite element under consideration.
    * @tparam HP                     False for normal, true for hp-dofhandler
-   * @tparam DH                     The spatial DoFHandler to be used when evaluating the
-   *                                weak form.
    */
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim,
            template<int, int> class FE = dealii::FESystem,
-           bool HP = false,
-           template<int, int> class DH = dealii::DoFHandler>
+           bool HP = false>
 #else
   /**
    * Container class for all stationary Optimization problems.
@@ -143,7 +140,7 @@ namespace DOpE
     OptProblemContainer(FUNCTIONAL &functional, PDE &pde,
                         CONSTRAINTS &constraints,
 #if DEAL_II_VERSION_GTE(9,3,0)
-			SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
+			SpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
 #else
 			SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
 #endif
@@ -167,7 +164,7 @@ namespace DOpE
     StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -180,7 +177,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	    HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+	    HP>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #else
 	      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #endif
@@ -195,7 +192,7 @@ namespace DOpE
     TangentProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -208,7 +205,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	    HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+	    HP>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #else
 	      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #endif
@@ -222,7 +219,7 @@ namespace DOpE
     AdjointProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -235,7 +232,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	    HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+	    HP>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #else
 	      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #endif
@@ -249,7 +246,7 @@ namespace DOpE
     Adjoint_HessianProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -262,7 +259,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	    HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+	    HP>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #else
 	      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #endif
@@ -277,7 +274,7 @@ namespace DOpE
     OPT_Adjoint_For_EEProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -290,7 +287,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	    HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+	    HP>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #else
 	      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 #endif
@@ -304,7 +301,7 @@ namespace DOpE
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>&
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>&
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>&
 #endif
@@ -1032,7 +1029,7 @@ namespace DOpE
     /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *
+    const SpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *
 #else
     const SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *
 #endif
@@ -1044,7 +1041,7 @@ namespace DOpE
     /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *
+    SpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *
 #else
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *
 #endif
@@ -1457,7 +1454,7 @@ namespace DOpE
     FUNCTIONAL *functional_;
     CONSTRAINTS *constraints_;
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *STH_;
+    SpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *STH_;
 #else
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *STH_;
 #endif
@@ -1494,7 +1491,7 @@ namespace DOpE
     StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1502,7 +1499,7 @@ namespace DOpE
     TangentProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1510,7 +1507,7 @@ namespace DOpE
     AdjointProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1518,7 +1515,7 @@ namespace DOpE
     Adjoint_HessianProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1526,7 +1523,7 @@ namespace DOpE
     OPT_Adjoint_For_EEProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1535,7 +1532,7 @@ namespace DOpE
     friend class StateProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1543,7 +1540,7 @@ namespace DOpE
     friend class TangentProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1551,7 +1548,7 @@ namespace DOpE
     friend class AdjointProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1559,7 +1556,7 @@ namespace DOpE
     friend class Adjoint_HessianProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1567,7 +1564,7 @@ namespace DOpE
     friend class OPT_Adjoint_For_EEProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>,
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 #endif
@@ -1579,14 +1576,15 @@ namespace DOpE
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+    template<int, int> class DH>
 #endif
-           template<int, int> class DH>
 #if DEAL_II_VERSION_GTE(9,3,0)
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::OptProblemContainer(
+    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::OptProblemContainer(
                         FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
-                        SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
+                        SpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
 #else
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::OptProblemContainer(
@@ -1619,12 +1617,13 @@ namespace DOpE
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+    template<int, int> class DH>
 #endif
-           template<int, int> class DH>
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::~OptProblemContainer()
+    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::~OptProblemContainer()
 #else
     SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~OptProblemContainer()
 #endif
@@ -1684,13 +1683,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool HP,
-#endif
+    bool HP>
+#else
     template<int, int> class DH>
+#endif
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ReInit(
+    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ReInit(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ReInit(
 #endif
@@ -1755,13 +1755,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool HP,
+    bool HP>
+#else
+      template<int, int> class DH>
 #endif
-    template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetType(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetType(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetType(
 #endif
@@ -1851,14 +1852,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool HP,
+    bool HP>
+#else
+      template<int, int> class DH>
 #endif
-    template<int, int> class DH>
   template<typename DATACONTAINER>
   double
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementFunctional(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementFunctional(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementFunctional(
 #endif
@@ -1897,13 +1899,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool HP,
+    bool HP>
+#else
+      template<int, int> class DH>
 #endif
-    template<int, int> class DH>
   double
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::PointFunctional(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::PointFunctional(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointFunctional(
 #endif
@@ -1958,14 +1961,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   double
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::BoundaryFunctional(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::BoundaryFunctional(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryFunctional(
 #endif
@@ -2004,14 +2008,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   double
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::FaceFunctional(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::FaceFunctional(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceFunctional(
 #endif
@@ -2046,13 +2051,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   double
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::AlgebraicFunctional(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::AlgebraicFunctional(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
 #endif
@@ -2090,14 +2096,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementEquation(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementEquation(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
 #endif
@@ -2123,13 +2130,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::AlgebraicResidual(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::AlgebraicResidual(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicResidual(
 #endif
@@ -2156,14 +2164,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementTimeEquation(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementTimeEquation(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
 #endif
@@ -2190,14 +2199,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementTimeEquationExplicit(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementTimeEquationExplicit(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
 #endif
@@ -2224,14 +2234,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::BoundaryEquation(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::BoundaryEquation(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
 #endif
@@ -2257,14 +2268,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementRhs(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementRhs(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
 #endif
@@ -2360,13 +2372,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::PointRhs(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::PointRhs(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointRhs(
 #endif
@@ -2453,14 +2466,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::FaceRhs(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::FaceRhs(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceRhs(
 #endif
@@ -2537,14 +2551,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::BoundaryRhs(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::BoundaryRhs(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryRhs(
 #endif
@@ -2625,14 +2640,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementMatrix(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementMatrix(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
 #endif
@@ -2661,14 +2677,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementTimeMatrix(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementTimeMatrix(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
 #endif
@@ -2694,14 +2711,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ElementTimeMatrixExplicit(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ElementTimeMatrixExplicit(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
 #endif
@@ -2726,14 +2744,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::FaceEquation(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::FaceEquation(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
 #endif
@@ -2759,14 +2778,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::InterfaceEquation(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::InterfaceEquation(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
 #endif
@@ -2792,14 +2812,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::FaceMatrix(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::FaceMatrix(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceMatrix(
 #endif
@@ -2831,14 +2852,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::InterfaceMatrix(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::InterfaceMatrix(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceMatrix(
 #endif
@@ -2863,14 +2885,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::BoundaryMatrix(
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::BoundaryMatrix(
 #else
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
 #endif
@@ -2894,13 +2917,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ComputeLocalControlConstraints(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ComputeLocalControlConstraints(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeLocalControlConstraints(
 #endif
@@ -2930,13 +2954,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   std::string
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDoFType() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDoFType() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
 #endif
@@ -2959,13 +2984,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const FE<dealdim, dealdim> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetFESystem() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetFESystem() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
 #endif
@@ -2995,13 +3021,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   UpdateFlags
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetUpdateFlags() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetUpdateFlags() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetUpdateFlags() const
 #endif
@@ -3042,13 +3069,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   UpdateFlags
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetFaceUpdateFlags() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetFaceUpdateFlags() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFaceUpdateFlags() const
 #endif
@@ -3088,13 +3116,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   std::string
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetFunctionalType() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetFunctionalType() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalType() const
 #endif
@@ -3116,13 +3145,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   std::string
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetFunctionalName() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetFunctionalName() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalName() const
 #endif
@@ -3144,13 +3174,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   std::string
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetConstraintType() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetConstraintType() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetConstraintType() const
 #endif
@@ -3163,13 +3194,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   unsigned int
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::FunctionalNeedPrecomputations() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::FunctionalNeedPrecomputations() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
 #endif
@@ -3191,13 +3223,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::FunctionalNeedFinalValue() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::FunctionalNeedFinalValue() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
 #endif
@@ -3210,13 +3243,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetTime(double time,
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetTime(double time,
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetTime(double time,
 #endif
@@ -3292,13 +3326,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+								  template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::ComputeSparsityPattern(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::ComputeSparsityPattern(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
 #endif
@@ -3332,13 +3367,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::PostProcessConstraints(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::PostProcessConstraints(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PostProcessConstraints(
 #endif
@@ -3352,13 +3388,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::AddAuxiliaryControl(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::AddAuxiliaryControl(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryControl(
 #endif
@@ -3380,13 +3417,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::AddAuxiliaryState(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::AddAuxiliaryState(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryState(
 #endif
@@ -3407,13 +3445,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::AddAuxiliaryConstraint(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::AddAuxiliaryConstraint(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryConstraint(
 #endif
@@ -3434,13 +3473,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const ControlVector<VECTOR> *
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetAuxiliaryControl(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetAuxiliaryControl(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryControl(
 #endif
@@ -3462,13 +3502,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const StateVector<VECTOR> *
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetAuxiliaryState(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetAuxiliaryState(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryState(
 #endif
@@ -3490,13 +3531,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::DeleteAuxiliaryControl(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::DeleteAuxiliaryControl(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryControl(
 #endif
@@ -3519,13 +3561,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::DeleteAuxiliaryState(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::DeleteAuxiliaryState(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryState(
 #endif
@@ -3548,13 +3591,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::DeleteAuxiliaryConstraint(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::DeleteAuxiliaryConstraint(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryConstraint(
 #endif
@@ -3577,13 +3621,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   FUNCTIONAL *
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetFunctional()
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetFunctional()
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional()
 #endif
@@ -3605,13 +3650,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const FUNCTIONAL *
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetFunctional() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetFunctional() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional() const
 #endif
@@ -3632,13 +3678,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::HasFaces() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::HasFaces() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasFaces() const
 #endif
@@ -3679,13 +3726,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::HasPoints() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::HasPoints() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasPoints() const
 #endif
@@ -3719,13 +3767,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::HasInterfaces() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::HasInterfaces() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasInterfaces() const
 #endif
@@ -3766,13 +3815,14 @@ namespace DOpE
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-           template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::HasVertices() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::HasVertices() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasVertices() const
 #endif
@@ -3807,14 +3857,15 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   template<typename ELEMENTITERATOR>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
 #endif
@@ -3851,13 +3902,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetControlDirichletBoundaryColors(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetControlDirichletBoundaryColors(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlDirichletBoundaryColors(
 #endif
@@ -3893,13 +3945,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetDirichletBoundaryColors(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetDirichletBoundaryColors(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetDirichletBoundaryColors(
 #endif
@@ -3954,13 +4007,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<unsigned int> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDirichletColors() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDirichletColors() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
 #endif
@@ -3982,13 +4036,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<unsigned int> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetTransposedDirichletColors() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetTransposedDirichletColors() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletColors() const
 #endif
@@ -4010,13 +4065,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<bool> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDirichletCompMask(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDirichletCompMask(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
 #endif
@@ -4055,13 +4111,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<bool> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetTransposedDirichletCompMask(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetTransposedDirichletCompMask(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
 #endif
@@ -4100,13 +4157,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const Function<dealdim> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDirichletValues(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDirichletValues(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletValues(
 #endif
@@ -4157,13 +4215,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const TransposedDirichletDataInterface<dealdim> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetTransposedDirichletValues(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetTransposedDirichletValues(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletValues(
 #endif
@@ -4223,13 +4282,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<unsigned int> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetBoundaryEquationColors() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetBoundaryEquationColors() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
 #endif
@@ -4252,13 +4312,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetControlBoundaryEquationColors(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetControlBoundaryEquationColors(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlBoundaryEquationColors(
 #endif
@@ -4293,13 +4354,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetBoundaryEquationColors(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetBoundaryEquationColors(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryEquationColors(
 #endif
@@ -4357,13 +4419,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<unsigned int> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetBoundaryFunctionalColors() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetBoundaryFunctionalColors() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
 #endif
@@ -4389,13 +4452,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::SetBoundaryFunctionalColors(
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::SetBoundaryFunctionalColors(
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryFunctionalColors(
 #endif
@@ -4452,13 +4516,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   unsigned int
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetControlNBlocks() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetControlNBlocks() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetControlNBlocks() const
 #endif
@@ -4472,13 +4537,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   unsigned int
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetStateNBlocks() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetStateNBlocks() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetStateNBlocks() const
 #endif
@@ -4492,13 +4558,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   unsigned int
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetNBlocks() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetNBlocks() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetNBlocks() const
 #endif
@@ -4527,13 +4594,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   const std::vector<unsigned int> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDoFsPerBlock() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDoFsPerBlock() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const
 #endif
@@ -4563,15 +4631,16 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
 
 #if DEAL_II_VERSION_GTE(9,1,1)
   const dealii::AffineConstraints<double> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDoFConstraints() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDoFConstraints() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
 #endif
@@ -4591,7 +4660,7 @@ namespace DOpE
   const dealii::ConstraintMatrix &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetDoFConstraints() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetDoFConstraints() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
 #endif
@@ -4615,15 +4684,16 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
 
 #if DEAL_II_VERSION_GTE(9,1,1)
   const dealii::AffineConstraints<double> &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::GetHNConstraints() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::GetHNConstraints() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
 #endif
@@ -4662,13 +4732,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::NeedTimeFunctional() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::NeedTimeFunctional() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::NeedTimeFunctional() const
 #endif
@@ -4691,13 +4762,14 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-           bool HP,
+           bool HP>
+#else
+      template<int, int> class DH>
 #endif
-  template<int, int> class DH>
   bool
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
 #if DEAL_II_VERSION_GTE(9,3,0)
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP, DH>::HasControlInDirichletData() const
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, HP>::HasControlInDirichletData() const
 #else
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasControlInDirichletData() const
 #endif

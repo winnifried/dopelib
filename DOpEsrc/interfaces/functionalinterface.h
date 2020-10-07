@@ -49,9 +49,9 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+    template<bool HP, typename VECTOR, int dealdim> class EDC,
+    template<bool HP, typename VECTOR, int dealdim> class FDC,
+    bool HP, typename VECTOR, int dopedim, int dealdim =
     dopedim>
 #else
   template<
@@ -80,7 +80,7 @@ namespace DOpE
      */
     virtual double
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementValue(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/)
+  ElementValue(const EDC<HP, VECTOR, dealdim> &/*edc*/)
 #else
   ElementValue(const EDC<DH, VECTOR, dealdim> &/*edc*/)
 #endif
@@ -100,7 +100,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementValue_U(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+  ElementValue_U(const EDC<HP, VECTOR, dealdim> &/*edc*/,
 #else
   ElementValue_U(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 #endif
@@ -121,7 +121,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
- ElementValue_Q(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+ ElementValue_Q(const EDC<HP, VECTOR, dealdim> &/*edc*/,
 #else
  ElementValue_Q(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 #endif
@@ -142,7 +142,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_UU(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+   ElementValue_UU(const EDC<HP, VECTOR, dealdim> &/*edc*/,
 #else
    ElementValue_UU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 #endif
@@ -163,7 +163,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_QU(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+   ElementValue_QU(const EDC<HP, VECTOR, dealdim> &/*edc*/,
 #else
    ElementValue_QU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 #endif
@@ -184,7 +184,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_UQ(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+   ElementValue_UQ(const EDC<HP, VECTOR, dealdim> &/*edc*/,
 #else
    ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 #endif
@@ -205,7 +205,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_QQ(const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+   ElementValue_QQ(const EDC<HP, VECTOR, dealdim> &/*edc*/,
 #else
    ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 #endif
@@ -228,8 +228,13 @@ namespace DOpE
      */
     virtual double
     PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/)
   {
@@ -251,8 +256,13 @@ namespace DOpE
      */
     virtual void
     PointValue_U(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/,
       VECTOR &/*rhs*/, double /*scale*/)
@@ -276,8 +286,13 @@ namespace DOpE
      */
     virtual void
     PointValue_Q(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/,
       VECTOR &/*rhs*/, double /*scale*/)
@@ -301,8 +316,13 @@ namespace DOpE
      */
     virtual void
     PointValue_UU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/,
       VECTOR &/*rhs*/, double /*scale*/)
@@ -327,8 +347,13 @@ namespace DOpE
      */
     virtual void
     PointValue_QU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/,
       VECTOR &/*rhs*/, double /*scale*/)
@@ -353,8 +378,13 @@ namespace DOpE
      */
     virtual void
     PointValue_UQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/,
       VECTOR &/*rhs*/, double /*scale*/)
@@ -380,8 +410,13 @@ namespace DOpE
      */
     virtual void
     PointValue_QQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &/*control_dof_handler*/,
+      const DOpEWrapper::DoFHandler<dealdim> &/*state_dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
       const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
+#endif
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
       const std::map<std::string, const VECTOR *> &/*domain_values*/,
       VECTOR &/*rhs*/, double /*scale*/)
@@ -399,7 +434,7 @@ namespace DOpE
      */
     virtual double
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/)
+   BoundaryValue(const FDC<HP, VECTOR, dealdim> &/*fdc*/)
 #else
    BoundaryValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
 #endif
@@ -418,7 +453,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue_U(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+   BoundaryValue_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
    BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -438,7 +473,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue_Q(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+   BoundaryValue_Q(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
    BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -458,7 +493,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue_UU(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+   BoundaryValue_UU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
    BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -478,7 +513,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue_QU(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+    BoundaryValue_QU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
     BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -498,7 +533,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     BoundaryValue_UQ(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+     BoundaryValue_UQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
      BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -518,7 +553,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      BoundaryValue_QQ(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+      BoundaryValue_QQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
       BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -537,7 +572,7 @@ namespace DOpE
      */
     virtual double
 #if DEAL_II_VERSION_GTE(9,3,0)
-       FaceValue(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/)
+       FaceValue(const FDC<HP, VECTOR, dealdim> &/*fdc*/)
 #else
        FaceValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
 #endif
@@ -556,7 +591,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       FaceValue_U(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+       FaceValue_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
        FaceValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -577,7 +612,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   FaceValue_Q(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+   FaceValue_Q(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
    FaceValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -598,7 +633,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       FaceValue_UU(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+       FaceValue_UU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
        FaceValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -619,7 +654,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceValue_QU(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+    FaceValue_QU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
      FaceValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -640,7 +675,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	 FaceValue_UQ(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+	 FaceValue_UQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
 	  FaceValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -662,7 +697,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      FaceValue_QQ(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+      FaceValue_QQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
       FaceValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif

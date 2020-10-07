@@ -48,19 +48,16 @@ namespace DOpE
    * @tparam dealdim                The dimension of the domain in which the PDE is considered.
    * @tparam FE                     The finite element under consideration.
    * @tparam HP                     False for normal, true for hp-dofhandler
-   * @tparam DH                     The spatial DoFHandler to be used when evaluating the
-   *                                weak form.
    */
-  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class PRIMALTSPROBLEM,
-           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class  ADJOINTTSPROBLEM,
+  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class PRIMALTSPROBLEM,
+           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class  ADJOINTTSPROBLEM,
            typename PDE,
            typename DD, typename SPARSITYPATTERN,
            typename VECTOR, int dealdim,
            template<int, int> class FE = FESystem,
-           bool HP = false,
-           template<int, int> class DH = dealii::DoFHandler>
+           bool HP = false>
   class InstatPDEProblemContainer : public PDEProblemContainer<PDE,DD,
-    SPARSITYPATTERN, VECTOR,dealdim,FE, HP, DH>
+    SPARSITYPATTERN, VECTOR,dealdim,FE, HP>
 #else
   /**
    * Container class for all nonstationary pde problems.
@@ -83,8 +80,8 @@ namespace DOpE
    * @tparam DH                     The spatial DoFHandler to be used when evaluating the
    *                                weak form.
    */
-  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class PRIMALTSPROBLEM,
-           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class  ADJOINTTSPROBLEM,
+  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class PRIMALTSPROBLEM,
+           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class  ADJOINTTSPROBLEM,
            typename PDE,
            typename DD, typename SPARSITYPATTERN,
            typename VECTOR, int dealdim,
@@ -97,8 +94,8 @@ namespace DOpE
   public:
     InstatPDEProblemContainer(PDE &pde,
 #if DEAL_II_VERSION_GTE(9,3,0)
-                              StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR,dealdim> &STH)
-  : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP, DH>(
+                              StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR,dealdim> &STH)
+  : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>(
     pde,STH), ts_state_problem_(NULL)
 #else
                               StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,dealdim> &STH)
@@ -125,7 +122,7 @@ namespace DOpE
         }
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP, DH>::ReInit(algo_type);
+      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>::ReInit(algo_type);
 #else
       PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>::ReInit(algo_type);
 #endif
@@ -142,17 +139,17 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
     PRIMALTSPROBLEM<StateProblem<
-      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP, DH>,
+      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-      SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
+      SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
           ts_state_problem_ = new PRIMALTSPROBLEM<StateProblem<
-	    PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP, DH>,
+	    PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-	    SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(PDEProblemContainer<PDE,DD,
-							  SPARSITYPATTERN,VECTOR,dealdim,FE, HP, DH>::GetStateProblem());
+	    SPARSITYPATTERN, VECTOR, dealdim, FE>(PDEProblemContainer<PDE,DD,
+							  SPARSITYPATTERN,VECTOR,dealdim,FE, HP>::GetStateProblem());
         }
       return *ts_state_problem_;
     }
@@ -160,14 +157,14 @@ namespace DOpE
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
           ts_state_problem_ = new PRIMALTSPROBLEM<StateProblem<
           PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(PDEProblemContainer<PDE,DD,
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(PDEProblemContainer<PDE,DD,
                                                     SPARSITYPATTERN,VECTOR,dealdim,FE, DH>::GetStateProblem());
         }
       return *ts_state_problem_;
@@ -177,14 +174,14 @@ namespace DOpE
   private:
 #if DEAL_II_VERSION_GTE(9,3,0)
     PRIMALTSPROBLEM<StateProblem<
-      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP, DH>,
+      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-      SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_state_problem_;
+      SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_state_problem_;
 #else
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_state_problem_;
+    SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_state_problem_;
 #endif
   };
 }

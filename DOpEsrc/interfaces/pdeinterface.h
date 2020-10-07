@@ -64,9 +64,9 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    bool HP, template<int, int> class DH, typename VECTOR,  int dealdim>
+    template<bool HP, typename VECTOR, int dealdim> class EDC,
+    template<bool HP, typename VECTOR, int dealdim> class FDC,
+    bool HP, typename VECTOR,  int dealdim>
 #else
   template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -109,7 +109,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      ElementEquation(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+      ElementEquation(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
 			  ElementEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -139,18 +139,19 @@ namespace DOpE
     *
      */
     virtual void
+      StrongElementResidual(  
 #if DEAL_II_VERSION_GTE(9,3,0)
-		      StrongElementResidual(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+	const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
-						StrongElementResidual(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+	const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
-								      const EDC<HP, DH, VECTOR, dealdim> & /*edc_weight*/,
+	const EDC<HP, VECTOR, dealdim> & /*edc_weight*/,
 #else
-								      const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
+	const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
 #endif
-                          double & /*ret*/,
-                          double /*scale*/)
+	double & /*ret*/,
+	double /*scale*/)
     {
       throw DOpEException("Not Implemented",
 			  "PDEInterface::StrongElementResidual");
@@ -181,7 +182,7 @@ namespace DOpE
     //Note that the _UU term is not needed, since we assume that ElementTimeEquation is linear!
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquation(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquation(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -213,7 +214,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquation_U(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquation_U(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -243,7 +244,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquation_UT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquation_UT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquation_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -276,7 +277,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementTimeEquation_UTT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+   ElementTimeEquation_UTT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
    ElementTimeEquation_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -308,7 +309,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquationExplicit(const EDC<HP, DH, VECTOR, dealdim> & /*edc**/,
+    ElementTimeEquationExplicit(const EDC<HP, VECTOR, dealdim> & /*edc**/,
 #else
     ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc**/,
 #endif
@@ -335,7 +336,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquationExplicit_U(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquationExplicit_U(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquationExplicit_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -363,7 +364,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquationExplicit_UT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquationExplicit_UT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquationExplicit_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -390,7 +391,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquationExplicit_UTT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquationExplicit_UTT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquationExplicit_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -419,7 +420,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementTimeEquationExplicit_UU(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquationExplicit_UU(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementTimeEquationExplicit_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -456,7 +457,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementEquation_U(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+   ElementEquation_U(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
    ElementEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -486,8 +487,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     StrongElementResidual_U(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
-			     const EDC<HP, DH, VECTOR, dealdim> & /*edc_weight*/,
+     StrongElementResidual_U(const EDC<HP, VECTOR, dealdim> & /*edc*/,
+			     const EDC<HP, VECTOR, dealdim> & /*edc_weight*/,
 #else
      StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 			     const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
@@ -525,7 +526,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementEquation_UT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+     ElementEquation_UT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
      ElementEquation_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -564,7 +565,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementEquation_UTT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+     ElementEquation_UTT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
      ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -604,7 +605,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation_Q(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_Q(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -644,7 +645,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      ElementEquation_QT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+      ElementEquation_QT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
      ElementEquation_QT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -679,7 +680,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation_QTT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_QTT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -715,7 +716,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation_UU(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_UU(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementEquation_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -753,7 +754,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation_QU(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_QU(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
 		       ElementEquation_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -788,7 +789,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation_UQ(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_UQ(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementEquation_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -822,7 +823,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      ElementEquation_QQ(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+      ElementEquation_QQ(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
       ElementEquation_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -849,7 +850,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementRightHandSide(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ElementRightHandSide(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -884,7 +885,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementMatrix(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+     ElementMatrix(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
      ElementMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -911,7 +912,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementTimeMatrix(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+   ElementTimeMatrix(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
    ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -933,7 +934,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementTimeMatrix_T(const EDC<HP, DH, VECTOR, dealdim> &edc,
+     ElementTimeMatrix_T(const EDC<HP, VECTOR, dealdim> &edc,
 #else
      ElementTimeMatrix_T(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -972,7 +973,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementTimeMatrixExplicit(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+     ElementTimeMatrixExplicit(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
      ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -995,7 +996,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       ElementTimeMatrixExplicit_T(const EDC<HP, DH, VECTOR, dealdim> &edc,
+       ElementTimeMatrixExplicit_T(const EDC<HP, VECTOR, dealdim> &edc,
 #else
        ElementTimeMatrixExplicit_T(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -1045,7 +1046,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ElementMatrix_T(const EDC<HP, DH, VECTOR, dealdim> &edc,
+   ElementMatrix_T(const EDC<HP, VECTOR, dealdim> &edc,
 #else
    ElementMatrix_T(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -1089,7 +1090,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   ControlElementEquation(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+   ControlElementEquation(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
    ControlElementEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -1113,7 +1114,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ControlElementMatrix(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    ControlElementMatrix(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     ControlElementMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -1142,7 +1143,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ControlBoundaryEquation(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    ControlBoundaryEquation(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     ControlBoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1166,7 +1167,7 @@ namespace DOpE
     */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ControlBoundaryMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    ControlBoundaryMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     ControlBoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1195,8 +1196,8 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     StrongElementResidual_Control(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
-				   const EDC<HP, DH, VECTOR, dealdim> & /*edc_weight*/,
+     StrongElementResidual_Control(const EDC<HP, VECTOR, dealdim> & /*edc*/,
+				   const EDC<HP, VECTOR, dealdim> & /*edc_weight*/,
 #else
      StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                                   const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
@@ -1228,8 +1229,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    StrongFaceResidual_Control(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-                               const FDC<HP, DH, VECTOR, dealdim> & /*fdc_weight*/,
+    StrongFaceResidual_Control(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+                               const FDC<HP, VECTOR, dealdim> & /*fdc_weight*/,
 #else
      StrongFaceResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                                const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
@@ -1261,8 +1262,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      StrongBoundaryResidual_Control(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-				     const FDC<HP, DH, VECTOR, dealdim> & /*fdc_weight*/,
+      StrongBoundaryResidual_Control(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+				     const FDC<HP, VECTOR, dealdim> & /*fdc_weight*/,
 #else
       StrongBoundaryResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                                    const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
@@ -1287,7 +1288,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceEquation(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceEquation(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1302,8 +1303,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     StrongFaceResidual(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-			const FDC<HP, DH, VECTOR, dealdim> & /*fdc_weight*/,
+     StrongFaceResidual(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+			const FDC<HP, VECTOR, dealdim> & /*fdc_weight*/,
 #else
      StrongFaceResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                        const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
@@ -1319,7 +1320,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceEquation_U(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_U(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     FaceEquation_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1334,8 +1335,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   StrongFaceResidual_U(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-			const FDC<HP, DH, VECTOR, dealdim> & /*fdc_weight*/,
+   StrongFaceResidual_U(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+			const FDC<HP, VECTOR, dealdim> & /*fdc_weight*/,
 #else
    StrongFaceResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
@@ -1351,7 +1352,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceEquation_UT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_UT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     FaceEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1366,7 +1367,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceEquation_UTT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_UTT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     FaceEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1381,7 +1382,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceEquation_Q(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceEquation_Q(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceEquation_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1396,7 +1397,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceEquation_QT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_QT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     FaceEquation_QT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1411,7 +1412,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceEquation_QTT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_QTT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     FaceEquation_QTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1426,7 +1427,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceEquation_UU(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceEquation_UU(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceEquation_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1441,7 +1442,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceEquation_QU(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceEquation_QU(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceEquation_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1456,7 +1457,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceEquation_UQ(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceEquation_UQ(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceEquation_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1471,7 +1472,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceEquation_QQ(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceEquation_QQ(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceEquation_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1486,7 +1487,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceRightHandSide(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceRightHandSide(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      FaceRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1503,7 +1504,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      FaceMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+      FaceMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
       FaceMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1518,7 +1519,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceMatrix_T(const FDC<HP, DH, VECTOR, dealdim> &fdc,
+     FaceMatrix_T(const FDC<HP, VECTOR, dealdim> &fdc,
 #else
      FaceMatrix_T(const FDC<DH, VECTOR, dealdim> &fdc,
 #endif
@@ -1546,7 +1547,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  InterfaceMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+  InterfaceMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
   InterfaceMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1561,7 +1562,7 @@ namespace DOpE
     //Functions for Interface Integrals
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    InterfaceMatrix_T(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    InterfaceMatrix_T(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     InterfaceMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1582,7 +1583,7 @@ namespace DOpE
     // availiable for implementation.
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      InterfaceEquation(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+      InterfaceEquation(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
       InterfaceEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1597,7 +1598,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	InterfaceEquation_U(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	InterfaceEquation_U(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
    InterfaceEquation_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1613,7 +1614,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	    InterfaceEquation_UT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	    InterfaceEquation_UT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
 	     InterfaceEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1629,7 +1630,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	 InterfaceEquation_UTT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	 InterfaceEquation_UTT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
 	   InterfaceEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1647,7 +1648,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       BoundaryEquation(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+       BoundaryEquation(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     BoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1662,8 +1663,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   StrongBoundaryResidual(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-			  const FDC<HP, DH, VECTOR, dealdim> & /*fdc_weight*/,
+   StrongBoundaryResidual(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+			  const FDC<HP, VECTOR, dealdim> & /*fdc_weight*/,
 #else
    StrongBoundaryResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                            const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
@@ -1679,7 +1680,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  BoundaryEquation_U(const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+  BoundaryEquation_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
 #else
   BoundaryEquation_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
 #endif
@@ -1695,8 +1696,8 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     StrongBoundaryResidual_U(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-			      const FDC<HP, DH, VECTOR, dealdim> & /*fdc_weight*/,
+     StrongBoundaryResidual_U(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+			      const FDC<HP, VECTOR, dealdim> & /*fdc_weight*/,
 #else
      StrongBoundaryResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                              const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
@@ -1712,7 +1713,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      BoundaryEquation_UT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+      BoundaryEquation_UT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
       BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1728,7 +1729,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	  BoundaryEquation_UTT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	  BoundaryEquation_UTT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
 	   BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1744,7 +1745,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       BoundaryEquation_Q(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+       BoundaryEquation_Q(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
       BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1760,7 +1761,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	  BoundaryEquation_QT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	  BoundaryEquation_QT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
 	  BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1776,7 +1777,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	      BoundaryEquation_QTT(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	      BoundaryEquation_QTT(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
 	       BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1792,7 +1793,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryEquation_UU(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+   BoundaryEquation_UU(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
    BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1808,7 +1809,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       BoundaryEquation_QU(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+       BoundaryEquation_QU(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
        BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1824,7 +1825,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryEquation_UQ(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+   BoundaryEquation_UQ(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
    BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1840,7 +1841,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       BoundaryEquation_QQ(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+       BoundaryEquation_QQ(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
        BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1856,7 +1857,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	   BoundaryRightHandSide(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	   BoundaryRightHandSide(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
 	     BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1871,7 +1872,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	 BoundaryMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	 BoundaryMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -1886,7 +1887,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	BoundaryMatrix_T(const FDC<HP, DH, VECTOR, dealdim> &fdc,
+	BoundaryMatrix_T(const FDC<HP, VECTOR, dealdim> &fdc,
 #else
        BoundaryMatrix_T(const FDC<DH, VECTOR, dealdim> &fdc,
 #endif
@@ -1926,7 +1927,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	 Init_ElementEquation(const EDC<HP, DH, VECTOR, dealdim> &edc,
+	 Init_ElementEquation(const EDC<HP, VECTOR, dealdim> &edc,
 #else
           Init_ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -1964,7 +1965,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      Init_ElementRhs_Q(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+      Init_ElementRhs_Q(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
       Init_ElementRhs_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -1974,7 +1975,7 @@ namespace DOpE
     }
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	Init_ElementRhs_QT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+	Init_ElementRhs_QT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
        Init_ElementRhs_QT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -1984,7 +1985,7 @@ namespace DOpE
     }
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	   Init_ElementRhs_QTT(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+	   Init_ElementRhs_QTT(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
 	   Init_ElementRhs_QTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -1994,7 +1995,7 @@ namespace DOpE
     }
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       Init_ElementRhs_QQ(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+       Init_ElementRhs_QQ(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
       Init_ElementRhs_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -2006,7 +2007,7 @@ namespace DOpE
     virtual void
     Init_ElementRhs(const dealii::Function<dealdim> *init_values,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -2042,7 +2043,7 @@ namespace DOpE
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	  Init_ElementMatrix(const EDC<HP, DH, VECTOR, dealdim> &edc,
+	  Init_ElementMatrix(const EDC<HP, VECTOR, dealdim> &edc,
 #else
 	 Init_ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -2237,7 +2238,7 @@ namespace DOpE
      *
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
- virtual void BoundaryEquation_BV(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+ virtual void BoundaryEquation_BV(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
   virtual void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2256,7 +2257,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-	  BoundaryMatrix_BV(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+	  BoundaryMatrix_BV(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
   	BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2283,7 +2284,7 @@ namespace DOpE
      *
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-    virtual void OutflowValues(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+    virtual void OutflowValues(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2302,7 +2303,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-       OutflowMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+       OutflowMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
        OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2326,7 +2327,7 @@ namespace DOpE
      *
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-     virtual void Init_OutflowValues(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     virtual void Init_OutflowValues(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      virtual void Init_OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2345,7 +2346,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     Init_OutflowMatrix(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     Init_OutflowMatrix(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
     Init_OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2419,7 +2420,7 @@ namespace DOpE
      */
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-ElementAuxRhs(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+ElementAuxRhs(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
  ElementAuxRhs(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -2431,7 +2432,7 @@ ElementAuxRhs(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
 
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FaceAuxRhs(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     FaceAuxRhs(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
        FaceAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif
@@ -2442,7 +2443,7 @@ ElementAuxRhs(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
     }
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     BoundaryAuxRhs(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+     BoundaryAuxRhs(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
 #else
      BoundaryAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 #endif

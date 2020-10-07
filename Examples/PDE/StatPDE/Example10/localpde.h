@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -81,7 +81,7 @@ public:
   void
   ElementEquation(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, 2> &edc,
+    const EDC<HP, VECTOR, 2> &edc,
 #else
     const EDC<DH, VECTOR, 2> &edc,
 #endif
@@ -249,7 +249,7 @@ public:
   void
   ElementMatrix(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, 2> &edc,
+    const EDC<HP, VECTOR, 2> &edc,
 #else
     const EDC<DH, VECTOR, 2> &edc,
 #endif
@@ -507,7 +507,7 @@ public:
   void
   ElementRightHandSide(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, 2> & /*edc*/,
+    const EDC<HP, VECTOR, 2> & /*edc*/,
 #else
     const EDC<DH, VECTOR, 2> & /*edc*/,
 #endif
@@ -519,7 +519,7 @@ public:
   void
   BoundaryEquation(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, DH, VECTOR, 2> &fdc,
+    const FDC<HP, VECTOR, 2> &fdc,
 #else
     const FDC<DH, VECTOR, 2> &fdc,
 #endif
@@ -582,7 +582,7 @@ public:
   void
   BoundaryMatrix(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, DH, VECTOR, 2> &fdc,
+    const FDC<HP, VECTOR, 2> &fdc,
 #else
     const FDC<DH, VECTOR, 2> &fdc,
 #endif
@@ -692,7 +692,7 @@ public:
   void
   BoundaryRightHandSide(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, DH, VECTOR, 2> &,
+    const FDC<HP, VECTOR, 2> &,
 #else
     const FDC<DH, VECTOR, 2> &,
 #endif

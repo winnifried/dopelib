@@ -31,7 +31,7 @@ namespace DOpE
    */
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
        dealii::BlockSparsityPattern, dealii::BlockVector<double>,
        dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern (dealii::BlockSparsityPattern &sparsity) const
   {
@@ -61,7 +61,7 @@ namespace DOpE
 
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
        dealii::SparsityPattern, dealii::Vector<double>, dope_dimension,
        deal_II_dimension>::ComputeControlSparsityPattern (dealii::SparsityPattern &sparsity) const
   {
@@ -144,7 +144,7 @@ namespace DOpE
    */
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
        dealii::BlockSparsityPattern, dealii::BlockVector<double>,
        dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern (dealii::BlockSparsityPattern &sparsity) const
   {
@@ -174,7 +174,7 @@ namespace DOpE
 
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
        dealii::SparsityPattern, dealii::Vector<double>, dope_dimension,
        deal_II_dimension>::ComputeControlSparsityPattern (dealii::SparsityPattern &sparsity) const
   {
@@ -255,7 +255,7 @@ namespace DOpE
   template <>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
 #else
     DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
 #endif
@@ -280,7 +280,7 @@ namespace DOpE
   template <>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
 #else
     DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
 #endif
@@ -305,7 +305,7 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
        dealii::BlockSparsityPattern, dealii::BlockVector<double>,
        dope_dimension, deal_II_dimension>::ResetTriangulation (const dealii::Triangulation<
            deal_II_dimension> &tria)
@@ -326,7 +326,7 @@ namespace DOpE
 
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
        dealii::SparsityPattern, dealii::Vector<double>, dope_dimension,
        deal_II_dimension>::ResetTriangulation (const dealii::Triangulation<
                                                deal_II_dimension> &tria)
@@ -371,29 +371,25 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
 						    false,
-						    dealii::DoFHandler,
-                                                    dealii::BlockSparsityPattern,
+						    dealii::BlockSparsityPattern,
                                                     dealii::BlockVector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
                                                     false,
-						    dealii::DoFHandler,
-                                                    dealii::SparsityPattern,
+						    dealii::SparsityPattern,
                                                     dealii::Vector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
 						    true,
-						    dealii::DoFHandler,
-                                                    dealii::BlockSparsityPattern,
+						    dealii::BlockSparsityPattern,
                                                     dealii::BlockVector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
                                                     true,
-						    dealii::DoFHandler,
-                                                    dealii::SparsityPattern,
+						    dealii::SparsityPattern,
                                                     dealii::Vector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;

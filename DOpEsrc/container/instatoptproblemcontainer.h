@@ -31,7 +31,7 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   /**
    * Container class for all nonstationary Optimization problems.
-   * This class collects all problem depended data needed to
+   * This class collects all problem dependend data needed to
    * calculate the solution to the optimization problem.
    *
    * At present also nonstationary PDEs use this container, beeing also an optimization problem
@@ -55,23 +55,20 @@ namespace DOpE
    * @tparam dealdim                The dimension of the domain in which the PDE is considered.
    * @tparam FE                     The finite element under consideration.
    * @tparam HP                     False for normal, true for hp-dofhandler
-   * @tparam DH                     The spatial DoFHandler to be used when evaluating the
-   *                                weak form.
-   */
-  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class PRIMALTSPROBLEM,
-           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class  ADJOINTTSPROBLEM,
+  */
+  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class PRIMALTSPROBLEM,
+           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class  ADJOINTTSPROBLEM,
            typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim,
            template<int, int> class FE = FESystem,
-           bool HP = false,
-           template<int, int> class DH = dealii::DoFHandler>
+           bool HP = false>
   class InstatOptProblemContainer : public OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE,HP, DH>
+    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE,HP>
 #else
   /**
    * Container class for all nonstationary Optimization problems.
-   * This class collects all problem depended data needed to
+   * This class collects all problem dependend data needed to
    * calculate the solution to the optimization problem.
    *
    * At present also nonstationary PDEs use this container, beeing also an optimization problem
@@ -97,8 +94,8 @@ namespace DOpE
    * @tparam DH                     The spatial DoFHandler to be used when evaluating the
    *                                weak form.
    */
-  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class PRIMALTSPROBLEM,
-           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE, template<int, int> class DH> class  ADJOINTTSPROBLEM,
+  template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class PRIMALTSPROBLEM,
+           template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class  ADJOINTTSPROBLEM,
            typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim,
@@ -111,8 +108,8 @@ namespace DOpE
     public:
     InstatOptProblemContainer(FUNCTIONAL &functional,PDE &pde,CONSTRAINTS &constraints,
 #if DEAL_II_VERSION_GTE(9,3,0)
-			      SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dopedim,dealdim> &STH)
-    : OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>(
+			      SpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dopedim,dealdim> &STH)
+    : OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>(
 #else
                               SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,dealdim> &STH)
       : OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>(
@@ -165,7 +162,7 @@ namespace DOpE
           ts_adjoint_hessian_problem_ = NULL;
         }
 #if DEAL_II_VERSION_GTE(9,3,0)
-      OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>::ReInit(algo_type);
+      OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>::ReInit(algo_type);
 #else
       OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::ReInit(algo_type);
 #endif
@@ -183,17 +180,17 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
     PRIMALTSPROBLEM<StateProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
           ts_state_problem_ = new PRIMALTSPROBLEM<StateProblem<
-          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>::GetStateProblem());
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>::GetStateProblem());
         }
       return *ts_state_problem_;
     }
@@ -201,14 +198,14 @@ namespace DOpE
     PRIMALTSPROBLEM<StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
           ts_state_problem_ = new PRIMALTSPROBLEM<StateProblem<
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
                                                     SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetStateProblem());
         }
       return *ts_state_problem_;
@@ -223,17 +220,17 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
     ADJOINTTSPROBLEM<AdjointProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetAdjointProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetAdjointProblem()
     {
       if (ts_adjoint_problem_ == NULL)
         {
           ts_adjoint_problem_ = new ADJOINTTSPROBLEM<AdjointProblem<
-          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>::GetAdjointProblem());
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>::GetAdjointProblem());
         }
       return *ts_adjoint_problem_;
     }
@@ -241,14 +238,14 @@ namespace DOpE
     ADJOINTTSPROBLEM<AdjointProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetAdjointProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetAdjointProblem()
     {
       if (ts_adjoint_problem_ == NULL)
         {
           ts_adjoint_problem_ = new ADJOINTTSPROBLEM<AdjointProblem<
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
                                                     SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjointProblem());
         }
       return *ts_adjoint_problem_;
@@ -261,17 +258,17 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
     PRIMALTSPROBLEM<TangentProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetTangentProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetTangentProblem()
     {
       if (ts_tangent_problem_ == NULL)
         {
           ts_tangent_problem_ = new PRIMALTSPROBLEM<TangentProblem<
-          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>::GetTangentProblem());
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>::GetTangentProblem());
         }
       return *ts_tangent_problem_;
     }
@@ -279,14 +276,14 @@ namespace DOpE
     PRIMALTSPROBLEM<TangentProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetTangentProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetTangentProblem()
     {
       if (ts_tangent_problem_ == NULL)
         {
           ts_tangent_problem_ = new PRIMALTSPROBLEM<TangentProblem<
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
                                                     SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetTangentProblem());
         }
       return *ts_tangent_problem_;
@@ -301,17 +298,17 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
     ADJOINTTSPROBLEM<Adjoint_HessianProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetAdjointHessianProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetAdjointHessianProblem()
     {
       if (ts_adjoint_hessian_problem_ == NULL)
         {
           ts_adjoint_hessian_problem_ = new   ADJOINTTSPROBLEM<Adjoint_HessianProblem<
-          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+          OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>::GetAdjoint_HessianProblem());
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>::GetAdjoint_HessianProblem());
         }
       return *ts_adjoint_hessian_problem_;
     }
@@ -319,14 +316,14 @@ namespace DOpE
     ADJOINTTSPROBLEM<Adjoint_HessianProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetAdjointHessianProblem()
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetAdjointHessianProblem()
     {
       if (ts_adjoint_hessian_problem_ == NULL)
         {
           ts_adjoint_hessian_problem_ = new   ADJOINTTSPROBLEM<Adjoint_HessianProblem<
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-          SPARSITYPATTERN, VECTOR, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+          SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
                                                     SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjoint_HessianProblem());
         }
       return *ts_adjoint_hessian_problem_;
@@ -336,39 +333,39 @@ namespace DOpE
   private:
 #if DEAL_II_VERSION_GTE(9,3,0)
 PRIMALTSPROBLEM<StateProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_state_problem_;
+    SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_state_problem_;
     ADJOINTTSPROBLEM<AdjointProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_adjoint_problem_;
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_adjoint_problem_;
     PRIMALTSPROBLEM<TangentProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_tangent_problem_;
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_tangent_problem_;
     ADJOINTTSPROBLEM<Adjoint_HessianProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP, DH>,
+    OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, HP>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_adjoint_hessian_problem_;
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_adjoint_hessian_problem_;
     
 #else
     PRIMALTSPROBLEM<StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_state_problem_;
+    SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_state_problem_;
     ADJOINTTSPROBLEM<AdjointProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_adjoint_problem_;
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_adjoint_problem_;
     PRIMALTSPROBLEM<TangentProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_tangent_problem_;
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_tangent_problem_;
     ADJOINTTSPROBLEM<Adjoint_HessianProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_adjoint_hessian_problem_;
+                        SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_adjoint_hessian_problem_;
 #endif
   };
 }

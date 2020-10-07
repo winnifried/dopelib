@@ -34,10 +34,10 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-    class LocalConstraint : public ConstraintInterface<EDC, FDC, HP, DH, VECTOR,
+    template<bool HP, typename VECTOR, int dealdim> class EDC,
+    template<bool HP, typename VECTOR, int dealdim> class FDC,
+    bool HP, typename VECTOR, int dopedim, int dealdim>
+    class LocalConstraint : public ConstraintInterface<EDC, FDC, HP, VECTOR,
     dopedim, dealdim>
 #else
     template<

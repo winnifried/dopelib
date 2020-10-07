@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+07.10.2020: Removed DoFHandler as template argument for dealii version 9.3.0 as it
+	    is no longer needed.
 06.10.2020: Fixed SetActiveFEIndex* methods to work with the merged DoFHandlers
 05.10.2020: To adjust to the merging of the DoFHandlers, all classes having
 	    a DoFHandler as template argument now need an additional template

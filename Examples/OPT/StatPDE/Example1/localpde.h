@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -53,7 +53,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementEquation(const EDC<HP, DH, VECTOR, dealdim> &edc,
+    ElementEquation(const EDC<HP, VECTOR, dealdim> &edc,
 #else
     ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -91,7 +91,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-		    ElementEquation_U(const EDC<HP, DH, VECTOR, dealdim> &edc,
+		    ElementEquation_U(const EDC<HP, VECTOR, dealdim> &edc,
 #else
 		    ElementEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -122,7 +122,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      ElementEquation_UT(const EDC<HP, DH, VECTOR, dealdim> &edc,
+      ElementEquation_UT(const EDC<HP, VECTOR, dealdim> &edc,
 #else
       ElementEquation_UT(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -152,7 +152,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
- ElementEquation_UTT(const EDC<HP, DH, VECTOR, dealdim> &edc,
+ ElementEquation_UTT(const EDC<HP, VECTOR, dealdim> &edc,
 #else
  ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -182,7 +182,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementEquation_Q(const EDC<HP, DH, VECTOR, dealdim> &edc,
+     ElementEquation_Q(const EDC<HP, VECTOR, dealdim> &edc,
 #else
      ElementEquation_Q(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -213,7 +213,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      ElementEquation_QT(const EDC<HP, DH, VECTOR, dealdim> &edc,
+      ElementEquation_QT(const EDC<HP, VECTOR, dealdim> &edc,
 #else
       ElementEquation_QT(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -245,7 +245,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
- ElementEquation_QTT(const EDC<HP, DH, VECTOR, dealdim> &edc,
+ ElementEquation_QTT(const EDC<HP, VECTOR, dealdim> &edc,
 #else
  ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -276,7 +276,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     ElementEquation_UU(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+     ElementEquation_UU(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
      ElementEquation_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -287,7 +287,7 @@ public:
   }
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementEquation_QU(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+  ElementEquation_QU(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
   ElementEquation_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -298,7 +298,7 @@ public:
   }
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementEquation_UQ(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+  ElementEquation_UQ(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
   ElementEquation_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -309,7 +309,7 @@ public:
   }
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementEquation_QQ(const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+  ElementEquation_QQ(const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
   ElementEquation_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -321,7 +321,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementRightHandSide(const EDC<HP, DH, VECTOR, dealdim> &edc,
+  ElementRightHandSide(const EDC<HP, VECTOR, dealdim> &edc,
 #else
   ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -354,7 +354,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementMatrix(const EDC<HP, DH, VECTOR, dealdim> &edc,
+  ElementMatrix(const EDC<HP, VECTOR, dealdim> &edc,
 #else
   ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -383,7 +383,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ControlElementEquation(const EDC<HP, DH, VECTOR, dealdim> &edc,
+  ControlElementEquation(const EDC<HP, VECTOR, dealdim> &edc,
 #else
   ControlElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -414,7 +414,7 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
- ControlElementMatrix(const EDC<HP, DH, VECTOR, dealdim> &edc,
+ ControlElementMatrix(const EDC<HP, VECTOR, dealdim> &edc,
 #else
  ControlElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -442,8 +442,8 @@ public:
   /******************************************************/
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     StrongElementResidual(const EDC<HP, DH, VECTOR, dealdim> &edc,
-			   const EDC<HP, DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+     StrongElementResidual(const EDC<HP, VECTOR, dealdim> &edc,
+			   const EDC<HP, VECTOR, dealdim> &edc_w, double &sum, double scale)
 #else
      StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
 			   const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
@@ -484,8 +484,8 @@ public:
   }
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-     StrongElementResidual_U(const EDC<HP, DH, VECTOR, dealdim> &edc,
-			     const EDC<HP, DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+     StrongElementResidual_U(const EDC<HP, VECTOR, dealdim> &edc,
+			     const EDC<HP, VECTOR, dealdim> &edc_w, double &sum, double scale)
 #else
      StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> &edc,
 			     const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
@@ -523,8 +523,8 @@ public:
   }
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      StrongElementResidual_Control(const EDC<HP, DH, VECTOR, dealdim> &edc,
-				    const EDC<HP, DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+      StrongElementResidual_Control(const EDC<HP, VECTOR, dealdim> &edc,
+				    const EDC<HP, VECTOR, dealdim> &edc_w, double &sum, double scale)
 #else
       StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim> &edc,
 				    const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
@@ -559,8 +559,8 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  StrongFaceResidual(const FDC<HP, DH, VECTOR, dealdim> &fdc,
-                     const FDC<HP, DH, VECTOR, dealdim> &fdc_w, double &sum, double scale)
+  StrongFaceResidual(const FDC<HP, VECTOR, dealdim> &fdc,
+                     const FDC<HP, VECTOR, dealdim> &fdc_w, double &sum, double scale)
 #else
   StrongFaceResidual(const FDC<DH, VECTOR, dealdim> &fdc,
                      const FDC<DH, VECTOR, dealdim> &fdc_w, double &sum, double scale)
@@ -599,8 +599,8 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-   StrongFaceResidual_U(const FDC<HP, DH, VECTOR, dealdim> &fdc,
-			const FDC<HP, DH, VECTOR, dealdim> &fdc_w, double &sum, double scale)
+   StrongFaceResidual_U(const FDC<HP, VECTOR, dealdim> &fdc,
+			const FDC<HP, VECTOR, dealdim> &fdc_w, double &sum, double scale)
 #else
    StrongFaceResidual_U(const FDC<DH, VECTOR, dealdim> &fdc,
 			const FDC<DH, VECTOR, dealdim> &fdc_w, double &sum, double scale)
@@ -638,8 +638,8 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  StrongFaceResidual_Control(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-                             const FDC<HP, DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
+  StrongFaceResidual_Control(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+                             const FDC<HP, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
 #else
   StrongFaceResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                              const FDC<DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
@@ -651,8 +651,8 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  StrongBoundaryResidual(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-                         const FDC<HP, DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
+  StrongBoundaryResidual(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+                         const FDC<HP, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
 #else
   StrongBoundaryResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          const FDC<DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
@@ -663,8 +663,8 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  StrongBoundaryResidual_U(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-                           const FDC<HP, DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
+  StrongBoundaryResidual_U(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+                           const FDC<HP, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
 #else
   StrongBoundaryResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                            const FDC<DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
@@ -675,8 +675,8 @@ public:
 
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-  StrongBoundaryResidual_Control(const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
-                                 const FDC<HP, DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
+  StrongBoundaryResidual_Control(const FDC<HP, VECTOR, dealdim> & /*fdc*/,
+                                 const FDC<HP, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)
 #else
   StrongBoundaryResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                                  const FDC<DH, VECTOR, dealdim> &/*fdc_w*/, double &sum, double)

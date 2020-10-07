@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+  template<bool HP, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, typename VECTOR, int dealdim> class FDC,
+  bool HP, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -54,7 +54,7 @@ public:
   void
   ElementEquation(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -93,7 +93,7 @@ public:
   void
   ElementEquation_U(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -125,7 +125,7 @@ public:
   void
   ElementEquation_UT(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -156,7 +156,7 @@ public:
   void
   ElementEquation_UTT(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -187,7 +187,7 @@ public:
   void
   ElementEquation_Q(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -219,7 +219,7 @@ public:
   void
   ElementEquation_QT(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -252,7 +252,7 @@ public:
   void
   ElementEquation_QTT(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -284,7 +284,7 @@ public:
   void
   ElementEquation_UU(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -296,7 +296,7 @@ public:
   void
   ElementEquation_QU(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -308,7 +308,7 @@ public:
   void
   ElementEquation_UQ(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -320,7 +320,7 @@ public:
   void
   ElementEquation_QQ(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+    const EDC<HP, VECTOR, dealdim> & /*edc*/,
 #else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
 #endif
@@ -333,7 +333,7 @@ public:
   void
   ElementRightHandSide(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -367,7 +367,7 @@ public:
   void
   ElementMatrix(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -397,7 +397,7 @@ public:
   void
   ControlElementEquation(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
@@ -429,7 +429,7 @@ public:
   void
   ControlElementMatrix(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, VECTOR, dealdim> &edc,
 #else
     const EDC<DH, VECTOR, dealdim> &edc,
 #endif
