@@ -1177,13 +1177,8 @@ namespace DOpE
          dealii::BlockSparsityPattern &sparsity) const
   {
     const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::BlockDynamicSparsityPattern csp(blocks.size(),
                                             blocks.size());
-#else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-                                                     blocks.size());
-#endif
     for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
@@ -1215,11 +1210,7 @@ namespace DOpE
                                              dealii::SparsityPattern &sparsity) const
   {
     const unsigned int total_dofs = this->GetControlNDoFs();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
-#else
-    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-#endif
     dealii::DoFTools::make_sparsity_pattern(
       static_cast<const dealii::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
       csp);
@@ -1242,13 +1233,8 @@ namespace DOpE
          dealii::BlockSparsityPattern &sparsity) const
   {
     const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::BlockDynamicSparsityPattern csp(blocks.size(),
                                             blocks.size());
-#else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-                                                     blocks.size());
-#endif
     for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
@@ -1297,11 +1283,7 @@ namespace DOpE
                                              dealii::SparsityPattern &sparsity) const
   {
     const unsigned int total_dofs = this->GetControlNDoFs();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
-#else
-    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-#endif
     dealii::DoFTools::make_sparsity_pattern(
       static_cast<const dealii::hp::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
       csp);

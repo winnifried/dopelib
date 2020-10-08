@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+08.10.2020: Fixes in new code to assert compatibility to dealii 8.5
+08.10.2020: Removed code-fragments for compatibility to dealii versions prior to 8.3.0
 07.10.2020: Removed DoFHandler as template argument for dealii version 9.3.0 as it
 	    is no longer needed.
 06.10.2020: Fixed SetActiveFEIndex* methods to work with the merged DoFHandlers

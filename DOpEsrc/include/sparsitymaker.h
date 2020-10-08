@@ -190,11 +190,7 @@ namespace DOpE
     const std::vector<unsigned int> &blocks) const
 #endif
   {
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::BlockDynamicSparsityPattern csp(blocks, blocks);
-#else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks, blocks);
-#endif
 
     if ( flux_pattern_ )
       {
@@ -246,11 +242,7 @@ namespace DOpE
         total_dofs += blocks.at(j);
       }
 
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
-#else
-    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-#endif
     if ( flux_pattern_ )
       {
         dealii::DoFTools::make_flux_sparsity_pattern(

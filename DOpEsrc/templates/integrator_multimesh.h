@@ -1137,17 +1137,10 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
               {
-#if DEAL_II_VERSION_GTE(8,3,0)
                 if (element[b_index]->face(face)->at_boundary()
                     &&
                     (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
                           element[b_index]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                if (element[b_index]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                   {
                     fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
                     pde.BoundaryEquation(fdc,local_vector, 1., 1.);
@@ -1299,17 +1292,10 @@ template<typename PROBLEM, bool HP>
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
               {
-#if DEAL_II_VERSION_GTE(8,3,0)
                 if (element[b_index]->face(face)->at_boundary()
                     &&
                     (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
                           element[b_index]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                if (element[b_index]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                   {
                     fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
                     pde.BoundaryRhs(fdc,local_vector,1.);
@@ -1438,17 +1424,10 @@ template<typename PROBLEM, typename MATRIX, bool HP>
 
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
               {
-#if DEAL_II_VERSION_GTE(8,3,0)
                 if (element[b_index]->face(face)->at_boundary()
                     &&
                     (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
                           element[b_index]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                if (element[b_index]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                   {
                     fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
                     pde.BoundaryMatrix(fdc, local_matrix);
@@ -1642,17 +1621,10 @@ template<typename PROBLEM, typename MATRIX, bool HP>
         //zeros entry in the element vector
         for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             if (element[b_index]->face(face)->at_boundary()
                 &&
                 (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
                       element[b_index]->face(face)->boundary_id()) != boundary_functional_colors.end()))
-#else
-            if (element[b_index]->face(face)->at_boundary()
-                &&
-                (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-                      element[b_index]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
-#endif
               {
                 fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
                 ret += pde.BoundaryFunctional(fdc);

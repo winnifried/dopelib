@@ -125,19 +125,9 @@ namespace DOpE
         dealii::ComponentMask components(c_comps_[i]);
         DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components,selected_dofs);
 #else
-#if DEAL_II_VERSION_GTE(8,0,0)
         //Newer dealii Versions have changed the interface
         dealii::ComponentMask components(c_comps_[i]);
         DoFTools::extract_dofs(dof_handler,components,selected_dofs);
-#else //Less than 8.0
-#if DEAL_II_VERSION_GTE(7,3,0)
-        //Newer dealii Versions have changed the interface
-        dealii::ComponentMask components(c_comps_[i]);
-        DoFTools::extract_dofs(dof_handler,components,selected_dofs);
-#else //Less than 7.3
-        DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
-#endif//Less than 7.3
-#endif//Less than 8.0
 #endif
 
         bool found = false;

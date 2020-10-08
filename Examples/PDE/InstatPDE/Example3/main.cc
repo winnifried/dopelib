@@ -131,35 +131,19 @@ ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
       {
         if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(1);
-#else
-            element->face(face)->set_boundary_indicator(1);
-#endif
           }
         else if (std::fabs(element->face(face)->center()(0) - (upper_bound)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(0);
-#else
-            element->face(face)->set_boundary_indicator(0);
-#endif
           }
         else if (std::fabs(element->face(face)->center()(1) - (upper_bound)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(0);
-#else
-            element->face(face)->set_boundary_indicator(0);
-#endif
           }
         else if (std::fabs(element->face(face)->center()(0) - (0)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(1);
-#else
-            element->face(face)->set_boundary_indicator(1);
-#endif
           }
       }
 }
