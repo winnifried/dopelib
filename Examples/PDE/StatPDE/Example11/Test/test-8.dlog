@@ -1,9 +1,9 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 8.5
 
 	L2-error: 0.0693574
@@ -12,7 +12,7 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.56e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 2.828427
 
@@ -25,7 +25,7 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.38e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 3.061467
 
@@ -38,7 +38,7 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.87e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 3.121445
 
@@ -51,7 +51,7 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.11e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 3.136548
 
@@ -64,13 +64,13 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.18e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 3.140331
 
 	
 
-************************************************
+********************************************
 	*             Starting Forward Solve             *
 	*   Solving : PDEProblemContainer	*
 	*   SDoFs   : 	1313
@@ -80,7 +80,7 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.33e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 3.141591
 
@@ -98,7 +98,7 @@ Using dealii Version: 8.5
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   4.06e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 	Computing Functionals:
 	BoundaryPI: 3.141593
 
