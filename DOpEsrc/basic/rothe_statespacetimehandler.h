@@ -248,8 +248,8 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,0,0)
           VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handlers_[j]->GetDEALDoFHandler(),color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()), *state_dof_constraints_[j], comp_mask);
 #else
-	  VectorTools::interpolate_boundary_values(GetMapping()[0], *state_dof_handlers_[j].GetDEALDoFHandler(),  
-						   state_dof_constraints_[j], comp_mask);
+	  VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handlers_[j]->GetDEALDoFHandler(), color, dealii::ZeroFunction<dealdim>(comp_mask.size()),  
+						   *state_dof_constraints_[j], comp_mask);
 #endif
         }
       

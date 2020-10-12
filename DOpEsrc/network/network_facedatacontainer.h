@@ -727,11 +727,7 @@ namespace DOpE
       Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetBoundaryIndicator() const
 #endif
     {
-#if DEAL_II_VERSION_GTE(8,3,0)
       return element_[0]->face(this->GetFace())->boundary_id();
-#else
-      return element_[0]->face(this->GetFace())->boundary_indicator();
-#endif
     }
 
     /**********************************************/

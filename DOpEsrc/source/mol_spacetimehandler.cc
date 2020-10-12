@@ -87,12 +87,7 @@ namespace DOpE
        dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern (dealii::BlockSparsityPattern &sparsity) const
   {
     const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock ();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::BlockDynamicSparsityPattern csp (blocks.size (), blocks.size ());
-#else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-                                                     blocks.size());
-#endif
 
     for (unsigned int i = 0; i < blocks.size (); i++)
       {
@@ -122,11 +117,7 @@ namespace DOpE
        deal_II_dimension>::ComputeControlSparsityPattern (dealii::SparsityPattern &sparsity) const
   {
     const unsigned int total_dofs = this->GetControlNDoFs ();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::DynamicSparsityPattern csp (total_dofs, total_dofs);
-#else
-    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-#endif
 
 #if dope_dimension > 0
     dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
@@ -200,12 +191,7 @@ namespace DOpE
        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern (dealii::BlockSparsityPattern &sparsity) const
   {
     const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock ();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::BlockDynamicSparsityPattern csp (blocks.size (), blocks.size ());
-#else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-                                                     blocks.size());
-#endif
 
     for (unsigned int i = 0; i < blocks.size (); i++)
       {
@@ -235,11 +221,7 @@ namespace DOpE
        dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern (dealii::SparsityPattern &sparsity) const
   {
     const unsigned int total_dofs = this->GetControlNDoFs ();
-#if DEAL_II_VERSION_GTE(8,3,0)
     dealii::DynamicSparsityPattern csp (total_dofs, total_dofs);
-#else
-    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-#endif
 
 #if dope_dimension > 0
     dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);

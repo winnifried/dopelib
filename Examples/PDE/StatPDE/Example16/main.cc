@@ -306,7 +306,11 @@ main(int argc, char **argv)
     //Calculate error to reference
     for (int i = 0; i < max_iter; i++)
     {
+#if DEAL_II_VERSION_GTE(8,4,0)
       Vector<float> difference_per_element (DOFH.GetStateDoFHandler().get_triangulation().n_active_cells());
+#else
+      Vector<float> difference_per_element (DOFH.GetStateDoFHandler().get_tria().n_active_cells());
+#endif
       //First component (of two) for error calculation
       ComponentSelectFunction<2> select_comp(0,2);
       //Prepare the error

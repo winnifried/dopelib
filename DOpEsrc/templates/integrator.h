@@ -616,7 +616,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
             // refined than/as the actual element. We have to distinguish here
             // only between the case 1 and the other two, because these will be
             // distinguished in in the FaceDataContainer.
-
+	    //TODO: Check if neighbor(face) exists!
             if (element[0]->neighbor(face)->has_children()) {
               // first: neighbour is finer
 

@@ -163,19 +163,11 @@ main(int argc, char **argv)
             {
               if (element->face(f)->center()[1] == 0)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
                   element->face(f)->set_all_boundary_ids(5);
-#else
-                  element->face(f)->set_all_boundary_indicators(5);
-#endif
                   if (fabs(element->face(f)->center()[0] - 2.)
                       < std::max(0.25, element->face(f)->diameter()))
                     {
-#if DEAL_II_VERSION_GTE(8,3,0)
                       element->face(f)->set_all_boundary_ids(2);
-#else
-                      element->face(f)->set_all_boundary_indicators(2);
-#endif
                     }
                 }
             }
@@ -248,19 +240,11 @@ main(int argc, char **argv)
                     {
                       if (element->face(f)->center()[1] == 0)
                         {
-#if DEAL_II_VERSION_GTE(8,3,0)
                           element->face(f)->set_all_boundary_ids(5);
-#else
-                          element->face(f)->set_all_boundary_indicators(5);
-#endif
                           if ((fabs(element->face(f)->center()[0] - 2.)
                                < std::max(0.25, element->face(f)->diameter())))
                             {
-#if DEAL_II_VERSION_GTE(8,3,0)
                               element->face(f)->set_all_boundary_ids(2);
-#else
-                              element->face(f)->set_all_boundary_indicators(2);
-#endif
                             }
                         }
                     }

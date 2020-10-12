@@ -77,6 +77,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
+#if defined(DOPELIB_WITH_TRILINOS)
 typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
@@ -272,6 +273,14 @@ main(int argc, char **argv)
 
   return 0;
 }
+#else //no Trilinos
+int
+main(int /*argc*/, char **/*argv*/)
+{
+  std::cout<<"This example requires DOpE with Trilinos"<<std::endl;
+    abort();
+}
+#endif //Dopelib with trilinos
 
 #undef FDC
 #undef EDC

@@ -178,11 +178,8 @@ namespace DOpE
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             int boundary_indicator = element->face(face)->boundary_id();
-#else
-            int boundary_indicator = element->face(face)->boundary_indicator();
-#endif
+
             // Proceed only if the boundary indicator is lower than 4 and
             //if face is on a boundary and the corresponding boundary indicator is even
             if (element->face(face)->at_boundary() && boundary_indicator < 4
@@ -224,11 +221,7 @@ namespace DOpE
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             int boundary_indicator = element->face(face)->boundary_id();
-#else
-            int boundary_indicator = element->face(face)->boundary_indicator();
-#endif
             //Now loop over the remaining dofs, i.e. the ones with an odd boundary_indicator
             if (element->face(face)->at_boundary() && boundary_indicator < 4
                 && boundary_indicator % 2 == 1)

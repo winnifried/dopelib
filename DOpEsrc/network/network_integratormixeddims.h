@@ -202,15 +202,9 @@ namespace DOpE
 //            {
 //              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
 //                {
-//#if DEAL_II_VERSION_GTE(8,3,0)
 //                  if (element[0]->face(face)->at_boundary()
 //                      &&
 //                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-//#else
-//                  if (element[0]->face(face)->at_boundary()
-//                      &&
-//                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-//#endif
 //                    {
 //                      fdc.ReInit(face);
 //                      pde.BoundaryRhs(fdc,local_vector,-1.);
@@ -329,15 +323,9 @@ namespace DOpE
 //            {
 //              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
 //                {
-//#if DEAL_II_VERSION_GTE(8,3,0)
 //                  if (element[0]->face(face)->at_boundary()
 //                      &&
 //                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-//#else
-//                  if (element[0]->face(face)->at_boundary()
-//                      &&
-//                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-//#endif
 //                    {
 //                      fdc.ReInit(face);
 //                      pde.BoundaryRhs(fdc,local_vector,1.);
@@ -550,17 +538,10 @@ namespace DOpE
               {
                 for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
                   {
-#if DEAL_II_VERSION_GTE(8,3,0)
                     if (element[0]->face(face)->at_boundary()
                         &&
                         (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
                               element[0]->face(face)->boundary_id()) != boundary_functional_colors.end()))
-#else
-                    if (element[0]->face(face)->at_boundary()
-                        &&
-                        (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-                              element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
-#endif
                       {
 //              pde.GetBaseProblem().GetSpaceTimeHandler()->ComputeFaceFEValues(element, face, pde.GetType());
                         fdc.ReInit(face);
@@ -704,11 +685,8 @@ namespace DOpE
               unsigned int color = dirichlet_colors[i];
               std::vector<bool> comp_mask = pde.GetTransposedDirichletCompMask(color);
               std::vector<bool> current_comp(comp_mask.size(), false);
-#if DEAL_II_VERSION_GTE(7,3,0)
               std::set<types::boundary_id> boundary_indicators;
-#else
-              std::set<unsigned char> boundary_indicators;
-#endif
+
               boundary_indicators.insert(color);
               for (unsigned int j = 0; j < comp_mask.size(); j++)
                 {
