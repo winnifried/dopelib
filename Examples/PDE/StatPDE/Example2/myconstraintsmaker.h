@@ -31,8 +31,8 @@ namespace DOpE
    * This class implements the periodicity-constraints.
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, int dim>
-    class PeriodicityConstraints : public UserDefinedDoFConstraints<HP, dim>
+  template<bool DH, int dim>
+    class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
 #else
   template<template<int, int> class DH, int dim>
     class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
@@ -92,9 +92,9 @@ namespace DOpE
   };
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, int dim>
+  template<bool DH, int dim>
     void
-    PeriodicityConstraints<HP, dim>::declare_params(
+    PeriodicityConstraints<DH, dim>::declare_params(
 #else
   template<template<int, int> class DH, int dim>
     void
@@ -112,9 +112,9 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,1,1)
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, int dim>
+  template<bool DH, int dim>
   void
-    PeriodicityConstraints<HP, dim>::MakeStateDoFConstraints(
+    PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
 #else
   template<template<int, int> class DH, int dim>
   void

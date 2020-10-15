@@ -150,7 +150,7 @@ namespace DOpE
      * the same local element. See also deal.ii step-28
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -164,20 +164,15 @@ namespace DOpE
 #endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
-      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
-#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc);
-#endif
 
     /**
      * Used by to ComputeNonlinearRhs to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -191,20 +186,15 @@ namespace DOpE
 #endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
-      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
-#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc);
-#endif
 
     /**
      * Used by to ComputeMatrix to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PROBLEM, typename MATRIX, bool HP>
+template<typename PROBLEM, typename MATRIX, bool DH>
 #else
 template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
@@ -218,20 +208,15 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
-      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
-#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc);
-#endif
 
     /**
      * Used by to ComputeDomainScalar to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -244,17 +229,13 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc);
-#else
       Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc);
-#endif
     /**
      * Used by to ComputeBoundaryScalar to loop until both variables are on
      * the same local element. See also deal.ii step-28
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -267,11 +248,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element_iter,
       const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc);
-#else
       Multimesh_FaceDataContainer<DH, VECTOR, dim> &edc);
-#endif
 
     INTEGRATORDATACONT &idc_;
 
@@ -1076,7 +1053,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -1090,13 +1067,8 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
-    Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
-#else
     Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
     Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
-#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1227,7 +1199,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PROBLEM, bool HP>
+template<typename PROBLEM, bool DH>
 #else
   template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -1241,13 +1213,8 @@ template<typename PROBLEM, bool HP>
 #endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
-      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
-#else
     Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
     Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
-#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1367,7 +1334,7 @@ template<typename PROBLEM, bool HP>
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
            int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PROBLEM, typename MATRIX, bool HP>
+template<typename PROBLEM, typename MATRIX, bool DH>
 #else
   template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
@@ -1381,13 +1348,8 @@ template<typename PROBLEM, typename MATRIX, bool HP>
 #endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc,
-      Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
-#else
     Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc,
     Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
-#endif
   {
 
     if (!element[0]->has_children() && ! element[1]->has_children())
@@ -1534,7 +1496,7 @@ template<typename PROBLEM, typename MATRIX, bool HP>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
   template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -1547,11 +1509,7 @@ template<typename PROBLEM, typename MATRIX, bool HP>
 #endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Multimesh_ElementDataContainer<HP, VECTOR, dim> &edc)
-#else
     Multimesh_ElementDataContainer<DH, VECTOR, dim> &edc)
-#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {
@@ -1594,7 +1552,7 @@ template<typename PROBLEM, typename MATRIX, bool HP>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool HP>
+    template<typename PROBLEM, bool DH>
 #else
   template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -1607,11 +1565,7 @@ template<typename PROBLEM, typename MATRIX, bool HP>
 #endif
     typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
     const FullMatrix<SCALAR> &prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-#if DEAL_II_VERSION_GTE(9,3,0)
-    Multimesh_FaceDataContainer<HP, VECTOR, dim> &fdc)
-#else
     Multimesh_FaceDataContainer<DH, VECTOR, dim> &fdc)
-#endif
   {
     if (!element[0]->has_children() && ! element[1]->has_children())
       {

@@ -39,8 +39,8 @@ namespace DOpE
    *                     Both vetors are assumed to be in identical order!
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, int dopedim, int dealdim = dopedim>
-    class PointConstraints : public UserDefinedDoFConstraints<HP,dopedim,dealdim>
+  template<bool DH, int dopedim, int dealdim = dopedim>
+    class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
 #else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
   class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
@@ -49,11 +49,7 @@ namespace DOpE
   public:
     PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
                      const std::vector<std::vector<bool> > &c_comps)
-#if DEAL_II_VERSION_GTE(9,3,0)
-  : UserDefinedDoFConstraints<HP,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
-#else
   : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
-#endif
     {
       if (c_points_.size() != c_comps_.size())
         throw DOpEException("Number of Entries not matching!","PointConstraints::PointConstraints");
@@ -97,8 +93,8 @@ namespace DOpE
   };
   
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, int dopedim, int dealdim>
-    void PointConstraints<HP, dopedim, dealdim>::MakeStateDoFConstraints(
+  template<bool DH, int dopedim, int dealdim>
+    void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
     dealii::AffineConstraints<double> &constraint_matrix) const
 

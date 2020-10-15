@@ -35,10 +35,10 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<
-    template<bool HP, typename VECTOR, int dealdim> class EDC,
-    template<bool HP, typename VECTOR, int dealdim> class FDC,
-    bool HP, typename VECTOR, int dopedim, int dealdim>
-    class LocalConstraint : public ConstraintInterface<EDC, FDC, HP, VECTOR,
+    template<bool DH, typename VECTOR, int dealdim> class EDC,
+    template<bool DH, typename VECTOR, int dealdim> class FDC,
+    bool DH, typename VECTOR, int dopedim, int dealdim>
+    class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
     dopedim, dealdim>
 #else
     template<
@@ -82,11 +82,7 @@ namespace DOpE
 
     double
     ElementValue(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &edc)
-#else
       const EDC<DH, VECTOR, dealdim> &edc)
-#endif
     {
       if (this->GetProblemType() == "global_constraints"
           && this->GetProblemTypeNum() == 0)
@@ -115,22 +111,14 @@ namespace DOpE
 
     void
     ElementValue_U(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
 
     void
     ElementValue_Q(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &edc,
-#else
       const EDC<DH, VECTOR, dealdim> &edc,
-#endif
       dealii::Vector<double> &local_vector, double scale)
     {
       if (this->GetProblemType() == "global_constraint_gradient"
@@ -159,41 +147,25 @@ namespace DOpE
 
     void
     ElementValue_UU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
     void
     ElementValue_QU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
     void
     ElementValue_UQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
     void
     ElementValue_QQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }

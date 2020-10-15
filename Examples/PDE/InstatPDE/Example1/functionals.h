@@ -34,10 +34,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, HP,
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -108,10 +108,10 @@ public:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, HP,
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -151,11 +151,7 @@ public:
   }
 
   double
-#if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
-#else
     BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
-#endif
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -229,10 +225,10 @@ public:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalLift : public FunctionalInterface<EDC, FDC, HP,
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalLift : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -273,11 +269,7 @@ public:
   }
 
   double
-#if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
-#else
     BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
-#endif
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

@@ -431,17 +431,13 @@ namespace DOpE
 #endif
       
 #if DEAL_II_VERSION_GTE(9,3,0)
-      template<bool HP>
+      template<bool DH>
 #else
       template<template<int, int> class DH>
 #endif
       void
       InterpolateBoundaryValues(
-#if DEAL_II_VERSION_GTE(9,3,0)
-        const DOpEWrapper::Mapping<dim, HP> &mapping,
-#else
         const DOpEWrapper::Mapping<dim, DH> &mapping,
-#endif
 #if DEAL_II_VERSION_GTE(9,3,0)
 	const DOpEWrapper::DoFHandler<dim> *dof_handler,
 #else
@@ -2020,17 +2016,13 @@ namespace DOpE
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
              int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-      template<bool HP>
+      template<bool DH>
 #else
       template<template<int, int> class DH>
 #endif
     void
     Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-#if DEAL_II_VERSION_GTE(9,3,0)
-        const DOpEWrapper::Mapping<dim, HP> &mapping,
-#else
 	const DOpEWrapper::Mapping<dim, DH> &mapping,
-#endif
 #if DEAL_II_VERSION_GTE(9,3,0)
 	const DOpEWrapper::DoFHandler<dim> *dof_handler,
 #else

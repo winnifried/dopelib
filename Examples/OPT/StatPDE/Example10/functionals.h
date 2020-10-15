@@ -34,10 +34,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, HP,
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
+  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -98,11 +98,11 @@ public:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
-  HP, VECTOR, dopedim, dealdim>
+  DH, VECTOR, dopedim, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -157,11 +157,11 @@ public:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
-  HP, VECTOR, dopedim, dealdim>
+  DH, VECTOR, dopedim, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -216,11 +216,11 @@ public:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
-  HP, VECTOR, dopedim, dealdim>
+  DH, VECTOR, dopedim, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -254,11 +254,7 @@ public:
   }
 
   double
-#if DEAL_II_VERSION_GTE(9,3,0)
-BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
-#else
 BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
-#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -347,11 +343,11 @@ private:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim = dopedim>
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
-  HP, VECTOR, dopedim, dealdim>
+  DH, VECTOR, dopedim, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -385,11 +381,7 @@ public:
   }
 
   double
-#if DEAL_II_VERSION_GTE(9,3,0)
-BoundaryValue(const FDC<HP, VECTOR, dealdim> &fdc)
-#else
 BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
-#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
 

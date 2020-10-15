@@ -49,9 +49,9 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<
-    template<bool HP, typename VECTOR, int dealdim> class EDC,
-    template<bool HP, typename VECTOR, int dealdim> class FDC,
-    bool HP, typename VECTOR, int dopedim, int dealdim =
+    template<bool DH, typename VECTOR, int dealdim> class EDC,
+    template<bool DH, typename VECTOR, int dealdim> class FDC,
+    bool DH, typename VECTOR, int dopedim, int dealdim =
     dopedim>
 #else
   template<
@@ -78,12 +78,8 @@ namespace DOpE
      * @param edc     The ElementDataContainer containing all the data necessary to evaluate the functional on
      *                a element.
      */
-    virtual double
-#if DEAL_II_VERSION_GTE(9,3,0)
-  ElementValue(const EDC<HP, VECTOR, dealdim> &/*edc*/)
-#else
+  virtual double
   ElementValue(const EDC<DH, VECTOR, dealdim> &/*edc*/)
-#endif
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue");
   }
@@ -98,12 +94,8 @@ namespace DOpE
      *                                 the i-th local basis function of the state space.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-  ElementValue_U(const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
+  virtual void
   ElementValue_U(const EDC<DH, VECTOR, dealdim> &/*edc*/,
-#endif
 		 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_U");
@@ -119,13 +111,9 @@ namespace DOpE
      *                                 the i-th local basis function of the control space.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
- ElementValue_Q(const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
- ElementValue_Q(const EDC<DH, VECTOR, dealdim> &/*edc*/,
-#endif
-		dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  ElementValue_Q(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+		 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_Q");
   }
@@ -140,13 +128,9 @@ namespace DOpE
      *                                 the i-th local basis function of the state space.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_UU(const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
-   ElementValue_UU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
-#endif
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  ElementValue_UU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UU");
   }
@@ -161,13 +145,9 @@ namespace DOpE
      *                                 the i-th local basis function of the state space.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_QU(const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
-   ElementValue_QU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
-#endif
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  ElementValue_QU(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QU");
   }
@@ -182,13 +162,9 @@ namespace DOpE
      *                                 the i-th local basis function of the control space.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_UQ(const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
-   ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
-#endif
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UQ");
   }
@@ -203,13 +179,9 @@ namespace DOpE
      *                                 the i-th local basis function of the control space.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   ElementValue_QQ(const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
-   ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
-#endif
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &/*edc*/,
+		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QQ");
   }
@@ -432,12 +404,8 @@ namespace DOpE
      *                                 the functional on a face.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual double
-#if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue(const FDC<HP, VECTOR, dealdim> &/*fdc*/)
-#else
-   BoundaryValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
-#endif
+  virtual double
+  BoundaryValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue");
@@ -451,13 +419,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-   BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue_U");
@@ -471,13 +435,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue_Q(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-   BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue_Q");
@@ -491,13 +451,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   BoundaryValue_UU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-   BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+		   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue_UU");
@@ -511,13 +467,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue_QU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-    BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+		   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue_QU");
@@ -531,13 +483,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-     BoundaryValue_UQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-     BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+		   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue_UQ");
@@ -551,13 +499,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-      BoundaryValue_QQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-      BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+		   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::BoundaryValue_QQ");
@@ -570,12 +514,8 @@ namespace DOpE
      * @param fdc                      A FaceDataContainer containing all the information to evaluate
      *                                 the functional on a face.
      */
-    virtual double
-#if DEAL_II_VERSION_GTE(9,3,0)
-       FaceValue(const FDC<HP, VECTOR, dealdim> &/*fdc*/)
-#else
-       FaceValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
-#endif
+  virtual double
+  FaceValue(const FDC<DH, VECTOR, dealdim> &/*fdc*/)
   {
     throw DOpEException("Not Implemented", "FunctionalInterface::FaceValue");
   }
@@ -589,13 +529,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-       FaceValue_U(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-       FaceValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  FaceValue_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+	      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::FaceValue_U");
@@ -610,13 +546,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-   FaceValue_Q(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-   FaceValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  FaceValue_Q(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+	      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::FaceValue_Q");
@@ -631,13 +563,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-       FaceValue_UU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-       FaceValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  FaceValue_UU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+	       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::FaceValue_UU");
@@ -652,13 +580,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-    FaceValue_QU(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-     FaceValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  FaceValue_QU(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+	       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::FaceValue_QU");
@@ -673,13 +597,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-	 FaceValue_UQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-	  FaceValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  FaceValue_UQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+	       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::FaceValue_UQ");
@@ -695,13 +615,9 @@ namespace DOpE
      * @param local_vector        A Vector to contain the result.
      * @param scale                    A factor by which the result is scaled.
      */
-    virtual void
-#if DEAL_II_VERSION_GTE(9,3,0)
-      FaceValue_QQ(const FDC<HP, VECTOR, dealdim> &/*fdc*/,
-#else
-      FaceValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-#endif
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  virtual void
+  FaceValue_QQ(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+	       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     throw DOpEException("Not Implemented",
                         "FunctionalInterface::FaceValue_QQ");
