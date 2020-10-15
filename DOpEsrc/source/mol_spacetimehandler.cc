@@ -135,7 +135,7 @@ namespace DOpE
    */
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection, true,
        dealii::BlockSparsityPattern, dealii::BlockVector<double>,
        dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern (dealii::BlockSparsityPattern &sparsity) const
   {
@@ -165,7 +165,7 @@ namespace DOpE
 
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection, true,
        dealii::SparsityPattern, dealii::Vector<double>, dope_dimension,
        deal_II_dimension>::ComputeControlSparsityPattern (dealii::SparsityPattern &sparsity) const
   {
@@ -287,7 +287,7 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection, true,
        dealii::BlockSparsityPattern, dealii::BlockVector<double>,
        dope_dimension, deal_II_dimension>::ResetTriangulation (const dealii::Triangulation<
            deal_II_dimension> &tria)
@@ -308,7 +308,7 @@ namespace DOpE
 
   template <>
   void
-  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, true,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection, true,
        dealii::SparsityPattern, dealii::Vector<double>, dope_dimension,
        deal_II_dimension>::ResetTriangulation (const dealii::Triangulation<
                                                deal_II_dimension> &tria)

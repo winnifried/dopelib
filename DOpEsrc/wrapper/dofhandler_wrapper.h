@@ -92,7 +92,7 @@ namespace DOpEWrapper
 
   public:
     /**
-     * We actually never need the triangulation, this constructur merely exists
+     * We actually never need the triangulation, this constructor merely exists
      * to allow for dimension independent programming.
      */
     template<int dim>
@@ -106,6 +106,13 @@ namespace DOpEWrapper
                     const unsigned int /*offset*/=0)
     {
       dofs_ = fe.element_multiplicity(0);
+    }
+    template<int dim>
+    void
+    distribute_dofs(const dealii::hp::FECollection<dim> &fe,
+                    const unsigned int /*offset*/=0)
+    {
+      dofs_ = fe[0].element_multiplicity(0);
     }
     void
     clear()
