@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+15.10.2020: Fixed typos in dealii 9.3.0 update
 12.10.2020: Fixes in new code to assert compatibility with deal 8.3
 08.10.2020: Fixes in new code to assert compatibility to dealii 8.5
 08.10.2020: Removed code-fragments for compatibility to dealii versions prior to 8.3.0
