@@ -45,12 +45,12 @@ namespace DOpE
    * and state variable as long as both are given as refinements of a common coarse grid
    * by calculation of the respective values on a common refinement.
    *
-   * @template HP         false for normal DoFHandler true for HP.
+   * @template DH         false for normal DoFHandler true for HP.
    * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
    * @template dim        The dimension of the integral we are actually interested in.
    */
 
-  template<bool HP, typename VECTOR, int dim>
+  template<bool DH, typename VECTOR, int dim>
 #else
   /**
    * Dummy Template Class, acts as kind of interface. Through template specialization, we

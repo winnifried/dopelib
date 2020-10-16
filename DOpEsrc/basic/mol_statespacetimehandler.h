@@ -54,8 +54,8 @@ namespace DOpE
    * For the detailed comments, please see the documentation of MethodOfLines_SpaceTimeHandler
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<template<int, int> class FE, bool HP, typename SPARSITYPATTERN, typename VECTOR, int dealdim>
-    class MethodOfLines_StateSpaceTimeHandler : public StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dealdim>
+  template<template<int, int> class FE, bool DH, typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+    class MethodOfLines_StateSpaceTimeHandler : public StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>
 #else
   template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN, typename VECTOR, int dealdim>
   class MethodOfLines_StateSpaceTimeHandler : public StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>
@@ -67,24 +67,16 @@ namespace DOpE
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
-#if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
-#else
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
-#endif
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
 #if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,DH),
 #else
       state_dof_handler_(triangulation_),
 #endif
       state_fe_(&state_fe),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, HP>::mapping_q1),
-#else
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1),
-#endif
       state_mesh_transfer_(NULL)
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -100,24 +92,16 @@ namespace DOpE
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
-#if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
-#else
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
-#endif
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
 #if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,DH),
 #else
       state_dof_handler_(triangulation_),
 #endif
       state_fe_(&state_fe),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, HP>::mapping_q1),
-#else
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1),
-#endif
       state_mesh_transfer_(
           NULL)
     {
@@ -131,24 +115,16 @@ namespace DOpE
 
     MethodOfLines_StateSpaceTimeHandler(
       dealii::Triangulation<dealdim> &triangulation,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::Mapping<dealdim, HP> &mapping,
-#else
       const DOpEWrapper::Mapping<dealdim, DH> &mapping,
-#endif
       const FE<dealdim, dealdim> &state_fe,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
-#if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
-#else
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
-#endif
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
 #if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,DH),
 #else
       state_dof_handler_(triangulation_),
 #endif
@@ -163,25 +139,17 @@ namespace DOpE
     }
     MethodOfLines_StateSpaceTimeHandler(
       dealii::Triangulation<dealdim> &triangulation,
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::Mapping<dealdim, HP> &mapping,
-#else
       const DOpEWrapper::Mapping<dealdim, DH> &mapping,
-#endif
       const FE<dealdim, dealdim> &state_fe,
       dealii::Triangulation<1> &times,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
-#if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
-#else
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
-#endif
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
 #if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,DH),
 #else
       state_dof_handler_(triangulation_),
 #endif
@@ -219,11 +187,7 @@ namespace DOpE
            const DirichletDescriptor &DD  )
     {
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-      StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
-#else
       StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
-#endif
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
 //          DoFRenumbering::Cuthill_McKee(
@@ -302,9 +266,9 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-	const DOpEWrapper::DoFHandler<dealdim> &
+  const DOpEWrapper::DoFHandler<dealdim> &
 #else
-	const DOpEWrapper::DoFHandler<dealdim, DH> &
+    const DOpEWrapper::DoFHandler<dealdim, DH> &
 #endif
     GetStateDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
@@ -315,11 +279,7 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandler
      */
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::Mapping<dealdim, HP> &
-#else
-      const DOpEWrapper::Mapping<dealdim, DH> &
-#endif
+  const DOpEWrapper::Mapping<dealdim, DH> &
     GetMapping() const
     {
       return *mapping_;
@@ -590,11 +550,7 @@ namespace DOpE
      * stokes problem). This function must be called prior to
      * ReInit.
      */
-#if DEAL_II_VERSION_GTE(9,3,0)
-    void SetUserDefinedDoFConstraints(UserDefinedDoFConstraints<HP, dealdim> &user_defined_dof_constr)
-#else
     void SetUserDefinedDoFConstraints(UserDefinedDoFConstraints<DH, dealdim> &user_defined_dof_constr)
-#endif
     {
       user_defined_dof_constr_ = &user_defined_dof_constr;
       user_defined_dof_constr_->RegisterMapping(this->GetMapping());
@@ -629,11 +585,7 @@ namespace DOpE
     {
       return sparsitymaker_;
     }
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const UserDefinedDoFConstraints<HP, dealdim> *
-#else
     const UserDefinedDoFConstraints<DH, dealdim> *
-#endif
     GetUserDefinedDoFConstraints() const
     {
       return user_defined_dof_constr_;
@@ -643,11 +595,7 @@ namespace DOpE
 #else
     SparsityMaker<DH, dealdim> *sparsitymaker_;
 #endif
-#if DEAL_II_VERSION_GTE(9,3,0)
-    UserDefinedDoFConstraints<HP, dealdim> *user_defined_dof_constr_;
-#else
     UserDefinedDoFConstraints<DH, dealdim> *user_defined_dof_constr_;
-#endif
     bool sparse_mkr_dynamic_;
 
     dealii::Triangulation<dealdim> &triangulation_;
@@ -667,11 +615,7 @@ namespace DOpE
 #endif
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_; //TODO is there a reason that this is not a reference?
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, HP> > mapping_;
-#else
     const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
-#endif
 
     std::vector<Point<dealdim> > support_points_;
 #if DEAL_II_VERSION_GTE(9,3,0)

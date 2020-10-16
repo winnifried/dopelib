@@ -47,7 +47,7 @@ namespace DOpE
      */
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<bool HP, typename VECTOR, int dim>
+    template<bool DH, typename VECTOR, int dim>
 #else
     template<template<int, int> class DH, typename VECTOR, int dim>
 #endif
@@ -356,11 +356,7 @@ namespace DOpE
       unsigned int state_index_;
       unsigned int control_index_;
 
-#if DEAL_II_VERSION_GTE(9,3,0)
       const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> & element_;
-#else
-      const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> & element_;
-#endif
       DOpEWrapper::FEFaceValues<dim> state_fe_values_;
       DOpEWrapper::FEFaceValues<dim> control_fe_values_;
 

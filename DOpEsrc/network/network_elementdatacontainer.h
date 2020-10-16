@@ -46,7 +46,7 @@ namespace DOpE
      * Through template specialization for DH, we
      * distinguish between the 'classic' and the 'hp' case.
      *
-     * @template HP         false for normal DoFHandler true for HP.
+     * @template DH         false for normal DoFHandler true for HP.
      * @template DH The type of the dealii-dofhandler we use in
      *                      our DOpEWrapper::DoFHandler, at the moment
      *                      DoFHandler and hp::DoFHandler.
@@ -55,7 +55,7 @@ namespace DOpE
      */
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<bool HP, typename VECTOR, int dim>
+    template<bool DH, typename VECTOR, int dim>
 #else
     template<template<int, int> class DH, typename VECTOR, int dim>
 #endif

@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -55,11 +55,7 @@ public:
 
   void
   ElementEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -123,11 +119,7 @@ public:
 
   void
   ElementEquation_U(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -160,11 +152,7 @@ public:
 
   void
   ElementEquation_UT(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -195,11 +183,7 @@ public:
 
   void
   ElementEquation_UTT(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -230,11 +214,7 @@ public:
 
   void
   ElementEquation_Q(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -282,11 +262,7 @@ public:
 
   void
   ElementEquation_QT(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -337,11 +313,7 @@ public:
 
   void
   ElementEquation_QTT(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -389,11 +361,7 @@ public:
 
   void
   ElementEquation_UU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
     double /*scale_ico*/)
   {
@@ -401,11 +369,7 @@ public:
   }
   void
   ElementEquation_QU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
     double /*scale_ico*/)
   {
@@ -413,11 +377,7 @@ public:
   }
   void
   ElementEquation_UQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
     double /*scale_ico*/)
   {
@@ -425,11 +385,7 @@ public:
   }
   void
   ElementEquation_QQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
     double /*scale_ico*/)
   {
@@ -437,11 +393,7 @@ public:
   }
   void
   ElementRightHandSide(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
     {
@@ -451,11 +403,7 @@ public:
 
   void
   ElementMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     FullMatrix<double> &local_matrix, double scale,
     double /*scale_ico*/)
   {
@@ -489,11 +437,7 @@ public:
 
   void
   ControlElementEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale)
   {
     {
@@ -511,11 +455,7 @@ public:
 
   void
   ControlElementMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     FullMatrix<double> &local_matrix, double scale)
   {
     assert(local_matrix.m() == local_matrix.n());

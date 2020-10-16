@@ -34,10 +34,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template <template <template <int, int> class DH, typename VECTOR, int dealdim>
           class EDC,
@@ -56,11 +56,7 @@ public:
 
   void
   ElementEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &        local_vector,
     double                          scale,
     double /*scale_ico*/) override
@@ -107,11 +103,7 @@ public:
 
   void
   ElementMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     FullMatrix<double> &            local_matrix,
     double                          scale,
     double /*scale_ico*/) override
@@ -147,11 +139,7 @@ public:
 
   void
   ElementRightHandSide(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &        local_vector,
     double                          scale) override
   {

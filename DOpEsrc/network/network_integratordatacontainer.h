@@ -44,7 +44,7 @@ namespace DOpE
      * needed in the integrator.
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template<bool HP, typename QUADRATURE, typename FACEQUADRATURE,
+  template<bool DH, typename QUADRATURE, typename FACEQUADRATURE,
            typename VECTOR, int dim>
 #else
     template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
@@ -92,16 +92,9 @@ namespace DOpE
                     bool need_interfaces = false)
       {
         delete fdc_;
-#if DEAL_II_VERSION_GTE(9,3,0)
-        fdc_ = new Network_FaceDataContainer<HP, VECTOR, dim>(pipe, n_pipes, n_comp, fquad,
-							      update_flags, sth, element,
-							      param_values, domain_values,
-							      need_interfaces);
-#else
         fdc_ = new Network_FaceDataContainer<DH, VECTOR, dim>(pipe, n_pipes, n_comp, fquad,
                                                               update_flags, sth, element, param_values, domain_values,
                                                               need_interfaces);
-#endif
       }
 
       /**
@@ -144,13 +137,8 @@ namespace DOpE
       {
         if (edc_ != NULL)
           delete edc_;
-#if DEAL_II_VERSION_GTE(9,3,0)
-        edc_ = new Network_ElementDataContainer<HP, VECTOR, dim>(pipe, quad,
-                                                                 update_flags, sth, element, param_values, domain_values);
-#else
         edc_ = new Network_ElementDataContainer<DH, VECTOR, dim>(pipe, quad,
                                                                  update_flags, sth, element, param_values, domain_values);
-#endif
       }
 
       /**
@@ -185,11 +173,7 @@ namespace DOpE
         return *face_quad_;
       }
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Network_FaceDataContainer<HP, VECTOR, dim> &
-#else
       Network_FaceDataContainer<DH, VECTOR, dim> &
-#endif
       GetFaceDataContainer() const
       {
         if (fdc_ != NULL)
@@ -199,11 +183,7 @@ namespace DOpE
                               "Network_IntegratorDataContainer::GetFaceDataContainer");
       }
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Network_ElementDataContainer<HP, VECTOR, dim> &
-#else
       Network_ElementDataContainer<DH, VECTOR, dim> &
-#endif
       GetElementDataContainer() const
       {
         if (edc_ != NULL)
@@ -216,13 +196,8 @@ namespace DOpE
     private:
       QUADRATURE const *quad_;
       FACEQUADRATURE const *face_quad_;
-#if DEAL_II_VERSION_GTE(9,3,0)
-      Network_FaceDataContainer<HP, VECTOR, dim> *fdc_;
-      Network_ElementDataContainer<HP, VECTOR, dim> *edc_;
-#else
       Network_FaceDataContainer<DH, VECTOR, dim> *fdc_;
       Network_ElementDataContainer<DH, VECTOR, dim> *edc_;
-#endif
     };
 
   }

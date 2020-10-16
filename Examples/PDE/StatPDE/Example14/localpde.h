@@ -34,10 +34,10 @@ using namespace DOpE;
 /***********************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, HP, VECTOR, dealdim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -59,11 +59,7 @@ public:
 
   void
   ElementEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double/*scale_ico*/)
   {
@@ -99,11 +95,7 @@ public:
 
   void
   BoundaryEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -164,11 +156,7 @@ public:
 
   void
   FaceEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -205,11 +193,7 @@ public:
   }
   void
   InterfaceEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -251,11 +235,7 @@ public:
 
   void
   BoundaryMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -324,11 +304,7 @@ public:
   }
   void
   FaceMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -368,11 +344,7 @@ public:
 
   void
   InterfaceMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -418,11 +390,7 @@ public:
 
   void
   ElementMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -457,11 +425,7 @@ public:
 
   void
   ElementRightHandSide(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
@@ -469,33 +433,21 @@ public:
 
   void
   FaceRightHandSide(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
   BoundaryRightHandSide(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
   ElementTimeEquationExplicit(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> & /*local_vector*/,
     double /*scale*/)
   {
@@ -504,11 +456,7 @@ public:
 
   void
   ElementTimeEquation(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector,
     double scale)
   {
@@ -540,11 +488,7 @@ public:
 
   void
   ElementTimeMatrixExplicit(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &/*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     FullMatrix<double> &/*local_matrix*/)
   {
     assert(this->problem_type_ == "state");
@@ -552,11 +496,7 @@ public:
 
   void
   ElementTimeMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     FullMatrix<double> &local_matrix)
   {
     assert(this->problem_type_ == "state");
@@ -588,11 +528,7 @@ public:
 
   /*******************Special Methods on Pipes************************************/
   void BoundaryEquation_BV(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     dealii::Vector<double> &local_vector,
     double scale,
     double /*scale_ico*/)
@@ -645,11 +581,7 @@ public:
 
 
   void BoundaryMatrix_BV(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     std::vector<bool> & /*present_in_outflow*/,
     dealii::FullMatrix<double> &local_matrix,
     double scale,
@@ -712,11 +644,7 @@ public:
   }
 
   void OutflowValues(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     std::vector<bool> &present_in_outflow,
     dealii::Vector<double> &local_vector,
     double /*scale*/,
@@ -762,11 +690,7 @@ public:
   }
 
   void OutflowMatrix(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     std::vector<bool> &present_in_outflow,
     dealii::FullMatrix<double> &local_matrix,
     double /*scale*/,

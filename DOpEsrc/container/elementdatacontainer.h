@@ -46,14 +46,14 @@ namespace DOpE
    * Through template specialization for DH, we
    * distinguish between the 'classic' and the 'hp' case.
    *
-   * @template HP         false for normal DoFHandler true for HP.
+   * @template DH         false for normal DoFHandler true for HP.
    * @template VECTOR     Type of the vector we use in our computations
    *                      (i.e. Vector<double> or BlockVector<double>)
    * @template dim        The dimension of the integral we are actually
    *                      interested in.
    */
 
-  template<bool HP, typename VECTOR, int dim>
+  template<bool DH, typename VECTOR, int dim>
 #else
   /**
    * Dummy Template Class, acts as kind of interface.
@@ -79,11 +79,7 @@ namespace DOpE
     {
       throw (DOpE::DOpEException(
                "Dummy class, this constructor should never get called.",
-#if DEAL_II_VERSION_GTE(9,3,0)
-	       "ElementDataContainer<HP , VECTOR, dim>::ElementDataContainer"));
-#else
 	       "ElementDataContainer<DH , VECTOR, dim>::ElementDataContainer"));
-#endif
     }
   };
 

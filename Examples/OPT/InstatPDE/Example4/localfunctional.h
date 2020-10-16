@@ -33,10 +33,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -70,11 +70,7 @@ public:
 
   double
     ElementValue(
-#if DEAL_II_VERSION_GTE(9,3,0)
-      const EDC<HP, VECTOR, dealdim> &edc)
-#else
       const EDC<DH, VECTOR, dealdim> &edc)
-#endif
   {
     if ( this->GetProblemType() == "cost_functional_pre" ||
          this->GetProblemType() == "cost_functional_pre_tangent" )
@@ -141,11 +137,7 @@ public:
 
   void
   ElementValue_U(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -171,11 +163,7 @@ public:
 
   void
   ElementValue_Q(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -216,11 +204,7 @@ public:
 
   void
   ElementValue_UU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -249,33 +233,21 @@ public:
 
   void
   ElementValue_QU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &,
-#else
     const EDC<DH, VECTOR, dealdim> &,
-#endif
     dealii::Vector<double> &, double)
   {
   }
 
   void
   ElementValue_UQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &,
-#else
     const EDC<DH, VECTOR, dealdim> &,
-#endif
     dealii::Vector<double> &, double)
   {
   }
 
   void
   ElementValue_QQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> &edc,
-#else
     const EDC<DH, VECTOR, dealdim> &edc,
-#endif
     dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =

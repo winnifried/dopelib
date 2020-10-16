@@ -35,10 +35,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR, 0, dealdim>
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -57,11 +57,7 @@ public:
   }
 
   double
-#if DEAL_II_VERSION_GTE(9,3,0)
-    ElementValue(const EDC<HP,VECTOR,dealdim> &edc)
-#else
     ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
-#endif
   {
     unsigned int n_q_points = edc.GetNQPoints();
 
@@ -118,10 +114,10 @@ private:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dealdim>
-  class LocalFunctional2 : public FunctionalInterface<EDC, FDC, HP, VECTOR, 0, dealdim>
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -139,11 +135,7 @@ public:
   }
 
   double
-#if DEAL_II_VERSION_GTE(9,3,0)
-    ElementValue(const EDC<HP,VECTOR,dealdim> &edc)
-#else
     ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
-#endif
   {
     unsigned int n_q_points = edc.GetNQPoints();
 

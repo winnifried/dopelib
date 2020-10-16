@@ -47,7 +47,7 @@ namespace DOpE
    *                                solution is to be stored.
    * @tparam dealdim                The dimension of the domain in which the PDE is considered.
    * @tparam FE                     The finite element under consideration.
-   * @tparam HP                     False for normal, true for hp-dofhandler
+   * @tparam DH                     False for normal, true for hp-dofhandler
    */
   template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class PRIMALTSPROBLEM,
            template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR, int dealdim, template<int, int> class FE> class  ADJOINTTSPROBLEM,
@@ -55,9 +55,9 @@ namespace DOpE
            typename DD, typename SPARSITYPATTERN,
            typename VECTOR, int dealdim,
            template<int, int> class FE = FESystem,
-           bool HP = false>
+           bool DH = false>
   class InstatPDEProblemContainer : public PDEProblemContainer<PDE,DD,
-    SPARSITYPATTERN, VECTOR,dealdim,FE, HP>
+    SPARSITYPATTERN, VECTOR,dealdim,FE, DH>
 #else
   /**
    * Container class for all nonstationary pde problems.
@@ -93,15 +93,9 @@ namespace DOpE
     {
   public:
     InstatPDEProblemContainer(PDE &pde,
-#if DEAL_II_VERSION_GTE(9,3,0)
-                              StateSpaceTimeHandler<FE, HP, SPARSITYPATTERN, VECTOR,dealdim> &STH)
-  : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>(
-    pde,STH), ts_state_problem_(NULL)
-#else
                               StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,dealdim> &STH)
     : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>(
       pde,STH), ts_state_problem_(NULL)
-#endif
   {
     }
 
@@ -121,11 +115,7 @@ namespace DOpE
           ts_state_problem_ = NULL;
         }
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>::ReInit(algo_type);
-#else
       PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>::ReInit(algo_type);
-#endif
     }
 
     std::string GetName() const
@@ -137,23 +127,6 @@ namespace DOpE
     /**
      * Returns a description of the PDE
      */
-#if DEAL_II_VERSION_GTE(9,3,0)
-    PRIMALTSPROBLEM<StateProblem<
-      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-      SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
-    {
-      if (ts_state_problem_ == NULL)
-        {
-          ts_state_problem_ = new PRIMALTSPROBLEM<StateProblem<
-	    PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>,
-          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-	    SPARSITYPATTERN, VECTOR, dealdim, FE>(PDEProblemContainer<PDE,DD,
-							  SPARSITYPATTERN,VECTOR,dealdim,FE, HP>::GetStateProblem());
-        }
-      return *ts_state_problem_;
-    }
-#else
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
@@ -169,20 +142,12 @@ namespace DOpE
         }
       return *ts_state_problem_;
     }
-#endif
     
   private:
-#if DEAL_II_VERSION_GTE(9,3,0)
-    PRIMALTSPROBLEM<StateProblem<
-      PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, HP>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-      SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_state_problem_;
-#else
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
     SPARSITYPATTERN, VECTOR, dealdim, FE> *ts_state_problem_;
-#endif
   };
 }
 #endif

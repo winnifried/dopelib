@@ -33,10 +33,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<bool HP, typename VECTOR, int dealdim> class EDC,
-  template<bool HP, typename VECTOR, int dealdim> class FDC,
-  bool HP, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, VECTOR,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -54,11 +54,7 @@ public:
 
   double
   BoundaryValue(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc)
-#else
     const FDC<DH, VECTOR, dealdim> &fdc)
-#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -89,11 +85,7 @@ public:
 
   void
   BoundaryValue_U(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> &fdc,
-#else
     const FDC<DH, VECTOR, dealdim> &fdc,
-#endif
     dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -130,76 +122,48 @@ public:
 
   void
   BoundaryValue_Q(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
 
   void
   BoundaryValue_UU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
 
   void
   BoundaryValue_QU(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
 
   void
   BoundaryValue_UQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
 
   void
   BoundaryValue_QQ(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const FDC<HP, VECTOR, dealdim> & /*fdc*/,
-#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
 
   void
   ElementValue_U(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
   void
   ElementValue_Q(
-#if DEAL_II_VERSION_GTE(9,3,0)
-    const EDC<HP, VECTOR, dealdim> & /*edc*/,
-#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-#endif
     dealii::Vector<double> &/*local_vector*/, double/*scale*/)
   {
   }
