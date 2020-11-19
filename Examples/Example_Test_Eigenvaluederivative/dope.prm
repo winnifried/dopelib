@@ -9,7 +9,7 @@ subsection newtonsolver parameters
  set linesearch_rho       = 0.9
 
   # global tolerance for the newton iteration
- set nonlinear_global_tol = 1.e-5#12
+ set nonlinear_global_tol = 1.e-6
 
   # maximal number of newton iterations
  set nonlinear_maxiter    = 10
@@ -18,7 +18,7 @@ subsection newtonsolver parameters
  set nonlinear_rho        = 0.1
 
   # relative tolerance for the newton iteration
- set nonlinear_tol        = 1.e-6#10
+ set nonlinear_tol        = 1.e-6
 end
 
 
@@ -51,7 +51,7 @@ subsection output parameters
 
   # Defines what strings should be printed, the higher the number the more
   # output
-  set printlevel              = 5
+  set printlevel              = 4
 
   # Directory where the output goes to
   set results_dir             = Results/
@@ -59,17 +59,34 @@ end
  
 
 subsection reducedgradientdescentalgorithm parameters
-  set line_maxiter         = 1000
-  set linesearch_c         = 0.1
+ set line_maxiter         = 1000
+ set linesearch_c         = 0.1
   set linesearch_rho       = 0.9
-  set nonlinear_global_tol = 1.e-5#11
-  set nonlinear_maxiter    = 1000
+  set nonlinear_global_tol = 1.e-8#11
+  set nonlinear_maxiter    = 100
   set nonlinear_tol        = 1.e-7
   set compute_functionals_in_every_step = false
 end
 
-subsection richardsonwithmatrix parameters
-#subsection gmres_withmatrix parameters
+#subsection reducedBFGSalgorithm parameters
+ #  set nonlinear_maxiter = 10
+  # set nonlinear_tol = 1.e-7
+   #set nonlinear_global_tol = 1.e-11
+#   set line_maxiter = 100 
+ #  set linesearch_gamma = 0.3 
+#   set linesearch_eta = 0.6 
+#   set memory = 10 
+#   set init_inverse_scale = 1. 
+#   set compute_functionals_in_every_step = false 
+#end
+
+
+
+
+
+
+#subsection richardsonwithmatrix parameters
+subsection gmres_withmatrix parameters
    set linear_maxiter = 2000
    set linear_global_tol = 1.e-6
 end

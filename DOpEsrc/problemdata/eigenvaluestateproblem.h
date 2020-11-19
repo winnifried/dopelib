@@ -930,7 +930,7 @@ namespace DOpE
   std::string
   EigenvalueStateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFType() const
   {
-    return "eigenval";
+    return "state";
   }
 
   /******************************************************/

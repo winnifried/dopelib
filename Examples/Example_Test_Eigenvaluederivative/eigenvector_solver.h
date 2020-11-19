@@ -180,14 +180,12 @@ namespace DOpE
 //             		eigenfunctions[i] /= eigenfunctions[i].linfty_norm();
               		eigenfunctions[i] /= eigenfunctions[i].norm_sqr();
              	}
-              	VECTOR residual;
-              	residual = eigenfunctions[0];
-//                GetIntegrator().ComputeNonlinearResidual(pde,residual,eigenvalues[0]);
 
     return build_matrix;
   }
 
-  //TODO Für Controlmatrix
+
+
   /*******************************************************************************************/
   template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
     template<typename PROBLEM>
@@ -210,10 +208,10 @@ namespace DOpE
     du.reinit(solution);
     residual.reinit(solution);
 
-//    if (apply_boundary_values)
-//      {
-//        GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
-//      }
+    if (apply_boundary_values)
+      {
+        GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
+      }
 
     GetIntegrator().AddDomainData("last_newton_solution",&solution);
 
@@ -251,7 +249,6 @@ namespace DOpE
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
 
-//       LINEARSOLVER lin;
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
 
         //Linesearch

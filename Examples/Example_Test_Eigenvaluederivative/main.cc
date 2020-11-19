@@ -36,8 +36,9 @@
 #include <deal.II/base/function_lib.h>
 #include <deal.II/base/table.h>
 
-//#include <opt_algorithms/algorithmForEigenvalueproblem.h>
 #include <opt_algorithms/reducedgradientdescentalgorithm.h>
+#include <opt_algorithms/reducedbfgsalgorithm.h>
+
 #include <container/optproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
 #include <include/parameterreader.h>
@@ -115,8 +116,8 @@ typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
 //typedef VoidLinearSolver<VECTOR> LINEARSOLVER;
 
-typedef RichardsonLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
-//typedef GMRESLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
+//typedef RichardsonLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
+typedef GMRESLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
 
 //typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
@@ -125,6 +126,7 @@ typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, S
 typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
 typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
+//typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
 
 
 
@@ -132,8 +134,7 @@ typedef MethodOfLines_SpaceTimeHandler/*_Curl*/<FE, DOFHANDLER, SPARSITYPATTERN,
         CDIM, DIM> STH;
 
 int
-main(int argc, char **argv)
-{
+main(int argc, char **argv){
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv,1);
 
   string paramfile = "dope.prm";
@@ -169,7 +170,7 @@ main(int argc, char **argv)
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(100);
+  COSTFUNCTIONAL LFunc(0.00001);
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
@@ -208,13 +209,16 @@ main(int argc, char **argv)
   VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  q.GetSpacialVector());
   ControlVector<VECTOR> dq(q);
 
+
       try
         {
-//    	  solver.ComputeReducedCostFunctional(q);
+    	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
+//   	  solver.ComputeReducedCostFunctional(q);
 
     	  Alg.ReInit();
     	  Alg.Solve(q);
-//    	  Alg.CheckGrads(1., q, dq, 4);
+//	  const double eps_diff = 1;
+//  	  Alg.CheckGrads(eps_diff, q, dq, 5);
         }
       catch (DOpEException &e)
         {

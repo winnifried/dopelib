@@ -1900,7 +1900,7 @@ namespace DOpE
                 || this->GetType() == "tangent"
                 || this->GetType() == "eigenvaluetangent"
                 || this->GetType() == "error_evaluation"
-                || this->GetType() == "adjoint_hessian")
+                || this->GetType() == "adjoint_hessian"
             	|| this->GetType() == "eigenvalueadjoint_hessian")
               {
                 GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);

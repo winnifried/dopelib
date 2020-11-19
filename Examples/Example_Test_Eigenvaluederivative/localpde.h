@@ -59,7 +59,6 @@ public:
 	      assert(
 	        (this->problem_type_ == "gradient")||(this->problem_type_ == "hessian")||(this->problem_type_ == "eigenvaluederivative")||(this->problem_type_ == "eigenvaluehessian"));
 	      funcgradvalues_.resize(n_q_points, Vector<double>(2));
-//	      qvalues_.resize(n_q_points, Vector<double>(2));
 	      edc.GetValuesControl("last_newton_solution", funcgradvalues_);
 	    }
 		const FEValuesExtractors::Vector controlextractor(0);
@@ -299,6 +298,8 @@ public:
 
 			for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 				for (unsigned int j = 0; j < n_dofs_per_element; j++) {
+
+					//TODO diese Formel ist nur gültig bei 2D-Problemen
 					local_matrix(i, j) += scale * (1/detDF)*phi_curl_u[j][0]
 							* (1/detDF)*phi_curl_u[i][0]
 							* state_fe_values.JxW(q_point);
@@ -390,7 +391,6 @@ public:
 					//TEST
 					local_matrix(i, j) += scale* scalar_product(phi_u[j]*DF_Inverse,phi_u[i]*DF_Inverse)
 												* state_fe_values.JxW(q_point);
-//					std::cout << local_matrix(i, j) <<std::endl;
 				}
 			}
 		}
@@ -800,31 +800,28 @@ public:
 
 //			local_vector(i) += scale*((1/detDFdq)*curl_z*(1/detDF)*curl_u
 //					+ (1/detDF)*curl_z * (1/detDFdq)*curl_u)
-//				* state_fe_values.JxW(q_point);
+//					* control_fe_values.JxW(q_point);
 //
-//			local_vector(i) += scale*(scalar_product(z*detDFdq, DF_Inverse_T*grad_u*DF_Inverse)
-//				 + scalar_product(z*detDF, DF_Inverse_Tdq*grad_u*DF_Inverse)
-//				+ scalar_product(z*detDF, DF_Inverse_T*grad_u*DF_Inversedq)
-//			)* state_fe_values.JxW(q_point);
+//			local_vector(i) += scale*(scalar_product(z*DF_Inversedq, DF_Inverse_T*grad_u)
+//						 + scalar_product(z*DF_Inverse, DF_Inverse_Tdq*grad_u)
+//					)* control_fe_values.JxW(q_point);
 //
-//			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*grad_z*DF_Inverse, u*detDF)
-//					+ scalar_product(DF_Inverse_T*grad_z*DF_Inversedq,u*detDF)
-//					+ scalar_product(DF_Inverse_T*grad_z*DF_Inverse,u*detDFdq)
-//			)* state_fe_values.JxW(q_point);
+//			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*grad_z, u*DF_Inverse)
+//						+ scalar_product(DF_Inverse_T*grad_z,u*DF_Inversedq)
+//					)* control_fe_values.JxW(q_point);
 
+			//Test...
+			local_vector(i) += -scale*((1/detDFdq)*curl_u*(1/detDF)*curl_z
+								+ (1/detDF)*curl_u * (1/detDFdq)*curl_z)
+								* control_fe_values.JxW(q_point);
 
-			//NEU...TODO!
-			local_vector(i) += scale*((1/detDFdq)*curl_z*(1/detDF)*curl_u
-					+ (1/detDF)*curl_z * (1/detDFdq)*curl_u)
-					* state_fe_values.JxW(q_point);
+			local_vector(i) += -scale*(scalar_product(u*DF_Inversedq, DF_Inverse_T*grad_z)
+							 + scalar_product(u*DF_Inverse, DF_Inverse_Tdq*grad_z)
+					)* control_fe_values.JxW(q_point);
 
-			local_vector(i) += scale*(scalar_product(z*DF_Inversedq, DF_Inverse_T*grad_u)
-						 + scalar_product(z*DF_Inverse, DF_Inverse_Tdq*grad_u)
-					)* state_fe_values.JxW(q_point);
-
-			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*grad_z, u*DF_Inverse)
-						+ scalar_product(DF_Inverse_T*grad_z,u*DF_Inversedq)
-					)* state_fe_values.JxW(q_point);
+			local_vector(i) += -scale*(scalar_product(DF_Inverse_Tdq*grad_u, z*DF_Inverse)
+							+ scalar_product(DF_Inverse_T*grad_u,z*DF_Inversedq)
+					)* control_fe_values.JxW(q_point);
 
 
 			}
@@ -879,6 +876,7 @@ public:
 				DF_Inverse.clear();
 				DF_Inverse_dq.clear();
 				z.clear();
+				u.clear();
 				qgrads.clear();
 				qgrads[0][0] = qgrads_[q_point][0][0];
 				qgrads[1][1] = qgrads_[q_point][1][1];
@@ -901,15 +899,13 @@ public:
 					DF_Inverse_dq = calc_invDF(DFdq);
 					DF_Inverse_Tdq = calc_invDFTranspose(DFdq);
 
-//					std::cout << "eigenval in elementmasseq_q = " << eigenvalue << std::endl;
-					/*local_vector(i) += scale * eigenvalue * (scalar_product(DF_Inverse_Tdq*z , DF_Inverse_T*u)
-									+  scalar_product(DF_Inverse_T*z,DF_Inverse_Tdq*u))
-						* state_fe_values.JxW(q_point);*/
-
-					//TEST neu:
-					local_vector(i) += scale * eigenvalue * (scalar_product(z*DF_Inverse_dq , u*DF_Inverse)
-														+  scalar_product(z*DF_Inverse,u*DF_Inverse_dq))
-											* state_fe_values.JxW(q_point);
+//					local_vector(i) += scale * eigenvalue * (scalar_product(z*DF_Inverse_dq , u*DF_Inverse)
+//														+  scalar_product(z*DF_Inverse,u*DF_Inverse_dq))
+//											* control_fe_values.JxW(q_point);
+					//Test..
+					local_vector(i) += -scale * eigenvalue * (scalar_product(u*DF_Inverse_dq , z*DF_Inverse)
+																			+  scalar_product(u*DF_Inverse,z*DF_Inverse_dq))
+																* control_fe_values.JxW(q_point);
 
 				}
 		}
