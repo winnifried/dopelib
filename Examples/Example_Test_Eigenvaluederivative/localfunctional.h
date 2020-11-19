@@ -60,20 +60,46 @@ public:
       edc.GetValuesState("eigenvalue", eigenvalue);
 
     double ev = eigenvalue[0][0];
-//    std::cout << "eigenvalue in elementvalue = " << ev << std::endl;
+
+    Tensor<1, 2> u;
+    u.clear();
+//   std::cout << "eigenvalue in elementvalue = " << ev << std::endl;
 
     double r = 0.;
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-    	fvalues_= 1.;//* (state_fe_values.quadrature_point(q_point)(0)*state_fe_values.quadrature_point(q_point)(1));
-        r += 0.5 * (ev - fvalues_) * (ev - fvalues_)
-             * state_fe_values.JxW(q_point);
+    	for (unsigned int i = 0; i < 2; i++) {
+    		u[i] = uvalues_[q_point][i];
+    	}
+    	double norm_u_square = u[0]*u[0]+u[1]+u[1];
+//    	std::cout << norm_u_square << std::endl;
+//    	double fval = 0.25;
+//    	r += 0.5*(ev - fval) *(ev - fval)* state_fe_values.JxW(q_point);
+//   	r += 0.5*((ev - 1.0)* norm_u_square)*((ev - 1.0)* norm_u_square)* state_fe_values.JxW(q_point);
+
          r += 0.5 * alpha_ * (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
       }
     return r;
   }
-//
+  double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                         const std::map<std::string, const VECTOR *> &domain_values)
+   {
+     assert(this->GetProblemType() == "cost_functional");
+
+     std::map<std::string, const dealii::Vector<double>*>::const_iterator vals = domain_values.find("eigenvalue");
+     double fval = 0.25; //TODO übergeben
+//     std::cout << vals->second->operator[](0) << std::endl;
+//     std::cout << 0.5*(vals->second->operator[](0) - fval)*(vals->second->operator[](0) - fval) << std::endl;
+    return 0.5*(vals->second->operator[](0) - fval)*(vals->second->operator[](0) - fval);
+
+   }
+
+
+
+
+
+
 //  void
 //  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
 //                 dealii::Vector<double> &local_vector, double scale)
@@ -112,23 +138,23 @@ public:
       edc.GetFEValuesState();
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
-    {
+
 //      qvalues_.resize(n_q_points);
     	qvalues_.resize(n_q_points, Vector<double>(2));
       edc.GetValuesControl("control", qvalues_);
-    }
+
 	vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
 
     const FEValuesExtractors::Vector dv(0);
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-      {
+    {
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
         	phi_q[i]=  control_fe_values[dv].value(i,q_point);
 
         	local_vector(i) += scale * alpha_
               * (qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
-              * state_fe_values.JxW(q_point);
+              * control_fe_values.JxW(q_point);
           }
       }
   }
@@ -203,7 +229,7 @@ public:
   string
   GetType() const
   {
-    return "domain";
+    return "domain algebraic";
   }
 
   string
