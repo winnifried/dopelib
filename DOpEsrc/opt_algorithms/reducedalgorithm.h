@@ -123,6 +123,8 @@ namespace DOpE
      * functional once it is confirmed that functional evaluations are correct.
      *
      * @double c          The direction will be initialized to the constant value c.
+     *                    Where c != 0 is needed. In case c == 0 no initialization will 
+     *                    be done and the user needs to provide a direction dq != 0.
      * @param q           The point at which we calculate the derivative.
      * @param dq          Storage or the direction.
      * @param niter       Number of difference quotient evaluations, i.e., how many times
@@ -148,6 +150,8 @@ namespace DOpE
      * and corresponting difference quotients for comparison.
      *
      * @double c          The direction will be initialized to the constant value c.
+     *                    Where c != 0 is needed. In case c == 0 no initialization will 
+     *                    be done and the user needs to provide a direction dq != 0.
      * @param q           The point at which we calculate the derivative.
      * @param dq          Storage or the direction.
      * @param niter       Number of difference quotient evaluations, i.e., how many times
@@ -354,9 +358,14 @@ namespace DOpE
   {
     q.ReInit();
     dq.ReInit();
-
-    dq = c;
-
+    if(c != 0)
+    {
+      dq = c;
+    }
+    else
+    {
+      assert(dq.Norm("infty","all") == 0.);
+    }
     ControlVector<VECTOR> point(q);
     point = q;
     std::stringstream out;
@@ -420,8 +429,14 @@ namespace DOpE
   {
     q.ReInit();
     dq.ReInit();
-
-    dq = c;
+    if(c != 0)
+    {
+      dq = c;
+    }
+    else
+    {
+      assert(dq.Norm("infty","all") == 0.);
+    }
 
     ControlVector<VECTOR> point(q);
     point = q;
