@@ -364,7 +364,7 @@ namespace DOpE
     }
     else
     {
-      assert(dq.Norm("infty","all") == 0.);
+      assert(dq.Norm("infty","all") != 0.);
     }
     ControlVector<VECTOR> point(q);
     point = q;
@@ -435,7 +435,7 @@ namespace DOpE
     }
     else
     {
-      assert(dq.Norm("infty","all") == 0.);
+      assert(dq.Norm("infty","all") != 0.);
     }
 
     ControlVector<VECTOR> point(q);
