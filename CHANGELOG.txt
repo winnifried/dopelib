@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+10.12.2020: Further adjustments to deal.ii 9.3.0 - The dealii::DoFHandler now detects
+	    'hp-capability' from beeing initialized by a FiniteElement or FECollection.
 03.12.2020: CheckGradient and CheckHessian now accept a preinitialized direction dq if the
 	    constant c is set to be zero.
 15.10.2020: Cleanup of templates for deal 9.3.0, now less
