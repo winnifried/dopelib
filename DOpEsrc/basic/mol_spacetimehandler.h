@@ -274,9 +274,12 @@ namespace DOpE
     {
 
 #if dope_dimension > 0
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_.set_fe(GetFESystem("control"));
+#endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetActiveFEIndicesControl(control_dof_handler_);
 #endif
-      control_dof_handler_.distribute_dofs(*control_fe_);
+      control_dof_handler_.distribute_dofs(GetFESystem("control"));
 
 #if dope_dimension > 0
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -355,6 +358,9 @@ namespace DOpE
             control_dofs_per_block_[control_block_component[i]]++;
           }
       }
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+     state_dof_handler_.set_fe(GetFESystem("state"));
 #endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);

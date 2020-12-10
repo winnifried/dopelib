@@ -192,6 +192,9 @@ namespace DOpE
 	  assert(SpaceTimeHandlerBase<VECTOR>::IsInIntervall(it,dofhandler_to_time_[j]));
 	  this->SetInterval(it,dofhandler_to_time_[j]);
 	}
+#if DEAL_II_VERSION_GTE(9,3,0)
+	state_dof_handlers_[j]->set_fe(GetFESystem("state"));
+#endif
 	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
 	  *state_dof_handlers_[j]);
       	state_dof_handlers_[j]->distribute_dofs(GetFESystem("state"));

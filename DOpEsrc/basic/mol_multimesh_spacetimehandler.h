@@ -224,9 +224,12 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD_state)
     {
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_.set_fe(GetFESystem("control"));
+#endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
         control_dof_handler_);
-      control_dof_handler_.distribute_dofs(*control_fe_);
+      control_dof_handler_.distribute_dofs(GetFESystem("control"));
 #if DEAL_II_VERSION_GTE(9,3,0)
       DoFRenumbering::component_wise(static_cast<dealii::DoFHandler<dim, dim>&>(control_dof_handler_));
 #else
@@ -291,7 +294,9 @@ namespace DOpE
 	  control_dofs_per_block_,
           control_block_component);
       }
-
+#if DEAL_II_VERSION_GTE(9,3,0)
+     state_dof_handler_.set_fe(GetFESystem("state"));
+#endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));

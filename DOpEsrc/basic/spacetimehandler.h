@@ -438,8 +438,7 @@ namespace DOpE
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
-	      //FIXME: Shouldn't this be SetActiveFEIndexControl?
-              this->GetFEIndexSetter ().SetActiveFEIndexState (element);
+              this->GetFEIndexSetter ().SetActiveFEIndexControl (element);
             }
         }
     }

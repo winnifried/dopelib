@@ -47,8 +47,10 @@ namespace DOpEWrapper
   class DoFHandler : public dealii::DoFHandler<dim, dim>
   {
   public:
-  DoFHandler(const dealii::Triangulation<dim, dim> &tria, const bool hp_capability_enabled=false) :
-      dealii::DoFHandler<dim, dim>(tria,hp_capability_enabled)
+#warning the dealii interface to the DoFHandler (and hp:DoFHandler) is changing rapidly in the current version, once it is settled, remove unnecessary arguments.
+  DoFHandler(const dealii::Triangulation<dim, dim> &tria, const bool /*hp_capability_enabled*/=false) :
+//      dealii::DoFHandler<dim, dim>(tria,hp_capability_enabled)
+    dealii::DoFHandler<dim, dim>(tria)
     {
     }
 
@@ -74,7 +76,7 @@ namespace DOpEWrapper
     bool
     NeedIndexSetter()
     {
-      return this->hp_capability_enabled;
+      return this->has_hp_capabilities();
     }
 
   };

@@ -186,7 +186,9 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
-
+#if DEAL_II_VERSION_GTE(9,3,0)
+     state_dof_handler_.set_fe(GetFESystem("state"));
+#endif
       StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
