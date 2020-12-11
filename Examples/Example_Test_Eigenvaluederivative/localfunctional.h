@@ -48,85 +48,52 @@ public:
   ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-      edc.GetFEValuesState();
+    edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
-      qvalues_.resize(n_q_points, Vector<double>(2));
-      uvalues_.resize(n_q_points, Vector<double>(3));
-      vector<Vector<double>> eigenvalue;
-      eigenvalue.resize(n_q_points, Vector<double>(3));
+    qvalues_.resize(n_q_points, Vector<double>(2));
+    qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 
-      edc.GetValuesControl("control", qvalues_);
-      edc.GetValuesState("state", uvalues_);
-      edc.GetValuesState("eigenvalue", eigenvalue);
+    edc.GetValuesControl("control", qvalues_);
+    edc.GetGradsControl("control", qgrads_);
 
-    double ev = eigenvalue[0][0];
-
-    Tensor<1, 2> u;
-    u.clear();
-//   std::cout << "eigenvalue in elementvalue = " << ev << std::endl;
+    Tensor<2, 2> qgrads;
+    Tensor<2, 2> DF;
+    double detDF;
 
     double r = 0.;
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-    	for (unsigned int i = 0; i < 2; i++) {
-    		u[i] = uvalues_[q_point][i];
-    	}
-    	double norm_u_square = u[0]*u[0]+u[1]+u[1];
-//    	std::cout << norm_u_square << std::endl;
-//    	double fval = 0.25;
-//    	r += 0.5*(ev - fval) *(ev - fval)* state_fe_values.JxW(q_point);
-//   	r += 0.5*((ev - 1.0)* norm_u_square)*((ev - 1.0)* norm_u_square)* state_fe_values.JxW(q_point);
+    	DF.clear();
+    	qgrads.clear();
+		qgrads[0][0] = qgrads_[q_point][0][0];
+		qgrads[1][1] = qgrads_[q_point][1][1];
+		qgrads[1][0] = qgrads_[q_point][1][0];
+		qgrads[0][1] = qgrads_[q_point][0][1];
+
+		DF = calc_DF(qgrads);
+		detDF = calc_detDF(DF);
 
          r += 0.5 * alpha_ * (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
+         //qgradient*qgradient für beide Komponenten
+
+         r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
+
+         //  log(detDF)
+         r +=  0.5 *alpha_ * std::log(detDF)* std::log(detDF) * state_fe_values.JxW(q_point);
       }
-    return r;
+
   }
-  double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+  double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
                          const std::map<std::string, const VECTOR *> &domain_values)
    {
      assert(this->GetProblemType() == "cost_functional");
 
      std::map<std::string, const dealii::Vector<double>*>::const_iterator vals = domain_values.find("eigenvalue");
-     double fval = 0.25; //TODO übergeben
-//     std::cout << vals->second->operator[](0) << std::endl;
-//     std::cout << 0.5*(vals->second->operator[](0) - fval)*(vals->second->operator[](0) - fval) << std::endl;
+     double fval = 3.8; //TODO übergeben
     return 0.5*(vals->second->operator[](0) - fval)*(vals->second->operator[](0) - fval);
 
    }
-
-
-
-
-
-
-//  void
-//  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
-//                 dealii::Vector<double> &local_vector, double scale)
-//  {
-//    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-//      edc.GetFEValuesState();
-//    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-//    unsigned int n_q_points = edc.GetNQPoints();
-//    {
-//      fvalues_.resize(n_q_points);
-//      uvalues_.resize(n_q_points);
-//
-//      edc.GetValuesState("state", uvalues_);
-//    }
-//
-//    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-//      {
-//        fvalues_[q_point] = 1.0;
-//        for (unsigned int i = 0; i < n_dofs_per_element; i++)
-//          {
-//            local_vector(i) += scale
-//                               * (uvalues_[q_point] - fvalues_[q_point])
-//                               * state_fe_values.shape_value(i, q_point)
-//                               * state_fe_values.JxW(q_point);
-//          }
-//      }
-//  }
 
   void
   ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
@@ -139,91 +106,56 @@ public:
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
 
-//      qvalues_.resize(n_q_points);
-    	qvalues_.resize(n_q_points, Vector<double>(2));
-      edc.GetValuesControl("control", qvalues_);
+    qvalues_.resize(n_q_points, Vector<double>(2));
+    qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+    edc.GetValuesControl("control", qvalues_);
+    edc.GetGradsControl("control", qgrads_);
+
+    Tensor<2, 2> qgrads;
+    Tensor<2, 2> DFdq;
+    Tensor<2, 2> DF;
+    double detDF;
+    double detDFdq;
 
 	vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
-
-    const FEValuesExtractors::Vector dv(0);
+	vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
+	const FEValuesExtractors::Vector dv(0);
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
     {
+    	DF.clear();
+    	qgrads.clear();
+    	qgrads[0][0] = qgrads_[q_point][0][0];
+    	qgrads[1][1] = qgrads_[q_point][1][1];
+    	qgrads[1][0] = qgrads_[q_point][1][0];
+    	qgrads[0][1] = qgrads_[q_point][0][1];
+
+    	DFdq.clear();
+
+    	DF = calc_DF(qgrads);
+    	detDF = calc_detDF(DF);
+
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
         	phi_q[i]=  control_fe_values[dv].value(i,q_point);
+        	grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
-        	local_vector(i) += scale * alpha_
-              * (qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
-              * control_fe_values.JxW(q_point);
+        	DFdq = calc_DF(grad_phi_v[i]);
+        	detDFdq = calc_detDF(DFdq);
+
+        	local_vector(i) +=  scale * alpha_ * (qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
+        	        	              * control_fe_values.JxW(q_point);
+
+        	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * control_fe_values.JxW(q_point);
+
+        	local_vector(i) += scale *alpha_  *std::log(detDF)* std::log(std::abs(detDFdq)) * control_fe_values.JxW(q_point);
           }
       }
-  }
-
-  void
-  ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale)
-  {
-//    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-//      edc.GetFEValuesState();
-//    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-//    unsigned int n_q_points = edc.GetNQPoints();
-//    {
-//      duvalues_.resize(n_q_points);
-//      edc.GetValuesState("tangent", duvalues_);
-//    }
-//
-//    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-//      {
-//        for (unsigned int i = 0; i < n_dofs_per_element; i++)
-//          {
-//            local_vector(i) += scale * duvalues_[q_point]
-//                               * state_fe_values.shape_value(i, q_point)
-//                               * state_fe_values.JxW(q_point);
-//          }
-//      }
-  }
-
-  void
-  ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
-  {
-  }
-
-  void
-  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
-  {
-  }
-
-  void
-  ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale)
-  {
-//    const DOpEWrapper::FEValues<dealdim> &control_fe_values =
-//      edc.GetFEValuesControl();
-//    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-//    unsigned int n_q_points = edc.GetNQPoints();
-//    {
-//      dqvalues_.resize(n_q_points);
-//      edc.GetValuesControl("dq", dqvalues_);
-//    }
-//
-//    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-//      {
-//        for (unsigned int i = 0; i < n_dofs_per_element; i++)
-//          {
-//            local_vector(i) += scale * alpha_
-//                               * (dqvalues_[q_point]
-//                                  * control_fe_values.shape_value(i, q_point))
-//                               * control_fe_values.JxW(q_point);
-//          }
-//      }
   }
 
   UpdateFlags
   GetUpdateFlags() const
   {
-    return update_values | update_quadrature_points;
+    return update_values | update_gradients | update_quadrature_points;
   }
 
   string
@@ -242,12 +174,26 @@ private:
   vector<Vector<double> > uvalues_;
   vector<Vector<double> > qvalues_;
   vector<Vector<double> > funcgradvalues_;
-//  Vector<double>  fvalues_;
-  double fvalues_;
-//  vector<double> fvalues_;
-//  vector<double> uvalues_;
-//  vector<double> duvalues_;
-//  vector<double> dqvalues_;
+
+  vector<vector<Tensor<1, dealdim> > > qgrads_;
   double alpha_;
+
+  // ---------------------------------------------------------------
+  // Hier alle Funktionen, die in Bezug zu DF benötigt werden
+  	Tensor<2, 2> calc_DF(Tensor<2, 2> qgrads) {
+  		Tensor<2, 2> DF_;
+  		DF_[0][0] = qgrads[0][0] + 1;
+  		DF_[1][1] = qgrads[1][1] + 1;
+  		DF_[1][0] = qgrads[1][0];
+  		DF_[0][1] = qgrads[0][1];
+
+  		return DF_;
+  	}
+  	double calc_detDF(Tensor<2, 2> DF) {
+  //		if( DF[0][0] * DF[1][1] - DF[1][0] * DF[0][1] == 1){
+  //			std::cout<< "Achtung: Determinante DF = 1" << std::endl;
+  //		}
+  		return DF[0][0] * DF[1][1] - DF[1][0] * DF[0][1];
+  	}
 };
 #endif

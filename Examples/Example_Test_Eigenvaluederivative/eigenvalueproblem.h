@@ -359,7 +359,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		gradient_reinit_; unsigned int cost_needs_precomputations_;
 		std::vector<PETScWrappers::MPI::Vector> eigenfunctions, adjoint_eigenfunctions, tangent_eigenfunctions, adjoint_hessian_eigenfunctions;
 		std::vector<double> eigenvalues, adjoint_eigenvalues, tangent_eigenvalues, adjoint_hessian_eigenvalues;
-		double numOfEigenval = 10;
+		double numOfEigenval = 2;
 		double eigenvalueFIXED;
 
 		friend class SolutionExtractor< EigenvalueProblem<CONTROLNONLINEARSOLVER,
@@ -541,7 +541,6 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			    VECTOR eigfun(eigenfunction.size());
 			    eigfun = eigenfunction;
 			    this->GetIntegrator().AddDomainData("state",&(eigfun));
-			                                      //  &(GetU().GetSpacialVector()));
 
 			    if (dopedim == dealdim)
 			      {
@@ -558,8 +557,13 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			                            "EigenvalueProblem::ComputeEigenvalueAdjoint");
 			      }
 
-			    VECTOR eigval(1);
-			    eigval[0]=eigenvalue;
+			    VECTOR eigval(eigenfunction.size());
+			    for(unsigned int i=0; i < eigenfunction.size(); i++){
+			    		eigval[i]=eigenvalue;
+			     }
+
+//			    VECTOR eigval(1);
+//			    eigval[0]=eigenvalue;
 			    this->GetIntegrator().AddParamData("eigenvalue",  &eigval);
 
 			    adjoint_eigenfunctions.resize((int) (numOfEigenval)); //TODO hier reicht auch Übergabe von bestimmter EV und EW bei aktuellem Problem
@@ -569,11 +573,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 
 
-//			    			    std::cout << "################################################################" << std::endl;
-//			    for (unsigned int i = 0; i < numOfEigenval; ++i) {
-			    		std::cout << "adjoint_k^2 " << " = " << adjoint_eigenvalues[0] << std::endl;
-//			    }
-//			    std::cout << "################################################################" << std::endl;
+			    			    std::cout << "################################################################" << std::endl;
+			    for (unsigned int i = 0; i < 2/*numOfEigenval*/; ++i) {
+			    		std::cout << "adjoint_k^2 " << " = " << adjoint_eigenvalues[i] << std::endl;
+			    }
+			    std::cout << "################################################################" << std::endl;
 			    if (dopedim == dealdim)
 			      {
 			        this->GetIntegrator().DeleteDomainData("control");
@@ -599,9 +603,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 			    VECTOR adjeigfun(adjoint_eigenfunctions[0].size());
 			    adjeigfun = adjoint_eigenfunctions[0];
-//			    std::cout << adjeigfun.size() << std::endl;
-//			    this->GetOutputHandler()->Write(adjeigfun,
-//			                                    "EigenvalueAdjoint" + this->GetPostIndex(), problem.GetDoFType());
+
+			    //TODO Hier auch???
+//			    adjeigfun *= (eigval[0]-3.9);
 			    this->GetOutputHandler()->Write((adjeigfun),
 			                                       "Adjoint" + this->GetPostIndex(), problem.GetDoFType());
 		}
@@ -658,10 +662,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 ////			        }
 
 			    VECTOR eigval(eigenfunction.size());
-		    for (unsigned int i = 0; i< eigenfunction.size(); i++){
+			    for(unsigned int i=0; i < eigenfunction.size(); i++){
 			    	eigval[i]=eigenvalue;
 			    }
-
 
 			    this->GetControlIntegrator().AddDomainData("eigenvalue",  &eigval);
 			    this->GetIntegrator().AddDomainData("eigenvalue",  &eigval);
@@ -672,13 +675,8 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 			    VECTOR adjeigfun(eigenfunction.size());
 			    adjeigfun = adjoint_eigenfunctions[0];
-			    adjeigfun *= (eigval[0]-0.25);
+			    adjeigfun *= (eigval[0]-3.8);
 
-//			    if (norm != 1 || abs(1-norm)>0.1){
-//			    	 adjeigfun = adjoint_eigenfunctions[1];
-//			    	norm = eigfun*adjeigfun;
-//			    }
-//			    std::cout << "test eigenfun_norm = " << norm << std::endl; //TODO
 			    this->GetControlIntegrator().AddDomainData("adjoint",&(adjeigfun));
 
 			      gradient_transposed = 0.;
@@ -773,7 +771,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 				this->GetOutputHandler()->Write("Computing Eigenvalues and Eigenvectors (state solution):", 4 + this->GetBasePriority());
 				this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-				AddUDD();
+//				AddUDD();
 
 
 	//			cost_needs_precomputations_ = this->GetProblem()->FunctionalNeedPrecomputations();
@@ -797,8 +795,8 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		                 problem, eigenvalues, eigenfunctions, true, build_state_matrix_/*, n*/);
 
 //					std::cout << "################################################################" << std::endl;
-//					for (unsigned int i = 0; i < eigenvalues.size(); ++i) {
-//						std::cout << " k^2 " << " = " << eigenvalues[0] << std::endl;
+//					for (unsigned int i = 0; i < 2/*eigenvalues.size()*/; ++i) {
+//						std::cout << " k^2 " << " = " << eigenvalues[i] << std::endl;
 //					}
 //					std::cout << "################################################################" << std::endl;
 				}catch ( DOpEException &e){
@@ -811,7 +809,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 					  throw DOpEException("dopedim not implemented",
 					                                 "EigenvalueProblem::ComputeReducedCostFunctional");
 				}
-				DeleteUDD();
+//				DeleteUDD();
 				this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 				 //Reset Values
 //				GetU().GetSpacialVector() = 0.;
@@ -832,7 +830,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 				VECTOR eigfun(eigenfunctions[0].size());
 				eigfun = eigenfunctions[0];
 
-				this->GetOutputHandler()->Write(eigfun, "EigenvalueState" + this->GetPostIndex(), problem.GetDoFType());
+				this->GetOutputHandler()->Write(eigfun, "State" + this->GetPostIndex(), problem.GetDoFType());
 
 		}
 		/******************************************************/
@@ -992,7 +990,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		}
 
 		 VECTOR eigval(eigenfunctions[0].size());
-		 eigval/*[0]*/=eigenvalues[0];
+		 for(unsigned int i = 0; i< eigval.size(); i++){
+			 eigval[i]=eigenvalues[0];
+		 }
+
 
 		this->GetIntegrator().AddDomainData("eigenvalue",  &eigval);
 
@@ -1041,9 +1042,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetIntegrator().AddDomainData("state",&(eigfun));
 
 		VECTOR eigval(eigenfunctions[0].size());
-		for(unsigned int i = 0; i < eigval.size(); i++){
-			eigval[i]=eigenvalues[0];
-		}
+//		for(unsigned int i = 0; i < eigval.size(); i++){
+			eigval[0]=eigenvalues[0];
+//		}
 
 		this->GetIntegrator().AddDomainData("eigenvalue",  &eigval);
 
@@ -1171,7 +1172,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
 		dealdim>::ComputeReducedHessianVector(
-				const ControlVector<VECTOR> &q, const ControlVector<VECTOR> &direction, ControlVector<VECTOR> &hessian_direction, ControlVector<VECTOR> &hessian_direction_transposed) {
+				const ControlVector<VECTOR> &/*q*/, const ControlVector<VECTOR> &/*direction*/, ControlVector<VECTOR> &/*hessian_direction*/, ControlVector<VECTOR> &/*hessian_direction_transposed*/) {
 //		this->GetOutputHandler()->Write("Computing ReducedHessianVector:", 4 + this->GetBasePriority()); this->GetOutputHandler()->Write("\tSolving Tangent:", 5 + this->GetBasePriority());
 //		std::cout << "In ComputeReducedHessianVector"<< std::endl;
 //		this->SetProblemType("eigenvaluetangent");

@@ -125,8 +125,8 @@ typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, S
 
 typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
-typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
-//typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
+//typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
+typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
 
 
 
@@ -156,9 +156,22 @@ main(int argc, char **argv){
   pr.read_parameters(paramfile);
 
   Triangulation<DIM> triangulation;
-  GridGenerator::hyper_cube(triangulation, 0, M_PI);
-  triangulation.refine_global(3);
 
+//    GridGenerator::hyper_rectangle(triangulation,
+//  		  Point<2>(-M_PI/3,-M_PI/2),
+//  		  Point<2>(M_PI/3,M_PI/2));
+  GridGenerator::hyper_rectangle(triangulation,
+  		  Point<2>(0,0),
+  		  Point<2>(M_PI/3,M_PI/2));
+
+
+//  GridGenerator::hyper_rectangle(triangulation,
+//		  Point<2>(-M_PI/2,-M_PI/2),
+//		  Point<2>(M_PI/2,M_PI/2));
+
+//  GridGenerator::hyper_ball(triangulation, Point<2>(0,0), M_PI);
+  triangulation.refine_global(3);
+//  triangulation.
   //------------- FE-System ---------------------------------------------
    FE<DIM> control_fe(FE_Q<DIM>(1), 2);
    FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
@@ -170,7 +183,9 @@ main(int argc, char **argv){
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(0.00001);
+  COSTFUNCTIONAL LFunc(0.01);
+//  COSTFUNCTIONAL LFunc(0.001);
+
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
@@ -181,6 +196,7 @@ main(int argc, char **argv){
    comp_mask[0] = true;
    DOpEWrapper::ZeroFunction<DIM> zf(3);
    SimpleDirichletData<VECTOR, DIM> DD1(zf);
+
 
 //TODO in  mol space time handler angepasst für NedelecRB
 
@@ -205,9 +221,16 @@ main(int argc, char **argv){
 
 //  out.ReInit();
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
+  q = 0;
+
+
   local::Q_Control q_initial;
-  VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  q.GetSpacialVector());
+// VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  q.GetSpacialVector());
   ControlVector<VECTOR> dq(q);
+
+  VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  dq.GetSpacialVector());
+
+
 
 
       try
@@ -216,9 +239,10 @@ main(int argc, char **argv){
 //   	  solver.ComputeReducedCostFunctional(q);
 
     	  Alg.ReInit();
+
+    	  const double eps_diff = 0;
+    	  Alg.CheckGrads(eps_diff, q, dq, 3);
     	  Alg.Solve(q);
-//	  const double eps_diff = 1;
-//  	  Alg.CheckGrads(eps_diff, q, dq, 5);
         }
       catch (DOpEException &e)
         {

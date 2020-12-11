@@ -355,7 +355,10 @@ namespace DOpE
     q.ReInit();
     dq.ReInit();
 
-    dq = c;
+    if(c!= 0){
+    	dq = c;
+    }
+
 
     ControlVector<VECTOR> point(q);
     point = q;
@@ -421,7 +424,9 @@ namespace DOpE
     q.ReInit();
     dq.ReInit();
 
-    dq = c;
+    if(c!= 0){
+    	dq = c;
+    }
 
     ControlVector<VECTOR> point(q);
     point = q;
