@@ -97,13 +97,6 @@ public:
   template <typename PROBLEM>
   void ComputeNonlinearResidual(PROBLEM &pde, VECTOR &residual, double eigenvalue);
 
-//  /******TODO ******************************************************/
-//  template <typename PROBLEM>
-//    void ComputeEigenvalueAdjoint(PROBLEM &pde,SCALAR eigenvalue, PETScWrappers::MPI::Vector &eigenvector, SCALAR derivative_eigenvalue);
-//  template <typename PROBLEM>
-//   void ComputeEigenvalueDerivative(PROBLEM &pde,SCALAR eigenvalue, PETScWrappers::MPI::Vector &eigenvector, SCALAR derivative_eigenvalue);
-
-
 
   /**
    * This method is used to evaluate the left hand side of the residual of the
@@ -568,7 +561,7 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
       // the second '1' plays only a role in the stationary case. In the
       // non-stationary case, scale_ico is set by the time-stepping-scheme
       pde.ElementEquation(edc, local_vector, 1.);
-      pde.ElementRhs(edc, local_vector, -1., eigenvalue); //TODO Vorzeichen richtig?
+      pde.ElementRhs(edc, local_vector, -1., eigenvalue);
 
       if (need_boundary_integrals && element[0]->at_boundary()) {
         for (unsigned int face = 0;

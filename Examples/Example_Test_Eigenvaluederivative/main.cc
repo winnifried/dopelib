@@ -23,7 +23,14 @@
 #include <iostream>
 
 #include <deal.II/grid/tria.h>
+#include <deal.II/grid/tria_accessor.h>
+#include <deal.II/grid/tria_iterator.h>
 #include <deal.II/grid/grid_generator.h>
+#include <deal.II/grid/grid_tools.h>
+#include <deal.II/grid/manifold_lib.h>
+#include <deal.II/grid/grid_out.h>
+#include <deal.II/grid/grid_in.h>
+
 #include <deal.II/fe/fe_q.h>
 #include <deal.II/fe/fe_nedelec.h>
 #include <deal.II/base/quadrature_lib.h>
@@ -53,6 +60,7 @@
 #include <templates/directlinearsolver.h>
 #include <templates/cglinearsolver.h>
 #include <templates/gmreslinearsolver.h>
+#include <templates/qmrslinearsolver.h>
 #include <templates/trilinosdirectlinearsolver.h>
 #include <templates/richardsonlinearsolver.h>
 
@@ -114,26 +122,22 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
-//typedef VoidLinearSolver<VECTOR> LINEARSOLVER;
-
-//typedef RichardsonLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
 typedef GMRESLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
-
-//typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER> EVS;
 
 typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
-//typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
-typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
+typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
+//typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
 
 
 
-typedef MethodOfLines_SpaceTimeHandler/*_Curl*/<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
 
 int
+
 main(int argc, char **argv){
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv,1);
 
@@ -157,19 +161,24 @@ main(int argc, char **argv){
 
   Triangulation<DIM> triangulation;
 
-//    GridGenerator::hyper_rectangle(triangulation,
-//  		  Point<2>(-M_PI/3,-M_PI/2),
-//  		  Point<2>(M_PI/3,M_PI/2));
   GridGenerator::hyper_rectangle(triangulation,
   		  Point<2>(0,0),
   		  Point<2>(M_PI/3,M_PI/2));
-
-
 //  GridGenerator::hyper_rectangle(triangulation,
-//		  Point<2>(-M_PI/2,-M_PI/2),
-//		  Point<2>(M_PI/2,M_PI/2));
+//  		  Point<2>(0,0),
+//  		  Point<2>(M_PI,M_PI));
+//GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);
+//  GridGenerator::hyper_ball(triangulation, Point<2>(2*M_PI, 2*M_PI), M_PI);
 
-//  GridGenerator::hyper_ball(triangulation, Point<2>(0,0), M_PI);
+//
+//  //------------READ MESH--------------------
+//  GridIn<DIM> gridin;
+//  gridin.attach_triangulation(triangulation);
+//  std::ifstream f("gradbeta_curve.msh");
+//  gridin.read_msh(f);
+
+
+
   triangulation.refine_global(3);
 //  triangulation.
   //------------- FE-System ---------------------------------------------
@@ -183,8 +192,8 @@ main(int argc, char **argv){
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(0.01);
-//  COSTFUNCTIONAL LFunc(0.001);
+  COSTFUNCTIONAL LFunc(0);
+//  COSTFUNCTIONAL LFunc(100.0);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -221,7 +230,7 @@ main(int argc, char **argv){
 
 //  out.ReInit();
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
-  q = 0;
+ q = 0;
 
 
   local::Q_Control q_initial;
@@ -229,19 +238,13 @@ main(int argc, char **argv){
   ControlVector<VECTOR> dq(q);
 
   VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  dq.GetSpacialVector());
-
-
-
-
       try
         {
     	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
-//   	  solver.ComputeReducedCostFunctional(q);
-
     	  Alg.ReInit();
-
     	  const double eps_diff = 0;
     	  Alg.CheckGrads(eps_diff, q, dq, 3);
+    	  Alg.ReInit();
     	  Alg.Solve(q);
         }
       catch (DOpEException &e)

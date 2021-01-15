@@ -332,19 +332,14 @@ namespace DOpE
         {
           unsigned int color = dirichlet_colors[i];
           std::vector<bool> comp_mask = DD_state.GetDirichletCompMask(color);
-          //TODO just für FE_Q...
+          //TODO for FE_Q...
            std::vector<bool> comp_mask_FEQ(1);
            comp_mask_FEQ[0] = true;
 
 
-          //TODO: mapping[0] is a workaround, as deal does not support interpolate
-          // boundary_values with a mapping collection at this point.
 
-//          if(GetFESystem("state").get_sub_fe(0,1).get_name() == "FE_Q<2>(1)" ){
-           //TODO
         	  VectorTools::project_boundary_values_curl_conforming_l2(state_dof_handler_.GetDEALDoFHandler(), 1,
         			  dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()), color, state_dof_constraints_, GetMapping()[0]);
-//          }else{
 
 #if DEAL_II_VERSION_GTE(9,0,0)
           VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()),

@@ -50,6 +50,8 @@ public:
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
     edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
+
+    uvalues_.resize(n_q_points, Vector<double>(3));
     qvalues_.resize(n_q_points, Vector<double>(2));
     qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 
@@ -75,11 +77,15 @@ public:
 
          r += 0.5 * alpha_ * (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
+
+
+
+
          //qgradient*qgradient für beide Komponenten
 
          r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
-
-         //  log(detDF)
+////DF
+////         //  log(detDF)
          r +=  0.5 *alpha_ * std::log(detDF)* std::log(detDF) * state_fe_values.JxW(q_point);
       }
 
@@ -87,10 +93,10 @@ public:
   double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
                          const std::map<std::string, const VECTOR *> &domain_values)
    {
-     assert(this->GetProblemType() == "cost_functional");
+//     assert(this->GetProblemType() == "cost_functional");
 
      std::map<std::string, const dealii::Vector<double>*>::const_iterator vals = domain_values.find("eigenvalue");
-     double fval = 3.8; //TODO übergeben
+     double fval = 3.; //TODO übergeben
     return 0.5*(vals->second->operator[](0) - fval)*(vals->second->operator[](0) - fval);
 
    }
@@ -143,7 +149,7 @@ public:
         	detDFdq = calc_detDF(DFdq);
 
         	local_vector(i) +=  scale * alpha_ * (qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
-        	        	              * control_fe_values.JxW(q_point);
+        	        	              * state_fe_values.JxW(q_point);
 
         	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * control_fe_values.JxW(q_point);
 
@@ -151,6 +157,8 @@ public:
           }
       }
   }
+
+
 
   UpdateFlags
   GetUpdateFlags() const
@@ -190,9 +198,7 @@ private:
   		return DF_;
   	}
   	double calc_detDF(Tensor<2, 2> DF) {
-  //		if( DF[0][0] * DF[1][1] - DF[1][0] * DF[0][1] == 1){
-  //			std::cout<< "Achtung: Determinante DF = 1" << std::endl;
-  //		}
+
   		return DF[0][0] * DF[1][1] - DF[1][0] * DF[0][1];
   	}
 };

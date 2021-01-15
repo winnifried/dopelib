@@ -70,10 +70,10 @@ public:
 	    		funcgradval[i] = funcgradvalues_[q_point][i];
 	    	}
 			for (unsigned int i = 0; i < n_dofs_per_element; i++) {
-			psi_q[i] = control_fe_values[controlextractor].value(i,q_point);
-			local_vector(i) += scale * scalar_product(funcgradval, psi_q[i]) * control_fe_values.JxW(q_point);
+				psi_q[i] = control_fe_values[controlextractor].value(i,q_point);
 
-	          }
+				local_vector(i) += scale * scalar_product(funcgradval, psi_q[i]) * control_fe_values.JxW(q_point);
+			}
 	      }
 	  }
 
@@ -95,11 +95,13 @@ public:
 	    	for (unsigned int i = 0; i < n_dofs_per_element; i++){
 	    		psi_q[i] = control_fe_values[controlextractor].value(i,q_point);
 	    	}
+
 	        for (unsigned int i = 0; i < n_dofs_per_element; i++)
 	          {
 	            for (unsigned int j = 0; j < n_dofs_per_element; j++)
 	              {
-	                local_matrix(i, j) += scale *  psi_q[i] * psi_q[j]
+
+	                local_matrix(i, j) += scale *  psi_q[j] * psi_q[i]
 	                                    * control_fe_values.JxW(q_point);
 	              }
 	          }
@@ -126,7 +128,7 @@ public:
 
 		vector<Tensor<1, dealdim> > phi_grads_u(n_dofs_per_element);
 		vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
-		vector<Tensor<1, dealdim> > psi_q(n_dofs_per_element);
+//		vector<Tensor<1, dealdim> > psi_q(n_dofs_per_element);
 		vector<Tensor<2, dealdim> > psi_grads_q(n_dofs_per_element);
 		vector<typename internal::CurlType<dealdim>::type> phi_curl_u(
 				n_dofs_per_element);
@@ -157,7 +159,7 @@ public:
 			DF_Inverse_T = calc_invDFTranspose(DF);
 
 			for (unsigned int i = 0; i < n_dofs_per_element; i++) {
-				psi_grads_q[i] = control_fe_values[controlextractor].gradient(i,q_point);
+//				psi_grads_q[i] = control_fe_values[controlextractor].gradient(i,q_point);
 				phi_grads_u[i] = state_fe_values[psi].gradient(i, q_point);
 				phi_curl_u[i] = state_fe_values[E].curl(i, q_point);
 				phi_u[i] = state_fe_values[E].value(i, q_point);
@@ -166,17 +168,18 @@ public:
 			for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 				for (unsigned int j = 0; j < n_dofs_per_element; j++) {
 
-					local_matrix(i, j) += scale * (1/detDF)*phi_curl_u[j][0]
-							* (1/detDF)*phi_curl_u[i][0]
-							* state_fe_values.JxW(q_point);
-
-					local_matrix(i, j) += scale
-											* scalar_product(phi_u[j]*DF_Inverse,DF_Inverse_T*
-													phi_grads_u[i])
-											* state_fe_values.JxW(q_point);
+					local_matrix(i, j) += scale *scalar_product( (1/detDF)*phi_curl_u[j]
+													,(1/detDF)*phi_curl_u[i])
+													* state_fe_values.JxW(q_point);
 
 					local_matrix(i, j) += scale* scalar_product(DF_Inverse_T*phi_grads_u[j],
-											phi_u[i]*DF_Inverse)	* state_fe_values.JxW(q_point);
+											DF_Inverse_T*phi_u[i])	* state_fe_values.JxW(q_point);
+
+					local_matrix(i, j) += scale* scalar_product(DF_Inverse_T*phi_u[j],DF_Inverse_T*
+																		phi_grads_u[i])
+													* state_fe_values.JxW(q_point);
+
+
 				}
 			}
 		}
@@ -230,8 +233,9 @@ public:
 			for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 				for (unsigned int j = 0; j < n_dofs_per_element; j++) {
 
-					local_matrix(i, j) += scale* scalar_product(phi_u[j]*DF_Inverse,phi_u[i]*DF_Inverse)
-												* state_fe_values.JxW(q_point);
+					local_matrix(i, j) += scale* scalar_product(DF_Inverse_T*phi_u[j],DF_Inverse_T*phi_u[i])
+																* state_fe_values.JxW(q_point);
+
 				}
 			}
 		}
@@ -265,6 +269,13 @@ public:
 
 		vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
 		vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
+
+		vector<Tensor<1, dealdim> > phi_grads_u(n_dofs_per_element);
+		vector<Tensor<1, dealdim> > psi_q(n_dofs_per_element);
+		vector<Tensor<2, dealdim> > psi_grads_q(n_dofs_per_element);
+		vector<typename internal::CurlType<dealdim>::type> phi_curl_u(
+						n_dofs_per_element);
+
 		const FEValuesExtractors::Scalar psi(0);
 		const FEValuesExtractors::Vector E(1);
 		const FEValuesExtractors::Vector dv(0);
@@ -310,19 +321,35 @@ public:
 		DF_Inverse_T = calc_invDFTranspose(DF);
 		detDF = calc_detDF(DF);
 
-		for (unsigned int i = 0; i < 2; i++) {
-			u[i] = uvalues_[q_point][i];
-			z[i] = zvalues_[q_point][i];
+//		z[0] = zvalues_[q_point][0];
+//		z[1] = zvalues_[q_point][1];
+//		u[0] = uvalues_[q_point][0];
+//		u[1] = uvalues_[q_point][1];
 
-			grad_u[i] = ugrads_[q_point][0][i];
-			grad_z[i] = zgrads_[q_point][0][i];
+//		curl_u =  ugrads_[q_point][2][0] - ugrads_[q_point][1][1];
+//		curl_z =  zgrads_[q_point][2][0] - zgrads_[q_point][1][1];
 
-		}
+		grad_u[0] = ugrads_[q_point][0][0];
+		grad_u[1] = ugrads_[q_point][0][1];
+		grad_z[0] = zgrads_[q_point][0][0];
+		grad_z[1] = zgrads_[q_point][0][1];
+
+		//------------neu...
+		z[0] = zvalues_[q_point][1];
+		z[1] = zvalues_[q_point][2];
+		u[0] = uvalues_[q_point][1];
+		u[1] = uvalues_[q_point][2];
+
 		curl_u =  ugrads_[q_point][2][0] - ugrads_[q_point][1][1];
 		curl_z =  zgrads_[q_point][2][0] - zgrads_[q_point][1][1];
 
+
 		for (unsigned int i = 0; i < n_dofs_per_element; i++) {
+
+
 			phi_u[i] = state_fe_values[E].value(i, q_point);
+			phi_curl_u[i] = state_fe_values[E].curl(i, q_point);
+			phi_grads_u[i] = state_fe_values[psi].gradient(i, q_point);
 			grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
 			DFdq = calc_DF(grad_phi_v[i]);
@@ -330,20 +357,30 @@ public:
 			DF_Inverse_Tdq = calc_invDFTranspose(DFdq);
 			detDFdq=calc_detDF(DFdq);
 
-			local_vector(i) += scale*((1/detDFdq)*curl_u*(1/detDF)*curl_z
-								+ (1/detDF)*curl_u * (1/detDFdq)*curl_z)
-								* control_fe_values.JxW(q_point);
+//			local_vector(i) += scale*((1/detDFdq)*curl_u *(1/detDF)*curl_z
+//								+ (1/detDF)*curl_u *(1/detDFdq)*curl_z)
+//								* control_fe_values.JxW(q_point);
+//
+//			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*u, DF_Inverse_T*grad_z)
+//								 + scalar_product(DF_Inverse_T*u, DF_Inverse_Tdq*grad_z)
+//								)*control_fe_values.JxW(q_point);
+//
+//			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*grad_u, DF_Inverse_T*z)
+//										+ scalar_product(DF_Inverse_T*grad_u,DF_Inverse_Tdq*z)
+//								)* control_fe_values.JxW(q_point);
 
-			local_vector(i) += scale*(scalar_product(u*DF_Inversedq, DF_Inverse_T*grad_z)
-							 + scalar_product(u*DF_Inverse, DF_Inverse_Tdq*grad_z)
-					)* control_fe_values.JxW(q_point);
+			local_vector(i) += scale*2*((1/detDF)*curl_u *(1/detDFdq)*curl_z)
+									* state_fe_values.JxW(q_point);
 
-			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*grad_u, z*DF_Inverse)
-							+ scalar_product(DF_Inverse_T*grad_u,z*DF_Inversedq)
-					)* control_fe_values.JxW(q_point);
+				local_vector(i) += scale*2*(scalar_product(DF_Inverse_T*u, DF_Inverse_Tdq*grad_z)
+									)*state_fe_values.JxW(q_point);
+
+				local_vector(i) += scale*2*(scalar_product(DF_Inverse_T*grad_u, DF_Inverse_Tdq*z)
+									)* state_fe_values.JxW(q_point);
+//				std::cout << local_vector(i) << std::endl;
+			}	//			std::cout << "++++++++++++++++++++++" << std::endl;
 
 
-			}
 		}
 
 	}
@@ -397,6 +434,7 @@ public:
 				z.clear();
 				u.clear();
 				qgrads.clear();
+
 				qgrads[0][0] = qgrads_[q_point][0][0];
 				qgrads[1][1] = qgrads_[q_point][1][1];
 				qgrads[1][0] = qgrads_[q_point][1][0];
@@ -405,10 +443,12 @@ public:
 				DF = calc_DF(qgrads);
 				DF_Inverse = calc_invDF(DF);
 				DF_Inverse_T = calc_invDFTranspose(DF);
-				for (unsigned int i = 0; i < 2; i++) {
-					z[i] = zvalues_[q_point][i];
-					u[i] = uvalues_[q_point][i];
-				}
+
+				z[0] = zvalues_[q_point][1];
+				z[1] = zvalues_[q_point][2];
+				u[0] = uvalues_[q_point][1];
+				u[1] = uvalues_[q_point][2];
+
 
 				for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 					phi_u[i] = state_fe_values[E].value(i, q_point);
@@ -418,11 +458,17 @@ public:
 					DF_Inverse_dq = calc_invDF(DFdq);
 					DF_Inverse_Tdq = calc_invDFTranspose(DFdq);
 
-					local_vector(i) += scale * eigenvalue * (scalar_product(u*DF_Inverse_dq , z*DF_Inverse)
-																			+  scalar_product(u*DF_Inverse,z*DF_Inverse_dq))
-																* control_fe_values.JxW(q_point);
+
+
+//					local_vector(i) += scale * eigenvalue * (scalar_product(DF_Inverse_Tdq*u ,DF_Inverse_T*z)
+//									+  scalar_product(DF_Inverse_T*u,DF_Inverse_Tdq*z))
+//									* control_fe_values.JxW(q_point);
+					local_vector(i) += scale * 2*eigenvalue * (scalar_product(DF_Inverse_T*u ,DF_Inverse_Tdq*z))
+										* state_fe_values.JxW(q_point);
+//					std::cout << local_vector(i) << std::endl;
 
 				}
+//				std::cout << "++++++++++++++++++++++" << std::endl;
 		}
 	}
 
@@ -495,17 +541,14 @@ private:
 		return DF_;
 	}
 	double calc_detDF(Tensor<2, 2> DF) {
-//		if( DF[0][0] * DF[1][1] - DF[1][0] * DF[0][1] == 1){
-//			std::cout<< "Achtung: Determinante DF = 1" << std::endl;
-//		}
 		return DF[0][0] * DF[1][1] - DF[1][0] * DF[0][1];
 	}
 	Tensor<2, 2> calc_adjDF(Tensor<2, 2> DF) {
 		Tensor<2, 2> adjDF_;
 		adjDF_[0][0] = DF[1][1];
 		adjDF_[1][1] = DF[0][0];
-		adjDF_[1][0] = -DF[0][1];
-		adjDF_[0][1] = -DF[1][0];
+		adjDF_[1][0] = -DF[1][0];
+		adjDF_[0][1] = -DF[0][1];
 
 		return adjDF_;
 	}
@@ -513,10 +556,10 @@ private:
 		Tensor<2, 2> adjDF_ = calc_adjDF(DF);
 		double detF_ = calc_detDF(DF);
 		Tensor<2, 2> invDF_;
-		invDF_[0][0] = 1 / detF_ * adjDF_[0][0];
-		invDF_[1][1] = 1 / detF_ * adjDF_[1][1];
-		invDF_[1][0] = 1 / detF_ * adjDF_[1][0];
-		invDF_[0][1] = 1 / detF_ * adjDF_[0][1];
+		invDF_[0][0] = (1 / detF_ )* adjDF_[0][0];
+		invDF_[1][1] = (1 / detF_ )* adjDF_[1][1];
+		invDF_[1][0] = (1 / detF_ )* adjDF_[1][0];
+		invDF_[0][1] = (1 / detF_ )* adjDF_[0][1];
 
 		return invDF_;
 	}
