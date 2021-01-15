@@ -74,7 +74,7 @@ namespace DOpE
     std::string
     GetType() const
     {
-      return "eigenval";
+      return "eigenvaluestate";
     }
 
     /**
@@ -691,7 +691,7 @@ namespace DOpE
                                      dealii::Vector<double> &local_vector, double scale,
                                      double scale_ico)
   {
-    pde_.ElementEquation_U(edc, local_vector, scale*interval_length_, scale_ico*interval_length_); //TODO das ist für adjoint...
+    pde_.ElementEquation(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
   }
 
   /******************************************************/
@@ -706,7 +706,7 @@ namespace DOpE
                                      dealii::Vector<double> &local_vector, double scale,
                                      double scale_ico)
   {
-    pde_.ElementMassEquation_U(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);//TODO das ist für adjoint...
+    pde_.ElementMassEquation(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
   }
 
   /******************************************************/

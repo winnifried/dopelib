@@ -53,7 +53,7 @@ namespace DOpE
     {
       dirichlet_colors_ = opt_problem_.dirichlet_colors_;
       dirichlet_comps_ = opt_problem_.dirichlet_comps_;
-      adjoint_dirichlet_values_ = opt_problem_.zero_dirichlet_values_;
+      adjoint_dirichlet_values_ = opt_problem_.adjoint_dirichlet_values_;
       adjoint_boundary_equation_colors_
         = opt_problem_.adjoint_boundary_equation_colors_;
       interval_length_ = 1.;
@@ -151,7 +151,7 @@ namespace DOpE
 
     /**
     * Functions providing the required information for the integrator.
-    * see OptProblemContainer for details.
+    * see OptProblemContainer for details.adjoint
     */
     template<typename EDC>
     void Init_ElementMatrix(const EDC &edc,
@@ -525,7 +525,7 @@ namespace DOpE
 
     std::vector<unsigned int> dirichlet_colors_;
     std::vector<std::vector<bool> > dirichlet_comps_;
-    const dealii::Function<dim> *adjoint_dirichlet_values_;
+    /*const dealii::Function<dim> * */ std::vector<AdjointDirichletData<DD, VECTOR, dim>*> adjoint_dirichlet_values_;
     std::vector<unsigned int> adjoint_boundary_equation_colors_;
     double interval_length_;
   };

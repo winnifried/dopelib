@@ -655,7 +655,7 @@ namespace DOpE
             if (opt_problem_.GetFunctional()->GetType().find("timedistributed") != std::string::npos && opt_problem_.GetFunctional()->GetType().find("timelocal") != std::string::npos)
               {
                 throw DOpEException("Conflicting functional types: "+ opt_problem_.GetFunctional()->GetType(),
-                                    "EigenvalueAdjointProblem::ElementRhs");
+                                    "EigenvalueDerivativeProblem::ElementRhs");
               }
           }
       }
