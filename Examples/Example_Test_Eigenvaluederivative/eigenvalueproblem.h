@@ -512,6 +512,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		GetAdjfun().ReInit();
 		GetEigfun().ReInit();
 
+
 		build_control_matrix_ = true;
 		cost_needs_precomputations_ = 0;
 
@@ -523,7 +524,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> void EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, StateVector<VECTOR> &eigenfunction, double eigenvalue, StateVector<VECTOR> &adjoint_eigenfunction, double adjoint_eigenvalue) {
+		dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, StateVector<VECTOR> &eigenfunction, double /*eigenvalue*/, StateVector<VECTOR> &adjoint_eigenfunction, double adjoint_eigenvalue) {
 			this->GetOutputHandler()->Write("Computing EigenvalueAdjoint:", 4 + this->GetBasePriority());
 			this->SetProblemType("eigenvalueadjoint");
 			auto &problem = this->GetProblem()->GetEigenvalueAdjointProblem();
@@ -551,11 +552,13 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		adjoint_eigenvalues.resize(numOfEigenval);
 		build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint").EigenvalueSolve(problem,adjoint_eigenvalues, adjoint_eigenfunctions, true, build_adjoint_matrix_/*, n*/);
 
-		for (unsigned int i = 0; i < adjoint_eigenfunctions.size(); ++i){
-			adjoint_eigenfunctions[i] /= adjoint_eigenfunctions[i].l2_norm();//norm_sqr();
-			adjoint_eigenfunctions[i] *= (eigenval_-3.);
-		}
+		GetAdjfun().GetSpacialVector() = 0.;
+		adjoint_eigenfunction.GetSpacialVector() = adjoint_eigenfunctions[0];   //Needed?
 		GetAdjfun().GetSpacialVector() = adjoint_eigenfunctions[0];
+//
+//		GetEigfun().GetSpacialVector() = 0.;
+//		eigenfunction.GetSpacialVector() = eigenfunctions[0]; //Needed?
+//		GetEigfun().GetSpacialVector() = eigenfunctions[0];
 
 		std::cout << "################################################################" << std::endl;
 		for (unsigned int i = 0; i < numOfEigenval; ++i) {
@@ -578,6 +581,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
+//		this->GetOutputHandler()->Write(GetEigfun().GetSpacialVector(), "State" + this->GetPostIndex(), problem.GetDoFType());
 		this->GetOutputHandler()->Write((GetAdjfun().GetSpacialVector()), "Adjoint" + this->GetPostIndex(), problem.GetDoFType());
 
 		}
@@ -679,9 +683,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			eigenvalues.resize(numOfEigenval);
 			build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(problem, eigenvalues, eigenfunctions, true, build_state_matrix_/*, n*/);
 
-			for (unsigned int i = 0; i < eigenfunctions.size(); ++i) {
-				eigenfunctions[i] /= eigenfunctions[i].l2_norm();//norm_sqr();
-			}
+//			for (unsigned int i = 0; i < eigenfunctions.size(); ++i) {
+//				eigenfunctions[i] /= eigenfunctions[i].l2_norm();
+//			}
+
 		}catch ( DOpEException &e){
 			if (dopedim == dealdim){
 				this->GetIntegrator().DeleteDomainData("control");
@@ -708,7 +713,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		GetEigfun().GetSpacialVector() = eigenfunctions[0];
 		eigenval_ = eigenvalues[0];
 		vecOfEigval_.reinit(eigenfunctions[0].size());
-		vecOfEigval_[0] = eigenval_;
+		vecOfEigval_ = eigenval_;
 
 		this->GetOutputHandler()->Write(GetEigfun().GetSpacialVector(), "State" + this->GetPostIndex(), problem.GetDoFType());
 
@@ -721,7 +726,8 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> bool EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::ComputeReducedConstraints( const ControlVector<VECTOR> &q, ConstraintVector<VECTOR> &/*g*/) { std::cout << "ComputeReducedConstraints" << std::endl;
+		dealdim>::ComputeReducedConstraints( const ControlVector<VECTOR> &/*q*/, ConstraintVector<VECTOR> &/*g*/) {
+			std::cout << "ComputeReducedConstraints" << std::endl;
 
 		}
 
@@ -733,7 +739,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> void EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::GetControlBoxConstraints( ControlVector<VECTOR> &lb, ControlVector<VECTOR> &ub) { std::cout << "GetControlBoxConstraints" << std::endl;
+		dealdim>::GetControlBoxConstraints( ControlVector<VECTOR> &/*lb*/, ControlVector<VECTOR> &/*ub*/) { std::cout << "GetControlBoxConstraints" << std::endl;
 
 		}
 
@@ -812,7 +818,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			found = true; ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
 		}
 		if (this->GetProblem()->GetFunctionalType().find("algebraic") != std::string::npos) {
-			found = true; ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+			double ev = vecOfEigval_[0];
+			found = true;
+			ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()),ev);
 		}
 
 		if (!found) {
@@ -822,8 +830,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		if (dopedim == dealdim) {
 			this->GetIntegrator().DeleteDomainData("control");
 
-		} else { throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedCostFunctional");
-		} if (cost_needs_precomputations_ != 0) {
+		} else {
+			throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedCostFunctional");
+		}
+		if (cost_needs_precomputations_ != 0) {
 			this->GetIntegrator().DeleteParamData("cost_functional_pre");
 		}
 		this->GetIntegrator().DeleteDomainData("state");
@@ -930,10 +940,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		typename VECTOR, int dopedim,
 		int dealdim> void EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
-CalculatePreFunctional(std::string name,
-		std::string postfix,
-		unsigned int n_pre,
-		unsigned int prob_num)
+CalculatePreFunctional(std::string /*name*/,
+		std::string /*postfix*/,
+		unsigned int /*n_pre*/,
+		unsigned int /*prob_num*/)
 {
 	std::cout << "CalculatePreFunctional" << std::endl;
 

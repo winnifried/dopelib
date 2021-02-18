@@ -48,8 +48,6 @@
 #include <problemdata/eigenvaluestateproblem.h>
 #include <problemdata/eigenvalueadjointproblem.h>
 #include <problemdata/eigenvaluederivativeproblem.h>
-//#include <problemdata/eigenvaluetangentproblem.h>
-//#include <problemdata/eigenvalueadjoint_hessianproblem.h>
 #include <problemdata/adjoint_hessianproblem.h>
 #include <problemdata/opt_adjoint_for_eeproblem.h>
 #include <basic/dopetypes.h>
@@ -417,7 +415,7 @@ namespace DOpE
     double
     AlgebraicFunctional(
       const std::map<std::string, const dealii::Vector<double>*> &values,
-      const std::map<std::string, const VECTOR *> &block_values);
+      const std::map<std::string, const VECTOR *> &block_values, double eigenvalue);
 
     /**
      * This function returns a residual to an equation that is depending
@@ -1501,7 +1499,7 @@ namespace DOpE
     std::vector<unsigned int> dirichlet_colors_;
     std::vector<std::vector<bool> > dirichlet_comps_;
     std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
-    std::vector<AdjointDirichletData<DD, VECTOR, dealdim>*> adjoint_dirichlet_values_;
+//    std::vector<AdjointDirichletData<DD, VECTOR, dealdim>*> adjoint_dirichlet_values_;
     std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> tangent_dirichlet_values_;
     const dealii::Function<dealdim> *zero_dirichlet_values_;
 
@@ -1647,11 +1645,11 @@ namespace DOpE
         if (primal_dirichlet_values_[i] != NULL)
           delete primal_dirichlet_values_[i];
       }
-    for (unsigned int i = 0; i < adjoint_dirichlet_values_.size(); i++)
-          {
-            if (adjoint_dirichlet_values_[i] != NULL)
-              delete adjoint_dirichlet_values_[i];
-          }
+//    for (unsigned int i = 0; i < adjoint_dirichlet_values_.size(); i++)
+//          {
+//            if (adjoint_dirichlet_values_[i] != NULL)
+//              delete adjoint_dirichlet_values_[i];
+//          }
     for (unsigned int i = 0; i < tangent_dirichlet_values_.size(); i++)
       {
         if (tangent_dirichlet_values_[i] != NULL)
@@ -2045,13 +2043,13 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
                         const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values)
+                        const std::map<std::string, const VECTOR *> &domain_values, double eigenvalue)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
       {
         // state values in quadrature points
-        return GetFunctional()->AlgebraicValue(param_values, domain_values);
+        return GetFunctional()->AlgebraicValue(param_values, domain_values, eigenvalue);
       }
     else if (this->GetType() == "aux_functional")
       {
@@ -2246,6 +2244,7 @@ namespace DOpE
                          const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
                          double scale, double eigenvalue)
    {
+
  	    if (this->GetType() == "eigenvaluederivative")
  	      {
 
@@ -2256,9 +2255,11 @@ namespace DOpE
  	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
  	              }
  	          }
+
  	       this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_ , eigenvalue);
  	       scale *= -1;
- 	       this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
+ 	       this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_);
+
 
  	   }else
  		        {
@@ -3168,8 +3169,8 @@ namespace DOpE
         transposed_control_hessian_dirichlet_values_[i]->SetTime(time);
       for (unsigned int i = 0; i < primal_dirichlet_values_.size(); i++)
         primal_dirichlet_values_[i]->SetTime(time);
-      for (unsigned int i = 0; i < adjoint_dirichlet_values_.size(); i++)
-              adjoint_dirichlet_values_[i]->SetTime(time);
+//      for (unsigned int i = 0; i < adjoint_dirichlet_values_.size(); i++)
+//              adjoint_dirichlet_values_[i]->SetTime(time);
       for (unsigned int i = 0; i < tangent_dirichlet_values_.size(); i++)
         tangent_dirichlet_values_[i]->SetTime(time);
       for (unsigned int i = 0; i < control_dirichlet_values_.size(); i++)
@@ -3720,9 +3721,9 @@ namespace DOpE
     PrimalDirichletData<DD, VECTOR, dealdim> *data =
       new PrimalDirichletData<DD, VECTOR, dealdim>(*values);
     primal_dirichlet_values_.push_back(data);
-    AdjointDirichletData<DD, VECTOR, dealdim> *adata =
-          new AdjointDirichletData<DD, VECTOR, dealdim>(*values);
-        adjoint_dirichlet_values_.push_back(adata);
+//    AdjointDirichletData<DD, VECTOR, dealdim> *adata =
+//          new AdjointDirichletData<DD, VECTOR, dealdim>(*values);
+//        adjoint_dirichlet_values_.push_back(adata);
     TangentDirichletData<DD, VECTOR, dealdim> *tdata =
       new TangentDirichletData<DD, VECTOR, dealdim>(*values);
     tangent_dirichlet_values_.push_back(tdata);

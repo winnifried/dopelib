@@ -59,12 +59,8 @@
 #include <templates/voidlinearsolver.h>
 #include <templates/directlinearsolver.h>
 #include <templates/cglinearsolver.h>
-#include <templates/gmreslinearsolver.h>
-#include <templates/qmrslinearsolver.h>
-#include <templates/trilinosdirectlinearsolver.h>
-#include <templates/richardsonlinearsolver.h>
 
-#include <templates/newtonsolver.h>
+//#include <templates/newtonsolver.h>
 
 #include <deal.II/lac/petsc_sparse_matrix.h>
 #include <deal.II/lac/petsc_full_matrix.h>
@@ -90,11 +86,12 @@ const static int CDIM = 2;
 #define DOFHANDLER DoFHandler
 #define FE FESystem
 
-typedef QGauss<DIM> QUADRATURE;
-typedef QGauss<DIM - 1> FACEQUADRATURE;
+//typedef QGaussLobatto<DIM> QUADRATURE;
+//typedef QGaussLobatto<DIM - 1> FACEQUADRATURE;
 
 typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
+
 
 typedef PETScWrappers::SparseMatrix MATRIX;
 typedef SparseMatrix<double> MATRIXFORLINSOLVE;
@@ -122,7 +119,7 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
-typedef GMRESLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
+typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
 
 typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER> EVS;
 
@@ -164,9 +161,12 @@ main(int argc, char **argv){
   GridGenerator::hyper_rectangle(triangulation,
   		  Point<2>(0,0),
   		  Point<2>(M_PI/3,M_PI/2));
-//  GridGenerator::hyper_rectangle(triangulation,
-//  		  Point<2>(0,0),
-//  		  Point<2>(M_PI,M_PI));
+//  std::vector< unsigned int > x(2);
+//  x[0]=2;
+//  x[1]=3;
+//  GridGenerator::subdivided_hyper_rectangle(triangulation, x, Point<2>(0,0),
+//  		  Point<2>(M_PI/3,M_PI/2));
+
 //GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);
 //  GridGenerator::hyper_ball(triangulation, Point<2>(2*M_PI, 2*M_PI), M_PI);
 
@@ -179,21 +179,21 @@ main(int argc, char **argv){
 
 
 
-  triangulation.refine_global(3);
-//  triangulation.
+  triangulation.refine_global(4);
+
   //------------- FE-System ---------------------------------------------
-   FE<DIM> control_fe(FE_Q<DIM>(1), 2);
-   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
+   FE<DIM> control_fe(FE_Q<DIM>(2), 2);
+   FESystem<DIM> state_fe(FE_Q<DIM>(2), 1 , FE_Nedelec<DIM>(1),1);
 
 
-  QUADRATURE quadrature_formula(4);
-  FACEQUADRATURE face_quadrature_formula(4);
+  QUADRATURE quadrature_formula(20);
+  FACEQUADRATURE face_quadrature_formula(20);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
   COSTFUNCTIONAL LFunc(0);
-//  COSTFUNCTIONAL LFunc(100.0);
+//  COSTFUNCTIONAL LFunc(0.01 /*100.0*/);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -230,7 +230,7 @@ main(int argc, char **argv){
 
 //  out.ReInit();
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
- q = 0;
+  q = 0;
 
 
   local::Q_Control q_initial;
@@ -240,10 +240,21 @@ main(int argc, char **argv){
   VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  dq.GetSpacialVector());
       try
         {
-    	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
+//    	  ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
+    	  solver.ReInit();
     	  Alg.ReInit();
+//    	  solver.ComputeReducedFunctionals(q);
+//    	  solver.ComputeReducedGradient(q,gradient,gradient_transposed);
+//    	  dq = gradient_transposed;
+    	 // dq *= -1.;
     	  const double eps_diff = 0;
     	  Alg.CheckGrads(eps_diff, q, dq, 3);
+
+    	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
+//    	  Alg.ReInit();
+//    	  const double eps_diff = 0;
+//    	  Alg.CheckGrads(eps_diff, q, dq, 3);
+//    	  std::cout << "--------------------------------------------- " << std::endl;
     	  Alg.ReInit();
     	  Alg.Solve(q);
         }

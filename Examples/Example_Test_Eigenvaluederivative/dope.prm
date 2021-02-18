@@ -3,9 +3,9 @@
 
 subsection newtonsolver parameters
  # maximal number of linesearch steps
- set line_maxiter         = 4
+ set line_maxiter         = 8
 
-  # reduction rate for the linesearch damping paramete
+  # reduction rate for the linesearch damping parameter
  set linesearch_rho       = 0.9
 
   # global tolerance for the newton iteration
@@ -44,10 +44,10 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list        = Hessian;Tangent;
+ # set never_write_list        = Hessian;Tangent;
 
   # Sets the precision of the output numbers
-  set number_precision        = 4
+  set number_precision        = 5
 
   # Defines what strings should be printed, the higher the number the more
   # output
@@ -59,29 +59,30 @@ end
  
 
 subsection reducedgradientdescentalgorithm parameters
-  set line_maxiter         = 300
- set linesearch_c         = 0.1
- set linesearch_rho       = 0.9
- set nonlinear_global_tol = 1.e-10
- set nonlinear_maxiter    = 300
- set nonlinear_tol        = 1.e-10
-  set compute_functionals_in_every_step = false
+ set line_maxiter         = 3000
+set linesearch_c         = 0.1
+set linesearch_rho       = 0.9
+set nonlinear_global_tol = 1.e-11
+set nonlinear_maxiter    = 300
+set nonlinear_tol        = 1.e-5
+ set compute_functionals_in_every_step = false
 end
 
 #subsection reducedBFGSalgorithm parameters
-# set nonlinear_maxiter = 100
+# set nonlinear_maxiter = 1000
 # set nonlinear_tol = 1.e-7
 # set nonlinear_global_tol = 1.e-11
 #  set line_maxiter = 300 
 # set linesearch_gamma = 0.3 
 #  set linesearch_eta = 0.6 
-#  set memory = 40
-# set init_inverse_scale = 0.01
- #  set compute_functionals_in_every_step = false 
+## set memory = 40
+#set init_inverse_scale = 0.01
+#   set compute_functionals_in_every_step = false 
 #end
 
-subsection gmres_withmatrix parameters
-   set linear_maxiter = 200
-   set linear_global_tol = 1.e-8
-   set no_tmp_vectors = 30
+subsection cglinearsolver_withmatrix parameters # gmres_withmatrix parameters #
+   set linear_maxiter = 10000
+   set linear_tol = 1.e-12
+   set linear_global_tol = 1.e-12
+   #set no_tmp_vectors = 30
 end

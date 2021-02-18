@@ -273,7 +273,7 @@ public:
    *
    * @return                          The value of the functional
    */
-  template <typename PROBLEM> SCALAR ComputeAlgebraicScalar(PROBLEM &pde);
+  template <typename PROBLEM> SCALAR ComputeAlgebraicScalar(PROBLEM &pde, double eigenvalue);
 
   /**
    * This method applies inhomogeneous dirichlet boundary values.
@@ -588,6 +588,8 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
       }
 
       if (need_faces) {
+    	  std::cout << "integrator need_faces" << std::endl;
+
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -599,6 +601,7 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
       }
 
       if (need_interfaces) {
+    	  std::cout << "integrator need_interfaces" << std::endl;
 
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
@@ -654,6 +657,7 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
 
   // check if we need the evaluation of PointRhs
   if (need_point_rhs) {
+	  std::cout << "integrator need_faces" << std::endl;
     VECTOR point_rhs;
     point_rhs.reinit(residual);
     pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs, -1.);
@@ -1472,9 +1476,9 @@ template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
 template <typename PROBLEM>
 SCALAR
 Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeAlgebraicScalar(
-    PROBLEM &pde) {
+    PROBLEM &pde,  double eigenvalue) {
   SCALAR ret = 0.;
-  ret = pde.AlgebraicFunctional(this->GetParamData(), this->GetDomainData());
+  ret = pde.AlgebraicFunctional(this->GetParamData(), this->GetDomainData(), eigenvalue);
   return ret;
 }
 
