@@ -119,7 +119,7 @@ namespace DOpE
         std::vector<bool> selected_dofs(dof_handler.n_dofs());
 #if DEAL_II_VERSION_GTE(9,2,0)
         dealii::ComponentMask components(c_comps_[i]);
-        DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components,selected_dofs);
+        selected_dofs = DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components);
 #else
         //Newer dealii Versions have changed the interface
         dealii::ComponentMask components(c_comps_[i]);
