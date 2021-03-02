@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+02.03.2021: Fixes for deprecated functions in deal.ii 9.2.0
 10.12.2020: Further adjustments to deal.ii 9.3.0 - The dealii::DoFHandler now detects
 	    'hp-capability' from beeing initialized by a FiniteElement or FECollection.
 03.12.2020: CheckGradient and CheckHessian now accept a preinitialized direction dq if the
