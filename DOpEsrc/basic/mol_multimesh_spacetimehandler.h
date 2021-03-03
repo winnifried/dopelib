@@ -285,14 +285,20 @@ namespace DOpE
 
       control_dofs_per_block_.resize(control_n_blocks);
       {
-        DoFTools::count_dofs_per_block(
+#if DEAL_II_VERSION_GTE(9,2,0)
+	  control_dofs_per_block_ = DoFTools::count_dofs_per_fe_block(
 #if DEAL_II_VERSION_GTE(9,3,0)
 	  static_cast<dealii::DoFHandler<dim, dim>&>(control_dof_handler_),
 #else
 	  static_cast<DH<dim, dim>&>(control_dof_handler_),
 #endif
+          control_block_component);
+#else
+        DoFTools::count_dofs_per_block(
+	  static_cast<DH<dim, dim>&>(control_dof_handler_),
 	  control_dofs_per_block_,
           control_block_component);
+#endif  //dealii older than 9.2.0
       }
 #if DEAL_II_VERSION_GTE(9,3,0)
      state_dof_handler_.set_fe(GetFESystem("state"));
@@ -354,13 +360,19 @@ namespace DOpE
       state_dof_constraints_.close();
 
       state_dofs_per_block_.resize(state_n_blocks);
-      DoFTools::count_dofs_per_block(
+#if DEAL_II_VERSION_GTE(9,2,0)
+      state_dofs_per_block_ = DoFTools::count_dofs_per_fe_block(
 #if DEAL_II_VERSION_GTE(9,3,0)
 	static_cast<dealii::DoFHandler<dim, dim>&>(state_dof_handler_),
 #else
 	static_cast<DH<dim, dim>&>(state_dof_handler_),
 #endif
+	state_block_component);
+#else 
+      DoFTools::count_dofs_per_block(
+	static_cast<DH<dim, dim>&>(state_dof_handler_),
 	state_dofs_per_block_, state_block_component);
+#endif //dealii older than 9.2.0
 
       support_points_.clear();
       n_neighbour_to_vertex_.clear();

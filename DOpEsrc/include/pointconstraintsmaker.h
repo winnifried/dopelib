@@ -116,12 +116,13 @@ namespace DOpE
     STHInternals::MapDoFsToSupportPoints(this->GetMapping(),dof_handler, support_points);
     for (unsigned int i = 0; i < c_points_.size(); i++)
       {
-        std::vector<bool> selected_dofs(dof_handler.n_dofs());
 #if DEAL_II_VERSION_GTE(9,2,0)
+	IndexSet selected_dofs(dof_handler.n_dofs());
         dealii::ComponentMask components(c_comps_[i]);
-        DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components,selected_dofs);
+        selected_dofs = DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components);
 #else
         //Newer dealii Versions have changed the interface
+        std::vector<bool> selected_dofs(dof_handler.n_dofs());
         dealii::ComponentMask components(c_comps_[i]);
         DoFTools::extract_dofs(dof_handler,components,selected_dofs);
 #endif
@@ -132,7 +133,11 @@ namespace DOpE
             if (c_points_[i].distance(support_points[p]) <= sqrt(support_points[p].square()+c_points_[i].square())*std::numeric_limits<double>::epsilon())
               {
                 found = true;
+#if DEAL_II_VERSION_GTE(9,2,0)
+                if (selected_dofs.is_element(p))
+#else
                 if (selected_dofs[p] == true)
+#endif
                   {
                     constraint_matrix.add_line(p);
                   }
