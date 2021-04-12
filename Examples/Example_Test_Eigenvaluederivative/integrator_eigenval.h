@@ -561,7 +561,7 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
       // the second '1' plays only a role in the stationary case. In the
       // non-stationary case, scale_ico is set by the time-stepping-scheme
       pde.ElementEquation(edc, local_vector, 1.);
-      pde.ElementRhs(edc, local_vector, -1., eigenvalue);
+      pde.ElementRhs(edc, local_vector, -1., eigenvalue); //TODO -?
 
       if (need_boundary_integrals && element[0]->at_boundary()) {
         for (unsigned int face = 0;

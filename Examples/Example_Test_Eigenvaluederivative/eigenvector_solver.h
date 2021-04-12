@@ -56,7 +56,7 @@ namespace DOpE
     void ReInit(PROBLEM &pde);
 
     template<typename PROBLEM>
-    bool EigenvalueSolve(PROBLEM &pde, EIGENVALUES &eigenvalues, EIGENVECTORS &eigenfunctions, bool apply_boundary_values=true,
+    bool EigenvalueSolve(PROBLEM &pde, MATRIX &matrixM_, EIGENVALUES &eigenvalues, EIGENVECTORS &eigenfunctions, bool apply_boundary_values=true,
                             bool force_matrix_build=false,
                             int priority = 5, std::string algo_level = "\t\t ");
     template<typename PROBLEM>
@@ -69,7 +69,7 @@ namespace DOpE
   private:
     INTEGRATOR &integrator_;
     SPARSITYPATTERN sparsity_pattern_;
-    MATRIX matrixK_, matrixM_;
+    MATRIX matrixK_;//, matrixM_;
 
     IndexSet eigenfunction_index_set;
 
@@ -132,9 +132,7 @@ namespace DOpE
   void EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::ReInit(PROBLEM &pde)
   {
-	   	 matrixM_.clear();
-	     matrixM_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
-	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
+
 	     matrixK_.clear();
 	     matrixK_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
 	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
@@ -147,13 +145,18 @@ namespace DOpE
   template<typename PROBLEM>
   bool EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::EigenvalueSolve(PROBLEM &pde,
+		  MATRIX &matrixM_,
 		  EIGENVALUES &eigenvalues,
 		  EIGENVECTORS &eigenfunctions,
 		           bool /*apply_boundary_values*/,
                    bool force_matrix_build,
                    int /*priority*/,
-                   std::string /*algo_level*/)
+                   std::string /*algo_level*/
+				   )
   {
+	  matrixM_.clear();
+	 matrixM_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
+	  pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
 
    bool build_matrix = force_matrix_build;
 
@@ -175,6 +178,9 @@ namespace DOpE
           eigensolver.set_target_eigenvalue(0.001);
 
           eigensolver.solve(matrixK_, matrixM_, eigenvalues, eigenfunctions, eigenvalues.size());
+
+
+
 
     return build_matrix;
   }

@@ -179,15 +179,15 @@ main(int argc, char **argv){
 
 
 
-  triangulation.refine_global(4);
+  triangulation.refine_global(3);
 
   //------------- FE-System ---------------------------------------------
-   FE<DIM> control_fe(FE_Q<DIM>(2), 2);
-   FESystem<DIM> state_fe(FE_Q<DIM>(2), 1 , FE_Nedelec<DIM>(1),1);
+   FE<DIM> control_fe(FE_Q<DIM>(1), 2);
+   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
 
 
-  QUADRATURE quadrature_formula(20);
-  FACEQUADRATURE face_quadrature_formula(20);
+  QUADRATURE quadrature_formula(4);
+  FACEQUADRATURE face_quadrature_formula(4);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
@@ -243,10 +243,12 @@ main(int argc, char **argv){
 //    	  ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
     	  solver.ReInit();
     	  Alg.ReInit();
+
 //    	  solver.ComputeReducedFunctionals(q);
 //    	  solver.ComputeReducedGradient(q,gradient,gradient_transposed);
 //    	  dq = gradient_transposed;
     	 // dq *= -1.;
+
     	  const double eps_diff = 0;
     	  Alg.CheckGrads(eps_diff, q, dq, 3);
 

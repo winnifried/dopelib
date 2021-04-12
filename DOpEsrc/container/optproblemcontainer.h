@@ -1836,7 +1836,7 @@ namespace DOpE
                 || this->GetType() == "aux_functional"
                 || this->GetType() == "tangent"
                 || this->GetType() == "error_evaluation"
-                || this->GetType() == "adjoint_hessian"
+                || this->GetType() == "adjoint_hessian")
               {
                 GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
               }

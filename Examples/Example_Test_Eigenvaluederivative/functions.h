@@ -48,9 +48,9 @@ namespace local
 
 
     	if(component ==0){
-    	  return  0.0001*x;//cos(30./180.*M_PI)*x - sin(30./180.*M_PI)*y-x ;
+    	  return 0.0001*x;//  ??3*x-x;//
       }else if(component == 1){
-    		return 0.0001*y;//sin(30./180.*M_PI)*x + cos(30./180.*M_PI)*y-y;
+    		return 0.0001*y;//sin(10./180.*M_PI)*x + cos(10./180.*M_PI)*y-y;//
     }
 
       return 0;
