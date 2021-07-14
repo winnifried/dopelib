@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+14.07.2021: Adjustments for deal.ii 9.3.0 - removing deprecated set_fe calls and
+	    updating CMakeLists.txt to use cxx17 instead of cxx11
 02.03.2021: Fixes for deprecated functions in deal.ii 9.2.0
 10.12.2020: Further adjustments to deal.ii 9.3.0 - The dealii::DoFHandler now detects
 	    'hp-capability' from beeing initialized by a FiniteElement or FECollection.

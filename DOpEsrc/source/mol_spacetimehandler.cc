@@ -248,7 +248,14 @@ namespace DOpE
     state_dof_handler_.clear ();
     triangulation_.clear ();
     triangulation_.copy_triangulation (tria);
+#if DEAL_II_VERSION_GTE(9,3,0)
+    state_dof_handler_.reinit (triangulation_);
+    //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+    // would be better to detect that from the fesystem than the DOFHandler.
+    state_dof_handler_.distribute_dofs(*state_fe_);
+#else
     state_dof_handler_.initialize (triangulation_, *state_fe_);
+#endif
     this->IncrementControlTicket ();
     this->IncrementStateTicket ();
     if (control_mesh_transfer_ != NULL)
@@ -273,7 +280,14 @@ namespace DOpE
     state_dof_handler_.clear ();
     triangulation_.clear ();
     triangulation_.copy_triangulation (tria);
+#if DEAL_II_VERSION_GTE(9,3,0)
+    state_dof_handler_.reinit (triangulation_);
+    //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+    // would be better to detect that from the fesystem than the DOFHandler.
+    state_dof_handler_.distribute_dofs(*state_fe_);
+#else
     state_dof_handler_.initialize (triangulation_, *state_fe_);
+#endif
     this->IncrementControlTicket ();
     this->IncrementStateTicket ();
     if (control_mesh_transfer_ != NULL)
@@ -295,7 +309,14 @@ namespace DOpE
     state_dof_handler_.clear ();
     triangulation_.clear ();
     triangulation_.copy_triangulation (tria);
+#if DEAL_II_VERSION_GTE(9,3,0)
+    state_dof_handler_.reinit (triangulation_);
+    //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+    // would be better to detect that from the fesystem than the DOFHandler.
+    state_dof_handler_.distribute_dofs(*state_fe_);
+#else
     state_dof_handler_.initialize (triangulation_, *state_fe_);
+#endif
     this->IncrementControlTicket ();
     this->IncrementStateTicket ();
     if (control_mesh_transfer_ != NULL)
@@ -316,7 +337,14 @@ namespace DOpE
     state_dof_handler_.clear ();
     triangulation_.clear ();
     triangulation_.copy_triangulation (tria);
+#if DEAL_II_VERSION_GTE(9,3,0)
+    state_dof_handler_.reinit (triangulation_);
+    //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+    // would be better to detect that from the fesystem than the DOFHandler.
+    state_dof_handler_.distribute_dofs(*state_fe_);
+#else
     state_dof_handler_.initialize (triangulation_, *state_fe_);
+#endif
     this->IncrementControlTicket ();
     this->IncrementStateTicket ();
     if (control_mesh_transfer_ != NULL)

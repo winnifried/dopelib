@@ -99,6 +99,10 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      control_dof_handler_.distribute_dofs(*control_fe_);
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -142,6 +146,10 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      control_dof_handler_.distribute_dofs(*control_fe_);
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -185,6 +193,10 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      control_dof_handler_.distribute_dofs(*control_fe_);
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else      
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -230,6 +242,10 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      control_dof_handler_.distribute_dofs(*control_fe_);
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -274,9 +290,6 @@ namespace DOpE
     {
 
 #if dope_dimension > 0
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_.set_fe(GetFESystem("control"));
-#endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetActiveFEIndicesControl(control_dof_handler_);
 #endif
       control_dof_handler_.distribute_dofs(GetFESystem("control"));
@@ -365,9 +378,6 @@ namespace DOpE
             control_dofs_per_block_[control_block_component[i]]++;
           }
       }
-#endif
-#if DEAL_II_VERSION_GTE(9,3,0)
-     state_dof_handler_.set_fe(GetFESystem("state"));
 #endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);

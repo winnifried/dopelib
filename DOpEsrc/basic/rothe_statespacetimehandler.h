@@ -192,9 +192,6 @@ namespace DOpE
 	  assert(SpaceTimeHandlerBase<VECTOR>::IsInIntervall(it,dofhandler_to_time_[j]));
 	  this->SetInterval(it,dofhandler_to_time_[j]);
 	}
-#if DEAL_II_VERSION_GTE(9,3,0)
-	state_dof_handlers_[j]->set_fe(GetFESystem("state"));
-#endif
 	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
 	  *state_dof_handlers_[j]);
       	state_dof_handlers_[j]->distribute_dofs(GetFESystem("state"));
@@ -819,6 +816,9 @@ namespace DOpE
 	assert(triangulations_[i] != NULL);	  
 #if DEAL_II_VERSION_GTE(9,3,0)
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim>(*(triangulations_[i]),DH);
+	//FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+	// would be better to detect that from the fesystem than the DOFHandler.
+	state_dof_handlers_[i]->distribute_dofs(GetFESystem("state"));
 #else
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
 #endif

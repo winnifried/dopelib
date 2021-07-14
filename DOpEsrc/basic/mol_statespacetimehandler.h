@@ -81,6 +81,9 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -107,6 +110,9 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -132,6 +138,9 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -157,6 +166,9 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
+      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
+      // would be better to detect that from the fesystem than the DOFHandler.
+      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -186,9 +198,6 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
-#if DEAL_II_VERSION_GTE(9,3,0)
-     state_dof_handler_.set_fe(GetFESystem("state"));
-#endif
       StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
