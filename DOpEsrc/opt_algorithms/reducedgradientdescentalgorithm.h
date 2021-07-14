@@ -307,17 +307,12 @@ namespace DOpE
 	//is typically very bad!
 	dq = gradient_transposed;
 	dq *= -1.;
-
-//// TODO zu Testzwecken
-	const double eps_diff = 0;
-	 this->CheckGrads(eps_diff, q, dq, 3);
-////TODO ENDE
         //Linesearch
         try
           {
             lineiter = ReducedGradientDescentLineSearch(dq,gradient,cost,q);
-            const double eps_diff = 0;
-            this->CheckGrads(eps_diff, q, dq, 3);
+//            const double eps_diff = 0;
+//            this->CheckGrads(eps_diff, q, dq, 3);
           }
         catch (DOpEIterationException &e)
           {
@@ -366,6 +361,8 @@ namespace DOpE
 
         out<<"\t GradientDescent step: " <<iter<<"\t Residual (rel.): "<<this->GetOutputHandler()->ZeroTolerance(sqrt(res)/sqrt(firstres),1.0)<< "\t LineSearch {"<<lineiter<<"} ";
         this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
+        const double eps_diff = 0;
+          this->CheckGrads(eps_diff, q, dq, 5);
       }
 
     //We are done write total evaluation
@@ -379,6 +376,7 @@ namespace DOpE
       {
         this->GetExceptionHandler()->HandleCriticalException(e,"ReducedGradientDescentAlgorithm::Solve");
       }
+
 
     out << "**************************************************\n";
     out << "*        Stopping Reduced GradientDescent Algorithm       *\n";

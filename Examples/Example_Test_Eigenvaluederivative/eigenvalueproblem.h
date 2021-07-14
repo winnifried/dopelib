@@ -341,9 +341,12 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		StateVector<VECTOR> eigfun_; StateVector<VECTOR>  adjeigfun_; double eigenval_;
 		VECTOR  vecOfEigval_;  double adjeigenval_; VECTOR  vecOfAdjeigval_;
+		VECTOR  initial_control_;
 
 		std::map<std::string,
 		dealii::Vector<double> > auxiliary_params_;
+
+		double initial_counter;
 
 		INTEGRATOR integrator_; CONTROLINTEGRATOR control_integrator_; NONLINEARSOLVER nonlinear_state_solver_; NONLINEARSOLVER nonlinear_adjoint_solver_; CONTROLNONLINEARSOLVER nonlinear_gradient_solver_;
 
@@ -404,11 +407,14 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			eigenfunctions.resize((int) (numOfEigenval));
 			eigenvalues.resize(numOfEigenval);
 
+//			initial_control_.resize(numOfEigenval);
+
 			adjoint_eigenfunctions.resize((int) (numOfEigenval));
 			adjoint_eigenvalues.resize(numOfEigenval);
 
 			eigenval_=0.;
 			adjeigenval_=0.;
+			initial_counter = 0;
 		}
 
 		/******************************************************/
@@ -444,6 +450,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		adjoint_eigenfunctions.resize((int) (numOfEigenval));
 		adjoint_eigenvalues.resize(numOfEigenval);
 
+//		initial_control_.resize(numOfEigenval);
+
+		initial_counter = 0;
 		eigenval_=0.;
 		adjeigenval_=0.;
 }
@@ -512,6 +521,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		GetAdjfun().ReInit();
 		GetEigfun().ReInit();
 
+		initial_counter = 0;
+
+		eigenval_=0.;
+		adjeigenval_=0.;
 
 		build_control_matrix_ = true;
 		cost_needs_precomputations_ = 0;
@@ -565,7 +578,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			VecDot(adjoint_eigenfunctions[1],eigenfunctions[0],scalar_factor);//= scalar_product(vec,eigenfunctions[i]);
 //			std::cout << scalar_factor[0] << std::endl;
 			adjoint_eigenfunctions[0]/= scalar_factor[0];
-			adjoint_eigenfunctions[0] *= (eigenvalues[0]-3.8);
+			adjoint_eigenfunctions[0] *= -(eigenvalues[0]-1.5);
 
 
 		GetAdjfun().GetSpacialVector() = 0.;
@@ -635,6 +648,19 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetControlIntegrator().AddDomainData("eigenvalue", &(vecOfEigval_));
 		this->GetControlIntegrator().AddDomainData("state",&(GetEigfun().GetSpacialVector()));
 		this->GetControlIntegrator().AddDomainData("adjoint",&(GetAdjfun().GetSpacialVector()));
+
+		if(initial_counter == 0){
+			initial_control_.reinit(1);
+			initial_control_ = 0;
+			this->GetControlIntegrator().AddParamData("control_counter", &(initial_control_));
+			this->GetControlIntegrator().AddDomainData("control_counter", &(initial_control_));
+			initial_counter = 1;
+		}else{
+			initial_control_ = 1;
+			this->GetControlIntegrator().AddParamData("control_counter", &(initial_control_));
+			this->GetControlIntegrator().AddDomainData("control_counter", &(initial_control_));
+		}
+
 //		for (unsigned int i = 0; i < eigfun_ .GetSpacialVector().size();i++){
 //								std::cout << eigfun_ .GetSpacialVector()[i] << std::endl;
 //							}
@@ -656,7 +682,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve( *(this->GetProblem()), adjoint_eigenvalues,gradient_transposed.GetSpacialVector(), true, build_control_matrix_);
 
 		if(dopedim == dealdim) {
-			this->GetControlIntegrator().DeleteDomainData("control");
+		this->GetControlIntegrator().DeleteDomainData("control");
 		} else {
 			throw DOpEException("dopedim not implemented", "EigenvalueProblem::ComputeEigenvalueDerivative");
 		}
@@ -664,6 +690,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetControlIntegrator().DeleteDomainData("state");
 		this->GetControlIntegrator().DeleteDomainData("adjoint");
 		this->GetControlIntegrator().DeleteDomainData("eigenvalue");
+
+		this->GetControlIntegrator().DeleteDomainData("control_counter");
+		this->GetControlIntegrator().DeleteParamData("control_counter");
 
 		this->GetProblem()->DeleteAuxiliaryFromIntegrator( this->GetControlIntegrator());
 
@@ -706,9 +735,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(problem, matrixM, eigenvalues, eigenfunctions, true, build_state_matrix_ /*, n*/);
 
 
-			for (unsigned int i = 0; i < eigenfunctions.size(); ++i) {
+
 				PETScWrappers::MPI::Vector vec;
-//				vec.reinit()// = matrixM*adjoint_eigenfunctions[i];
+//
 				MatMult(matrixM,eigenfunctions[0],eigenfunctions[1]); // VECTOR vec = matrixM.vmult(eigenfunctions[i]);
 
 				//TODO ACHTUNG: eigenfunctions[1] wird hier neu definiert --- TODO eigenen PETSCVector initialisieren mit richtiger länge für mehr übersicht
@@ -716,7 +745,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 				VecDot(eigenfunctions[1],eigenfunctions[0],scalar_factor);
 				scalar_factor[0] = sqrt(scalar_factor[0]);  //double scalar_factor = sqrt(scalar_product(vec,eigenfunctions[i]));
 				eigenfunctions[0]/= scalar_factor[0];
-		}
+
 
 //			std::cout << "################################################################" << std::endl;
 //				for (unsigned int i = 0; i < numOfEigenval; ++i) {
@@ -826,6 +855,18 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
 		if (dopedim == dealdim) {
+			if(initial_counter == 0){
+				initial_control_.reinit(1);
+				initial_control_ = 0;
+				this->GetIntegrator().AddParamData("control_counter", &(initial_control_));
+				this->GetIntegrator().AddDomainData("control_counter", &(initial_control_));
+
+
+			}else{
+				initial_control_ = 1;
+				this->GetIntegrator().AddParamData("control_counter", &(initial_control_));
+				this->GetIntegrator().AddDomainData("control_counter", &(initial_control_));
+			}
 			this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
 		} else {
 			throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedCostFunctional");
@@ -838,6 +879,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		this->GetIntegrator().AddDomainData("eigenvalue", &(vecOfEigval_));
 		this->GetIntegrator().AddDomainData("state",&(GetEigfun().GetSpacialVector()));
+
 
 		double ret = 0;
 		bool found = false;
@@ -877,6 +919,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		}
 		this->GetIntegrator().DeleteDomainData("state");
 		this->GetIntegrator().DeleteDomainData("eigenvalue");
+
+		this->GetIntegrator().DeleteDomainData("control_counter");
+		this->GetIntegrator().DeleteParamData("control_counter");
+
+
 		this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
 		this->GetFunctionalValues()[0].push_back(ret);

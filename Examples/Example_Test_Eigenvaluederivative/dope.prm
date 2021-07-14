@@ -59,24 +59,24 @@ end
  
 
 subsection reducedgradientdescentalgorithm parameters
- set line_maxiter         = 3000
+ set line_maxiter         = 1000
 set linesearch_c         = 0.1
 set linesearch_rho       = 0.9
 set nonlinear_global_tol = 1.e-11
-set nonlinear_maxiter    = 300
+set nonlinear_maxiter    = 10
 set nonlinear_tol        = 1.e-8
  set compute_functionals_in_every_step = false
 end
 
 #subsection reducedBFGSalgorithm parameters
-# set nonlinear_maxiter = 1000
-# set nonlinear_tol = 1.e-7
+# set nonlinear_maxiter = 100
+# set nonlinear_tol = 1.e-4
 # set nonlinear_global_tol = 1.e-11
-#  set line_maxiter = 300 
+# set line_maxiter = 300 
 # set linesearch_gamma = 0.3 
-#  set linesearch_eta = 0.6 
+# set linesearch_eta = 0.6 
 ## set memory = 40
-#set init_inverse_scale = 0.01
+#set init_inverse_scale = 0.01   # identisch zu alpha und neq 0
 #   set compute_functionals_in_every_step = false 
 #end
 

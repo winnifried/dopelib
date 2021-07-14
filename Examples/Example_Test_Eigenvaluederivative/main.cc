@@ -186,13 +186,13 @@ main(int argc, char **argv){
    FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
 
 
-  QUADRATURE quadrature_formula(4);
-  FACEQUADRATURE face_quadrature_formula(4);
+  QUADRATURE quadrature_formula(8);
+  FACEQUADRATURE face_quadrature_formula(8);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(0);
+  COSTFUNCTIONAL LFunc(100);
 //  COSTFUNCTIONAL LFunc(0.01 /*100.0*/);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
@@ -238,6 +238,9 @@ main(int argc, char **argv){
   ControlVector<VECTOR> dq(q);
 
   VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  dq.GetSpacialVector());
+
+
+
       try
         {
 //    	  ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
@@ -250,7 +253,7 @@ main(int argc, char **argv){
     	 // dq *= -1.;
 
     	  const double eps_diff = 0;
-    	  Alg.CheckGrads(eps_diff, q, dq, 3);
+    	  Alg.CheckGrads(eps_diff, q, dq, 5);
 
     	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
 //    	  Alg.ReInit();

@@ -292,7 +292,7 @@ public:
 		Tensor<2, 2> DFdq;
 		Tensor<2, 2> DF_Inverse_Tdq;
 		Tensor<2, 2> DF_Inversedq;
-		double detDFdq = 0;
+		double detDFINVdq = 0;
 		double eigval = 0;
 
 		for (unsigned int q_point = 0; q_point < n_q_points; q_point++) {
@@ -339,22 +339,28 @@ public:
 		zDF_Inv_T = DF_Inverse_T*z;
 
 //		z = zDF_Inv_T *transpose_(DF)  ;
-
+//		std::cout << " -----LOCALPDE_ELEMENTEQ_Q------------ " << std::endl;
 		for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 			grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
-			detDFdq = -(1/detDF)*(1/detDF)*
+			detDFINVdq = -(1/detDF)*(1/detDF)*
 								((qgrads[0][0]+1)*grad_phi_v[i][1][1]
 								+ (qgrads[1][1]+1)*grad_phi_v[i][0][0]
 								-qgrads[1][0]*grad_phi_v[i][0][1]
 								-qgrads[0][1]*grad_phi_v[i][1][0] );
 
-			DF_Inverse_Tdq = ((1/detDF)*adjunkte_transposed_(grad_phi_v[i])+detDFdq*adjunkte_transposed_(DF));
-			DF_Inversedq = ((1/detDF)*adjunkte_(grad_phi_v[i])+detDFdq*adjunkte_(DF));
+			DF_Inverse_Tdq = -((1/detDF)*adjunkte_transposed_(grad_phi_v[i])+detDFINVdq*adjunkte_transposed_(DF));
+			DF_Inversedq = -((1/detDF)*adjunkte_(grad_phi_v[i])+detDFINVdq*adjunkte_(DF));
+
+
+
+//        	std::cout << "detDFINVdq = " << detDFINVdq << std::endl;
+//        	std::cout << " detDF = " << detDF << std::endl;
+//        	std::cout << " ----------------- " << std::endl;
 
 
 //			//Curl Term
-			local_vector(i) += scale*/*2**/detDFdq*curl_z * (1/detDF)*curl_u
+			local_vector(i) += scale*/*2**/detDFINVdq*curl_z * (1/detDF)*curl_u
 					* state_fe_values.JxW(q_point);
 
 			//1. Grad Term
@@ -369,6 +375,24 @@ public:
 					/*+
 					scalar_product(uDF_Inv_T, DF_Inverse_Tdq*grad_z)*/
 			)* state_fe_values.JxW(q_point);
+
+////
+//						//Curl Term
+//						local_vector(i) += scale*2*detDFINVdq*curl_z * (1/detDF)*curl_u
+//								* state_fe_values.JxW(q_point);
+//
+//						//1. Grad Term
+//						local_vector(i) += scale*
+//								(scalar_product(/*DF_Inverse_T**/grad_u*DF_Inverse, DF_Inverse_Tdq*z)
+//								+scalar_product(/*DF_Inverse_Tdq**/grad_z*DF_Inversedq,uDF_Inv_T))
+//								* state_fe_values.JxW(q_point);
+//
+//						//2. Grad Term
+//						local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*z,
+//								/*DF_Inverse_T**/grad_u*DF_Inverse)
+//								+
+//								scalar_product(uDF_Inv_T, /*DF_Inverse_Tdq**/grad_z*DF_Inversedq)
+//						)* state_fe_values.JxW(q_point);
 
 		}
 
@@ -422,7 +446,7 @@ public:
 			double curl_z = 0;
 
 			double detDF = 0;
-			double detDFdq =0;
+			double detDFINVdq =0;
 			Tensor<2, 2> DF;
 			Tensor<2, 2> DFdq;
 			Tensor<2, 2> DF_Inverse;
@@ -431,6 +455,8 @@ public:
 			Tensor<2, 2> DF_Inverse_Tdq;
 			Tensor<2, 2> qgrads;
 
+			double c = 0;
+//			std::cout << " -----LOCALPDE_ELEMENTMASSEQ------------ " << std::endl;
 			for (unsigned int q_point = 0; q_point < n_q_points; q_point++) {
 				uDF_Inv_T.clear();
 				zDF_Inv_T.clear();
@@ -455,6 +481,7 @@ public:
 
 				DF = deformation_tensor_(qgrads);
 				detDF = determinante_(DF);
+//				std::cout << "det(DF) = " << detDF << std::endl;
 
 				DF_Inverse = inverse_(DF);
 				DF_Inverse_T = inverse_transpose_(DF);
@@ -475,7 +502,7 @@ public:
 				for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 					grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
-					detDFdq = -(1/detDF)*(1/detDF)*
+					detDFINVdq = -(1/detDF)*(1/detDF)*
 										(qgrads[0][0]*grad_phi_v[i][1][1]
 										+ qgrads[1][1]*grad_phi_v[i][0][0]
 										-qgrads[1][0]*grad_phi_v[i][0][1]
@@ -483,20 +510,25 @@ public:
 										+grad_phi_v[i][1][1]
 										+grad_phi_v[i][0][0] );
 
-					DF_Inversedq = ((1/detDF)*adjunkte_(grad_phi_v[i])+detDFdq*adjunkte_(DF));
-					DF_Inverse_Tdq =  ((1/detDF)* adjunkte_transposed_(grad_phi_v[i])+detDFdq*adjunkte_transposed_(DF));
+					DF_Inversedq = -((1/detDF)*adjunkte_(grad_phi_v[i])+detDFINVdq*adjunkte_(DF)); //TODO vorzeichen?
+					DF_Inverse_Tdq =  -((1/detDF)* adjunkte_transposed_(grad_phi_v[i])+detDFINVdq*adjunkte_transposed_(DF));
 
 
-					local_vector(i) += scale*2*eigenvalue*(
-						scalar_product(uDF_Inv_T ,DF_Inverse_Tdq*z))
-				* state_fe_values.JxW(q_point);
+//		        	std::cout << "detDFINVdq = " << detDFINVdq << std::endl;
+//		        	std::cout << " detDF = " << detDF << std::endl;
+//		        	if(detDF< 0.5){
+//		        		std::cout << "achtung det<0.5" << std::endl;
+//		        	}
+//		        	std::cout << " ----------------- " << std::endl;
 
+//					local_vector(i) += scale*4*eigenvalue*(
+//						scalar_product(uDF_Inv_T ,DF_Inverse_Tdq*z))
+//				* state_fe_values.JxW(q_point);
 
+//				 Normbedingung
+//					local_vector(i) += scale*eigenvalue*((scalar_product(uDF_Inv_T,DF_Inverse_Tdq *z)
+//								)* state_fe_values.JxW(q_point));
 
-				// Normbedingung
-
-					local_vector(i) += scale*2*eigenvalue*((scalar_product(uDF_Inv_T,DF_Inverse_Tdq *z)
-								)* state_fe_values.JxW(q_point));
 				}
 		}
 	}
