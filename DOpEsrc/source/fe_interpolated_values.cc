@@ -51,7 +51,7 @@ UpdateFlags				flags) :
   //TODO: Check for element type, since interpolation needs to be done
   //Assert that Div-Conforming image element is used, otherwise the transformation
   //is not correct.
-  bool is_div_conforming = dynamic_cast<const FE_RaviartThomas<dim> *>(&fe_to) != nullptr ||
+  bool is_div_conforming __attribute__((unused))= dynamic_cast<const FE_RaviartThomas<dim> *>(&fe_to) != nullptr ||
     dynamic_cast<const FE_RaviartThomasNodal<dim> *>(&fe_to) != nullptr ||
     dynamic_cast<const FE_BDM<dim> *>(&fe_to) != nullptr;
   Assert(is_div_conforming, ExcNotImplemented());
