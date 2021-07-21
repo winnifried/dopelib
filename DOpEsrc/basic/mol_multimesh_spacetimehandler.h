@@ -75,13 +75,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
       state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_(control_triangulation_,DH),
-      state_dof_handler_(state_triangulation_,DH),
-#else
       control_dof_handler_(control_triangulation_),
       state_dof_handler_(state_triangulation_),
-#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe), 
       mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -106,13 +101,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times, type, index_setter),
       state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_(control_triangulation_,DH),
-      state_dof_handler_(state_triangulation_,DH),
-#else
       control_dof_handler_(control_triangulation_),
       state_dof_handler_(state_triangulation_),
-#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe), 
       mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -137,13 +127,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
       state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_(control_triangulation_,DH),
-      state_dof_handler_(state_triangulation_,DH),
-#else
       control_dof_handler_(control_triangulation_),
       state_dof_handler_(state_triangulation_),
-#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe),
       mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -171,13 +156,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
 	SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,type, index_setter),
 	  state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-	  control_dof_handler_(control_triangulation_,DH),
-	  state_dof_handler_(state_triangulation_,DH),
-#else
 	  control_dof_handler_(control_triangulation_),
 	  state_dof_handler_(state_triangulation_),
-#endif
 	  control_fe_(&control_fe),
 	  state_fe_(&state_fe),
 	  mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),

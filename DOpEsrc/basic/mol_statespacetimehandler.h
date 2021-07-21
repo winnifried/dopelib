@@ -70,11 +70,7 @@ namespace DOpE
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,DH),
-#else
       state_dof_handler_(triangulation_),
-#endif
       state_fe_(&state_fe),
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1),
       state_mesh_transfer_(NULL)
@@ -95,11 +91,7 @@ namespace DOpE
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,DH),
-#else
       state_dof_handler_(triangulation_),
-#endif
       state_fe_(&state_fe),
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1),
       state_mesh_transfer_(
@@ -123,11 +115,7 @@ namespace DOpE
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,DH),
-#else
       state_dof_handler_(triangulation_),
-#endif
       state_fe_(&state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -148,11 +136,7 @@ namespace DOpE
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
       sparse_mkr_dynamic_(true),
       triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      state_dof_handler_(triangulation_,DH),
-#else
       state_dof_handler_(triangulation_),
-#endif
       state_fe_(&state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
     {
 #if DEAL_II_VERSION_GTE(9,3,0)

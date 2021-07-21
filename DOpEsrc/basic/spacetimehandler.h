@@ -61,6 +61,9 @@
 namespace DOpE
 {
 #if DEAL_II_VERSION_GTE(9,3,0)
+  //FIXME: In deal 9.3.0 it should be possible to remove the DH template completely.
+  //The hp/non-hp case can be deduced by comparing with the FE given, i.e.
+  // std::is_same<FE<dealdim,dealdim>,hp::FECollection<dealdim,dealdim> >::value) returns true when hp is used.
   /**
    * Interface to the dimension depended functionality of a
    * SpaceTimeDoFHandler.

@@ -814,14 +814,7 @@ namespace DOpE
 	  triangulations_[i]->copy_triangulation(*(triangulations_[i-1]));
 	}
 	assert(triangulations_[i] != NULL);	  
-#if DEAL_II_VERSION_GTE(9,3,0)
-	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim>(*(triangulations_[i]),DH);
-	//FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-	// would be better to detect that from the fesystem than the DOFHandler.
-	state_dof_handlers_[i]->distribute_dofs(GetFESystem("state"));
-#else
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
-#endif
 
 #if DEAL_II_VERSION_GTE(9,1,1)
 	state_dof_constraints_[i]= new dealii::AffineConstraints<double>;
