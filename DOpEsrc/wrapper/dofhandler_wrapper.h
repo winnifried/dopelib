@@ -69,16 +69,6 @@ namespace DOpEWrapper
       return *this;
     }
 
-    /**
-     * Does the DoFHandler need an IndexSetter, i.e. is this
-     * an hp dofhandler?
-     */
-    bool
-    NeedIndexSetter()
-    {
-      return this->has_hp_capabilities();
-    }
-
   };
 
   /**
@@ -124,11 +114,6 @@ namespace DOpEWrapper
     n_dofs() const
     {
       return dofs_;
-    }
-    bool
-    NeedIndexSetter()
-    {
-      return false;
     }
 
     // Quick-fix for dim = 0, just return some DoFHandler.
@@ -182,13 +167,6 @@ namespace DOpEWrapper
       return *this;
     }
 
-    /**
-     * Does the DoFHandler need an IndexSetter, i.e. is this
-     * an hp dofhandler?
-     */
-    bool
-    NeedIndexSetter();
-
   };
 
   //Template specialization DOFHANDLER = dealii::DoFHandler<dim>
@@ -199,11 +177,6 @@ namespace DOpEWrapper
   DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       dealii::DoFHandler<dim>(tria)
     {
-    }
-    bool
-    NeedIndexSetter()
-    {
-     return false;
     }
     const dealii::DoFHandler<dim> &
     GetDEALDoFHandler() const
@@ -222,11 +195,6 @@ namespace DOpEWrapper
     DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       dealii::hp::DoFHandler<dim>(tria)
     {
-    }
-    bool
-    NeedIndexSetter()
-    {
-      return true;
     }
     const dealii::hp::DoFHandler<dim> &
     GetDEALDoFHandler() const
@@ -272,11 +240,6 @@ namespace DOpEWrapper
     {
       return dofs_;
     }
-    bool
-    NeedIndexSetter()
-    {
-      return false;
-    }
 
     // Quick-fix for dim = 0, just return some DoFHandler.
     const dealii::DoFHandler<1> &
@@ -320,11 +283,6 @@ namespace DOpEWrapper
     n_dofs() const
     {
       return dofs_;
-    }
-    bool
-    NeedIndexSetter()
-    {
-      return false;
     }
     // Quick-fix for dim = 0, just return some DoFHandler.
     const dealii::hp::DoFHandler<1> &

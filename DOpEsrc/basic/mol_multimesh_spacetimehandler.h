@@ -91,10 +91,6 @@ namespace DOpE
       control_triangulation_.copy_triangulation(state_triangulation_);
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
 #endif
@@ -126,10 +122,6 @@ namespace DOpE
       control_triangulation_.copy_triangulation(state_triangulation_);
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
 #endif
@@ -163,10 +155,6 @@ namespace DOpE
       control_triangulation_.copy_triangulation(state_triangulation_);
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
 #endif
@@ -198,10 +186,6 @@ namespace DOpE
       control_triangulation_.copy_triangulation(state_triangulation_);
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
 #endif
@@ -1017,9 +1001,6 @@ namespace DOpE
       state_triangulation_.copy_triangulation(tria);
 #if DEAL_II_VERSION_GTE(9,3,0)
       state_dof_handler_.reinit (state_triangulation_);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       state_dof_handler_.initialize(state_triangulation_, *state_fe_);
 #endif
@@ -1044,9 +1025,6 @@ namespace DOpE
       control_triangulation_.copy_triangulation(tria);
 #if DEAL_II_VERSION_GTE(9,3,0)
       control_dof_handler_.reinit(control_triangulation_);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(control_fe_);
 #else
       control_dof_handler_.initialize(control_triangulation_, *control_fe_);
 #endif

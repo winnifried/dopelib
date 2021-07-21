@@ -99,10 +99,6 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -146,10 +142,6 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -193,10 +185,6 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else      
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif
@@ -242,10 +230,6 @@ namespace DOpE
     {
 #if DEAL_II_VERSION_GTE(9,3,0)
       sparsitymaker_ = new SparsityMaker<dealdim>(flux_pattern);
-      //FIXME: Only to assert that the hp_capabilities for the 'SetActiveIndes' methods are set
-      // would be better to detect that from the fesystem than the DOFHandler.
-      control_dof_handler_.distribute_dofs(*control_fe_);
-      state_dof_handler_.distribute_dofs(*state_fe_);
 #else
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
 #endif

@@ -320,7 +320,7 @@ namespace DOpE
       DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
 #endif
     {
-      if (dof_handler.NeedIndexSetter ())
+      if (std::is_same<FE<dealdim,dealdim>,dealii::hp::FECollection<dealdim,dealdim> >::value)
         {
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)

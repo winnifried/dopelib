@@ -56,6 +56,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 namespace DOpE
 {
@@ -408,7 +409,7 @@ namespace DOpE
       DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
 #endif
     {
-      if (dof_handler.NeedIndexSetter ()) //with this we distinguish between hp and classic
+      if (std::is_same<FE<dealdim,dealdim>,dealii::hp::FECollection<dealdim,dealdim> >::value) //with this we distinguish between hp and classic
         {
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)
@@ -433,7 +434,7 @@ namespace DOpE
       DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler)
 #endif
     {
-      if (dof_handler.NeedIndexSetter ())
+      if (std::is_same<FE<dealdim,dealdim>,dealii::hp::FECollection<dealdim,dealdim> >::value)
         {
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)
