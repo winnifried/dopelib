@@ -101,7 +101,8 @@ namespace DOpE
                   const std::map<std::string, const VECTOR *> &domain_values,
                   bool need_interfaces = false)
     {
-      delete fdc_;
+      if (fdc_ != NULL)
+        delete fdc_;
       fdc_ = new FaceDataContainer<DH, VECTOR, dim>(fquad,
                                                     update_flags, sth, element, param_values, domain_values,
                                                     need_interfaces);
