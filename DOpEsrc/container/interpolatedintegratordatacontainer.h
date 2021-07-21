@@ -114,7 +114,7 @@ namespace DOpE
 		   const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
 #else
 		   const std::vector<typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
-#fi
+#endif
 		   const std::map<std::string, const Vector<double>*> &param_values,
 		   const std::map<std::string, const VECTOR *> &domain_values,
 		   bool need_vertices)

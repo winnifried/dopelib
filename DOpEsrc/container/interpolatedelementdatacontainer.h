@@ -38,7 +38,7 @@ namespace DOpE
   template<bool DH, typename VECTOR, int dim>
 #else
    template<template<int, int> class DH, typename VECTOR, int dim>
-#fi
+#endif
    class InterpolatedElementDataContainer : public ElementDataContainer<DH, VECTOR, dim>
    {
       public :
