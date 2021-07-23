@@ -32,3 +32,5 @@ Examples/description.pdf
 CMakeFiles
 CMakeCache.txt
 
+DOpEsrc/Makefile
+Examples/PDE/StatPDE/Example1/Makefile
