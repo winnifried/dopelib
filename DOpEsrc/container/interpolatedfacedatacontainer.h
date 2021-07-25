@@ -74,10 +74,18 @@ namespace DOpE
 			 const FiniteElement<dim>	&fe_interpolate,
 			 const Quadrature<dim> &quad,
 			 const Quadrature<dim-1> &fquad, UpdateFlags update_flags,
-               		 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR, dopedim,
-			 dealdim>& sth,
+#if DEAL_II_VERSION_GTE(9,3,0)
+			 SpaceTimeHandler<FE, false, SPARSITYPATTERN, VECTOR,
+#else
+               		 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
+#endif
+			 dopedim, dealdim>& sth,
+#if DEAL_II_VERSION_GTE(9,3,0)
+			 const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
                          const std::vector<typename DOpEWrapper::DoFHandler<dim, 
 				dealii::DoFHandler>::active_cell_iterator>& element,
+#endif
                          const std::map<std::string, const Vector<double>*> &param_values,
                          const std::map<std::string, const VECTOR *> &domain_values,
                          bool need_neighbour) : 
@@ -121,9 +129,18 @@ namespace DOpE
 		const FiniteElement<dim>	&fe_interpolate,
 		const Quadrature<dim>	&quad,
 		const Quadrature<dim-1> &fquad, UpdateFlags update_flags, 
-		StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR, dim> &sth,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		StateSpaceTimeHandler<FE, false, SPARSITYPATTERN,
+#else
+		StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
+#endif
+		VECTOR, dim> &sth,
 		const std::vector<
+#if DEAL_II_VERSION_GTE(9,3,0)
+		typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
 		typename DOpEWrapper::DoFHandler<dim,dealii::DoFHandler>::active_cell_iterator> &element,
+#endif
 		const std::map<std::string, const Vector<double>*> &param_values,
 		const std::map<std::string, const VECTOR *> &domain_values,
 		bool need_neighbour) :

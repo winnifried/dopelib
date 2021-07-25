@@ -29,11 +29,19 @@
 using namespace DOpE;
 using namespace std;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+   template<bool DH, typename VECTOR, int dealdim> class EDC,
+   template<bool DH, typename VECTOR, int dealdim> class FDC,
+   bool DH, typename VECTOR, int dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template<
    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
    template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
    public:
       LocalPDE() :

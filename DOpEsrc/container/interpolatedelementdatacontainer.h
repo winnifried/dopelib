@@ -73,8 +73,12 @@ namespace DOpE
 			 const Mapping<dim>		&map,
 			 const FiniteElement<dim>	&fe_interpolate,
 			 const Quadrature<dim> &quad, UpdateFlags update_flags,
-               		 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR, dopedim,
-			 dealdim>& sth,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                         SpaceTimeHandler<FE, false, SPARSITYPATTERN, VECTOR,
+#else
+               		 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
+#endif
+			 dopedim, dealdim>& sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
@@ -118,7 +122,12 @@ namespace DOpE
 		const Mapping<dim>		&map,
 		const FiniteElement<dim>	&fe_interpolate,
 		const Quadrature<dim> &quad, UpdateFlags update_flags,
-		StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR, dim> &sth,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		StateSpaceTimeHandler<FE, false, SPARSITYPATTERN,
+#else
+		StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
+#endif
+		VECTOR, dim> &sth,
 		const std::vector<
 		typename dealii::DoFHandler<dim>::active_cell_iterator> &element,
 		const std::map<std::string, const Vector<double>*> &param_values,
