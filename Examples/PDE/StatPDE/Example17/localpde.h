@@ -26,14 +26,6 @@
 
 #include <interfaces/pdeinterface.h>
 
-//RT Stuff
-#include <container/interpolatedelementdatacontainer.h>
-#include <container/interpolatedintegratordatacontainer.h>
-
-#define InterpIDC InterpolatedIntegratorDataContainer
-#define InterpEDC InterpolatedElementDataContainer
-
-
 using namespace DOpE;
 using namespace std;
 
@@ -162,13 +154,11 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
       }
    }
 
-   // Using InterpEDC instead of EDC, because we need interpolated values //
    void
-   ElementRightHandSide(const InterpEDC<DH, VECTOR, dealdim> &
-                       edc, dealii::Vector<double> &local_vector, double scale)
+   ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
+			dealii::Vector<double> &local_vector, double scale)
    {
-     //FIXME: It should be GetInterpolatedFEValuesState to be consistent in naming
-      InterpolatedFEValues<dealdim> fe_values_interpolated = edc.GetInterpolatedFEValues();
+      InterpolatedFEValues<dealdim> fe_values_interpolated = edc.GetInterpolatedFEValuesState();
       const DOpEWrapper::FEValues<dealdim> &state_fe_values = 
 			edc.GetFEValuesState();
 

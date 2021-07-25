@@ -153,7 +153,7 @@ namespace DOpE
 	 }
 
          InterpolatedFEValues<dim> 
-	 GetInterpolatedFEValues() const
+	 GetInterpolatedFEValuesState() const
 	 {
 	    return interpolated_fe_values_;
 	 }

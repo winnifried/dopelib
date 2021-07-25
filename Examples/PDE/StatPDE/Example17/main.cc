@@ -47,6 +47,9 @@
 
 #include <problemdata/simpledirichletdata.h>
 
+//Files for the access to interpolated finite element values
+#include <container/interpolatedintegratordatacontainer.h>
+#include <container/interpolatedelementdatacontainer.h>
 #include <container/interpolatedintegratordatacontainer.h>
 
 #include "localpde.h"
@@ -77,8 +80,8 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 //FIXME: Why use the standard data containers if the interpolated are needed in the PDE?
-#define CDC ElementDataContainer
-#define FDC FaceDataContainer
+#define CDC InterpolatedElementDataContainer
+#define FDC InterpolatedFaceDataContainer
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
@@ -204,47 +207,37 @@ main(int argc, char **argv)
 
       DoFRenumbering::component_wise(dof_handler);
 
-      vector<types::global_dof_index> dofs_per_component(DIM + 1);
-      DoFTools::count_dofs_per_component(dof_handler, dofs_per_component);
-
-      const unsigned int n_u = dofs_per_component[0] * DIM;
-      const unsigned int n_p = dofs_per_component[DIM];
-
-      VECTOR solution;
-
-      solution.reinit(2);
-      solution.block(0).reinit(n_u);
-      solution.block(1).reinit(n_p);
-      solution.collect_sizes();
-
+ 
       const ComponentSelectFunction<DIM> velocity_mask(make_pair(0, DIM), DIM + 1);
       const ComponentSelectFunction<DIM> pressure_mask(DIM, DIM + 1);
 
       ExactSolution<DIM>	exact_solution;
-      Vector<double>		cellwise_errors(triangulation.n_active_cells());
+      Vector<double>		cellwise_errors(DOFH.GetStateDoFHandler().get_triangulation().n_active_cells());
 
-      QGauss<DIM>		qgauss_error(4);
-      SolutionExtractor<RP, VECTOR> 	a1(solver);
-      const StateVector<VECTOR>		&gu = a1.GetU();
-      solution		= gu.GetSpacialVector();
-
-      VectorTools::integrate_difference(dof_handler, solution, exact_solution,
-		cellwise_errors, qgauss_error, VectorTools::L2_norm, &velocity_mask);
+      SolutionExtractor<RP, VECTOR> 	SE(solver);
+      
+      VectorTools::integrate_difference(DOFH.GetStateDoFHandler(),
+					SE.GetU().GetSpacialVector(), exact_solution,
+					cellwise_errors, QGauss<DIM>(4),
+					VectorTools::L2_norm, &velocity_mask);
     
-      const double v_l2_error = VectorTools::compute_global_error(triangulation,
-			cellwise_errors, VectorTools::L2_norm);
-
-      VectorTools::integrate_difference(dof_handler, solution, exact_solution,
-		cellwise_errors, qgauss_error, VectorTools::H1_norm, &velocity_mask);
+      const double v_l2_error = cellwise_errors.l2_norm();
+      
+      VectorTools::integrate_difference(DOFH.GetStateDoFHandler(),
+					SE.GetU().GetSpacialVector(),
+					exact_solution,
+					cellwise_errors, QGauss<DIM>(4),
+					VectorTools::H1_norm, &velocity_mask);
     
-      const double v_h1_error = VectorTools::compute_global_error(triangulation,
-			cellwise_errors, VectorTools::H1_norm);
+      const double v_h1_error = cellwise_errors.l2_norm();
 
-      VectorTools::integrate_difference(dof_handler, solution, exact_solution,
-		cellwise_errors, qgauss_error, VectorTools::L2_norm, &pressure_mask);
+      VectorTools::integrate_difference(DOFH.GetStateDoFHandler(),
+					SE.GetU().GetSpacialVector(), exact_solution,
+					cellwise_errors, QGauss<DIM>(4),
+					VectorTools::L2_norm, &pressure_mask);
     
       const double p_l2_error = VectorTools::compute_global_error(triangulation,
-			cellwise_errors, VectorTools::L2_norm);
+			cellwise_errors, VectorTools::H1_norm);
     
       outp << " Errors : ||e_v||_l2 : " << v_l2_error <<  
 	      ",||v||_h1 : " << v_h1_error << ", ||e_p||_l2 : " << 
