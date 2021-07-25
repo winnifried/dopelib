@@ -101,6 +101,8 @@ typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
 int
 main(int argc, char **argv)
 {
+   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+
    string paramfile = "dope.prm";
 
    if (argc == 2)
@@ -244,9 +246,10 @@ main(int argc, char **argv)
       const double p_l2_error = VectorTools::compute_global_error(triangulation,
 			cellwise_errors, VectorTools::L2_norm);
     
-      cout << " Errors : ||e_v||_l2 : " << v_l2_error <<  
-		",||v||_h1 : " << v_h1_error << ", ||e_p||_l2 : " << 
-		p_l2_error << endl;
+      outp << " Errors : ||e_v||_l2 : " << v_l2_error <<  
+	      ",||v||_h1 : " << v_h1_error << ", ||e_p||_l2 : " << 
+	      p_l2_error << endl;
+      out.Write(outp, 1, 0, 0);
 
 
    }
