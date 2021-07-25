@@ -142,6 +142,7 @@ namespace DOpE
     {
       if (interp_fdc_ != NULL)
 	 delete interp_fdc_;
+      //FIXME: FaceData should only depend on facequadrature not element quadarture
       interp_fdc_ = new InterpolatedFaceDataContainer<DH, VECTOR, dim>(selected_component_,
 								       map_, 
 								       fe_interpolate_,

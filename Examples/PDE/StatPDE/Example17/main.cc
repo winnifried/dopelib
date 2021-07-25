@@ -54,7 +54,6 @@
 
 //H div spaces where we interpolate to
 #include <deal.II/fe/fe_raviart_thomas.h>
-//#include <deal.II/fe/fe_bdm.h>
 
 using namespace std;
 using namespace dealii;
@@ -62,7 +61,12 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -72,6 +76,7 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
+//FIXME: Why use the standard data containers if the interpolated are needed in the PDE?
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
@@ -119,11 +124,6 @@ main(int argc, char **argv)
    GridGenerator::hyper_cube(triangulation, 0, 1);
    triangulation.refine_global(4);
 
-   // BDM  currently not working have to adjust pointconstraintmaker.h 
-   // if we need constraint. Works fine without constraints //
-   //FE<DIM> state_fe(FE_Q<DIM>(2), DIM, FE_DGP<DIM>(1), 1); //Q2DGQ1Q2
-   //FE_BDM<DIM> fe_interpolate(2);
-   
    
    // Raviart Thomas interpolation //
    FE<DIM> state_fe(FE_Q<DIM>(2), DIM, FE_DGQ<DIM>(1), 1); //Q2Q1
@@ -143,8 +143,6 @@ main(int argc, char **argv)
 
    STH DOFH(triangulation, state_fe);
 
-      try 
-   {
    OP P(LPDE, DOFH);
    
    //Specification of the dirichlet values
@@ -177,6 +175,8 @@ main(int argc, char **argv)
    solver.RegisterOutputHandler(&out);
    solver.RegisterExceptionHandler(&ex);
 
+   try 
+   {
       //Before solving we have to reinitialize the stateproblem and outputhandler.
       solver.ReInit();
       out.ReInit();
