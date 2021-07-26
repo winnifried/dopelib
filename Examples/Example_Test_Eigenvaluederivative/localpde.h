@@ -271,6 +271,12 @@ public:
 		edc.GetGradsState("adjoint", zgrads_);
 		edc.GetValuesState("eigenvalue",eigValues_);
 
+		//TEST ---
+//		  qvalues_old_.resize(n_q_points, Vector<double>(2));
+//		 edc.GetValuesControl("q_previous", qvalues_old_);
+
+		//__TESTENDE
+
 		vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
 		const FEValuesExtractors::Vector dv(0);
 
@@ -355,7 +361,6 @@ public:
 
 
 //        	std::cout << "detDFINVdq = " << detDFINVdq << std::endl;
-//        	std::cout << " detDF = " << detDF << std::endl;
 //        	std::cout << " ----------------- " << std::endl;
 
 
@@ -584,6 +589,10 @@ private:
 	vector<vector<Tensor<1, dealdim> > > dugrads_;
 	vector<vector<Tensor<1, dealdim> > > zgrads_;
 	vector<vector<Tensor<1, dealdim> > > qgrads_;
+
+	  vector<Vector<double> > qvalues_old_;
+
+
 
 	vector<Vector<double> > qvalues_;
 	vector<Vector<double> > funcgradvalues_;

@@ -43,7 +43,7 @@
 #include <deal.II/base/function_lib.h>
 #include <deal.II/base/table.h>
 
-#include <opt_algorithms/reducedgradientdescentalgorithm.h>
+#include <opt_algorithms/reducedproximalgradientdescentalgorithm.h>
 #include <opt_algorithms/reducedbfgsalgorithm.h>
 
 #include <container/optproblemcontainer.h>
@@ -53,6 +53,8 @@
 #include <problemdata/noconstraints.h>
 #include <wrapper/preconditioner_wrapper.h>
 #include <container/integratordatacontainer.h>
+
+#include <include/solutionextractor.h>
 
 #include <templates/integrator.h>
 
@@ -125,7 +127,7 @@ typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, S
 
 typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
-typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
+typedef ReducedProximalGradientDescentAlgorithm<OP, VECTOR> RNA;
 //typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
 
 
@@ -192,7 +194,7 @@ main(int argc, char **argv){
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(100);
+  COSTFUNCTIONAL LFunc(100000);
 //  COSTFUNCTIONAL LFunc(0.01 /*100.0*/);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
@@ -239,21 +241,20 @@ main(int argc, char **argv){
 
   VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  dq.GetSpacialVector());
 
-
-
       try
         {
+
 //    	  ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
     	  solver.ReInit();
     	  Alg.ReInit();
+
+
+
 
 //    	  solver.ComputeReducedFunctionals(q);
 //    	  solver.ComputeReducedGradient(q,gradient,gradient_transposed);
 //    	  dq = gradient_transposed;
     	 // dq *= -1.;
-
-    	  const double eps_diff = 0;
-    	  Alg.CheckGrads(eps_diff, q, dq, 5);
 
     	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
 //    	  Alg.ReInit();

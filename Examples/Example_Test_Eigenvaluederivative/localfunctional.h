@@ -42,12 +42,6 @@ public:
   LocalFunctional(double alpha)
   {
     alpha_ = alpha;
-//    control_initial_iteration = 0;
-
-//    qgrads_old_.resize(edc.GetNQPoints(), vector<Tensor<1, dealdim> >(2));
-//    qgrads_old_ = 0;
-
-//    q_old_ = 0;
   }
 
   double
@@ -60,18 +54,17 @@ public:
     qvalues_.resize(n_q_points, Vector<double>(2));
     qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 
-    control_initial_iteration.reinit(1);
+    control_initial_iteration.resize(n_q_points, Vector<double>(2));
 
     edc.GetValuesControl("control", qvalues_);
     edc.GetGradsControl("control", qgrads_);
-    edc.GetParamValues("control_counter", control_initial_iteration);
-//    edc.GetValuesControl("control_counter", control_initial_iteration);
+    edc.GetValuesControl("control_counter", control_initial_iteration);
 
-//    std::cout << "control-counter = "<< control_initial_iteration[0]<< std::endl;
-//    if(control_initial_iteration[0] == 1 ){
-//        qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-//        edc.GetGradsState("control_previous", qgrads_old_);
-//    }
+//std::cout << "control_initial_iteration[0][0]" << control_initial_iteration[0][0] << std::endl;
+    if(control_initial_iteration[0][0] != 0 ){
+       qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+       edc.GetGradsControl("q_previous", qgrads_old_);
+   }
 
     Tensor<2, 2> qgrads;
     Tensor<2, 2> qgrads_old;
@@ -90,18 +83,33 @@ public:
 		qgrads[1][0] = qgrads_[q_point][1][0];
 		qgrads[0][1] = qgrads_[q_point][0][1];
 
+		if(control_initial_iteration[0][0]!= 0){
+		    	qgrads_old[0][0] = qgrads_old_[q_point][0][0];
+		    	qgrads_old[1][1] = qgrads_old_[q_point][1][1];
+		    	qgrads_old[1][0] = qgrads_old_[q_point][1][0];
+		    	qgrads_old[0][1] = qgrads_old_[q_point][0][1];
+		}
+
+
 		DF = deformation_tensor_(qgrads);
 		detDF = determinante_(DF);
-//		std::cout << " detDF = " << detDF<< std::endl;
-         r += 0.5 * alpha_ * (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
+		if(detDF < 0.1){
+//			std::cout << " detDF = " << detDF<< std::endl;
+			r = 10.e20;
+			return r ;
+
+		}
+
+
+         r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
 
-//		if(control_initial_iteration[0] == 0){
+		if(control_initial_iteration[0][0] == 0){
 			r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
-//		}else{
-//			r += 0.5 * alpha_  * (scalar_product((qgrads[0] - qgrads_old_[q_point][0] ),(qgrads[0]-qgrads_old_[q_point][0]))+scalar_product((qgrads[1]-qgrads_old_[q_point][1]),(qgrads[1]-qgrads_old_[q_point][1]))) * state_fe_values.JxW(q_point);
-//       }
-         //qgradient*qgradient für beide Komponenten
+		}else{
+			r += 0.5 * alpha_  * (scalar_product((qgrads[0] - qgrads_old_[q_point][0] ),(qgrads[0]-qgrads_old_[q_point][0]))+scalar_product((qgrads[1]-qgrads_old_[q_point][1]),(qgrads[1]-qgrads_old_[q_point][1]))) * state_fe_values.JxW(q_point);
+       }
+
 
 
          //  log(detDF)
@@ -113,19 +121,10 @@ public:
 //		 r +=  0.5 *alpha_ *  (detDF)*  (detDF)* state_fe_values.JxW(q_point);
 
 
-//    	qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-//        qgrads_old_[q_point][0][0] = qgrads_[q_point][0][0];
-//        qgrads_old_[q_point][1][1] = qgrads_[q_point][1][1];
-//        qgrads_old_[q_point][1][0] = qgrads_[q_point][1][0];
-//        qgrads_old_[q_point][0][1] = qgrads_[q_point][0][1];
-//
-//        qgrads_old[0][0] = qgrads_old_[q_point][0][0];
-//        qgrads_old[1][1] = qgrads_old_[q_point][1][1];
-//        qgrads_old[1][0] = qgrads_old_[q_point][1][0];
-//        qgrads_old[0][1] = qgrads_old_[q_point][0][1];
-//
+
 // std::cout << " detDF_alt = " << determinante_(deformation_tensor_(qgrads_old))<< std::endl;
       }
+//    std::cout << " ############################ " << std::endl;
 
     return r;
 
@@ -154,18 +153,17 @@ public:
     qvalues_.resize(n_q_points, Vector<double>(2));
     qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 
-    control_initial_iteration.reinit(1);
-
-
+    control_initial_iteration.resize(n_q_points, Vector<double>(2));
 
     edc.GetValuesControl("control", qvalues_);
     edc.GetGradsControl("control", qgrads_);
-    edc.GetParamValues("control_counter", control_initial_iteration);
-//    if(control_initial_iteration[0] == 1 ){
-//    	 qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-//    	 edc.GetGradsControl("control_previous", qgrads_old_);
-//
-//    }
+
+   edc.GetValuesControl("control_counter", control_initial_iteration);
+    if(control_initial_iteration[0][0] != 0 ){
+    	 qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+    	 edc.GetGradsControl("q_previous", qgrads_old_);
+
+    }
 
 //    std::cout << "control-counter = "<< control_initial_iteration[0]<< std::endl;
 
@@ -182,25 +180,24 @@ public:
     {
     	DF.clear();
     	qgrads.clear();
-//    	qgrads_old.clear();
+    	qgrads_old.clear();
 
     	qgrads[0][0] = qgrads_[q_point][0][0];
     	qgrads[1][1] = qgrads_[q_point][1][1];
     	qgrads[1][0] = qgrads_[q_point][1][0];
     	qgrads[0][1] = qgrads_[q_point][0][1];
 
-//    	if(control_initial_iteration[0] != 0){
-//
-//    	qgrads_old[0][0] = qgrads_old_[q_point][0][0];
-//    	qgrads_old[1][1] = qgrads_old_[q_point][1][1];
-//    	qgrads_old[1][0] = qgrads_old_[q_point][1][0];
-//    	qgrads_old[0][1] = qgrads_old_[q_point][0][1];
-//    	}
+    	if(control_initial_iteration[0][0] == 1){
+
+    	qgrads_old[0][0] = qgrads_old_[q_point][0][0];
+    	qgrads_old[1][1] = qgrads_old_[q_point][1][1];
+    	qgrads_old[1][0] = qgrads_old_[q_point][1][0];
+    	qgrads_old[0][1] = qgrads_old_[q_point][0][1];
+    	}
 
     	DF = deformation_tensor_(qgrads);
     	detDF = determinante_(DF);
 
-//    	std::cout << " -----LOCALFUNCTIONAL------------ " << std::endl;
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
         	phi_q[i]=  control_fe_values[dv].value(i,q_point);
@@ -211,37 +208,25 @@ public:
 					-qgrads[1][0]*grad_phi_v[i][0][1]
 					-qgrads[0][1]*grad_phi_v[i][1][0] );
 
-//
+
         	local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
         	        	              * state_fe_values.JxW(q_point);
 
 
-//        	std::cout << " std::log(detDF) = " << std::log(detDF) << std::endl;
-//        	std::cout << " detDFdq = " << detDFdq << std::endl;
-//        	std::cout << " detDF = " << detDF<< std::endl;
-
-
-
-////
-//        	if(control_initial_iteration[0] == 0){
+        	if(control_initial_iteration[0][0] == 0){
             	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
 
-//        	}else{
+        	}else{
 //        		std::cout << " detDF_alt = " << determinante_(deformation_tensor_(qgrads_old))<< std::endl;
-//            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0]-qgrads_old_[q_point][0])+scalar_product(grad_phi_v[i][1],qgrads[1]-qgrads_old_[q_point][1])) * state_fe_values.JxW(q_point);
-//
-//        	}
-//        	std::cout << " ----------------- " << std::endl;
+            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0]-qgrads_old_[q_point][0])+scalar_product(grad_phi_v[i][1],qgrads[1]-qgrads_old_[q_point][1])) * state_fe_values.JxW(q_point);
+
+        	}
+
 
 //        	local_vector(i) += scale *alpha_ *(detDF)* detDFdq * state_fe_values.JxW(q_point);
 
 //       	local_vector(i) += scale *alpha_ *(std::log(detDF)-1)* (1/detDFdq) * state_fe_values.JxW(q_point);
           }
-//        qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-//        qgrads_old_[q_point][0][0] = qgrads_[q_point][0][0];
-//        qgrads_old_[q_point][1][1] = qgrads_[q_point][1][1];
-//        qgrads_old_[q_point][1][0] = qgrads_[q_point][1][0];
-//        qgrads_old_[q_point][0][1] = qgrads_[q_point][0][1];
       }
 
   }
@@ -268,13 +253,17 @@ public:
 
 private:
   vector<Vector<double> > uvalues_;
+
   vector<Vector<double> > evalues_;
   vector<Vector<double> > qvalues_;
+  vector<Vector<double> > qvalues_old_;
+  vector<Vector<double> > control_initial_iteration;
+
   vector<Vector<double> > funcgradvalues_;
 
   vector<vector<Tensor<1, dealdim> > > qgrads_;
   vector<vector<Tensor<1, dealdim> > > qgrads_old_;
-  Vector<double>  control_initial_iteration;
+
   double alpha_ ;
 
   // ---------------------------------------------------------------
