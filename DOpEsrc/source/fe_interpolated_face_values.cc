@@ -21,7 +21,7 @@
  *
  **/
 
-#include <include/fe_interpolated_values.h>
+#include <include/fe_interpolated_face_values.h>
 
 #include <deal.II/fe/fe_raviart_thomas.h>
 #include <deal.II/fe/fe_bdm.h>
@@ -29,16 +29,16 @@
 DEAL_II_NAMESPACE_OPEN
 
 template <int dim, int spacedim>
-InterpolatedFEValues<dim, spacedim>::InterpolatedFEValues(
-const FEValuesExtractors::Vector 	component_view,
-const Mapping<dim, spacedim>		&map,
-const FiniteElement<dim, spacedim>	&fe_from,
-const FiniteElement<dim, spacedim>	&fe_to,
-const Quadrature<dim>			&quadrature,
-UpdateFlags				flags) :
-	selected_vector(component_view), map_(map), fe_base(fe_from),
-	fe_interpolated(fe_to), 
-	quad(quadrature), update_flags(flags)
+InterpolatedFEFaceValues<dim, spacedim>::InterpolatedFEFaceValues(
+  const FEValuesExtractors::Vector 	component_view,
+  const Mapping<dim, spacedim>		&map,
+  const FiniteElement<dim, spacedim>	&fe_from,
+  const FiniteElement<dim, spacedim>	&fe_to,
+  const Quadrature<dim-1>			&quadrature,
+  UpdateFlags				flags) :
+  selected_vector(component_view), map_(map), fe_base(fe_from),
+  fe_interpolated(fe_to), 
+  quad(quadrature), update_flags(flags)
 {
   //Quadrature should be feasible
   Assert(quad.size() != 0, ExcLowerRange(quad.size(),1));
@@ -72,7 +72,7 @@ UpdateFlags				flags) :
 
 
 template<int dim, int spacedim>
-void InterpolatedFEValues<dim, spacedim>::reinit(const typename Triangulation<dim, spacedim>::cell_iterator &cell)
+void InterpolatedFEFaceValues<dim, spacedim>::reinit(const typename Triangulation<dim, spacedim>::cell_iterator &cell, const unsigned int face_no)
 {
    // Reinitialize values to the current element.
    const unsigned int fe_base_dofs = fe_base.dofs_per_cell;
@@ -100,10 +100,10 @@ void InterpolatedFEValues<dim, spacedim>::reinit(const typename Triangulation<di
    }
 
    FEValues<dim> 	fe_values_1(fe_base, q2, u_flag1);  // fe values of fe_base on fe_interpolated dofs
-   FEValues<dim>     	fe_values_2(map_,fe_interpolated, quad, u_flag2); // fe values of fe_interpolated on target quadrature
+   FEFaceValues<dim>     	fe_values_2(map_,fe_interpolated, quad, u_flag2); // fe values of fe_interpolated on target quadrature
 
    fe_values_1.reinit(cell);
-   fe_values_2.reinit(cell);
+   fe_values_2.reinit(cell,face_no);
 
    const auto &Inv_Jacobians = fe_values_2.get_inverse_jacobians();
 
@@ -174,7 +174,7 @@ void InterpolatedFEValues<dim, spacedim>::reinit(const typename Triangulation<di
 }
 
 template<int dim, int spacedim>
-Tensor<1, spacedim> InterpolatedFEValues<dim, spacedim>::value(
+Tensor<1, spacedim> InterpolatedFEFaceValues<dim, spacedim>::value(
 		const unsigned int shape_function,
 		const unsigned int q_point) const
 {
@@ -191,7 +191,7 @@ Tensor<1, spacedim> InterpolatedFEValues<dim, spacedim>::value(
 }
 
 template<int dim, int spacedim>
-Tensor<2, spacedim> InterpolatedFEValues<dim, spacedim>::gradient(const unsigned int shape_function,
+Tensor<2, spacedim> InterpolatedFEFaceValues<dim, spacedim>::gradient(const unsigned int shape_function,
 	const unsigned int q_point) const
 {
    Assert(shape_function < fe_base.dofs_per_cell,
@@ -203,7 +203,7 @@ Tensor<2, spacedim> InterpolatedFEValues<dim, spacedim>::gradient(const unsigned
    return interpolated_gradients[shape_function][q_point];
 }
 
-template class InterpolatedFEValues<2>;
-template class InterpolatedFEValues<3>;
+template class InterpolatedFEFaceValues<2>;
+template class InterpolatedFEFaceValues<3>;
 
 DEAL_II_NAMESPACE_CLOSE

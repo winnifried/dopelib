@@ -27,7 +27,7 @@
 #include <container/facedatacontainer.h>
 #include <deal.II/base/quadrature.h>
 #include <deal.II/fe/fe_raviart_thomas.h>
-#include <include/fe_interpolated_values.h>
+#include <include/fe_interpolated_face_values.h>
 
 using namespace dealii;
 using namespace std;
@@ -54,7 +54,7 @@ namespace DOpE
       *                                components of FE need to be interpolated
       * @param map                     The mapping for the target element of the interpolation
       * @param fe_interpolate          The finite element to which the interpolation should go
-      * @param quad                    Reference to the quadrature-rule which we use at the moment.
+      * @param fquad                   Reference to the face quadrature-rule which we use at the moment.
       * @param update_flags            The update flags we need to initialize the FEValues obejcts
       * @param sth                     A reference to the SpaceTimeHandler in use.
       * @param element                    A vector of element iterators through which we gain most of the needed information (like
@@ -72,7 +72,6 @@ namespace DOpE
 			 const FEValuesExtractors::Vector selected_component,
 			 const Mapping<dim>		&map,
 			 const FiniteElement<dim>	&fe_interpolate,
-			 const Quadrature<dim> &quad,
 			 const Quadrature<dim-1> &fquad, UpdateFlags update_flags,
 #if DEAL_II_VERSION_GTE(9,3,0)
 			 SpaceTimeHandler<FE, false, SPARSITYPATTERN, VECTOR,
@@ -89,11 +88,11 @@ namespace DOpE
                          const std::map<std::string, const Vector<double>*> &param_values,
                          const std::map<std::string, const VECTOR *> &domain_values,
                          bool need_neighbour) : 
-		FaceDataContainer<DH, VECTOR, dim>( fquad, update_flags, sth, element, 
-		param_values, domain_values, need_neighbour), 
-		interpolated_fe_values_(selected_component, map, sth.GetFESystem("state"), 
-			fe_interpolate, quad, update_flags), element_(element)
-
+     FaceDataContainer<DH, VECTOR, dim>( fquad, update_flags, sth, element, 
+					 param_values, domain_values, need_neighbour), 
+       interpolated_fe_face_values_(selected_component, map, sth.GetFESystem("state"), 
+				    fe_interpolate, fquad, update_flags),
+       element_(element)
 	 {
          }
 
@@ -109,7 +108,7 @@ namespace DOpE
       *                                components of FE need to be interpolated
       * @param map                     The mapping for the target element of the interpolation
       * @param fe_interpolate          The finite element to which the interpolation should go
-      * @param quad                    Reference to the quadrature-rule which we use at the moment.
+      * @param fquad                   Reference to the face quadrature-rule which we use at the moment.
       * @param update_flags            The update flags we need to initialize the FEValues obejcts
       * @param sth                     A reference to the SpaceTimeHandler in use.
       * @param element                    A vector of element iterators through which we gain most of the needed information (like
@@ -127,7 +126,6 @@ namespace DOpE
 		const FEValuesExtractors::Vector selected_component,
 		const Mapping<dim>		&map,
 		const FiniteElement<dim>	&fe_interpolate,
-		const Quadrature<dim>	&quad,
 		const Quadrature<dim-1> &fquad, UpdateFlags update_flags, 
 #if DEAL_II_VERSION_GTE(9,3,0)
 		StateSpaceTimeHandler<FE, false, SPARSITYPATTERN,
@@ -144,39 +142,35 @@ namespace DOpE
 		const std::map<std::string, const Vector<double>*> &param_values,
 		const std::map<std::string, const VECTOR *> &domain_values,
 		bool need_neighbour) :
-		FaceDataContainer<DH, VECTOR, dim>(fquad, update_flags, sth, element, param_values, domain_values,
-		need_neighbour), 
-		interpolated_fe_values_(selected_component, map, sth.GetFESystem("state"), 
-				fe_interpolate, quad, update_flags), element_(element)
+       FaceDataContainer<DH, VECTOR, dim>(fquad, update_flags, sth, element,
+					  param_values, domain_values,
+					  need_neighbour), 
+       interpolated_fe_face_values_(selected_component, map, sth.GetFESystem("state"), 
+				    fe_interpolate, fquad, update_flags),
+       element_(element)
 	 {
  	 }
 
          void ReInit(unsigned int face_no)
 	 {
 	    FaceDataContainer<DH, VECTOR, dim>::ReInit(face_no);
-	    interpolated_fe_values_.reinit(element_[FaceDataContainer<DH, VECTOR, dim>::GetStateIndex()]);
+	    interpolated_fe_face_values_.reinit(element_[FaceDataContainer<DH, VECTOR, dim>::GetStateIndex()],face_no);
 	 }
 
          void ReInit(unsigned int face_no, unsigned int subface_no)
 	 {
 	    FaceDataContainer<DH, VECTOR, dim>::ReInit(face_no, subface_no);
-	    interpolated_fe_values_.reinit(element_[FaceDataContainer<DH, VECTOR, dim>::GetStateIndex()]);
+	    throw DOpEException("Not implemented","InterpolatedFaceDataContainer::ReInit(unsigned int, unsigned int)");
 	 }
 
-         void ReInit()
-  	 {
-      	    FaceDataContainer<DH, VECTOR, dim>::ReInit();
-	    interpolated_fe_values_.reinit(element_[FaceDataContainer<DH, VECTOR, dim>::GetStateIndex()]);
-	 }
-
-         InterpolatedFEValues<dim> 
-	 GetInterpolatedFEValuesState() const
+         InterpolatedFEFaceValues<dim> 
+	 GetInterpolatedFEFaceValuesState() const
 	 {
-	    return interpolated_fe_values_;
+	    return interpolated_fe_face_values_;
 	 }
 
          private:
-  	    InterpolatedFEValues<dim>	interpolated_fe_values_;
+  	    InterpolatedFEFaceValues<dim>	interpolated_fe_face_values_;
 	    const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> &element_; 
 
    };
