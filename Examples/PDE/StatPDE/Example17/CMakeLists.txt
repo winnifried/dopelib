@@ -5,7 +5,6 @@ SET(TARGET "DOpE-PDE-StatPDE-Example17")
 # Declare all source files the target consists of:
 SET(TARGET_SRC
   main.cc
-  ../../../../DOpEsrc/source/fe_interpolated_values.cc
   # You can specify additional files here!
   )
 
