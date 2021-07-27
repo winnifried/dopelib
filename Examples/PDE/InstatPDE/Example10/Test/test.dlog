@@ -1,0 +1,1320 @@
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 27/08/2018
+Using dealii Version: 9.1
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 76
+		Total   DoFs: 3186224
+		Minimal DoFs: 41924
+		Maximal DoFs: 41924
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   2.4414e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00000.vtk]
+		         Precalculating functional values 
+		StressX: 0
+		 Timestep: 1 (0 -> 0.0001) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00001.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5128e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.2383e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.7594e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.0720e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.8318e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.3439e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   5.4418e-08	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.8280e-08	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   4.4438e-08	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   4.1422e-08	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00001.vtk]
+		         Precalculating functional values 
+		StressX: 13.8158
+		 Timestep: 2 (0.0001 -> 0.0002) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00002.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5128e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2140e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.4421e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.5093e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.9738e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.6329e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.3979e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.2259e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.0942e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.0070e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   9.4481e-08	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00002.vtk]
+		         Precalculating functional values 
+		StressX: 27.6309
+		 Timestep: 3 (0.0002 -> 0.0003) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00003.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5128e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3071e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.4601e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.8555e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.9891e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.4550e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.1006e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.8538e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.6584e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.5182e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   1.4400e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00003.vtk]
+		         Precalculating functional values 
+		StressX: 41.4434
+		 Timestep: 4 (0.0003 -> 0.0004) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00004.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5127e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2309e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.1734e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.0999e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.9674e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.3249e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.8902e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   2.5584e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   2.2983e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   2.1257e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.0162e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00004.vtk]
+		         Precalculating functional values 
+		StressX: 55.2524
+		 Timestep: 5 (0.0004 -> 0.0005) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00005.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5127e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.6313e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.7704e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.2515e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.9111e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.0978e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   3.5521e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   3.1917e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   2.9158e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   2.7339e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00005.vtk]
+		         Precalculating functional values 
+		StressX: 69.0559
+		 Timestep: 6 (0.0005 -> 0.0006) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00006.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5126e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5258e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.1879e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.5885e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.6775e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.4628e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   4.6338e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.0356e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   3.5846e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   3.3421e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   3.1697e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00006.vtk]
+		         Precalculating functional values 
+		StressX: 82.853
+		 Timestep: 7 (0.0006 -> 0.0007) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00007.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5126e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4146e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.4006e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.9253e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.6965e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.3341e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   5.4241e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.8074e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   4.3771e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   4.0249e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00007.vtk]
+		         Precalculating functional values 
+		StressX: 96.6418
+		 Timestep: 8 (0.0007 -> 0.0008) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00008.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5125e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4811e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.4877e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.0551e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.2463e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.8638e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   5.9493e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   5.3318e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   4.8797e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   4.5616e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00008.vtk]
+		         Precalculating functional values 
+		StressX: 110.421
+		 Timestep: 9 (0.0008 -> 0.0009) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00009.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5124e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4215e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.6933e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.1971e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.3254e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.7366e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   6.6843e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   5.9556e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   5.5813e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   5.2947e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00009.vtk]
+		         Precalculating functional values 
+		StressX: 124.189
+		 Timestep: 10 (0.0009 -> 0.001) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00010.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5123e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2414e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.0479e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.4408e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.1101e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   9.0826e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   7.7995e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   6.9699e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   6.3508e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   5.8456e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00010.vtk]
+		         Precalculating functional values 
+		StressX: 137.945
+		 Timestep: 11 (0.001 -> 0.0011) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00011.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5123e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3263e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.9474e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.2120e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.2198e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.5858e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   4.1450e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   3.8175e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.3099e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   7.3622e-08	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   4.8096e-08	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   3.4128e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00011.vtk]
+		         Precalculating functional values 
+		StressX: 151.927
+		 Timestep: 12 (0.0011 -> 0.0012) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00012.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5123e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.9008e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.2378e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.4464e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.4336e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.8119e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.4022e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.1173e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   9.1102e-08	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   7.6527e-08	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   6.6422e-08	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   5.8028e-08	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   5.1017e-08	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   4.5117e-08	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   4.0112e-08	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   3.5834e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00012.vtk]
+		         Precalculating functional values 
+		StressX: 165.582
+		 Timestep: 13 (0.0012 -> 0.0013) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00013.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5123e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   3.1881e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.5524e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.3739e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.6986e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.2792e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.0011e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   8.0690e-08	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   6.6557e-08	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   5.7658e-08	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   5.0613e-08	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   4.4734e-08	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   3.9797e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00013.vtk]
+		         Precalculating functional values 
+		StressX: 179.47
+		 Timestep: 14 (0.0013 -> 0.0014) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00014.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5122e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   3.6819e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.8221e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.1371e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.6177e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.7356e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00014.vtk]
+		         Precalculating functional values 
+		StressX: 193.124
+		 Timestep: 15 (0.0014 -> 0.0015) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00015.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5121e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.1840e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.1534e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.3906e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.9266e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00015.vtk]
+		         Precalculating functional values 
+		StressX: 206.979
+		 Timestep: 16 (0.0015 -> 0.0016) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00016.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5121e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.7047e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.6588e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.9856e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.9823e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.9823e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.9823e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.3331e-08	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   8.4569e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00016.vtk]
+		         Precalculating functional values 
+		StressX: 220.631
+		 Timestep: 17 (0.0016 -> 0.0017) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00017.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5120e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.2109e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.8700e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.2335e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00017.vtk]
+		         Precalculating functional values 
+		StressX: 234.445
+		 Timestep: 18 (0.0017 -> 0.0018) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00018.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5119e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.7830e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.0712e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.3267e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.2916e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00018.vtk]
+		         Precalculating functional values 
+		StressX: 248.091
+		 Timestep: 19 (0.0018 -> 0.0019) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00019.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5117e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   6.3326e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.3612e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5785e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00019.vtk]
+		         Precalculating functional values 
+		StressX: 261.859
+		 Timestep: 20 (0.0019 -> 0.002) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00020.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5116e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   6.8889e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.6735e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.8553e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00020.vtk]
+		         Precalculating functional values 
+		StressX: 275.492
+		 Timestep: 21 (0.002 -> 0.0021) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00021.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5115e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   7.4388e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.0478e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.8931e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00021.vtk]
+		         Precalculating functional values 
+		StressX: 289.21
+		 Timestep: 22 (0.0021 -> 0.0022) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00022.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5114e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   7.9837e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.4777e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.9560e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00022.vtk]
+		         Precalculating functional values 
+		StressX: 302.822
+		 Timestep: 23 (0.0022 -> 0.0023) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00023.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5113e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   8.5255e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.9713e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.3351e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00023.vtk]
+		         Precalculating functional values 
+		StressX: 316.485
+		 Timestep: 24 (0.0023 -> 0.0024) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00024.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5112e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   9.0743e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.5444e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.1270e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00024.vtk]
+		         Precalculating functional values 
+		StressX: 330.065
+		 Timestep: 25 (0.0024 -> 0.0025) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00025.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5110e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   9.6108e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.1853e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.3722e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00025.vtk]
+		         Precalculating functional values 
+		StressX: 343.667
+		 Timestep: 26 (0.0025 -> 0.0026) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00026.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5109e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.0131e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.9337e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.2279e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00026.vtk]
+		         Precalculating functional values 
+		StressX: 357.202
+		 Timestep: 27 (0.0026 -> 0.0027) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00027.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5108e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.0633e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.7517e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5815e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00027.vtk]
+		         Precalculating functional values 
+		StressX: 370.738
+		 Timestep: 28 (0.0027 -> 0.0028) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00028.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5106e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.1117e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.7192e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.0409e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00028.vtk]
+		         Precalculating functional values 
+		StressX: 384.214
+		 Timestep: 29 (0.0028 -> 0.0029) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00029.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5105e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.1601e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.7774e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.5954e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00029.vtk]
+		         Precalculating functional values 
+		StressX: 397.673
+		 Timestep: 30 (0.0029 -> 0.003) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00030.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5104e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2060e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.0161e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.3050e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00030.vtk]
+		         Precalculating functional values 
+		StressX: 411.074
+		 Timestep: 31 (0.003 -> 0.0031) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00031.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5102e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2493e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.0363e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.1514e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.7855e-10	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00031.vtk]
+		         Precalculating functional values 
+		StressX: 424.444
+		 Timestep: 32 (0.0031 -> 0.0032) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00032.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5101e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2894e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.1934e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.2150e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.4849e-10	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00032.vtk]
+		         Precalculating functional values 
+		StressX: 437.752
+		 Timestep: 33 (0.0032 -> 0.0033) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00033.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5100e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3291e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.3596e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.4500e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.4066e-10	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00033.vtk]
+		         Precalculating functional values 
+		StressX: 451.018
+		 Timestep: 34 (0.0033 -> 0.0034) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00034.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5098e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3658e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5440e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.9484e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.6074e-10	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00034.vtk]
+		         Precalculating functional values 
+		StressX: 464.213
+		 Timestep: 35 (0.0034 -> 0.0035) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00035.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5097e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3992e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.7369e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.6665e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.1474e-10	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00035.vtk]
+		         Precalculating functional values 
+		StressX: 477.353
+		 Timestep: 36 (0.0035 -> 0.0036) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00036.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5096e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4301e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.9477e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.1710e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.0989e-10	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00036.vtk]
+		         Precalculating functional values 
+		StressX: 490.412
+		 Timestep: 37 (0.0036 -> 0.0037) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00037.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5095e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4592e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1667e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.4027e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.0535e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00037.vtk]
+		         Precalculating functional values 
+		StressX: 503.401
+		 Timestep: 38 (0.0037 -> 0.0038) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00038.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5093e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4845e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.4124e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.6787e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.3542e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00038.vtk]
+		         Precalculating functional values 
+		StressX: 516.295
+		 Timestep: 39 (0.0038 -> 0.0039) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00039.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5092e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5076e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.6746e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.9934e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.7198e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00039.vtk]
+		         Precalculating functional values 
+		StressX: 529.101
+		 Timestep: 40 (0.0039 -> 0.004) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00040.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5091e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5282e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.9569e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.3585e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.1588e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00040.vtk]
+		         Precalculating functional values 
+		StressX: 541.794
+		 Timestep: 41 (0.004 -> 0.0041) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00041.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5090e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5455e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.2508e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.7677e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.6781e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00041.vtk]
+		         Precalculating functional values 
+		StressX: 554.378
+		 Timestep: 42 (0.0041 -> 0.0042) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00042.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5089e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5612e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.5647e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.2364e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.2844e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00042.vtk]
+		         Precalculating functional values 
+		StressX: 566.826
+		 Timestep: 43 (0.0042 -> 0.0043) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00043.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5087e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5739e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.8895e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.7568e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.9872e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00043.vtk]
+		         Precalculating functional values 
+		StressX: 579.139
+		 Timestep: 44 (0.0043 -> 0.0044) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00044.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5086e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5848e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.2330e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.3455e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.8269e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00044.vtk]
+		         Precalculating functional values 
+		StressX: 591.286
+		 Timestep: 45 (0.0044 -> 0.0045) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00045.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5085e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5941e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.5855e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.9924e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.7793e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00045.vtk]
+		         Precalculating functional values 
+		StressX: 603.264
+		 Timestep: 46 (0.0045 -> 0.0046) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00046.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5085e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.6037e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.9546e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.7155e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.0511e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00046.vtk]
+		         Precalculating functional values 
+		StressX: 615.039
+		 Timestep: 47 (0.0046 -> 0.0047) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00047.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5084e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.6873e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.2687e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.4353e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.6838e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00047.vtk]
+		         Precalculating functional values 
+		StressX: 626.599
+		 Timestep: 48 (0.0047 -> 0.0048) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00048.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5083e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7054e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.4842e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.3132e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.0650e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00048.vtk]
+		         Precalculating functional values 
+		StressX: 637.906
+		 Timestep: 49 (0.0048 -> 0.0049) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00049.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5082e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7217e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.7826e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.4942e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.2978e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00049.vtk]
+		         Precalculating functional values 
+		StressX: 648.939
+		 Timestep: 50 (0.0049 -> 0.005) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00050.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5081e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7367e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.1001e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.8392e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.5757e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00050.vtk]
+		         Precalculating functional values 
+		StressX: 659.649
+		 Timestep: 51 (0.005 -> 0.0051) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00051.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5081e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7482e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.4131e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.1193e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.8768e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00051.vtk]
+		         Precalculating functional values 
+		StressX: 670.002
+		 Timestep: 52 (0.0051 -> 0.0052) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00052.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5080e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7578e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.7264e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.2378e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.1747e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00052.vtk]
+		         Precalculating functional values 
+		StressX: 679.936
+		 Timestep: 53 (0.0052 -> 0.0053) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00053.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5080e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7634e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.0252e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.3648e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.5072e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00053.vtk]
+		         Precalculating functional values 
+		StressX: 689.393
+		 Timestep: 54 (0.0053 -> 0.0054) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00054.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5080e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7765e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.3585e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5000e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.8781e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00054.vtk]
+		         Precalculating functional values 
+		StressX: 698.286
+		 Timestep: 55 (0.0054 -> 0.0055) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00055.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.8176e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.7148e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.6360e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.1427e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.1427e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.1427e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.1879e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00055.vtk]
+		         Precalculating functional values 
+		StressX: 706.522
+		 Timestep: 56 (0.0055 -> 0.0056) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00056.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.8756e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.6121e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.0348e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.8343e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.1287e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   4.6248e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.2418e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.9889e-06	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.4288e-06	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   9.7571e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   7.2033e-07	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   5.6378e-07	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   4.6022e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   3.8723e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   3.3308e-07	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   2.9562e-07	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   2.6879e-07	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   2.4550e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   1.8716e-07	 LineSearch {2} 
+			 Newton step: 20	 Residual (rel.):   1.5087e-07	 LineSearch {2} 
+			 Newton step: 21	 Recalculate with new Matrix
+			 Newton step: 21	 Residual (rel.):   1.3493e-07	 LineSearch {1} 
+			 Newton step: 22	 Recalculate with new Matrix
+			 Newton step: 22	 Residual (rel.):   1.0528e-07	 LineSearch {1} 
+			 Newton step: 23	 Recalculate with new Matrix
+			 Newton step: 23	 Residual (rel.):   7.7138e-08	 LineSearch {0} 
+			 Newton step: 24	 Residual (rel.):   4.5990e-08	 LineSearch {0} 
+			 Newton step: 25	 Residual (rel.):   2.9565e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00056.vtk]
+		         Precalculating functional values 
+		StressX: 713.965
+		 Timestep: 57 (0.0056 -> 0.0057) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00057.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.9302e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.4445e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.1683e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.8158e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.8973e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.6617e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   2.6617e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   2.5928e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.6594e-07	 LineSearch {2} 
+			 Newton step: 10	 Residual (rel.):   1.6569e-07	 LineSearch {2} 
+			 Newton step: 11	 Recalculate with new Matrix
+			 Newton step: 11	 Residual (rel.):   6.6278e-08	 LineSearch {1} 
+			 Newton step: 12	 Residual (rel.):   4.2418e-08	 LineSearch {2} 
+			 Newton step: 13	 Recalculate with new Matrix
+			 Newton step: 13	 Residual (rel.):   2.9204e-08	 LineSearch {2} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00057.vtk]
+		         Precalculating functional values 
+		StressX: 720.459
+		 Timestep: 58 (0.0057 -> 0.0058) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00058.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.9668e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5010e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.4900e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.6139e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.7790e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   6.9032e-07	 LineSearch {0} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   5.4121e-07	 LineSearch {3} 
+			 Newton step: 8	 Residual (rel.):   4.1302e-07	 LineSearch {0} 
+			 Newton step: 9	 Recalculate with new Matrix
+			 Newton step: 9	 Residual (rel.):   2.6433e-07	 LineSearch {2} 
+			 Newton step: 10	 Recalculate with new Matrix
+			 Newton step: 10	 Residual (rel.):   1.6917e-07	 LineSearch {2} 
+			 Newton step: 11	 Recalculate with new Matrix
+			 Newton step: 11	 Residual (rel.):   1.6273e-07	 LineSearch {2} 
+			 Newton step: 12	 Recalculate with new Matrix
+			 Newton step: 12	 Residual (rel.):   1.1209e-07	 LineSearch {2} 
+			 Newton step: 13	 Residual (rel.):   4.7961e-08	 LineSearch {1} 
+			 Newton step: 14	 Recalculate with new Matrix
+			 Newton step: 14	 Residual (rel.):   5.0048e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00058.vtk]
+		         Precalculating functional values 
+		StressX: 725.777
+		 Timestep: 59 (0.0058 -> 0.0059) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00059.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.0318e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5476e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.3078e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.0666e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.1328e-06	 LineSearch {0} 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   8.6188e-07	 LineSearch {2} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   5.5161e-07	 LineSearch {2} 
+			 Newton step: 8	 Recalculate with new Matrix
+			 Newton step: 8	 Residual (rel.):   3.5423e-07	 LineSearch {2} 
+			 Newton step: 9	 Recalculate with new Matrix
+			 Newton step: 9	 Residual (rel.):   3.4513e-07	 LineSearch {1} 
+			 Newton step: 10	 Residual (rel.):   3.4513e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   2.7058e-07	 LineSearch {3} 
+			 Newton step: 12	 Residual (rel.):   2.6113e-07	 LineSearch {4} 
+			 Newton step: 13	 Recalculate with new Matrix
+			 Newton step: 13	 Residual (rel.):   1.6713e-07	 LineSearch {2} 
+			 Newton step: 14	 Residual (rel.):   1.5340e-07	 LineSearch {1} 
+			 Newton step: 15	 Recalculate with new Matrix
+			 Newton step: 15	 Residual (rel.):   1.5242e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00059.vtk]
+		         Precalculating functional values 
+		StressX: 729.658
+		 Timestep: 60 (0.0059 -> 0.006) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00060.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.0646e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.5030e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.0818e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.4765e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.8213e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   4.3509e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   3.9918e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   3.1560e-06	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   2.2747e-06	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   1.5253e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   1.1023e-06	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   8.4523e-07	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   6.7661e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   5.5845e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   4.7153e-07	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   4.0524e-07	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   3.5362e-07	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   3.1594e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   2.8394e-07	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   2.5645e-07	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   2.3256e-07	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   2.1793e-07	 LineSearch {1} 
+			 Newton step: 23	 Residual (rel.):   1.1332e-07	 LineSearch {0} 
+			 Newton step: 24	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00060.vtk]
+		         Precalculating functional values 
+		StressX: 731.729
+		 Timestep: 61 (0.006 -> 0.0061) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00061.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.2011e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5921e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.3878e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.9811e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.5981e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   4.3402e-06	 LineSearch {0} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   2.0349e-06	 LineSearch {1} 
+			 Newton step: 8	 Residual (rel.):   5.5885e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   3.2517e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.0194e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   1.3103e-07	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   8.8117e-08	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   6.2779e-08	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   4.6206e-08	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   3.4554e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00061.vtk]
+		         Precalculating functional values 
+		StressX: 731.468
+		 Timestep: 62 (0.0061 -> 0.0062) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00062.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.3014e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5722e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.4740e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.5789e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.5735e-06	 LineSearch {0} 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   2.4541e-06	 LineSearch {2} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   9.7455e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   9.7455e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   9.7099e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   7.9601e-09	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00062.vtk]
+		         Precalculating functional values 
+		StressX: 728.059
+		 Timestep: 63 (0.0062 -> 0.0063) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00063.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.1074e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.3127e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.2712e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.7105e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.1519e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.7752e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   7.5902e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   3.2453e-06	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   2.4443e-06	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.2782e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   2.1347e-06	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   1.5918e-06	 LineSearch {1} 
+			 Newton step: 13	 Residual (rel.):   9.8571e-07	 LineSearch {1} 
+			 Newton step: 14	 Recalculate with new Matrix
+			 Newton step: 14	 Residual (rel.):   6.3761e-07	 LineSearch {1} 
+			 Newton step: 15	 Recalculate with new Matrix
+			 Newton step: 15	 Residual (rel.):   3.8066e-07	 LineSearch {1} 
+			 Newton step: 16	 Recalculate with new Matrix
+			 Newton step: 16	 Residual (rel.):   2.8048e-07	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   1.5971e-07	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   9.4769e-08	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   5.9478e-08	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   4.0375e-08	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   2.7360e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00063.vtk]
+		         Precalculating functional values 
+		StressX: 720.2
+		 Timestep: 64 (0.0063 -> 0.0064) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00064.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.4552e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.3671e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.5357e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.4767e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.1090e-05	 LineSearch {0} 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   7.2285e-06	 LineSearch {2} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   4.6263e-06	 LineSearch {2} 
+			 Newton step: 8	 Recalculate with new Matrix
+			 Newton step: 8	 Residual (rel.):   3.2350e-06	 LineSearch {1} 
+			 Newton step: 9	 Residual (rel.):   3.2350e-06	 LineSearch {0} 
+			 Newton step: 10	 Recalculate with new Matrix
+			 Newton step: 10	 Residual (rel.):   2.5938e-06	 LineSearch {2} 
+			 Newton step: 11	 Residual (rel.):   2.0376e-06	 LineSearch {1} 
+			 Newton step: 12	 Recalculate with new Matrix
+			 Newton step: 12	 Residual (rel.):   4.1738e-07	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   2.0637e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   1.0775e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   6.0505e-08	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   3.5665e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00064.vtk]
+		         Precalculating functional values 
+		StressX: 705.735
+		 Timestep: 65 (0.0064 -> 0.0065) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00065.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.8654e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.0695e-02	 LineSearch {0} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   5.4091e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.6418e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.8470e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.3883e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.0914e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   8.8481e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   7.3479e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   6.2096e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   5.3148e-07	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   4.5985e-07	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   4.0108e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   3.5177e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   3.0966e-07	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   2.7338e-07	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   2.4207e-07	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   2.1574e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   1.9325e-07	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   1.7337e-07	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   1.5566e-07	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   1.3984e-07	 LineSearch {0} 
+			 Newton step: 23	 Residual (rel.):   1.2565e-07	 LineSearch {0} 
+			 Newton step: 24	 Residual (rel.):   1.1292e-07	 LineSearch {0} 
+			 Newton step: 25	 Residual (rel.):   1.0149e-07	 LineSearch {0} 
+			 Newton step: 26	 Residual (rel.):   9.1212e-08	 LineSearch {0} 
+			 Newton step: 27	 Residual (rel.):   8.1981e-08	 LineSearch {0} 
+			 Newton step: 28	 Residual (rel.):   7.3688e-08	 LineSearch {0} 
+			 Newton step: 29	 Residual (rel.):   6.6241e-08	 LineSearch {0} 
+			 Newton step: 30	 Residual (rel.):   5.9554e-08	 LineSearch {0} 
+			 Newton step: 31	 Residual (rel.):   5.3550e-08	 LineSearch {0} 
+			 Newton step: 32	 Residual (rel.):   4.8159e-08	 LineSearch {0} 
+			 Newton step: 33	 Residual (rel.):   4.3318e-08	 LineSearch {0} 
+			 Newton step: 34	 Residual (rel.):   3.8970e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00065.vtk]
+		         Precalculating functional values 
+		StressX: 681.216
+		 Timestep: 66 (0.0065 -> 0.0066) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00066.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   6.1806e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.6236e-03	 LineSearch {0} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   4.6937e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.0815e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.4458e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.5581e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.0344e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   7.0689e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   4.9275e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   3.5762e-07	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   2.6883e-07	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   2.0570e-07	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   1.5867e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   1.2284e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   9.5234e-08	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   7.3887e-08	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   5.8168e-08	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   4.5955e-08	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   3.6306e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00066.vtk]
+		         Precalculating functional values 
+		StressX: 642.211
+		 Timestep: 67 (0.0066 -> 0.0067) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00067.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.6974e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.6593e-02	 LineSearch {1} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   6.0800e-02	 LineSearch {1} 
+			 Newton step: 4	 Recalculate with new Matrix
+			 Newton step: 4	 Residual (rel.):   1.5894e-02	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   9.2148e-03	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   5.3474e-03	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   3.1111e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.8126e-03	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.0573e-03	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   6.1729e-04	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   3.6069e-04	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   2.1090e-04	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   1.2339e-04	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   7.2233e-05	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   4.2308e-05	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   2.4793e-05	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   1.4536e-05	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   1.2922e-05	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   1.2922e-05	 LineSearch {0} 
+			 Newton step: 20	 Recalculate with new Matrix
+			 Newton step: 20	 Residual (rel.):   1.2860e-05	 LineSearch {1} 
+			 Newton step: 21	 Residual (rel.):   3.1555e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00067.vtk]
+		         Precalculating functional values 
+		StressX: 591.076
+		 Timestep: 68 (0.0067 -> 0.0068) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00068.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5079e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.4744e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.0125e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.2142e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.2872e-03	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.6933e-03	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   6.4646e-03	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.8042e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   2.9791e-04	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   8.9686e-05	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.6137e-05	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   7.7346e-06	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   2.3026e-06	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   6.8805e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   2.0615e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   6.1896e-08	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   1.8618e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00068.vtk]
+		         Precalculating functional values 
+		StressX: 540.211
+		 Timestep: 69 (0.0068 -> 0.0069) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00069.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5078e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.6027e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.0412e-01	 LineSearch {1} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   6.6639e-02	 LineSearch {2} 
+			 Newton step: 4	 Recalculate with new Matrix
+			 Newton step: 4	 Residual (rel.):   4.2649e-02	 LineSearch {2} 
+			 Newton step: 5	 Residual (rel.):   2.7616e-02	 LineSearch {0} 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   1.2389e-02	 LineSearch {1} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   8.1966e-03	 LineSearch {2} 
+			 Newton step: 8	 Recalculate with new Matrix
+			 Newton step: 8	 Residual (rel.):   6.5061e-03	 LineSearch {3} 
+			 Newton step: 9	 Recalculate with new Matrix
+			 Newton step: 9	 Residual (rel.):   1.1766e-02	 LineSearch {4} 
+			 Newton step: 10	 Recalculate with new Matrix
+			 Newton step: 10	 Residual (rel.):   4.6970e-04	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   2.9751e-06	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   2.2192e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00069.vtk]
+		         Precalculating functional values 
+		StressX: 487.84
+		 Timestep: 70 (0.0069 -> 0.007) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00070.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5078e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.8699e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.3494e-01	 LineSearch {1} 
+			 Newton step: 3	 Residual (rel.):   1.7065e-01	 LineSearch {0} 
+			 Newton step: 4	 Recalculate with new Matrix
+			 Newton step: 4	 Residual (rel.):   1.4803e-01	 LineSearch {1} 
+			 Newton step: 5	 Recalculate with new Matrix
+			 Newton step: 5	 Residual (rel.):   6.6956e-02	 LineSearch {0} 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   3.6390e-02	 LineSearch {0} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   1.0134e-02	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   6.1108e-03	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   3.6857e-03	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.2257e-03	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   1.3448e-03	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   8.1273e-04	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   4.9129e-04	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   2.9702e-04	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   1.7958e-04	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   1.0858e-04	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   6.5658e-05	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   3.9702e-05	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   2.4008e-05	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   1.4517e-05	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   8.7784e-06	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   5.3082e-06	 LineSearch {0} 
+			 Newton step: 23	 Residual (rel.):   3.2098e-06	 LineSearch {0} 
+			 Newton step: 24	 Residual (rel.):   1.9409e-06	 LineSearch {0} 
+			 Newton step: 25	 Residual (rel.):   1.1736e-06	 LineSearch {0} 
+			 Newton step: 26	 Residual (rel.):   7.0965e-07	 LineSearch {0} 
+			 Newton step: 27	 Residual (rel.):   4.2910e-07	 LineSearch {0} 
+			 Newton step: 28	 Residual (rel.):   2.5946e-07	 LineSearch {0} 
+			 Newton step: 29	 Residual (rel.):   1.5688e-07	 LineSearch {0} 
+			 Newton step: 30	 Residual (rel.):   9.4860e-08	 LineSearch {0} 
+			 Newton step: 31	 Residual (rel.):   5.7357e-08	 LineSearch {0} 
+			 Newton step: 32	 Residual (rel.):   3.4681e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00070.vtk]
+		         Precalculating functional values 
+		StressX: 433.419
+		 Timestep: 71 (0.007 -> 0.0071) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00071.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5078e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   9.1953e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.4757e-01	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.9897e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.2273e-03	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.1293e-03	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.9464e-03	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.8561e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   5.4823e-04	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   2.9347e-05	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.6500e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   2.4041e-07	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   2.1813e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00071.vtk]
+		         Precalculating functional values 
+		StressX: 375.161
+		 Timestep: 72 (0.0071 -> 0.0072) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00072.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5078e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Recalculate with new Matrix
+			 Newton step: 1	 Residual (rel.):   4.0000e-01	 LineSearch {1} 
+			 Newton step: 2	 Residual (rel.):   2.5600e-01	 LineSearch {2} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   1.5061e-01	 LineSearch {0} 
+			 Newton step: 4	 Recalculate with new Matrix
+			 Newton step: 4	 Residual (rel.):   2.0855e-02	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.2644e-02	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   7.6882e-03	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.6796e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   4.2624e-03	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   4.1354e-03	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.4693e-03	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   4.0111e-04	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   1.2635e-04	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   5.2893e-05	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   2.2653e-05	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   9.7813e-06	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   4.2346e-06	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   1.8348e-06	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   7.9518e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   3.4464e-07	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   1.4937e-07	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   6.4735e-08	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   2.8055e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00072.vtk]
+		         Precalculating functional values 
+		StressX: 310.07
+		 Timestep: 73 (0.0072 -> 0.0073) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00073.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5078e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Recalculate with new Matrix
+			 Newton step: 1	 Residual (rel.):   4.0000e-01	 LineSearch {1} 
+			 Newton step: 2	 Residual (rel.):   3.7420e-01	 LineSearch {1} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   2.3648e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.9348e-03	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.0964e-03	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   6.0592e-03	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   6.0245e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   3.2157e-03	 LineSearch {1} 
+			 Newton step: 9	 Residual (rel.):   2.4765e-03	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   8.4817e-04	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   4.5032e-04	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   2.4458e-04	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   1.4776e-04	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   9.2779e-05	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   5.8498e-05	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   3.6994e-05	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   2.3444e-05	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   1.4879e-05	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   9.4519e-06	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   6.0084e-06	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   3.8211e-06	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   2.4308e-06	 LineSearch {0} 
+			 Newton step: 23	 Residual (rel.):   1.5467e-06	 LineSearch {0} 
+			 Newton step: 24	 Residual (rel.):   9.8423e-07	 LineSearch {0} 
+			 Newton step: 25	 Residual (rel.):   6.2637e-07	 LineSearch {0} 
+			 Newton step: 26	 Residual (rel.):   3.9865e-07	 LineSearch {0} 
+			 Newton step: 27	 Residual (rel.):   2.5373e-07	 LineSearch {0} 
+			 Newton step: 28	 Residual (rel.):   1.6149e-07	 LineSearch {0} 
+			 Newton step: 29	 Residual (rel.):   1.0279e-07	 LineSearch {0} 
+			 Newton step: 30	 Residual (rel.):   6.5425e-08	 LineSearch {0} 
+			 Newton step: 31	 Residual (rel.):   4.1643e-08	 LineSearch {0} 
+			 Newton step: 32	 Residual (rel.):   2.6506e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00073.vtk]
+		         Precalculating functional values 
+		StressX: 231.9
+		 Timestep: 74 (0.0073 -> 0.0074) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00074.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5078e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Recalculate with new Matrix
+			 Newton step: 1	 Residual (rel.):   4.0000e-01	 LineSearch {1} 
+			 Newton step: 2	 Residual (rel.):   2.5600e-01	 LineSearch {2} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   1.6384e-01	 LineSearch {2} 
+			 Newton step: 4	 Recalculate with new Matrix
+			 Newton step: 4	 Residual (rel.):   4.6210e-02	 LineSearch {0} 
+			 Newton step: 5	 Recalculate with new Matrix
+			 Newton step: 5	 Residual (rel.):   9.8307e-03	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   8.6980e-03	 LineSearch {0} 
+			 Newton step: 7	 Recalculate with new Matrix
+			 Newton step: 7	 Residual (rel.):   8.5625e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   5.6376e-03	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   3.0668e-03	 LineSearch {1} 
+			 Newton step: 10	 Recalculate with new Matrix
+			 Newton step: 10	 Residual (rel.):   2.1520e-03	 LineSearch {2} 
+			 Newton step: 11	 Recalculate with new Matrix
+			 Newton step: 11	 Residual (rel.):   1.0574e-03	 LineSearch {1} 
+			 Newton step: 12	 Recalculate with new Matrix
+			 Newton step: 12	 Residual (rel.):   3.1872e-04	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   5.0614e-05	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   1.3396e-05	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   4.0623e-06	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   1.3816e-06	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   4.8075e-07	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   1.6752e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   5.8408e-08	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   2.0368e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00074.vtk]
+		         Precalculating functional values 
+		StressX: 132.222
+		 Timestep: 75 (0.0074 -> 0.0075) using Crank-Nicolson
+	Writing [Results/Mesh0/LastTimestep_State_InstatPDEProblemContainer.00075.vtk]
+			 Newton step: 0	 Residual (abs.):   2.5077e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Recalculate with new Matrix
+			 Newton step: 1	 Residual (rel.):   4.0000e-01	 LineSearch {1} 
+			 Newton step: 2	 Residual (rel.):   3.1360e-01	 LineSearch {3} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   2.4763e-01	 LineSearch {1} 
+			 Newton step: 4	 Recalculate with new Matrix
+			 Newton step: 4	 Residual (rel.):   1.0688e-01	 LineSearch {0} 
+			 Newton step: 5	 Recalculate with new Matrix
+			 Newton step: 5	 Residual (rel.):   2.4415e-02	 LineSearch {0} 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   1.4879e-02	 LineSearch {2} 
+			 Newton step: 7	 Residual (rel.):   1.0142e-02	 LineSearch {0} 
+			 Newton step: 8	 Recalculate with new Matrix
+			 Newton step: 8	 Residual (rel.):   7.6047e-03	 LineSearch {1} 
+			 Newton step: 9	 Recalculate with new Matrix
+			 Newton step: 9	 Residual (rel.):   5.6465e-03	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.0950e-03	 LineSearch {0} 
+			 Newton step: 11	 Recalculate with new Matrix
+			 Newton step: 11	 Residual (rel.):   1.0998e-03	 LineSearch {1} 
+			 Newton step: 12	 Recalculate with new Matrix
+			 Newton step: 12	 Residual (rel.):   6.5098e-04	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   7.5514e-05	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   2.4498e-05	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   7.3962e-06	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   2.3275e-06	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   1.1147e-06	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   5.7050e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   2.9041e-07	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   1.4743e-07	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   7.4755e-08	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   3.7879e-08	 LineSearch {0} 
+	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00075.vtk]
+		         Precalculating functional values 
+		StressX: 14.1991
+	Computing Functionals:
+	StressX too large. Writing to file instead: 
+	Writing [Results/Mesh0/StressX_InstatPDEProblemContainer.00075.gpl]

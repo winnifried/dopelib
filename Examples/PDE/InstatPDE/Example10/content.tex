@@ -1,0 +1,59 @@
+\subsubsection{General problem description}
+We consider phase-field fracture propagation on a slit domain, with time dependent 
+Dirichlet data and homogeneous Neumann data.
+The main novelties are:
+\begin{itemize}
+\item Imposing a variational inequality constraint ($\frac{\partial \varphi}{\partial t} \leq 0$)
+via a Langrage multiplier similar to  \cite{mang2020phase};
+%\item Implementation of an augmented Lagrangian loop (not yet)
+\item Stress splitting into tension and compression \`a
+la \cite{MieWelHof10a}, see as well \cite{AmorMarigoMaurini2009}, located 
+in 
+\begin{verbatim}
+stress_splitting.h
+\end{verbatim}
+\item Implementation of a Newton solver that 
+allows for an increase of the residual for which, however,
+no convergence results are available:
+\begin{verbatim}
+instat_step_modified_newtonsolver.h
+\end{verbatim}
+\item The localpde* files:
+\begin{verbatim}
+localpde_quasi_monolithic.h
+\end{verbatim}
+which provides the implementation of a quasi-monolithic scheme
+(similar to\cite{HeWheWi15}).
+\end{itemize}
+
+The problem formulation as well as the handling of the irreversibility constraint is exactly the same as in Example 5.2.8.
+
+
+The test case is the so-called single edged notched 
+tension test. For further details about this problem it is referred
+to \cite{MieHofWel2010,BoVeScoHuLa12}, and \cite{WeWiWo2014}.
+
+
+
+% \subsubsection{Future improvements}
+% Possible future improvements are:
+% \begin{itemize}
+% \item Implement the phase-field extrapolation in the displacement equation proposed in \cite{HeWheWi15};
+% \item Implement the augmented Lagrangian loop proposed by
+% Wheeler/Wick/Wollner, CMAME 2014 \cite{WeWiWo2014}. 
+% \end{itemize}
+
+% Need to implement extrapolation with two 
+% previous time steps
+% To be changed: 
+% instatpdeproblem.h
+% instat_step_newton_solver.h
+%
+% augmented Lagrangian solver loop
+% -> currently simple penalization
+% has to be implemented in instat_step_newton_solver.h
+%
+% Dokumentation in content.tex
+
+
+
