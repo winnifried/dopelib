@@ -33,12 +33,21 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
+#endif
 {
   double lame_coefficient_mu_, lame_coefficient_lambda_;
 
@@ -146,10 +155,17 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalBulk : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_;
@@ -250,10 +266,17 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalCrack : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double G_c_, alpha_eps_;

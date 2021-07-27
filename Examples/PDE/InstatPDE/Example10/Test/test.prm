@@ -21,8 +21,8 @@ subsection newtonsolver parameters
   # For the modified instat_step Newton, do not set this number too high
   set line_maxiter         = 4
 
-  # reduction rate for the linesearch damping paramete
-  set linesearch_rho       = 0.6
+  # reduction rate for the linesearch damping parameter
+  set linesearch_rho       = 0.1
 
   # global tolerance for the newton iteration
   set nonlinear_global_tol = 1.e-10
@@ -51,8 +51,8 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
-  #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State
+
       
   # Defines what strings should be printed, the higher the number the more
   # output
@@ -66,7 +66,7 @@ subsection output parameters
 
 
   # Directory where the output goes to
-  set results_dir       = Results/
+  set results_dir       = ./
 end
 
 

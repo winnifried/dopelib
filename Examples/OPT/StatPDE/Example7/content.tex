@@ -23,7 +23,7 @@ The implementation is done using the following three additional files:
 \subsubsection{Program description}
 In addition to the previous Example \ref{OPT_Stat_Box_controlconstraints_SNOPT}, 
 we consider now in addition one global constraint. To calculate the correct 
-storrage needed we use the 
+storage needed we use the 
 second argument of \texttt{constraints(lcc, 1)}, which is now one. 
 
 We use 
@@ -42,5 +42,5 @@ which should remain constant with the value $V_{\max} = 0.5$, i.e.,
 \]
 Its implementation is 
 provided in \texttt{localconstraints.h} where the global constraint is handled as 
-a functional, which again is normalized to be nonpositive if the control is feasible.
+a functional, which again is normalized to be non-positive if the control is feasible.
 

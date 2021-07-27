@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.1
+Using dealii Version: 9.2
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -22,7 +22,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   6.2500e-02
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
-	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00000.vtk]
 		         Precalculating functional values 
 		TCV: 0
 		BulkEnergy: 0
@@ -31,82 +30,32 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   5.9693e-01
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.):   6.4000e-01	 LineSearch {2} M 
-			 Newton step: 2	 Residual (rel.):   4.3533e-01	 LineSearch {1} M 
-			 Newton step: 3	 Residual (rel.):   3.8755e-01	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.8026e-01	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.1966e-01	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   9.4001e-02	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   7.4224e-02	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   6.0434e-02	 LineSearch {0} 
-			 Newton step: 9	 Residual (rel.):   5.0564e-02	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   4.4389e-02	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.):   3.9644e-02	 LineSearch {0} 
-			 Newton step: 12	 Residual (rel.):   3.5545e-02	 LineSearch {0} 
-			 Newton step: 13	 Residual (rel.):   3.2064e-02	 LineSearch {0} 
-			 Newton step: 14	 Residual (rel.):   2.9065e-02	 LineSearch {0} 
-			 Newton step: 15	 Residual (rel.):   1.9077e-02	 LineSearch {1} M 
-			 Newton step: 16	 Residual (rel.):   1.6112e-02	 LineSearch {1} M 
+			 Newton step: 2	 Residual (rel.):   4.3538e-01	 LineSearch {1} M 
+			 Newton step: 3	 Residual (rel.):   3.8759e-01	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.8029e-01	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.1967e-01	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   9.4009e-02	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   7.4231e-02	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   6.0437e-02	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   5.0568e-02	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   4.4396e-02	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   3.9651e-02	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   3.5495e-02	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   3.2069e-02	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   2.9070e-02	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   1.9083e-02	 LineSearch {1} M 
+			 Newton step: 16	 Residual (rel.):   1.6119e-02	 LineSearch {1} M 
 			 Newton step: 17	 Recalculate with new Matrix
-			 Newton step: 17	 Residual (rel.):   1.3700e-02	 LineSearch {1} M 
+			 Newton step: 17	 Residual (rel.):   1.3708e-02	 LineSearch {1} M 
 			 Newton step: 18	 Recalculate with new Matrix
-			 Newton step: 18	 Residual (rel.):   1.1941e-02	 LineSearch {1} M 
+			 Newton step: 18	 Residual (rel.):   1.1953e-02	 LineSearch {1} M 
 			 Newton step: 19	 Recalculate with new Matrix
-			 Newton step: 19	 Residual (rel.):   8.7371e-03	 LineSearch {2} M 
+			 Newton step: 19	 Residual (rel.):   8.7810e-03	 LineSearch {2} M 
 			 Newton step: 20	 Recalculate with new Matrix
-			 Newton step: 20	 Residual (rel.):   7.6741e-03	 LineSearch {1} M 
+			 Newton step: 20	 Residual (rel.):   8.3347e-03	 LineSearch {1} M 
 			 Newton step: 21	 Recalculate with new Matrix
-			 Newton step: 21	 Residual (rel.):   6.7152e-03	 LineSearch {0} M 
-			 Newton step: 22	 Residual (rel.):   2.8353e-03	 LineSearch {0} 
-			 Newton step: 23	 Residual (rel.):   2.0565e-03	 LineSearch {0} 
-			 Newton step: 24	 Residual (rel.):   1.7259e-03	 LineSearch {0} 
-			 Newton step: 25	 Residual (rel.):   1.4575e-03	 LineSearch {0} 
-			 Newton step: 26	 Residual (rel.):   1.2365e-03	 LineSearch {0} 
-			 Newton step: 27	 Residual (rel.):   1.0518e-03	 LineSearch {0} 
-			 Newton step: 28	 Residual (rel.):   8.9574e-04	 LineSearch {0} 
-			 Newton step: 29	 Residual (rel.):   7.6319e-04	 LineSearch {0} 
-			 Newton step: 30	 Residual (rel.):   6.5039e-04	 LineSearch {0} 
-			 Newton step: 31	 Residual (rel.):   5.5431e-04	 LineSearch {0} 
-			 Newton step: 32	 Residual (rel.):   4.7244e-04	 LineSearch {0} 
-			 Newton step: 33	 Residual (rel.):   4.0266e-04	 LineSearch {0} 
-			 Newton step: 34	 Residual (rel.):   3.4320e-04	 LineSearch {0} 
-			 Newton step: 35	 Residual (rel.):   2.9251e-04	 LineSearch {0} 
-			 Newton step: 36	 Residual (rel.):   2.4931e-04	 LineSearch {0} 
-			 Newton step: 37	 Residual (rel.):   2.1249e-04	 LineSearch {0} 
-			 Newton step: 38	 Residual (rel.):   1.8111e-04	 LineSearch {0} 
-			 Newton step: 39	 Residual (rel.):   1.5437e-04	 LineSearch {0} 
-			 Newton step: 40	 Residual (rel.):   1.3157e-04	 LineSearch {0} 
-			 Newton step: 41	 Residual (rel.):   1.1214e-04	 LineSearch {0} 
-			 Newton step: 42	 Residual (rel.):   9.5577e-05	 LineSearch {0} 
-			 Newton step: 43	 Residual (rel.):   8.1462e-05	 LineSearch {0} 
-			 Newton step: 44	 Residual (rel.):   6.9432e-05	 LineSearch {0} 
-			 Newton step: 45	 Residual (rel.):   5.9178e-05	 LineSearch {0} 
-			 Newton step: 46	 Residual (rel.):   5.0438e-05	 LineSearch {0} 
-			 Newton step: 47	 Residual (rel.):   4.2989e-05	 LineSearch {0} 
-			 Newton step: 48	 Residual (rel.):   3.6641e-05	 LineSearch {0} 
-			 Newton step: 49	 Residual (rel.):   3.1230e-05	 LineSearch {0} 
-			 Newton step: 50	 Residual (rel.):   2.6617e-05	 LineSearch {0} 
-			 Newton step: 51	 Residual (rel.):   2.2687e-05	 LineSearch {0} 
-			 Newton step: 52	 Residual (rel.):   1.9336e-05	 LineSearch {0} 
-			 Newton step: 53	 Residual (rel.):   1.6481e-05	 LineSearch {0} 
-			 Newton step: 54	 Residual (rel.):   1.4047e-05	 LineSearch {0} 
-			 Newton step: 55	 Residual (rel.):   1.1972e-05	 LineSearch {0} 
-			 Newton step: 56	 Residual (rel.):   1.0204e-05	 LineSearch {0} 
-			 Newton step: 57	 Residual (rel.):   8.6972e-06	 LineSearch {0} 
-			 Newton step: 58	 Residual (rel.):   7.4128e-06	 LineSearch {0} 
-			 Newton step: 59	 Residual (rel.):   6.3180e-06	 LineSearch {0} 
-			 Newton step: 60	 Residual (rel.):   5.3850e-06	 LineSearch {0} 
-			 Newton step: 61	 Residual (rel.):   4.5897e-06	 LineSearch {0} 
-			 Newton step: 62	 Residual (rel.):   3.9119e-06	 LineSearch {0} 
-			 Newton step: 63	 Residual (rel.):   3.3342e-06	 LineSearch {0} 
-			 Newton step: 64	 Residual (rel.):   2.8418e-06	 LineSearch {0} 
-			 Newton step: 65	 Residual (rel.):   2.4221e-06	 LineSearch {0} 
-			 Newton step: 66	 Residual (rel.):   2.0644e-06	 LineSearch {0} 
-			 Newton step: 67	 Residual (rel.):   1.7595e-06	 LineSearch {0} 
-			 Newton step: 68	 Residual (rel.):   1.4997e-06	 LineSearch {0} 
-			 Newton step: 69	 Residual (rel.):   1.2782e-06	 LineSearch {0} 
-			 Newton step: 70	 Residual (rel.):   1.0894e-06	 LineSearch {0} 
-			 Newton step: 71	 Residual (rel.):   9.2854e-07	 LineSearch {0} 
-	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00001.vtk]
+			 Newton step: 21	 Residual (rel.):   5.8505e-03	 LineSearch {1} M 
+			 Newton step: 22	 Residual (rel.):   5.5904e-07	 LineSearch {0} M 
 		         Precalculating functional values 
 		TCV: 0.00563401
 		BulkEnergy: 2.01671e-06
@@ -115,57 +64,52 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.1617e-05
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Recalculate with new Matrix
-			 Newton step: 1	 Residual (rel.):   6.0158e-02	 LineSearch {0} M 
-			 Newton step: 2	 Residual (rel.):   5.0225e-04	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.):   1.0283e-04	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   5.7942e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   3.9710e-05	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   2.8876e-05	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   2.1898e-05	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   1.7067e-05	 LineSearch {0} 
-			 Newton step: 9	 Residual (rel.):   1.3561e-05	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   1.0863e-05	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.):   8.7672e-06	 LineSearch {0} 
-			 Newton step: 12	 Residual (rel.):   7.2888e-06	 LineSearch {0} 
-	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00002.vtk]
+			 Newton step: 1	 Residual (rel.):   5.2447e-03	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   1.6777e-04	 LineSearch {0} M 
+			 Newton step: 3	 Residual (rel.):   5.5633e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.6812e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.6858e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.0373e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   1.6336e-05	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.3268e-05	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.0999e-05	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   9.2579e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   7.8202e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06466e-06
 		CrackEnergy: 2.89463
 		 Timestep: 3 (2 -> 3) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.6752e-10
+			 Newton step: 0	 Residual (abs.):   4.6734e-10
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.):   1.5115e-01	 LineSearch {0} 
-	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00003.vtk]
+			 Newton step: 1	 Residual (rel.):   1.6530e-01	 LineSearch {0} 
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06467e-06
 		CrackEnergy: 2.89463
 		 Timestep: 4 (3 -> 4) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.6260e-10
+			 Newton step: 0	 Residual (abs.):   1.6236e-10
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.):   6.4000e-01	 LineSearch {2} M 
-			 Newton step: 2	 Residual (rel.):   3.8520e-01	 LineSearch {0} M 
-	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00004.vtk]
+			 Newton step: 1	 Residual (rel.):   9.7177e-01	 LineSearch {1} M 
+			 Newton step: 2	 Residual (rel.):   3.5910e-01	 LineSearch {0} M 
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06467e-06
 		CrackEnergy: 2.89463
 		 Timestep: 5 (4 -> 5) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.2635e-11
+			 Newton step: 0	 Residual (abs.):   5.9197e-11
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-	Writing [Results/Mesh0/State_InstatPDEProblemContainer.00005.vtk]
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06467e-06
 		CrackEnergy: 2.89463
 	Computing Functionals:
 	TCV too large. Writing to file instead: 
-	Writing [Results/Mesh0/TCV_InstatPDEProblemContainer.00005.gpl]
+	Writing [./Mesh0/TCV_InstatPDEProblemContainer.00005.gpl]
 	BulkEnergy too large. Writing to file instead: 
-	Writing [Results/Mesh0/BulkEnergy_InstatPDEProblemContainer.00005.gpl]
+	Writing [./Mesh0/BulkEnergy_InstatPDEProblemContainer.00005.gpl]
 	CrackEnergy too large. Writing to file instead: 
-	Writing [Results/Mesh0/CrackEnergy_InstatPDEProblemContainer.00005.gpl]
+	Writing [./Mesh0/CrackEnergy_InstatPDEProblemContainer.00005.gpl]
 
 	*******************************************************************************************************************************************************************************************************
 	*******************************************************************************************************************************************************************************************************

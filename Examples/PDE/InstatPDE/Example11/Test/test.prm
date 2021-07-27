@@ -50,7 +50,7 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;LastTime
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;LastTime;State
   #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
       
   # Defines what strings should be printed, the higher the number the more
@@ -65,7 +65,7 @@ subsection output parameters
 
 
   # Directory where the output goes to
-  set results_dir       = Results/
+  set results_dir       = ./
 
 end
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2017 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -89,7 +89,11 @@ using namespace DOpE;
 // und neues Makefile erzeugen
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer

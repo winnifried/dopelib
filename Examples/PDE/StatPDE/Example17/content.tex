@@ -57,7 +57,7 @@ element $V_h\times Q_h$ should be interpolated onto $X_h$ consisting of the elem
 The \texttt{map} indicates the Mapping to be used for the transformation of the reference
 RaviartThomas element to the real element.
 
-In \texttt{localpde.h}, the only substantial change occures in the
+In \texttt{localpde.h}, the only substantial change occurs in the
 \texttt{ElementRightHandSide} where we need to multiply $f$ with
 $\bm{\pi}^{\rm{div}} \textbf{v}_h$.
 Here we utilize that the \texttt{InterpolatedElementDataContainer} gives access to $\bm{\pi}^{\rm{div}} \textbf{v}_h$ by the method \texttt{GetInterpolatedFEValues()}.

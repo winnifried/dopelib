@@ -1,6 +1,6 @@
 \subsubsection{General problem description}
 We consider phase-field fracture propagation on a slit domain, with time dependent 
-Dirichlet data and homogenous Neumann data.
+Dirichlet data and homogeneous Neumann data.
 The main novelties are:
 \begin{itemize}
 \item Imposing a variational inequality constraint ($\frac{\partial \varphi}{\partial t} \leq 0$)
@@ -17,7 +17,7 @@ no convergence results are available:
 \begin{verbatim}
 DOpEsrc/templates/instat_step_modified_newtonsolver.h
 \end{verbatim}
-\item The localpde* file:
+\item The localpde file:
 \begin{verbatim}
 localpde_fully_implicit.h
 \end{verbatim}
@@ -78,7 +78,7 @@ For the loading steps $n=1,2,\ldots, N$ solve the following system of equations:
 Find $u_h \in \mathcal{V}_h$, $p_h \in \mathcal{U}_h$, $\varphi_h:= \varphi_h^n \in \mathcal{W}_{n,h}$ and $\tau_h \in \mathcal{X}_h$ such that 
  \begin{align*}
  \begin{aligned}
-   \left(g(\varphi_h^{n-1})\left[2\mu E^+(u_h) + \lambda (\operatorname{trace}(E(u)))_+ \textbf{I}\right],\nabla w_h \right)\\
+   \left(g(\varphi_h^{n})\left[2\mu E^+(u_h) + \lambda (\operatorname{trace}(E(u)))_+ \textbf{I}\right],\nabla w_h \right)\\
   + \left(2\mu \left(E(u_h)-E^+(u_h)\right),E(w_h)\right)\\
  + \left(\lambda (\operatorname{trace}(E(u)))_- \textbf{I},E(w_h)\right) =&\ 0,\\
  %\forall w_h\in&\ \mathcal{V}_h,\\
@@ -102,6 +102,7 @@ non-smooth complementarity function, see, e.g.,~\cite[Section~4.1]{MangWallothWi
 The test case is the so-called single edged notched 
 shear test. For further details about this problem it is referred
 to \cite{MieHofWel2010,BoVeScoHuLa12}, and \cite{WeWiWo2014}.
+For the choice of the boundary conditions see also~\cite[Section~5]{MangWallothWickWollner:2019}.
 
 
 

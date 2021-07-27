@@ -38,8 +38,6 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
 #else
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,

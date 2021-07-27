@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2017 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -33,10 +33,17 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
 template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
 template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalTCV : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
@@ -123,10 +130,17 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
 template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
 template<int, int> class DH, typename VECTOR, int dealdim>
+#endif 
 class LocalFunctionalBulk : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 	double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_;
@@ -246,10 +260,17 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
 template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
 template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalCrack : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 	double G_c_, alpha_eps_;
@@ -347,10 +368,17 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
 template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
 template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalBulkMixed : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 	double constant_k_, lame_coefficient_mu_;
@@ -461,19 +489,25 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispXLeft : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -509,19 +543,25 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dealdim >
+#endif
 class PointFunctionalDispXRight : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -556,13 +596,19 @@ public:
 };
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispXTop : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
@@ -577,7 +623,7 @@ public:
   }
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -615,13 +661,19 @@ double d_;
 };
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispXBottom : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
@@ -636,7 +688,7 @@ public:
   }
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -675,19 +727,25 @@ double d_;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispYLeft : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -723,19 +781,25 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispYRight : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -770,13 +834,19 @@ public:
 };
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispYTop : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
@@ -791,7 +861,7 @@ public:
   }
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -829,13 +899,19 @@ double d_;
 };
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class PointFunctionalDispYBottom : public FunctionalInterface<EDC, FDC, DH,
-  VECTOR, dopedim, dealdim>
+  VECTOR, dealdim>
 {
 public:
 
@@ -850,7 +926,7 @@ public:
   }
   double
   PointValue(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
@@ -890,10 +966,17 @@ double d_;
 /** Functional for the error in phi in the energy norm **/
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalEnergyNorm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double constant_k_, lame_coefficient_mu_,alpha_eps_, G_c_;
@@ -1050,10 +1133,17 @@ public:
 /** Functional for the error in phi in the energy norm with u on the finest level**/
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalEnergyVarNorm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double constant_k_, lame_coefficient_mu_, alpha_eps_, G_c_;
@@ -1212,10 +1302,17 @@ public:
 /** Functional for the error in phi in the L^2 part of the energy norm **/
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalWeightedL2Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double constant_k_, lame_coefficient_mu_, alpha_eps_, G_c_;
@@ -1350,10 +1447,17 @@ public:
 /** Functional for the error in phi in the L^2 norm  **/
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalL2Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
  
@@ -1440,10 +1544,17 @@ public:
 /** Functional for the error in phi in the H^1 part of the energy norm  **/
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalWeightedH1Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double alpha_eps_, G_c_;
@@ -1560,10 +1671,17 @@ public:
 /** Functional for the error in the H^1 norm  **/
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalH1Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   std::string ref_string_;

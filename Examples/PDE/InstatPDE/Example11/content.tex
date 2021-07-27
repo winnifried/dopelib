@@ -5,9 +5,9 @@ In this example, we consider a lower-dimensional fracture in a
 a constant length and varying width.
 The driving force in this example is a given constant pressure prescribed in the fracture.
 The setting is motivated by the book of Sneddon and Lowengrub
-\cite{sneddon1969crack} and therefore known as `Sneddon' benchmark or `pressure-driven cavity'. Analytical solutions are derived in \cite{sneddon1969crack} and are also discussed in 
+\cite{SneddLow69} and therefore known as `Sneddon' benchmark or `pressure-driven cavity'. Analytical solutions are derived in \cite{SneddLow69} and are also discussed in 
 \cite{bourdin2012variational}. Subsequently, 
-\cite{wheeler2014augmented,heister2015primal} coin the proposed benchmark, 
+\cite{WeWiWo2014,HeWheWi15} coin the proposed benchmark, 
 and provide numerical results.\\
 
 Using the notation and problem setup of Example 5.2.8 and combine it with a a given pressure $p:\Omega \to \mathbb{R}$, we get the
@@ -75,7 +75,7 @@ and
 +&\ G_C\left(-\frac{1}{\epsilon}(1-\varphi,\psi-\varphi)+\epsilon\left(\nabla \varphi,\nabla(\psi-\varphi)\right) \right)\geq 0\quad \forall \psi \in \mathcal{W}_{\text{in}} \cap L^{\infty}(\Omega).
 \end{align*}
 \end{Problem}
-The crack irreversibilty condition is handled via a Lagrange multiplier as in Example 5.2.8.\\
+The crack irreversibility condition is handled via a Lagrange multiplier as in Example~\ref{PDE_phase_field_fracture}\\
 
 In this example, we are especially interested in three computed quantities:
 \begin{itemize}
@@ -84,7 +84,7 @@ In this example, we are especially interested in three computed quantities:
 \label{eq_TCV_num}
 \text{TCV}_{h,\epsilon}=\int_{\Omega} u(x,y) \cdot \nabla \varphi(x,y)\ \mathrm{d}{(x,y)}.
 \end{align}
-A formula for the limit can be obtained using \cite{sneddon1969crack}.
+A formula for the limit can be obtained using \cite{SneddLow69}.
 Using symmetry of the configuration, i.e., $u_y(x,0^+) = - u_y(x,0^-)$,
 and the known crack location $[-1,1]\times \{0\}$, one obtains
 \begin{align*}
@@ -93,7 +93,7 @@ and the known crack location $[-1,1]\times \{0\}$, one obtains
 where $0^\pm$ denotes the respective limit from above or below, and
 $u_y$ denotes the second ($y$) component of the displacement.
 
-Using the exact representation of $u_y$ (cf. \cite{sneddon1969crack}, page
+Using the exact representation of $u_y$ (cf. \cite{SneddLow69}, page
 29)
 \[
 u_y(x,0^+) =  \frac{p l_0}{E^{\prime}} \left(1-\frac{x^2}{l_0^2}\right)^{1/2}
@@ -131,7 +131,7 @@ Again, no manufactured reference values are provided and we only present
 values computed numerically.
 \end{itemize}
 
-Further details on this numerical example can be found in \cite[Chapter 7]{schroder2020selection}.
+Further details on this numerical example can be found in \cite[Chapter~7]{SchroederEtAl:2021}.
 
 
 %
