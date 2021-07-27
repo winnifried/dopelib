@@ -17,7 +17,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.07531e-02
 			 Newton step: 0	 Residual (rel.):   1.00000e+00
 LOG: Allowing IterationCounter `PDENewtonLS' for filenames!
-			 Newton step: 1	 Residual (rel.):   2.58116e-15	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00000e-14	 LineSearch {0} M 
 	Computing Functionals:
 	 Errors : ||e_v||_l2 : 0.000269865,||v||_h1 : 0.027919, ||e_p||_l2 : 0.125007
 	

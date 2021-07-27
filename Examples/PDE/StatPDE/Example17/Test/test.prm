@@ -29,7 +29,7 @@ subsection output parameters
   set debug                       = false
 
   # Correlation of the output and machine precision
-  set eps_machine_set_by_user     = 0.0
+  set eps_machine_set_by_user     = 1.e-14
 
   # File format for the output of solution variables
   set file_format                 = .vtk
