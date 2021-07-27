@@ -4,7 +4,6 @@
 subsection Local PDE parameters
  	   set constant_k	= 1.0e-10
      	   set alpha_eps	= 2.0
-	   set gamma_penal	= 1.0
 	   set G_c		= 2.7
 	   set lame_coefficient_mu	= 80.77e+3
 	   set lame_coefficient_lambda  = 121.15e+3
@@ -19,10 +18,10 @@ end
 subsection newtonsolver parameters
   # maximal number of linesearch steps
   # For the modified instat_step Newton, do not set this number too high
-  set line_maxiter         = 4
+  set line_maxiter         = 10
 
   # reduction rate for the linesearch damping paramete
-  set linesearch_rho       = 0.5
+  set linesearch_rho       = 0.1
 
   # global tolerance for the newton iteration
   set nonlinear_global_tol = 1.e-10

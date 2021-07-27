@@ -31,7 +31,7 @@ using namespace dealii;
 class NonHomoDirichletData : public DOpEWrapper::Function<2>
 {
 public:
-  NonHomoDirichletData (ParameterReader &param_reader) : DOpEWrapper::Function<2>(3)
+  NonHomoDirichletData (ParameterReader &param_reader) : DOpEWrapper::Function<2>(4)
   {
     param_reader.SetSubsection("Problem data parameters");
     dis_step_per_timestep_ = param_reader.get_double ("dis_step_per_timestep");
@@ -63,7 +63,7 @@ private:
 };
 
 /******************************************************/
-
+/// Boundary values for Miehe shear test
 double
 NonHomoDirichletData::value (const Point<2>  &p,
                              const unsigned int component) const
@@ -72,14 +72,25 @@ NonHomoDirichletData::value (const Point<2>  &p,
           ExcIndexRange (component, 0, this->n_components));
 
 
-  if (component == 0)
-    {
+      // Miehe shear
+      if (component == 0)
+	{
+	  return ( ((p(1) == 1.0) )
+		   ?
+		   (-1.0) * localtime *dis_step_per_timestep_ : 0 );
+	}
 
-      return ( ((p(1) == 1.0) )
-               ?
-               (-1.0) * localtime *dis_step_per_timestep_ : 0 );
-
-    }
+      if (component == 1)
+	{
+	   
+	  return 0.0;
+	}
+      if (component == 2)
+  	{
+    	if(p(1)==1.0)
+      	  return 1.;
+    	return 0.;
+  	}
   return 0;
 }
 
@@ -101,7 +112,7 @@ class InitialData: public DOpEWrapper::Function<2>
 {
 public:
   InitialData() :
-    DOpEWrapper::Function<2>(3)
+    DOpEWrapper::Function<2>(4)
   {
 
   }
@@ -118,8 +129,13 @@ private:
 double InitialData::value(const Point<2> &/*p*/, const unsigned int component) const
 {
 
+  // Set phase-field to "1" since domain is unbroken at the beginning
   if (component == 2)
+  {
+    //if( (p(0) >= 0.5) && (p(1)==0.5) )
+      //return 0.;
     return 1.0;
+  }
   else
     return 0.0;
 }

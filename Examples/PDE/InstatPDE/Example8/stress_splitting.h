@@ -124,10 +124,14 @@ void decompose_stress(
     {
       Tensor<2,dim> E_plus = P_matrix * Lambda_plus * transpose(P_matrix);
 
-      double tr_E_positive = std::max(0.0, tr_E);
+      double tr_E_positive = std::max(0.0, tr_E); //TEST Amor splitting!
+
+      //stress_term_plus = lame_coefficient_lambda * tr_E_positive * Identity + lame_coefficient_mu * tr_E_positive * Identity + 2.0 * lame_coefficient_mu * (E_plus - 0.5 * tr_E_positive * Identity);
+
+      //stress_term_minus = ((lame_coefficient_lambda * tr_E) - (lame_coefficient_lambda * tr_E_positive)) * Identity + lame_coefficient_mu * (tr_E - tr_E_positive) * Identity + 2.0 * lame_coefficient_mu * ((E-E_plus) - 0.5 * (tr_E - tr_E_positive) * Identity);
 
       stress_term_plus = lame_coefficient_lambda * tr_E_positive * Identity
-                         + 2 * lame_coefficient_mu * E_plus;
+                        + 2 * lame_coefficient_mu * E_plus;
 
       stress_term_minus = lame_coefficient_lambda * (tr_E - tr_E_positive) * Identity
                           + 2 * lame_coefficient_mu * (E - E_plus);
@@ -265,13 +269,19 @@ void decompose_stress(
         tr_E_positive_LinU = tr_E_LinU;
 
 
-
+      
       stress_term_plus = lame_coefficient_lambda * tr_E_positive_LinU * Identity
                          + 2 * lame_coefficient_mu * E_plus_LinU;
 
       stress_term_minus = lame_coefficient_lambda * (tr_E_LinU - tr_E_positive_LinU) * Identity
                           + 2 * lame_coefficient_mu * (E_LinU - E_plus_LinU);
 
+      //double pressure_LinU = lame_coefficient_lambda * tr_E_LinU;
+      //double pressure_positive_LinU = lame_coefficient_lambda * tr_E_positive_LinU;
+
+      //stress_term_plus = pressure_positive_LinU * Identity + lame_coefficient_mu * tr_E_positive_LinU * Identity + 2.0 * lame_coefficient_mu * (E_plus_LinU - 0.5 * tr_E_positive_LinU * Identity); // new along to Paper AmGeL015, maybe 0.5 instead of 1/3
+
+      //stress_term_minus = (pressure_LinU - pressure_positive_LinU) * Identity + lame_coefficient_mu * (tr_E_LinU - tr_E_positive_LinU) * Identity + 2.0 * lame_coefficient_mu * ((E_LinU - E_plus_LinU) - 0.5 * (tr_E_LinU - tr_E_positive_LinU) * Identity); // new along to Paper AmGeL015
 
       // Sanity check
       //Tensor<2,dim> stress_term = lame_coefficient_lambda * tr_E_LinU * Identity
