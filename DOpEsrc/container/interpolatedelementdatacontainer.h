@@ -27,7 +27,7 @@
 #include <container/elementdatacontainer.h>
 #include <deal.II/base/quadrature.h>
 #include <deal.II/fe/fe_raviart_thomas.h>
-#include <include/fe_interpolated_values.h>
+#include <include/interpolated_fe_values.h>
 
 using namespace dealii;
 using namespace std;

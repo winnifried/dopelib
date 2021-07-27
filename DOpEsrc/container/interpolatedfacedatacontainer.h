@@ -27,7 +27,7 @@
 #include <container/facedatacontainer.h>
 #include <deal.II/base/quadrature.h>
 #include <deal.II/fe/fe_raviart_thomas.h>
-#include <include/fe_interpolated_face_values.h>
+#include <include/interpolated_fe_face_values.h>
 
 using namespace dealii;
 using namespace std;
