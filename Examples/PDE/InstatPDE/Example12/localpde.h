@@ -688,8 +688,8 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 
 	void
 	StrongFaceResidual(
-			const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc,
-			const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
+			const FDC<DH, VECTOR, dealdim> &fdc,
+			const FDC<DH, VECTOR, dealdim> &fdc_w,
 			double &sum, double scale)
 	{
 
@@ -856,8 +856,8 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 
 	void
 	StrongBoundaryResidual(
-			const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc,
-			const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
+			const FDC<DH, VECTOR, dealdim> &fdc,
+			const FDC<DH, VECTOR, dealdim> &fdc_w,
 			double &sum, double scale)
 	{
 	  // int EstChoice_;

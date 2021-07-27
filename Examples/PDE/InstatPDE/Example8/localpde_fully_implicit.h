@@ -143,7 +143,7 @@ public:
         grad_pf[1] = ugrads_[q_point][2][1];
 
 	double pf = uvalues_[q_point](2);
-        double old_timestep_pf = last_timestep_uvalues_[q_point](2);
+        double old_timestep_pf = max(0.,last_timestep_uvalues_[q_point](2));
 
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
         const double tr_E = trace(E);
@@ -304,7 +304,7 @@ public:
         grad_pf[1] = ugrads_[q_point][2][1];
 
         double pf = uvalues_[q_point](2);
-        double old_timestep_pf = last_timestep_uvalues_[q_point](2);
+        double old_timestep_pf = max(0.,last_timestep_uvalues_[q_point](2));
 
 	const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
         const double tr_E = trace(E);
