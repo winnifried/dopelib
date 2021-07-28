@@ -150,9 +150,9 @@ void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
-  param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
+  param_reader.declare_entry("prerefine", "1", Patterns::Integer(0),
                              "How often should we refine the coarse grid?");
-  param_reader.declare_entry("local_prerefine", "1", Patterns::Integer(1),
+  param_reader.declare_entry("local_prerefine", "1", Patterns::Integer(0),
                              "How often should we refine the coarse grid locally near the crack?");
   param_reader.declare_entry("num_intervals", "1", Patterns::Integer(1),
                                "How many quasi-timesteps?");
