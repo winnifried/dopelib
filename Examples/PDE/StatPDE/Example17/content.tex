@@ -10,13 +10,14 @@
  		    200 x^2 (1-x)^2y(1-y)(1-2y) \\
  		    -200 y^2(10y)^2x(1-x)(1-2x)
  	  	   \end{bmatrix} \\
-   p(x,y) & = 10\left(x - \frac{1}{2}\right)^3y^2 + (1-x)^3\left(y-\frac{1}{2}\right)^3 + \frac{1}{8}.
+   p(x,y) & = -10\left(x - \frac{1}{2}\right)^3y^2 + (1-x)^3\left(y-\frac{1}{2}\right)^3 - \frac{1}{8}.
  \end{align*}
- respectively for the quasi incompressible linear elasticity equation
+ in the incompressible limit $\lambda \rightarrow \infty$ of the 
+ the quasi incompressible linear elasticity equation
  \begin{equation}
    \begin{aligned}[b] \label{eq:strong_form}
-     -2\mu \nabla \! \cdot \! \varepsilon(\textbf{u}) + \nabla p = f, \\
-     \nabla \cdot \textbf{u} + \frac{1}{\lambda} p = 0,
+     -2\mu \nabla \! \cdot \! \varepsilon(\textbf{u}) - \nabla p = f, \\
+     \nabla \cdot \textbf{u} - \frac{1}{\lambda} p = 0,
    \end{aligned}
  \end{equation}
  for given parameters $\lambda, \mu > 0$ and $\lambda$ ``large''.
@@ -26,9 +27,9 @@
  $Q_1$ finite elements for $Q_h$.
  The gradient robust discretization of \eqref{eq:strong_form} is given as
   \begin{align}
-   2\mu \int\limits_\Omega \varepsilon(\textbf{u}_h) : \varepsilon(\textbf{v}_h) \; \mathrm{d} x - 
+   2\mu \int\limits_\Omega \varepsilon(\textbf{u}_h) : \varepsilon(\textbf{v}_h) \; \mathrm{d} x + 
    \int\limits_\Omega p_h \nabla \cdot \textbf{v}_h \; \mathrm{d} x & = \int\limits_\Omega \textbf{f} \cdot  \bm{\pi}^{\rm{div}} \textbf{v}_h \; \mathrm{d} x  \label{eq:modified_weak_form} , \\
-   \int\limits_\Omega q_h \nabla \cdot \textbf{u}_h \; \mathrm{d} x  + \dfrac{1}{\lambda}\int\limits_\Omega p_hq_h \; \mathrm{d} x  & = 0  \label{eq:nearly_incompress_modified}
+   \int\limits_\Omega q_h \nabla \cdot \textbf{u}_h \; \mathrm{d} x  - \dfrac{1}{\lambda}\int\limits_\Omega p_hq_h \; \mathrm{d} x  & = 0  \label{eq:nearly_incompress_modified}
  \end{align}
  for all $\textbf{v}_h \in V_h$, $q_h \in Q_h$
  where, $\bm{\pi}^{\rm{div}} \colon V_h\rightarrow X_h \subset H^{\rm{div}}$

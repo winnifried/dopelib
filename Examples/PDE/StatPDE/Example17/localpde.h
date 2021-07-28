@@ -106,9 +106,9 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 	    const double div_phi_v = state_fe_values[disp].divergence(i,q_point);
 
 
-	    local_vector(i) += scale* (2 * myu_ *
+	    local_vector(i) += scale* (2. * mu_ *
 			scalar_product(realgrads, phi_i_grads_real) 
-			- press * div_phi_v + divergence * phi_i_q +
+			+ press * div_phi_v + divergence * phi_i_q -
 			lambda_inverse_ * press * phi_i_q)
 			* state_fe_values.JxW(q_point);
 	 }
@@ -152,9 +152,9 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 	 {
 	    for(j = 0; j < n_dofs_per_element; ++j)
 	    {
-	       local_matrix(i,j) += scale*( 2 * myu_ *
-			scalar_product(phi_i_grads_v_real[j], phi_i_grads_v_real[i]) -
-			phi_i_q[j] * div_phi_i_v[i] + div_phi_i_v[j] * phi_i_q[i] +
+	       local_matrix(i,j) += scale*( 2. * mu_ *
+			scalar_product(phi_i_grads_v_real[j], phi_i_grads_v_real[i]) +
+			phi_i_q[j] * div_phi_i_v[i] + div_phi_i_v[j] * phi_i_q[i] -
 			lambda_inverse_ * phi_i_q[j] * phi_i_q[i]) 
 			* state_fe_values.JxW(q_point);
 	    }
@@ -190,13 +190,13 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 	 const double x = P[0];
 	 const double y = P[1];
 
-	 fvalues[0] = -400*myu_*y*(1-y)*(1-2*y)*(1- 6*x + 6*x*x) + 
+	 fvalues[0] = -400*mu_*y*(1-y)*(1-2*y)*(1- 6*x + 6*x*x) + 
 	 	 30*y*y*(x-0.5)*(x-0.5) - 3*(y-0.5)*(y-0.5)*(y-0.5)*(1-x)*(1-x) -
-		 1200*myu_*x*x*(1-x)*(1-x)*(2*y-1);
+		 1200*mu_*x*x*(1-x)*(1-x)*(2*y-1);
 
-	 fvalues[1] = 1200*myu_*y*y*(1-y)*(1-y)*(2*x-1) +
+	 fvalues[1] = 1200*mu_*y*y*(1-y)*(1-y)*(2*x-1) +
  	 	20*y*(x-0.5)*(x-0.5)*(x-0.5) + 3*(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5) 
-		 + 400*myu_*x*(1-x)*(1-2*x)*(1- 6*y + 6*y*y);
+		 + 400*mu_*x*(1-x)*(1-2*x)*(1- 6*y + 6*y*y);
 
          for(i = 0; i < n_dofs_per_element; ++i)
 	 {
@@ -262,7 +262,7 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
    }
 
    private:
-      const double myu_ = 3.4722e-5;
+      const double mu_ = 3.4722e-5;
       const double lambda_inverse_ = 1e-4;
       vector<Vector<double>>  u_values_;
       vector<vector<Tensor<1,dealdim>>> u_grads_;

@@ -59,8 +59,8 @@ ExactSolution<dim>::value(const Point<dim> &p,
       return_value = ( -200*y*y*(1-y)*(1-y)*x*(1-x)*(1-2*x) );
 
    if (component == 2)
-      return_value = ( 10*(x-0.5)*(x-0.5)*(x-0.5)*y*y + 
-		(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5)*(y-0.5) + ((double) 1/8) );
+      return_value = -( 10*(x-0.5)*(x-0.5)*(x-0.5)*y*y + 
+		(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5)*(y-0.5) -(1./8.) );
 
    return(return_value);
 }
@@ -101,8 +101,8 @@ ExactSolution<dim>::gradient(const Point<dim> &p,
 
    if (component == 2)
    {
-	 return_value[0] = ( 30*y*y*(x-0.5)*(x-0.5) - 3*(y-0.5)*(y-0.5)*(y-0.5)*(1-x)*(1-x) );
- 	 return_value[1] = ( 20*y*(x-0.5)*(x-0.5)*(x-0.5) + 3*(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5));
+	 return_value[0] = -( 30*y*y*(x-0.5)*(x-0.5) - 3*(y-0.5)*(y-0.5)*(y-0.5)*(1-x)*(1-x) );
+ 	 return_value[1] = -( 20*y*(x-0.5)*(x-0.5)*(x-0.5) + 3*(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5));
    }
 
    return(return_value);
@@ -144,8 +144,8 @@ BoundaryValues<dim>::value (const Point<dim> &p,
       return_value = ( 200*y*y*(1-y)*(1-y)*x*(1-x)*(2*x-1) );
 
    if (component == 2)
-      return_value = ( 10*(x-0.5)*(x-0.5)*(x-0.5)*y*y + 
-		(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5)*(y-0.5) + ((double) 1/8) );
+      return_value = -( 10*(x-0.5)*(x-0.5)*(x-0.5)*y*y + 
+		(1-x)*(1-x)*(1-x)*(y-0.5)*(y-0.5)*(y-0.5) - ( 1./8.) );
 
    return(return_value);
 }
