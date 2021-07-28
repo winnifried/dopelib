@@ -127,6 +127,15 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 typedef InstatStepModifiedNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
+void
+declare_params(ParameterReader &param_reader)
+{
+  param_reader.SetSubsection("main parameters");
+  param_reader.declare_entry("prerefine", "5", Patterns::Integer(1),
+                             "How often should we refine the coarse grid?");
+  param_reader.declare_entry("num_intervals", "75", Patterns::Integer(1),
+                               "How many quasi-timesteps?");
+}
 
 /*********************************************************************************/
 int
@@ -142,7 +151,7 @@ main(int argc, char **argv)
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
   
   string paramfile = "dope.prm";
-
+  
   if (argc == 2)
     {
       paramfile = argv[1];
@@ -156,6 +165,7 @@ main(int argc, char **argv)
   /*********************************************************************************/
   // Parameter data
   ParameterReader pr;
+  declare_params(pr);
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
@@ -165,7 +175,11 @@ main(int argc, char **argv)
   LocalFunctionalCrack<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   pr.read_parameters(paramfile);
 
-
+  //define some constants
+  pr.SetSubsection("main parameters");
+  int prerefine = pr.get_integer("prerefine");
+  int num_intervals = pr.get_integer("num_intervals");
+  /*********************************************************************************/
   /*********************************************************************************/
   // Reading mesh and creating triangulation
   Triangulation<DIM> triangulation;
@@ -173,7 +187,7 @@ main(int argc, char **argv)
   grid_in.attach_triangulation(triangulation);
   std::ifstream input_file("unit_slit.inp");
   grid_in.read_ucd(input_file);
-  triangulation.refine_global(5);
+  triangulation.refine_global(prerefine);
 
 
   /*********************************************************************************/
@@ -199,10 +213,9 @@ main(int argc, char **argv)
   LocalFunctionalCrack<CDC, FDC, DOFHANDLER, VECTOR, DIM> LFC(pr);
 
   /*********************************************************************************/
-  // Create a time grid of [0,0.02] with
-  // 80 subintervalls for the timediscretization.
+  // Create a time grid of [0,0.0075] with
+  // no subintervalls are given in prm file (default 75)
   Triangulation<1> times;
-  unsigned int num_intervals = 75;
   double initial_time = 0.0;
   double end_time = 0.0075;
   GridGenerator::subdivided_hyper_cube(times, num_intervals, initial_time, end_time);

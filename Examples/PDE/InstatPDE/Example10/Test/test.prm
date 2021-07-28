@@ -1,6 +1,11 @@
 # Listing of Parameters for PDE Instat Example 1 (Fluid problem)
 # --------------------------------------------------------------
 
+subsection main parameters
+  set prerefine = 3
+  set num_intervals = 75
+end
+
 subsection Local PDE parameters
  	   set constant_k	= 1.0e-10
      	   set alpha_eps	= 0.08
