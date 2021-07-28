@@ -79,7 +79,6 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-//FIXME: Why use the standard data containers if the interpolated are needed in the PDE?
 #define CDC InterpolatedElementDataContainer
 #define FDC InterpolatedFaceDataContainer
 

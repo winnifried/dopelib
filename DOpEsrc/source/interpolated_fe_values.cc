@@ -99,7 +99,7 @@ void InterpolatedFEValues<dim, spacedim>::reinit(const typename Triangulation<di
       u_flag2 = u_flag2 | update_inverse_jacobians;
    }
 
-   FEValues<dim> 	fe_values_1(fe_base, q2, u_flag1);  // fe values of fe_base on fe_interpolated dofs
+   FEValues<dim> 	fe_values_1(map_,fe_base, q2, u_flag1);  // fe values of fe_base on fe_interpolated dofs
    FEValues<dim>     	fe_values_2(map_,fe_interpolated, quad, u_flag2); // fe values of fe_interpolated on target quadrature
 
    fe_values_1.reinit(cell);
