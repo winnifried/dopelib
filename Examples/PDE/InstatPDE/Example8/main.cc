@@ -210,9 +210,9 @@ main(int argc, char **argv)
   LocalFunctionalCrack<EDC, FDC, DOFHANDLER, VECTOR, DIM> LFC(pr);
 
   /*********************************************************************************/
-  // Create a time grid of [0,0.02] with
-  // 80 subintervalls for the timediscretization.
-  // timestep size -> 10e-3
+  // Create a time grid of [0,0.015] with
+  // 150 subintervalls for the timediscretization.
+  // timestep size -> 10e-4
   Triangulation<1> times;
   unsigned int num_intervals = 150;
   double initial_time = 0.0;
@@ -243,8 +243,8 @@ main(int argc, char **argv)
 
   /*********************************************************************************/
   // Prescribing boundary values
-  // We have 3 components (2D displacements and scalar-valued phase-field)
-  // 4 components with u(x), u(y), phi(x), p(x): pressure ist new component!
+  // We have 4 components (2D displacements and scalar-valued phase-field and a Lagrange multiplier for the inequality)
+  //                       i.e. u_x, u_y, phi, tau: 
   std::vector<bool> comp_mask(4);
   comp_mask[2] = false; // phase-field component (always hom. Neumann data)
    
