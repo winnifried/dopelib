@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+10.08.2021: Allow filtering of iteration numbers. Now it is possible to only print certain
+	    iterations to file, e.g., every n-th time step.
 27.07.2021: Updated PDE/Instat/Example8 and added PDE/Instat/Example10 until 12
 	    now solving four Benchmarks for fracture propagation.
 27.07.2021: Added InterpolatedFEFaceValues 	    
