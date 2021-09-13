@@ -129,7 +129,7 @@ namespace DOpE
     }
   private:
     unsigned int nonlinear_maxiter_, line_maxiter_;
-    double       nonlinear_tol_, nonlinear_global_tol_, lineasearch_rho_, linesearch_c_;
+    double       nonlinear_tol_, nonlinear_global_tol_, lineasearch_rho_, linesearch_c_, eigenvalue_tol_;
     bool         compute_functionals_in_every_step_;
     std::string postindex_;
   };
@@ -147,6 +147,7 @@ namespace DOpE
     param_reader.SetSubsection("reducedgradientdescentalgorithm parameters");
     param_reader.declare_entry("nonlinear_maxiter", "10",Patterns::Integer(0));
     param_reader.declare_entry("nonlinear_tol", "1.e-7",Patterns::Double(0));
+    param_reader.declare_entry("eigenvalue_tol", "1.e-7",Patterns::Double(0));
     param_reader.declare_entry("nonlinear_global_tol", "1.e-11",Patterns::Double(0));
 
     param_reader.declare_entry("line_maxiter", "10",Patterns::Integer(0));
@@ -173,6 +174,7 @@ namespace DOpE
     nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
     nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
     nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
+    eigenvalue_tol_ = param_reader.get_double ("eigenvalue_tol");
 
     line_maxiter_         = param_reader.get_integer ("line_maxiter");
     lineasearch_rho_       = param_reader.get_double ("linesearch_rho");
@@ -247,6 +249,7 @@ namespace DOpE
 	     double cost=0.;
 	     std::stringstream out;
 	     this->GetOutputHandler()->InitNewtonOut(out);
+	 	double fval = 1.5;
 
 	     out << "**************************************************\n";
 	     out << "*        Starting Reduced GradientDescent Algorithm       *\n";
@@ -255,6 +258,7 @@ namespace DOpE
 	     q.PrintInfos(out);
 	     out << "*  SDoFs : ";
 	     this->GetReducedProblem()->StateSizeInfo(out);
+	     out << "eigenvalue to achieve = " << fval << "\n";
 	     out << "**************************************************";
 	     this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
 
@@ -308,6 +312,7 @@ namespace DOpE
 	        this->GetOutputHandler()->Write(gradient,"GradientDescentResidual"+postindex_,"control");
 	        out<< "\t GradientDescent step: " <<iter<<"\t Residual (abs.): "<<sqrt(res)<<"\n";
 	        out<< "\t GradientDescent step: " <<iter<<"\t Residual (rel.): "<<std::scientific<<sqrt(res)/sqrt(res)<<"\n";
+	        out<<"\t Actual eigenvalue: " << this->GetReducedProblem()->Get_actual_first_eigenvalue() <<"\n";
 	        this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 	        int lineiter =0;
 	        unsigned int miniter = 0;
@@ -323,12 +328,33 @@ namespace DOpE
 
 	  	  ControlVector<VECTOR> q_previous(q);
 
-//	  	  double counter = 0;
+
+	  	//#####################################################################
+	  	//TODO Neue Abbruchbedingungung... wenn Eigenwert +- 0.05 erreicht wird.. (geeignete Abweichung festlegen..abhängig von Gitter..)
+	  	// TODO Uebergabe!!!
+//	  	std::map<std::string, const VECTOR *>  x = this->GetReducedProblem()->GetIntegrator()->GetDomainData();
+//	  	auto xx = x.find("lambda_target_value");
+//	  	auto y =  xx->second;
+//	  	double fval = y[0][0];
 
 
+	  	double fval_min = fval-eigenvalue_tol_;
+	  	double fval_max = fval+eigenvalue_tol_;
+	  	double actual_first_eigenvalue;
+	  	bool a = 0, b = 0;
 
-	        while (( (res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ) ||  iter < miniter )
+	  	//#####################################################################
+//	  	std::map<std::string, const VECTOR *>  x =  this->GetReducedProblem()->GetUserDomainData();
+
+	        while (( ((res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ) ||  iter < miniter) /*&& !(a==1 && b==1) */)
 	              {
+
+	        	a = actual_first_eigenvalue>fval_min;
+	        	b = actual_first_eigenvalue<fval_max;
+//	        	std::cout <<"fval_min = " << a  << std::endl;
+//	        	std::cout <<"fval_max = " << b  << std::endl;
+//	        	bool c = (a==1 && b==1);
+//	        	std::cout <<"stopp? " << c  << std::endl;
 
 	        	counter++;
 	        	initial_control_ = counter;
@@ -390,13 +416,17 @@ namespace DOpE
 	        	 	          {
 	        	 	            this->GetExceptionHandler()->HandleCriticalException(e,"ReducedProximalGradientDescentAlgorithm::Solve");
 	        	 	          }
+	        	 	       actual_first_eigenvalue = this->GetReducedProblem()->Get_actual_first_eigenvalue();
 
 	        	 	        this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
 	        	 	        this->GetOutputHandler()->Write(gradient,"GradientDescentResidual"+postindex_,"control");
 
 	        	 	        res = Residual(gradient,gradient_transposed);//gradient*gradient_transposed;
-
 	        	 	        out<<"\t GradientDescent step: " <<iter<<"\t Residual (rel.): "<<this->GetOutputHandler()->ZeroTolerance(sqrt(res)/sqrt(firstres),1.0)<< "\t LineSearch {"<<lineiter<<"} ";
+	        	 	       //###################
+	        	 	        out<<"\t Actual eigenvalue =  " << this->GetReducedProblem()/*->GetProblem()*/->Get_actual_first_eigenvalue() <<"\n";
+
+	        	 	       	//###################
 	        	 	        this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 	        	 	        const double eps_diff = 0;
 	        	 	          this->CheckGrads(eps_diff, q, dq, 5);
