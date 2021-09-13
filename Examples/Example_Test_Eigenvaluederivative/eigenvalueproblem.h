@@ -81,7 +81,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
 		typename VECTOR, int dopedim,
 		int dealdim> class EigenvalueProblem : public ReducedProblemInterface<PROBLEM,
-		VECTOR> { public:
+		VECTOR> {
+
+		public:
+		double eigenval_;
 		/**
 		 * Constructor for the StatReducedProblem.
 		 *
@@ -177,6 +180,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		 */
 		void ComputeReducedFunctionals(const ControlVector<VECTOR> &q);
 
+		double Get_actual_first_eigenvalue();
+		void Set_actual_first_eigenvalue(double eigenval);
+
 		/******************************************************/
 
 		/**
@@ -253,6 +259,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		 */
 		using ReducedProblemInterface<PROBLEM,
 		VECTOR>::WriteToFile;
+
+
+
 
 		protected:
 		/**
@@ -350,7 +359,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		 **/
 		void CalculatePreFunctional(std::string name, std::string postfix, unsigned int n_pre, unsigned int prob_num);
 
-		StateVector<VECTOR> eigfun_; StateVector<VECTOR>  adjeigfun_; double eigenval_;
+		StateVector<VECTOR> eigfun_; StateVector<VECTOR>  adjeigfun_;
 		VECTOR  vecOfEigval_;  double adjeigenval_; VECTOR  vecOfAdjeigval_;
 //		VECTOR  initial_control_;
 
@@ -494,6 +503,31 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 				throw DOpEException("No Solver for Problem type:`" + type + "' found", "EigenvalueProblem::GetNonlinearSolver");
 
 		} }
+
+		template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+				typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+				typename VECTOR, int dopedim,
+				int dealdim> double EigenvalueProblem<CONTROLNONLINEARSOLVER,
+				NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
+				dopedim, dealdim>::Get_actual_first_eigenvalue(){
+
+			return eigenval_;
+		}
+
+		template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+		typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+		typename VECTOR, int dopedim,
+		int dealdim> void EigenvalueProblem<CONTROLNONLINEARSOLVER,
+		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
+		dopedim, dealdim>::Set_actual_first_eigenvalue(double firsteigenval){
+
+			eigenval_ = firsteigenval;
+
+		}
+
+
+
+
 		/******************************************************/
 
 		template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
@@ -571,7 +605,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		}
 
 		this->GetIntegrator().AddParamData("eigenvalue", &(vecOfEigval_));
-//		AddUDD();
+		AddUDD();
 
 		adjoint_eigenfunctions.resize((int) (numOfEigenval));
 		adjoint_eigenvalues.resize(numOfEigenval);
@@ -589,8 +623,20 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			PetscScalar scalar_factor[1];
 			VecDot(adjoint_eigenfunctions[1],eigenfunctions[0],scalar_factor);//= scalar_product(vec,eigenfunctions[i]);
 //			std::cout << scalar_factor[0] << std::endl;
+
+
+			//TODO nicht schoen..
+			std::map<std::string, const VECTOR *>  x = this->GetUserDomainData();
+			 auto xx = x.find("lambda_target_value");
+			     auto y =  xx->second;
+			     double fval = y[0][0];
+			     std::cout << fval << std::endl;
+
+//			auto y = x[1];
+//			double fval = 1;//x[1][0]; //TODO übergeben
+
 			adjoint_eigenfunctions[0]/= scalar_factor[0];
-			adjoint_eigenfunctions[0] *= -(eigenvalues[0]-1.5);
+			adjoint_eigenfunctions[0] *= -(eigenvalues[0]-fval);
 
 
 		GetAdjfun().GetSpacialVector() = 0.;
@@ -617,7 +663,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		if (cost_needs_precomputations_ != 0) {
 			this->GetIntegrator().DeleteParamData("cost_functional_pre");
 		}
-//		DeleteUDD();
+		DeleteUDD();
 		this->GetIntegrator().DeleteDomainData("state");
 		this->GetIntegrator().DeleteParamData("eigenvalue");
 
@@ -744,6 +790,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 				VecDot(eigenfunctions[1],eigenfunctions[0],scalar_factor);
 				scalar_factor[0] = sqrt(scalar_factor[0]);  //double scalar_factor = sqrt(scalar_product(vec,eigenfunctions[i]));
 				eigenfunctions[0]/= scalar_factor[0];
+
 
 
 //			std::cout << "################################################################" << std::endl;
