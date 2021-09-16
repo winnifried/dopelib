@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+16.09.2021: Specify namespace for boost placeholder _1. Introduction of namespace avoids
+		ambiguity and prevents errors with newer boost versions where use without declaration
+		of namespace is depreceated.
 10.08.2021: Allow filtering of iteration numbers. Now it is possible to only print certain
 	    iterations to file, e.g., every n-th time step.
 27.07.2021: Updated PDE/Instat/Example8 and added PDE/Instat/Example10 until 12

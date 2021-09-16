@@ -1597,8 +1597,8 @@ namespace DOpE
                        const ControlVector<VECTOR> &q, DWRC &dwrc, PDE &pde)
   {
     //Attach the ResidualModifier to the PDE.
-    pde.ResidualModifier = boost::bind<void>(boost::mem_fn(&DWRC::ResidualModifier),boost::ref(dwrc),_1);
-    pde.VectorResidualModifier = boost::bind<void>(boost::mem_fn(&DWRC::VectorResidualModifier),boost::ref(dwrc),_1);
+    pde.ResidualModifier = boost::bind<void>(boost::mem_fn(&DWRC::ResidualModifier),boost::ref(dwrc),boost::placeholders::_1);
+    pde.VectorResidualModifier = boost::bind<void>(boost::mem_fn(&DWRC::VectorResidualModifier),boost::ref(dwrc),boost::placeholders::_1);
 
     //first we reinit the dwrdatacontainer (this
     //sets the weight-vectors to their correct length)
