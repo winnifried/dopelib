@@ -47,10 +47,8 @@ namespace DOpEWrapper
   class DoFHandler : public dealii::DoFHandler<dim, dim>
   {
   public:
-#warning the dealii interface to the DoFHandler (and hp:DoFHandler) is changing rapidly in the current version, once it is settled, remove unnecessary arguments.
-  DoFHandler(const dealii::Triangulation<dim, dim> &tria, const bool /*hp_capability_enabled*/=false) :
-//      dealii::DoFHandler<dim, dim>(tria,hp_capability_enabled)
-    dealii::DoFHandler<dim, dim>(tria)
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+      dealii::DoFHandler<dim, dim>(tria)
     {
     }
 
@@ -67,16 +65,6 @@ namespace DOpEWrapper
     GetDEALDoFHandler() const
     {
       return *this;
-    }
-
-    /**
-     * Does the DoFHandler need an IndexSetter, i.e. is this
-     * an hp dofhandler?
-     */
-    bool
-    NeedIndexSetter()
-    {
-      return this->has_hp_capabilities();
     }
 
   };
@@ -124,11 +112,6 @@ namespace DOpEWrapper
     n_dofs() const
     {
       return dofs_;
-    }
-    bool
-    NeedIndexSetter()
-    {
-      return false;
     }
 
     // Quick-fix for dim = 0, just return some DoFHandler.
@@ -182,13 +165,6 @@ namespace DOpEWrapper
       return *this;
     }
 
-    /**
-     * Does the DoFHandler need an IndexSetter, i.e. is this
-     * an hp dofhandler?
-     */
-    bool
-    NeedIndexSetter();
-
   };
 
   //Template specialization DOFHANDLER = dealii::DoFHandler<dim>
@@ -199,11 +175,6 @@ namespace DOpEWrapper
   DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       dealii::DoFHandler<dim>(tria)
     {
-    }
-    bool
-    NeedIndexSetter()
-    {
-     return false;
     }
     const dealii::DoFHandler<dim> &
     GetDEALDoFHandler() const
@@ -222,11 +193,6 @@ namespace DOpEWrapper
     DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       dealii::hp::DoFHandler<dim>(tria)
     {
-    }
-    bool
-    NeedIndexSetter()
-    {
-      return true;
     }
     const dealii::hp::DoFHandler<dim> &
     GetDEALDoFHandler() const
@@ -272,11 +238,6 @@ namespace DOpEWrapper
     {
       return dofs_;
     }
-    bool
-    NeedIndexSetter()
-    {
-      return false;
-    }
 
     // Quick-fix for dim = 0, just return some DoFHandler.
     const dealii::DoFHandler<1> &
@@ -320,11 +281,6 @@ namespace DOpEWrapper
     n_dofs() const
     {
       return dofs_;
-    }
-    bool
-    NeedIndexSetter()
-    {
-      return false;
     }
     // Quick-fix for dim = 0, just return some DoFHandler.
     const dealii::hp::DoFHandler<1> &

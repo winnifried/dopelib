@@ -1,8 +1,25 @@
 Changelog DOpE
 ==============
+17.09.2021: Adjustments for deal 9.3.1
+16.09.2021: Specify namespace for boost placeholder _1. Introduction of namespace avoids
+		ambiguity and prevents errors with newer boost versions where use without declaration
+		of namespace is depreceated.
+10.08.2021: Allow filtering of iteration numbers. Now it is possible to only print certain
+	    iterations to file, e.g., every n-th time step.
+27.07.2021: Updated PDE/Instat/Example8 and added PDE/Instat/Example10 until 12
+	    now solving four Benchmarks for fracture propagation.
+27.07.2021: Added InterpolatedFEFaceValues 	    
+25.07.2021: Added Example for the use of gradient robust methods
+21.07.2021: In deal 9.3.0 the hp capabilities in the SpaceTimeHandler classes are
+	    now deduced from the finite element given. Thus avoiding unnecessary
+	    initialization of the dealii:DoFHandler.
+21.07.2021: Added first files for Gradient Robust interpolation - InterpolatedFEValues and
+	    corresponding data containers.
+14.07.2021: Adjustments for deal.ii 9.3.0 - removing deprecated set_fe calls and
+	    updating CMakeLists.txt to use cxx17 instead of cxx11
 02.03.2021: Fixes for deprecated functions in deal.ii 9.2.0
 10.12.2020: Further adjustments to deal.ii 9.3.0 - The dealii::DoFHandler now detects
-	    'hp-capability' from beeing initialized by a FiniteElement or FECollection.
+	    'hp-capability' from being initialized by a FiniteElement or FECollection.
 03.12.2020: CheckGradient and CheckHessian now accept a preinitialized direction dq if the
 	    constant c is set to be zero.
 15.10.2020: Cleanup of templates for deal 9.3.0, now less
@@ -24,15 +41,15 @@ Changelog DOpE
 	    between Mapping and MappingCollection the DOpEWrapper::Mapping now needs a
 	    template argument telling if it is a collection or not. 
 27.06.2020: Fixed: FaceDataContainer::GetCenter returns center of face instead of the corresponding element.
-	    In Integrator; if at an interface a face term needs to be evaluated neighbour information
+	    In Integrator; if at an interface a face term needs to be evaluated neighbor information
 	    is also assembled for the evaluation of the face terms.
 	    Optimization problems where gradient involves face/interface terms now running without
-	    failiure due to missing Face/Interface Matrix.
-	    Functionals can now evaluate interface terms using also neighbour element information.
+	    failure due to missing Face/Interface Matrix.
+	    Functionals can now evaluate interface terms using also neighbor element information.
 22.05.2020: Moved GetStateIndex and GetControlIndex to be protected rather than private
 	    to allow access in derived classes
 18.05.2020: Updates for dealii 9.2
-04.05.2020: Fixed of by one eror in storage of functional values for InstatPDEProblems
+04.05.2020: Fixed of by one error in storage of functional values for InstatPDEProblems
 08.04.2020: Adjustments to 'OSX Terminal' for test scripts
 08.04.2020: Adjustments for warnings given by gcc 4.9
 23.02.2020: Added new refinement container RefineByGeometry which can be used to drive
@@ -43,10 +60,10 @@ Changelog DOpE
 07.02.2020: Fixed bug in PointConstraintsMaker prohibiting the use of pointconstraints at zero.
 19.01.2020: Fixed bug in Integrator::ApplyInitialBoundaryValues. Now this function works correctly
 	    with hanging nodes.
-16.01.2020: Moved counter for timestep to last position in filename, so that iterating in
+16.01.2020: Moved counter for time-step to last position in file name, so that iterating in
 	    visualization tools gets easier
 25.10.2019: Fixed bug in ReducedProblemInterface_Base::GetTimeFunctionalValue
-27.09.2019: Failiure of the Newton methods now cleans all integrator data prior to
+27.09.2019: Failure of the Newton methods now cleans all integrator data prior to
             throwing an exception. Thus a recomputation can be setup without
 	    first cleaning all data.
 03.09.2019: If code runs in parallel using MPI, the outputhandler of the rank == 0
@@ -81,7 +98,7 @@ Changelog DOpE
 16.01.2019: -Updated Rothe_SpaceTimeHandler, to fix wrong order of deletes in Destructor
 	    -PDEProblemContainer now has a function for adding AuxiliaryVariables which
 	     need to be transfered to a different mesh due to a change over a time step.
-	    - SpaceTimeVector now has a method to acces the values at a given time point
+	    - SpaceTimeVector now has a method to access the values at a given time point
 	      interpolated to DoFs at a different timepoint. Further, access to the vectors
 	      by GetSpacialVector, now checks (and aborts) if a copy of this vector has been
 	      called for and not been previously unlocked.
@@ -92,7 +109,7 @@ Changelog DOpE
 16.12.2018: -Changed DOpEtypes::ControlType to DOpEtypes::VectorAction to
 	    allow unification of storage classes.
 	    -Updated ControlVector to be based on SpaceTimeVector.
-14.12.2018: Added support for error estimation in instatpde problem
+14.12.2018: Added support for error estimation in InstatPDEProblem
 13.12.2018: Started work on Rothe space-time-handler:
 	    -Adding time_point to all access functions in space-time-handlers
 	    -Fixed flipping between int and unsigned for time_points
@@ -135,7 +152,7 @@ Changelog DOpE
 	    example in Examples/PDE/StatPDE/Example14.
 07.08.2017: Updated the manual.
 01.08.2017: Added developer branch for networks of PDEs
-26.07.2017: Added publication to licence file.
+26.07.2017: Added publication to license file.
 24.07.2017: Fixed: Unified check for deal.II version.
 20.07.2017: Fixed: In one dimensional PDEs, the error estimation failed, because the 
 	    1d face-iterator of deal.II does not support the same features as in dimension 2 and 3.
@@ -144,7 +161,7 @@ Changelog DOpE
 	    since the higher order interpolation could not be defined.
 	    This is now fixed and the interpolation error is set to zero (as
 	    there is no interpolation error in 0d.
-14.07.2017: Fixed: When solving the PDE fails in (stationary) optimization problems a linesearch for the optimization
+14.07.2017: Fixed: When solving the PDE fails in (stationary) optimization problems a line search for the optimization
 	    is now done.
 21.06.2017: Added possibility to evaluate the final-time value of the solution in the functional together with the initial value.
 16.06.2017: Fixed: missing cross derivative in initial-values for adjoint_hessian problem.

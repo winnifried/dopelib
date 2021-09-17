@@ -62,8 +62,13 @@ namespace DOpEWrapper
    */
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+  template <int dim>
+  class DataOut : public dealii::DataOut<dim>
+#else
   template <int dim>
   class DataOut : public dealii::DataOut<dim, dealii::DoFHandler<dim, dim> >
+#endif
 #else
   template <int dim, template <int, int> class DH = dealii::DoFHandler>
   class DataOut : public dealii::DataOut<dim, DH<dim, dim> >

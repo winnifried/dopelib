@@ -48,8 +48,13 @@ namespace DOpEWrapper
    */
 
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+  template <int dim, typename VECTOR>
+    class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR,dim>
+#else
   template <int dim, typename VECTOR>
     class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
+#endif
 #else
   template <int dim, typename VECTOR, template<int, int> class DH = dealii::DoFHandler>
     class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
@@ -57,7 +62,11 @@ namespace DOpEWrapper
   {
   public:
 #if DEAL_II_VERSION_GTE(9,3,0)
-  SolutionTransfer(const dealii::DoFHandler<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
+#if DEAL_II_VERSION_GTE(9,3,1)
+    SolutionTransfer(const dealii::DoFHandler<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR,dim>(dof)
+#else
+    SolutionTransfer(const dealii::DoFHandler<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
+#endif
 #else
   SolutionTransfer(const DH<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >(dof)
 #endif

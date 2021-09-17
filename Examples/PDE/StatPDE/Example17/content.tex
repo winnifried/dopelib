@@ -1,0 +1,86 @@
+\subsubsection{General problem description}
+ In this example we show how to implement pressure robust finite elements
+ as proposed by~\cite{Linke:2014} using the
+ FEInterpolatedValues class in \texttt{DOpElib}.
+ For this, we consider a small variation to the incompressible
+ Stokes problem in~\cite{Linke:2014} towards quasi incompressible
+ linear elasticity. The displacement and pressure are given as follows
+ \begin{align*}
+   \textbf{u}(x, y) & = \begin{bmatrix}
+ 		    200 x^2 (1-x)^2y(1-y)(1-2y) \\
+ 		    -200 y^2(10y)^2x(1-x)(1-2x)
+ 	  	   \end{bmatrix} \\
+   p(x,y) & = -10\left(x - \frac{1}{2}\right)^3y^2 + (1-x)^3\left(y-\frac{1}{2}\right)^3 - \frac{1}{8}.
+ \end{align*}
+ in the incompressible limit $\lambda \rightarrow \infty$ of the 
+ the quasi incompressible linear elasticity equation
+ \begin{equation}
+   \begin{aligned}[b] \label{eq:strong_form}
+     -2\mu \nabla \! \cdot \! \varepsilon(\textbf{u}) - \nabla p = f, \\
+     \nabla \cdot \textbf{u} - \frac{1}{\lambda} p = 0,
+   \end{aligned}
+ \end{equation}
+ for given parameters $\lambda, \mu > 0$ and $\lambda$ ``large''.
+
+ For the discretization we search $(\textbf{u}_h,p_h) \in V_h \times Q_h$,
+ here given by continuous $Q_2$ finite elements for $V_h$ and discontinuous
+ $Q_1$ finite elements for $Q_h$.
+ The gradient robust discretization of \eqref{eq:strong_form} is given as
+  \begin{align}
+   2\mu \int\limits_\Omega \varepsilon(\textbf{u}_h) : \varepsilon(\textbf{v}_h) \; \mathrm{d} x + 
+   \int\limits_\Omega p_h \nabla \cdot \textbf{v}_h \; \mathrm{d} x & = \int\limits_\Omega \textbf{f} \cdot  \bm{\pi}^{\rm{div}} \textbf{v}_h \; \mathrm{d} x  \label{eq:modified_weak_form} , \\
+   \int\limits_\Omega q_h \nabla \cdot \textbf{u}_h \; \mathrm{d} x  - \dfrac{1}{\lambda}\int\limits_\Omega p_hq_h \; \mathrm{d} x  & = 0  \label{eq:nearly_incompress_modified}
+ \end{align}
+ for all $\textbf{v}_h \in V_h$, $q_h \in Q_h$
+ where, $\bm{\pi}^{\rm{div}} \colon V_h\rightarrow X_h \subset H^{\rm{div}}$
+ is a suitable interpolation operator satisfying
+ \[
+ (q_h, \nabla \cdot \textbf{v}_h) = (q_h \nabla \cdot \bm{\pi}^{\rm{div}}\textbf{v}_h) 
+ \]
+ for all $q_h \in Q_h$ and $\textbf{v}_h \in V_h$. For the choice of $V_h,Q_h$ made here a
+ suitable choice for this space $X_h$ is the space of Raviart-Thomas finite elements
+ with the canonical interpolation.
+
+ In contrast to standard mixed discretizations as discussed, e.g. in Section~\ref{PDE_Stat_Stokes} only some minor changes are needed which we discuss below. 
+
+In \textit{main.cc}, we need to utilize modified versions of the ElementDataContainer,
+FaceDataContainer and IntegratorContainer that give access to the values of
+$\bm{\pi}^{\rm{div}}\textbf{v}_h$ in the local integrals for the righthandside.  
+These classes are provided by the files
+\texttt{interpolatedintegratordatacontainer.h}, 
+\texttt{interpolatedelementdatacontainer.h} and \texttt{interpolatedfacedatacontainer.h}
+For the instantiation, we only need to take care of the InterpolatedIntegratorDataContainer
+via
+\texttt{IDC idc(velocity\_component, map, fe\_interpolate, quadrature\_formula, face\_quadrature\_formula);}
+here the first three arguments are new and needed for the interpolation. The \texttt{velocity\_component} is a \texttt{FEValuesExtractpor::Vector} that indicates which components of the finite
+element $V_h\times Q_h$ should be interpolated onto $X_h$ consisting of the element
+\texttt{fe\_interpolate} here initialized as \texttt{RaviartThomasNodal<2>} of degree $1$.
+The \texttt{map} indicates the Mapping to be used for the transformation of the reference
+RaviartThomas element to the real element.
+
+In \texttt{localpde.h}, the only substantial change occurs in the
+\texttt{ElementRightHandSide} where we need to multiply $f$ with
+$\bm{\pi}^{\rm{div}} \textbf{v}_h$.
+Here we utilize that the \texttt{InterpolatedElementDataContainer} gives access to $\bm{\pi}^{\rm{div}} \textbf{v}_h$ by the method \texttt{GetInterpolatedFEValues()}.
+More precisely, initializing 
+\begin{verbatim}
+        InterpolatedFEValues<dealdim> fe_values_interpolated 
+                                      = edc.GetInterpolatedFEValues();   
+\end{verbatim}                
+allows to access $\bm{\pi}^{\rm{div}} \textbf{v}_h$ transparently via
+\begin{verbatim}
+        fe_values_interpolated.value(i, q_point)
+\end{verbatim}
+whereas the choice 
+\begin{verbatim}
+        FEValues<dealdim> fe_values = edc.GetFEValuesState(); 
+        const FEValuesExtractors::Vector disp(0);
+\end{verbatim}                
+allows to access $\textbf{v}_h$ via
+\begin{verbatim}
+        fe_values[disp].value(i, q_point)
+\end{verbatim}
+
+   
+
+

@@ -121,7 +121,7 @@ solving the\\[2mm]
 u,\phi) = 0
 \quad\forall \phi\in V.
 \end{equation*}
-Further, we have an auxilliary\\[2mm]  
+Further, we have an auxiliary\\[2mm]  
 %
 \textbf{Dual for Hessian equation}
 to find $\delta z\in V$ solving
@@ -151,7 +151,7 @@ for the gradient $\nabla j(q) \in H$ using the definition:
  (\nabla j(q),\delta q)_Q = j'(q)(\delta q) \quad \forall\,\delta q\in Q.
 \]
 In the given example, $Q = L^2(\Omega)$ and hence the scalar product will be the
-standard $L^2$-inner product. Simillarly, we can define the Hessian operator 
+standard $L^2$-inner product. Similarly, we can define the Hessian operator 
 $H(q) \in \mathcal L(Q,Q)$ by defining
 \[
  (H(q)\tau q,\delta q)_Q = j''(q)(\tau q,\delta q) \quad \forall\,\delta q,\tau q\in Q.
@@ -263,7 +263,7 @@ Finally, the main file of the optimization examples does not look very much
 different than for pure PDE computations - which is one of the crucial aims 
 of our library. 
 Here, instead of using a \texttt{pdeproblemcontainer}, we use 
-now an \texttt{optproblemcontainer} which can assemble all additionally needed informations,
+now an \texttt{optproblemcontainer} which can assemble all additionally needed information,
 such as adjoint and tangent PDEs. 
 Furthermore, we define \texttt{ReducedNewtonAlgorithm} and 
 \texttt{ReducedTrustregion\underline{ }NewtonAlgorithm}

@@ -1,6 +1,6 @@
 \documentclass[a4paper,cleardoubleempty]{scrreprt}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb, amsthm, commath}
+\usepackage{amsmath,amssymb, amsthm, commath, bm}
 \usepackage[pdftex,bookmarks=false,pdfpagelabels=true,plainpages=false]{hyperref}
 \usepackage{booktabs}
 \usepackage{makeidx}
@@ -10,6 +10,7 @@
 \usepackage{graphicx} 
 \usepackage{enumerate}
 \usepackage{listings}
+\usepackage{tikz}
 
 \theoremstyle{plain}
 \newtheorem{Problem}{Problem}[section]
@@ -17,6 +18,10 @@
 \theoremstyle{remark}
 \newtheorem{remark}[Problem]{Remark}
 
+\DeclareMathOperator{\tr}{tr} % new
+\DeclareMathOperator{\Div}{div} % new
+\newcommand{\bu}{\mathbf{u}}
+\newcommand{\bv}{\mathbf{v}}
 
 %%% Geht bei mir nicht: habe tex neu installiert, geht aber trotzdem nicht
 %\usepackage{changes}
@@ -158,6 +163,10 @@ Differential Equations and Optimization Environment}
 \label{PDE_obstacle}
 \input{PDE/StatPDE/Example16/content.tex}
 \clearpage
+\subsection{Gradient Robust Discretization of Nearly Incompressible Elasticity}
+\label{PDE_pressurerobust}
+\input{PDE/StatPDE/Example17/content.tex}
+\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Nonstationary PDEs}
@@ -197,7 +206,7 @@ Differential Equations and Optimization Environment}
 \label{PDE_isothermal_euler}
 \input{PDE/InstatPDE/Example7/content.tex}
 \cleardoublepage
-\subsection{Fully monolithic phase-field fracture propagation}
+\subsection{Fully monolithic phase-field fracture propagation: Single Edged Notched Shear Test}
 \label{PDE_phase_field_fracture}
 \input{PDE/InstatPDE/Example8/content.tex}
 \cleardoublepage
@@ -205,6 +214,21 @@ Differential Equations and Optimization Environment}
 \subsection{Heat Equation in 2D with Rothe-discretization}
 \label{PDE_Instat_Heat_Rothe}
 \input{PDE/InstatPDE/Example9/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Time lagged phase-field fracture propagation: Single Edged Notched Tension Test}
+\label{PDE_SENT}
+\input{PDE/InstatPDE/Example10/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Pressure-driven cavity - Sneddon's benchmark}
+\label{PDE_Sneddon}
+\input{PDE/InstatPDE/Example11/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Sneddon's benchmark layered for incompressible solids}
+\label{PDE_Sneddon-incompressible}
+\input{PDE/InstatPDE/Example12/content.tex}
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -37,11 +37,18 @@ using namespace dealii;
  * See pdeinterface.h for more information.
  */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
-class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
 
@@ -52,28 +59,30 @@ public:
 
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
-    param_reader.declare_entry("gamma_penal", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
     param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
+    param_reader.declare_entry("sigma", "1", Patterns::Double(0),
+				"Which sigma in complementarity function");
 
   }
 
   LocalPDE(ParameterReader &param_reader) :
-    state_block_component_(3, 0)
+    state_block_component_(4, 0)
   {
     state_block_component_[2] = 1;
+    state_block_component_[3] = 2;
 
     param_reader.SetSubsection("Local PDE parameters");
 
     param_reader.SetSubsection("Local PDE parameters");
     constant_k_ = param_reader.get_double("constant_k");
     alpha_eps_ = param_reader.get_double("alpha_eps");
-    gamma_penal_ = param_reader.get_double("gamma_penal");
     G_c_ = param_reader.get_double("G_c");
     lame_coefficient_mu_     = param_reader.get_double("lame_coefficient_mu");
     lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
-
+    
+    s_ = param_reader.get_double("sigma");
 
   }
 
@@ -88,19 +97,18 @@ public:
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
 
-    double element_diameter = edc.GetElementDiameter();
-
-    uvalues_.resize(n_q_points, Vector<double>(3));
-    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
-    last_timestep_uvalues_.resize(n_q_points, Vector<double>(3));
+    uvalues_.resize(n_q_points, Vector<double>(4));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
+    last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
 
     edc.GetValuesState("last_newton_solution", uvalues_);
     edc.GetGradsState("last_newton_solution", ugrads_);
 
     edc.GetValuesState("last_time_solution", last_timestep_uvalues_);
 
-    const FEValuesExtractors::Vector velocities(0);
-    const FEValuesExtractors::Scalar pressure(2);
+    const FEValuesExtractors::Vector displacements(0);
+    const FEValuesExtractors::Scalar phasefield(2);
+    const FEValuesExtractors::Scalar multiplier(3);
 
     Tensor<2,2> Identity;
     Identity[0][0] = 1.0;
@@ -134,8 +142,6 @@ public:
         double pf = uvalues_[q_point](2);
         double old_timestep_pf = last_timestep_uvalues_[q_point](2);
 
-        double pf_minus_old_timestep_pf_plus = std::max(0.0, pf - old_timestep_pf);
-
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
         const double tr_E = trace(E);
 
@@ -165,31 +171,60 @@ public:
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            //const Tensor<1, 2> phi_i_u = state_fe_values[velocities].value(i,q_point);
-            const Tensor<2, 2> phi_i_grads_u = state_fe_values[velocities].gradient(i, q_point);
-            const double phi_i_pf = state_fe_values[pressure].value(i, q_point);
-            const Tensor<1, 2> phi_i_grads_pf = state_fe_values[pressure].gradient(i, q_point);
+            //const Tensor<1, 2> phi_i_u = state_fe_values[displacements].value(i,q_point);
+            const Tensor<2, 2> phi_i_grads_u = state_fe_values[displacements].gradient(i, q_point);
+            const double phi_i_pf = state_fe_values[phasefield].value(i, q_point);
+	    const Tensor<1, 2> phi_i_grads_pf = state_fe_values[phasefield].gradient(i, q_point);
 
             // Solid (Time-lagged version)
             local_vector(i) += scale
-                               * (scalar_product(((1.0-constant_k_) * old_timestep_pf * old_timestep_pf + constant_k_) *
+                               * (
+				scalar_product(((1.0-constant_k_) * old_timestep_pf * old_timestep_pf + constant_k_) *
                                                  stress_term_plus, phi_i_grads_u)
                                   + scalar_product(stress_term_minus, phi_i_grads_u)
-                                 ) * state_fe_values.JxW(q_point);
+                                 ) * state_fe_values.JxW(q_point); 
 
 
 
             // Phase-field
             local_vector(i) += scale
-                               * (// Penalty term
-                                 gamma_penal_ * 1.0/(element_diameter * element_diameter)
-                                 * pf_minus_old_timestep_pf_plus * phi_i_pf
-                                 // Main terms
-                                 + (1.0 - constant_k_) * scalar_product(stress_term_plus, E) * pf * phi_i_pf
-                                 - G_c_/(alpha_eps_ * element_diameter) * (1.0 - pf) * phi_i_pf
-                                 + G_c_ * alpha_eps_ * element_diameter * grad_pf * phi_i_grads_pf
+                               * (
+				// Main terms
+				(1.0 - constant_k_) * scalar_product(stress_term_plus, E) * pf * phi_i_pf
+                                 - G_c_/(alpha_eps_) * (1.0 - pf) * phi_i_pf
+                                 + G_c_ * alpha_eps_ * grad_pf * phi_i_grads_pf
                                ) * state_fe_values.JxW(q_point);
 
+
+	    //Now the inequality constraint.
+	    //Evaluate only in vertices, so we check whether the lambda test function
+	    // is one (i.e. we are in a vertex)
+
+	    if(fabs(state_fe_values[multiplier].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+	    {
+	      //Weight to account for multiplicity when running over multiple meshes.
+	      unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+	      double weight = 1./n_neig;
+	      if(n_neig == 4)
+	      {
+		//Equation for multiplier
+		local_vector(i) += scale * weight* (uvalues_[q_point][3]
+						    - std::max(0.,uvalues_[q_point][3]+s_*(pf-old_timestep_pf)));
+		//Add Multiplier to the state equation
+		//find corresponding basis of state
+		for(unsigned int j = 0; j < n_dofs_per_element; j++)
+		{
+		  if(fabs(state_fe_values[phasefield].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+		  {
+		    local_vector(j) += scale * weight* uvalues_[q_point][3];
+		  }
+		}
+	      }
+	      else //Boundary or hanging node (no weight, so it works if hanging)
+	      {
+		local_vector(i) += scale * uvalues_[q_point][3];
+	      }
+	    }
           }
       }
 
@@ -206,14 +241,13 @@ public:
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
 
-    double element_diameter = edc.GetElementDiameter();
+    const FEValuesExtractors::Vector displacements(0);
+    const FEValuesExtractors::Scalar phasefield(2);
+    const FEValuesExtractors::Scalar multiplier(3);
 
-    const FEValuesExtractors::Vector velocities(0);
-    const FEValuesExtractors::Scalar pressure(2);
-
-    uvalues_.resize(n_q_points, Vector<double>(3));
-    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
-    last_timestep_uvalues_.resize(n_q_points, Vector<double>(3));
+    uvalues_.resize(n_q_points, Vector<double>(4));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
+    last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
 
 
     edc.GetValuesState("last_newton_solution", uvalues_);
@@ -223,8 +257,11 @@ public:
 
     std::vector<Tensor<1, 2> > phi_u(n_dofs_per_element);
     std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_element);
+    std::vector<double> div_phi_u(n_dofs_per_element);
     std::vector<double> phi_pf(n_dofs_per_element);
     std::vector<Tensor<1, 2> > phi_grads_pf(n_dofs_per_element);
+    std::vector<Tensor<2, 2> > E_test(n_dofs_per_element);
+    
 
     Tensor<2,2> Identity;
     Identity[0][0] = 1.0;
@@ -238,11 +275,13 @@ public:
       {
         for (unsigned int k = 0; k < n_dofs_per_element; k++)
           {
-            phi_u[k] = state_fe_values[velocities].value(k, q_point);
-            phi_grads_u[k] = state_fe_values[velocities].gradient(k, q_point);
-            phi_pf[k] = state_fe_values[pressure].value(k, q_point);
-            phi_grads_pf[k] = state_fe_values[pressure].gradient(k, q_point);
 
+            phi_u[k] = state_fe_values[displacements].value(k, q_point);
+            phi_grads_u[k] = state_fe_values[displacements].gradient(k, q_point);
+	    div_phi_u[k] = state_fe_values[displacements].divergence(k, q_point);
+            phi_pf[k] = state_fe_values[phasefield].value(k, q_point);
+            phi_grads_pf[k] = state_fe_values[phasefield].gradient(k, q_point);
+    
           }
 
         Tensor<2, 2> grad_u;
@@ -265,9 +304,6 @@ public:
         double pf = uvalues_[q_point](2);
         double old_timestep_pf = last_timestep_uvalues_[q_point](2);
 
-        //double pf_minus_old_timestep_pf_plus = std::max(0.0, pf - old_timestep_pf);
-
-
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
         const double tr_E = trace(E);
 
@@ -298,12 +334,6 @@ public:
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            double pf_minus_old_timestep_pf_plus_Lin = 0.0;
-            if ((pf - old_timestep_pf) < 0.0)
-              pf_minus_old_timestep_pf_plus_Lin = 0.0;
-            else
-              pf_minus_old_timestep_pf_plus_Lin = phi_pf[i];
-
 
             const Tensor<2, 2> E_LinU = 0.5
                                         * (phi_grads_u[i] + transpose(phi_grads_u[i]));
@@ -340,29 +370,63 @@ public:
               {
                 // Solid (time-lagged version)
                 local_matrix(j, i) += scale
-                                      * (scalar_product(((1-constant_k_) * old_timestep_pf * old_timestep_pf + constant_k_) *
-                                                        stress_term_plus_LinU, phi_grads_u[j])
-                                         + scalar_product(stress_term_minus_LinU, phi_grads_u[j])
-
+                                      * ( 
+					scalar_product(((1-constant_k_) * old_timestep_pf * old_timestep_pf + constant_k_) *
+                                                        stress_term_plus_LinU, phi_grads_u[j]) // du
+                                         + scalar_product(stress_term_minus_LinU, phi_grads_u[j]) // du
                                         ) * state_fe_values.JxW(q_point);
 
                 // Phase-field
                 local_matrix(j, i) += scale
-                                      * (// Penalty term
-                                        gamma_penal_ * 1.0/(element_diameter * element_diameter) *
-                                        pf_minus_old_timestep_pf_plus_Lin * phi_pf[j]
-                                        // Main terms
-                                        + (1-constant_k_) * (scalar_product(stress_term_plus_LinU, E)
-                                                             + scalar_product(stress_term_plus, E_LinU)) * pf * phi_pf[j]
-                                        +(1-constant_k_) * scalar_product(stress_term_plus, E) * phi_pf[i] * phi_pf[j]
-                                        + G_c_/(alpha_eps_ * element_diameter) * phi_pf[i] * phi_pf[j]
-                                        + G_c_ * alpha_eps_ * element_diameter * phi_grads_pf[i] * phi_grads_pf[j]
-                                      ) * state_fe_values.JxW(q_point);
+                                      * (
+					// Main terms
+					(1-constant_k_) * (scalar_product(stress_term_plus_LinU, E)
+                                                             + scalar_product(stress_term_plus, E_LinU)) * pf * phi_pf[j] // du
+                                        +(1-constant_k_) * scalar_product(stress_term_plus, E) * phi_pf[i] * phi_pf[j] // d phi
+                                        + G_c_/(alpha_eps_) * phi_pf[i] * phi_pf[j] // d phi
+                                        + G_c_ * alpha_eps_ * phi_grads_pf[i] * phi_grads_pf[j] // d phi
+                                        ) * state_fe_values.JxW(q_point);
 
 
+		
+		//Now the Multiplierpart
+		//only in vertices, so we check whether one of the 
+		//lambda test function
+		// is one (i.e. we are in a vertex)
+		if(
+		  (fabs(state_fe_values[multiplier].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+		  ||
+		  (fabs(state_fe_values[multiplier].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+		  )
+		{
+		  //Weight to account for multiplicity when running over multiple meshes.
+		  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+		  double weight = 1./n_neig;
 
-
-
+		  if(n_neig == 4)
+		  {
+		    //max = 0
+		    if( (uvalues_[q_point][3]+s_*(pf-old_timestep_pf)) <= 0. )
+		    {
+		      local_matrix(i, j) += scale * weight* state_fe_values[multiplier].value(i,q_point)
+			*state_fe_values[multiplier].value(j,q_point);
+		    }
+		    else //max > 0
+		    {
+		      //From Complementarity
+		      local_matrix(i, j) -= scale * weight* s_*state_fe_values[phasefield].value(j,q_point)
+			*state_fe_values[multiplier].value(i,q_point);
+		    }
+		    //From Equation
+		    local_matrix(i, j) += scale * weight* state_fe_values[phasefield].value(i,q_point)
+		      *state_fe_values[multiplier].value(j,q_point);
+		  }
+		  else //Boundary or hanging node no weight so it works when hanging
+		  {
+		    local_matrix(i, j) += scale *  state_fe_values[multiplier].value(i,q_point)
+		      *state_fe_values[multiplier].value(j,q_point);
+		  }
+		}
               }
           }
       }
@@ -415,7 +479,7 @@ public:
   UpdateFlags
   GetUpdateFlags() const
   {
-    return update_values | update_gradients | update_quadrature_points;
+    return update_values | update_gradients| update_hessians | update_quadrature_points;
   }
 
   UpdateFlags
@@ -439,7 +503,7 @@ public:
   unsigned int
   GetStateNBlocks() const
   {
-    return 2;
+    return 3;
   }
 
   std::vector<unsigned int> &
@@ -462,8 +526,15 @@ public:
   {
     return state_block_component_;
   }
+  bool
+  HasVertices() const
+  {
+    return true;
+  }
 
 private:
+ // vector<Tensor<1, dealdim> > fvalues_;
+  vector<double> fvalues_;
   vector<Vector<double> > uvalues_;
   vector<vector<Tensor<1, dealdim> > > ugrads_;
 
@@ -475,8 +546,8 @@ private:
   vector<unsigned int> state_block_component_;
   vector<unsigned int> control_block_component_;
 
-  double constant_k_, alpha_eps_, gamma_penal_,
-         G_c_, lame_coefficient_mu_, lame_coefficient_lambda_;
+  double constant_k_, alpha_eps_,
+         G_c_, lame_coefficient_mu_, lame_coefficient_lambda_, s_;
 
 };
 #endif

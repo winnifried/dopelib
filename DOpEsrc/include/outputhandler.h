@@ -312,6 +312,8 @@ namespace DOpE
     bool debug_;
     unsigned int number_precision_;
     unsigned int functional_number_precision_;
+    unsigned int filter_time_;
+    unsigned int filter_iterations_;
     double user_eps_machine_;
     bool disallow_all_;
     bool parallel_;

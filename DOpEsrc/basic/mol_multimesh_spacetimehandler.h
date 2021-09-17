@@ -75,13 +75,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
       state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_(control_triangulation_,DH),
-      state_dof_handler_(state_triangulation_,DH),
-#else
       control_dof_handler_(control_triangulation_),
       state_dof_handler_(state_triangulation_),
-#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe), 
       mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -106,13 +101,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times, type, index_setter),
       state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_(control_triangulation_,DH),
-      state_dof_handler_(state_triangulation_,DH),
-#else
       control_dof_handler_(control_triangulation_),
       state_dof_handler_(state_triangulation_),
-#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe), 
       mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -137,13 +127,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
       state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_(control_triangulation_,DH),
-      state_dof_handler_(state_triangulation_,DH),
-#else
       control_dof_handler_(control_triangulation_),
       state_dof_handler_(state_triangulation_),
-#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe),
       mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -171,13 +156,8 @@ namespace DOpE
         ActiveFEIndexSetterInterface<dim, dim>()) :
 	SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,type, index_setter),
 	  state_triangulation_(triangulation),
-#if DEAL_II_VERSION_GTE(9,3,0)
-	  control_dof_handler_(control_triangulation_,DH),
-	  state_dof_handler_(state_triangulation_,DH),
-#else
 	  control_dof_handler_(control_triangulation_),
 	  state_dof_handler_(state_triangulation_),
-#endif
 	  control_fe_(&control_fe),
 	  state_fe_(&state_fe),
 	  mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
@@ -224,9 +204,6 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD_state)
     {
-#if DEAL_II_VERSION_GTE(9,3,0)
-      control_dof_handler_.set_fe(GetFESystem("control"));
-#endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
         control_dof_handler_);
       control_dof_handler_.distribute_dofs(GetFESystem("control"));
@@ -300,9 +277,6 @@ namespace DOpE
           control_block_component);
 #endif  //dealii older than 9.2.0
       }
-#if DEAL_II_VERSION_GTE(9,3,0)
-     state_dof_handler_.set_fe(GetFESystem("state"));
-#endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
@@ -1005,7 +979,11 @@ namespace DOpE
       state_dof_handler_.clear();
       state_triangulation_.clear();
       state_triangulation_.copy_triangulation(tria);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      state_dof_handler_.reinit (state_triangulation_);
+#else
       state_dof_handler_.initialize(state_triangulation_, *state_fe_);
+#endif
       this->IncrementStateTicket();
       if (state_mesh_transfer_ != NULL)
         delete state_mesh_transfer_;
@@ -1025,7 +1003,11 @@ namespace DOpE
       control_dof_handler_.clear();
       control_triangulation_.clear();
       control_triangulation_.copy_triangulation(tria);
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_.reinit(control_triangulation_);
+#else
       control_dof_handler_.initialize(control_triangulation_, *control_fe_);
+#endif
       this->IncrementControlTicket();
       if (control_mesh_transfer_ != NULL)
         delete control_mesh_transfer_;

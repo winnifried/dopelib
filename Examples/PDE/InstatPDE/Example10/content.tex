@@ -1,0 +1,38 @@
+\subsubsection{General problem description}
+In this example, we provide an implementation if the
+The test case is the so-called single edged notched 
+tension test. For further details about this problem it is referred
+to \cite{MieHofWel2010,BoVeScoHuLa12}, and \cite{WeWiWo2014}.
+For the choice of the boundary conditions see also~\cite[Section~5]{MangWallothWickWollner:2019}.
+
+The formulation of the irreversibility constraint  is exactly the same
+as in Example~\ref{PDE_phase_field_fracture}, however, the fracture is
+not handled fully implicit. Instead the elasticity equation
+couples with the phase-field from the previous time step, i.e., in
+contrast to Example~\ref{PDE_phase_field_fracture} the following
+system 
+\begin{align*}
+ \begin{aligned}
+   \left(g(\varphi_h^{n-1})\left[2\mu E^+(u_h) + \lambda (\operatorname{trace}(E(u)))_+ \textbf{I}\right],\nabla w_h \right)\\
+  + \left(2\mu \left(E(u_h)-E^+(u_h)\right),E(w_h)\right)\\
+ + \left(\lambda (\operatorname{trace}(E(u)))_- \textbf{I},E(w_h)\right) =&\ 0,\\
+ %\forall w_h\in&\ \mathcal{V}_h,\\
+ %\left(g(\varphi_h) \nabla \cdot u_h,q_h\right) - \frac{1}{\lambda} \left(g(\varphi_h) p_h,q_h\right)=&\ 0,\\
+ %\forall q_h\in&\ \mathcal{U}_h,\\
+  (1- \kappa)\left(\varphi_h 2\mu E^+(u_h) + \lambda (\operatorname{trace}(E(u)))_+ \textbf{I} : E(u_h),\psi_h\right)\\
+  + G_c \left(-\frac{1}{\epsilon} (1-\varphi_h),\psi_h\right)\\ 
+  + G_c \epsilon \left(\nabla \varphi_h,\nabla\psi_h \right) - \left(\tau_h,\psi_h\right) =&\ 0,\\
+  %\forall \psi_h \in&\ \mathcal{W}_h,\\
+%\tau_h\geq&\ 0,\\
+%\varphi_h^n - \varphi_h^{n-1} \leq&\ 0,\\
+%\left(\tau_h,\varphi_h^n -\varphi_h^{n-1}\right)=&\ 0,
+\left(\tau_h - \chi_h,\varphi_h -\varphi_h^{n-1}\right)\geq&\ 0,
+\end{aligned}
+\end{align*}
+is solved using a complementarity formulation for the variational inequality.
+
+
+
+
+
+

@@ -1,0 +1,104 @@
+\subsubsection{General problem description}
+
+Based on the setup of the previous example, we are interested in simulating a pressure-driven cavity in a nearly incompressible material. To avoid locking effects considering incompressible solids, 
+a mixed form for the solid equations is proposed.\\
+
+In the previous example in terms of the total crack volume, 
+for $\nu_s = 0.49999$, the fracture in incompressible 
+solids would not open anymore and the TCV is almost $0$. On the other hand, 
+the formulae in \cite{SneddLow69}[Section 2.4] suggest a value greater than zero. 
+The reason being that therein an infinite domain was assumed.
+To study incompressible solids in larger domains, we use a trick and add a compressible 
+layer as surrounding area. Considering the figure in the previous example, now we work in a domain $(-20,20)^2$ which contains the previously defined domain $(-10,10)^2$.
+The surrounding layer of width $10$ is defined as a compressible material with $\nu = 0.2$.
+All other parameters, namely $E$, $G_c$, $\kappa$ and $\Omega_c$ are
+kept as before.
+The same compressible material is used inside of the prescribed
+fracture on the set $(-1,1)\times (-d,d)$.
+
+\begin{Problem}[Euler-Lagrange System in Mixed Form]
+\label{form_mixed}
+Let $p_g\in W^{1,\infty}(\Omega)$ be given. 
+For the loading steps $n=1,2,3,\ldots, N$: Find vector-valued displacements,
+a scalar-valued pressure, 
+and a
+scalar-valued phase-field variable 
+$\{\bu,p,\varphi\} := \{\bu^n,p^n,\varphi^n\} \in \mathcal{V} \times \mathcal{U} \times \mathcal{W}$ such that
+\begin{equation}\label{eq_u_mixed}
+\begin{aligned}
+\left(g(\varphi)\ \sigma(\bu,p)\,e({\bv})\right) 
++({\varphi}^{2} p_g, \Div  {\bv}) 
++ ({\varphi}^{2} \nabla p_g,  {\bv}) 
+&=0 \quad \forall \bv\in \mathcal{V},
+\end{aligned}
+\end{equation}
+and 
+\begin{equation}
+\begin{aligned}
+(\operatorname{tr}e( {\bu})\,, q) - \frac{1}{\lambda} (p,q)
+=0 \quad \forall q\in \mathcal{U},
+\end{aligned}
+\end{equation}
+and
+%%%%
+\begin{equation}
+\begin{aligned}
+ (1-\kappa) &({\varphi} \;\sigma(\bu,p):e( \bu)\,, \psi {-\varphi}) \\
+&+  2 ({\varphi}\;  p_g\; \Div  \bu,\psi{-\varphi})
++ 2\, ({\varphi} \nabla p_g\cdot  {\bu},\psi{-\varphi}) 
+\\
+&+  G_c  \left( -\frac{1}{\epsilon} (1-\varphi,\psi{-\varphi}) + \epsilon (\nabla
+\varphi, \nabla (\psi - {\varphi}))   \right)  \geq  0
+\quad \forall \psi \in \mathcal{K},
+\end{aligned}
+\end{equation}
+including the inequality constraint. The stress tensor $\sigma(u,p)$ is given by $\sigma(u,p) := 2 \mu e(u) + p \textbf{I}$ with the Lam\'e coefficients $\mu,\lambda > 0$.
+The linearized strain tensor therein is defined as in the previous example as $e(u):=\frac{1}{2} (\nabla u + \nabla u^T)$. 
+By $\textbf{I}$, the two-dimensional identity matrix is denoted.
+\end{Problem}
+
+
+\begin{Problem}[Discrete formulation of Problem~\ref{form_mixed}]\label{form_mixed_h}
+Let $p_g\in W^{1,\infty}(\Omega)$ be given. 
+For the loading steps $n=1,2,3,\ldots, N$: Find vector-valued displacements,
+a scalar-valued pressure, 
+and a
+scalar-valued phase-field variable 
+$\{\bu_h,p_h,\varphi_h\} := \{\bu_h^n,p_h^n,\varphi_h^n\} \in \mathcal{V}_h \times \mathcal{U}_h \times \mathcal{W}_h$ such that
+\begin{equation}\label{eq_u_mixed_disc}
+\begin{aligned}
+\left(g(\varphi_h)\;\sigma(\bu_h,p_h)\,, e( \bv_h)\right)  
+&+({\varphi_h}^{2} p_g, \Div  \bv_h) \\
+&+ ({\varphi_h}^{2} \nabla p_g,  \bv_h) 
+=0 \quad \forall \bv_h\in \mathcal{V}_h ,
+\end{aligned}
+\end{equation}
+and 
+\begin{equation}\label{eq_p_mixed_disc}
+\begin{aligned}
+(\operatorname{tr}e(\bu_h)\,, q_h) - \frac{1}{\lambda} (p_h,q_h)
+=0 \quad \forall q_h\in \mathcal{U}_h,
+\end{aligned}
+\end{equation}
+and
+%%%%
+\begin{equation} \label{eq_varphi_mixed_disc}
+\begin{aligned}
+ (1&-\kappa) (\varphi_h \;\sigma(\bu_h,p_h):e( \bu_h)\,, \psi_h -\varphi_h) \\
+&+  2 (\varphi_h\;  p_g\; \Div  \bu_h,\psi_h-\varphi_h)
++ 2\, (\varphi_h \nabla p_g\cdot  \bu_h,\psi_h-\varphi_h) 
+\\
+&+  G_c  \left( -\frac{1}{\epsilon} (1-\varphi_h,\psi_h-\varphi_h) + \epsilon (\nabla
+\varphi_h, \nabla (\psi_h - \varphi_h))   \right)  \geq  0
+\quad \forall \psi_h \in \mathcal{K}_h.
+\end{aligned}
+\end{equation}
+\end{Problem}
+
+The mixed problem formulation allows to run test cases with Poisson ratios $\nu=0.3, 0.49, 0.4999$ up to the incompressible limit $\nu=0.5$. 
+Further details and results can be found in \cite{BasavaMangWallothWickWollner:2020}.
+%later refer to the journal
+%
+% Dokumentation in content.tex
+
+

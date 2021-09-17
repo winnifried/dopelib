@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.0
+Using dealii Version: 9.2
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -20,6 +20,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
 			 Newton step: 0	 Residual (abs.): < 1.00e-07
 			 Newton step: 0	 Residual (rel.):          NAN
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00000.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0
 		Drag: 0
@@ -30,6 +31,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.11e-02	 LineSearch {0} M 
 			 Newton step: 2	 Residual (rel.):   3.66e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.10548
 		Drag: 0.19756
@@ -40,6 +42,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.10e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.95e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.12423
 		Drag: 0.24183
@@ -50,6 +53,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.11e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.13905
 		Drag: 0.27886
@@ -60,6 +64,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.75e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.38e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.15559
 		Drag: 0.3144
@@ -70,6 +75,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.70e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   9.89e-07	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.17627
 		Drag: 0.3532
@@ -80,6 +86,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.02e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.20393
 		Drag: 0.39829
@@ -90,6 +97,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.44e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.10e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.24049
 		Drag: 0.45244
@@ -100,6 +108,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.33e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.09e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.28647
 		Drag: 0.51665
@@ -110,6 +119,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.23e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.74e-07	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.34073
 		Drag: 0.5902
@@ -119,6 +129,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.13e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.58e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.40158
 		Drag: 0.67096
@@ -128,6 +139,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.32e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.90e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.46777
 		Drag: 0.75659
@@ -137,6 +149,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.79e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.53858
 		Drag: 0.84552
@@ -146,6 +159,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.49e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.61345
 		Drag: 0.93696
@@ -155,6 +169,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.60e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.69185
 		Drag: 1.0305
@@ -164,6 +179,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.24e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.41e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.77328
 		Drag: 1.1255
@@ -173,6 +189,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.25e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.8572
 		Drag: 1.2215
@@ -182,6 +199,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.84e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.94308
 		Drag: 1.318
@@ -191,6 +209,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.13e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.0304
 		Drag: 1.4145
@@ -200,6 +219,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.17e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.48e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.1185
 		Drag: 1.5104
@@ -209,6 +229,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.84e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.89e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.2071
 		Drag: 1.6053
@@ -218,6 +239,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.99e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.2954
 		Drag: 1.6987
@@ -227,6 +249,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.05e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.84e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.383
 		Drag: 1.7902
@@ -236,6 +259,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.34e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.03e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.4694
 		Drag: 1.8794
@@ -245,6 +269,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.51e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.5541
 		Drag: 1.9658
@@ -254,6 +279,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.64e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.6365
 		Drag: 2.0491
@@ -263,6 +289,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.68e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.73e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.7162
 		Drag: 2.1288
@@ -272,6 +299,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.66e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.59e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.7927
 		Drag: 2.2045
@@ -281,6 +309,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.89e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.76e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.8656
 		Drag: 2.276
@@ -290,6 +319,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.36e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.9343
 		Drag: 2.3428
@@ -299,6 +329,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.41e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.9986
 		Drag: 2.4048
@@ -308,6 +339,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.04e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.0581
 		Drag: 2.4614
@@ -317,6 +349,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.07e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.72e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.1123
 		Drag: 2.5126
@@ -326,6 +359,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.27e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.78e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.1609
 		Drag: 2.558
@@ -335,6 +369,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.40e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.57e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2038
 		Drag: 2.5974
@@ -344,6 +379,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.88e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.61e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2405
 		Drag: 2.6306
@@ -353,6 +389,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.03e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.51e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2709
 		Drag: 2.6574
@@ -362,6 +399,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.83e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.25e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2948
 		Drag: 2.6778
@@ -371,6 +409,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.04e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.25e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.312
 		Drag: 2.6916
@@ -380,6 +419,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.02e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.3225
 		Drag: 2.6986
@@ -389,6 +429,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.55e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.06e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.3261
 		Drag: 2.699
@@ -398,6 +439,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.36e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.3228
 		Drag: 2.6926
@@ -407,6 +449,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.23e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.3127
 		Drag: 2.6794
@@ -416,6 +459,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.42e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2957
 		Drag: 2.6595
@@ -425,6 +469,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2721
 		Drag: 2.633
@@ -434,6 +479,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.95e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2418
 		Drag: 2.6
@@ -443,6 +489,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.44e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.2051
 		Drag: 2.5605
@@ -452,6 +499,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.37e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.1621
 		Drag: 2.5149
@@ -461,6 +509,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.58e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.1132
 		Drag: 2.4632
@@ -470,6 +519,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.78e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.0586
 		Drag: 2.4056
@@ -479,6 +529,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.98e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.9986
 		Drag: 2.3426
@@ -488,6 +539,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.18e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.9335
 		Drag: 2.2742
@@ -497,6 +549,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.38e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.8638
 		Drag: 2.2008
@@ -506,6 +559,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.57e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.7897
 		Drag: 2.1228
@@ -515,6 +569,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.75e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.7118
 		Drag: 2.0404
@@ -524,6 +579,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.94e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.6305
 		Drag: 1.9541
@@ -533,6 +589,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.11e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.5463
 		Drag: 1.8642
@@ -542,6 +599,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.29e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.4596
 		Drag: 1.7712
@@ -551,6 +609,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.46e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.3709
 		Drag: 1.6755
@@ -560,6 +619,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.62e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.2809
 		Drag: 1.5774
@@ -569,6 +629,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.78e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.1899
 		Drag: 1.4776
@@ -578,6 +639,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   3.93e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.0985
 		Drag: 1.3763
@@ -587,6 +649,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.07e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.0072
 		Drag: 1.2742
@@ -596,6 +659,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.21e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.91663
 		Drag: 1.1716
@@ -605,6 +669,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.34e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.82722
 		Drag: 1.0691
@@ -614,6 +679,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.06e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.73951
 		Drag: 0.96718
@@ -623,6 +689,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.59e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.21e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.65399
 		Drag: 0.86629
@@ -632,6 +699,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.70e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.47e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.57114
 		Drag: 0.76694
@@ -641,6 +709,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.79e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.49142
 		Drag: 0.66962
@@ -650,6 +719,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.90e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.15e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.41527
 		Drag: 0.57481
@@ -659,6 +729,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.98e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.57e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.34309
 		Drag: 0.48296
@@ -668,6 +739,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.06e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.05e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.27525
 		Drag: 0.39454
@@ -677,6 +749,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.12e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.56e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.21205
 		Drag: 0.30998
@@ -686,6 +759,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.18e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.09e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.15377
 		Drag: 0.22967
@@ -695,6 +769,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.60e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.10059
 		Drag: 0.15399
@@ -704,6 +779,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.80e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.052618
 		Drag: 0.08325
@@ -713,6 +789,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.13e-07	 LineSearch {0} M 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.0098428
 		Drag: 0.017684
@@ -723,6 +800,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.19e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: -0.027901
 		Drag: -0.04258
@@ -733,6 +811,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.77e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: -0.060987
 		Drag: -0.097578
@@ -743,6 +822,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.01e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.50e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: -0.090062
 		Drag: -0.14758
@@ -753,6 +833,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   4.75e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.26e-06	 LineSearch {0} M 
 			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		Pressure_difference: -0.11613
 		Drag: -0.19322

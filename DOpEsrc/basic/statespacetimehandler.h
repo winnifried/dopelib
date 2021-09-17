@@ -320,7 +320,7 @@ namespace DOpE
       DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
 #endif
     {
-      if (dof_handler.NeedIndexSetter ())
+      if (std::is_same<FE<dealdim,dealdim>,dealii::hp::FECollection<dealdim,dealdim> >::value)
         {
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)
@@ -580,7 +580,11 @@ namespace DOpE
         data_out.attach_dof_handler (GetStateDoFHandler ());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+	data_out.add_data_vector (v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
+#else
 	data_out.add_data_vector (v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
+#endif
 #else
 	data_out.add_data_vector (v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
 #endif
@@ -678,7 +682,11 @@ namespace DOpE
         data_out.attach_dof_handler(GetStateDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+	data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
+#else
 	data_out.add_data_vector(v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
+#endif
 #else
 	data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
 #endif

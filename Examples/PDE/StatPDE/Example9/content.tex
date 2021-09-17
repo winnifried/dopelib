@@ -5,7 +5,7 @@ is given as an incompressible Newtonian fluid modeled by the Stokes
 equation. Here, we use the symmetric stress tensor which has a little
 consequence when using the do-nothing outflow condition, see also
 section \ref{PDE_Stat_Stokes}. The flow is driven by non-homogeneous Dirichlet 
-condition on the left bounddary.
+condition on the left boundary.
 
 The computation domain is $\Omega = [-6,6]\times [0,2]$ and we choose for
 simplicity $f=0$. 
@@ -123,7 +123,7 @@ program output is the values of the functionals.
 We also demonstrate another very convenient feature. Since we have 
 two different material laws (INH and simplified STVK), we do not implement 
 them together in one \textit{localpde.h} file by using if-conditions etc. 
-But we implement them seperately in two different *.h files, namely
+But we implement them separately in two different *.h files, namely
 \begin{lstlisting}
 localpde.h
 localpde_stvk_material.h

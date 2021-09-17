@@ -53,9 +53,13 @@
 //DOpE includes for instationary problems
 #include <reducedproblems/instatpdeproblem.h>
 #include <container/instatpdeproblemcontainer.h>
+#include <container/dwrdatacontainer.h>
 
 // Timestepping scheme
+#include <tsschemes/backward_euler_problem.h>
 #include <tsschemes/crank_nicolson_problem.h>
+#include <tsschemes/shifted_crank_nicolson_problem.h>
+#include <tsschemes/fractional_step_theta_problem.h>
 
 // A new heuristic Newton solver
 #include "instat_step_modified_newtonsolver.h"
@@ -65,12 +69,7 @@
 // Either of them can be activated by uncommenting the desired
 // one and by commenting the other one.
 
-// PDE 1
-// A quasi-monolithic formulation based
-// on ideas outlined in Heister/Wheeler/Wick; CMAME, 2015
-//#include "localpde_quasi_monolithic.h"
-
-// PDE 2
+// PDE
 // A fully implicit formulation without any time-lagging of
 // the phase-field variable. For the fully
 // implicit setting, the Newton solver needs to be changed
@@ -89,6 +88,8 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+// Ggf. in cmake (CMAKELists.txt) die Dimension ebenfalls aendern 
+// und neues Makefile erzeugen
 const static int DIM = 2;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -96,15 +97,15 @@ const static int DIM = 2;
 #else
 #define DOFHANDLER DoFHandler
 #endif
-
 #define FE FESystem
 #define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 
 /*********************************************************************************/
-typedef QGauss<DIM> QUADRATURE;
-typedef QGauss<DIM - 1> FACEQUADRATURE;
+//Use LobattoFormulas, as obstacle multiplier is located in vertices
+typedef QGaussLobatto<DIM> QUADRATURE;
+typedef QGaussLobatto<DIM - 1> FACEQUADRATURE;
 typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
@@ -118,8 +119,8 @@ LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
 typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
-#define TSP CrankNicolsonProblem
-#define DTSP CrankNicolsonProblem
+#define TSP BackwardEulerProblem
+#define DTSP BackwardEulerProblem
 typedef InstatPDEProblemContainer<TSP, DTSP,
         LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN,
@@ -137,14 +138,15 @@ typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
 
 /*********************************************************************************/
+
 int
 main(int argc, char **argv)
 {
   /**
    *  We solve a quasi-static phase-field brittle fracture
    *  propagation problem. The crack irreversibility
-   *  constraint is imposed with the help of an augmented Lagrangian
-   *  iteration. The configuration is the single edge notched shear test.
+   *  constraint is imposed with the help of a Lagrange multiplier
+   *  The configuration is the single edge notched shear test.
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
@@ -168,14 +170,16 @@ main(int argc, char **argv)
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   NonHomoDirichletData::declare_params(pr);
-  LocalBoundaryFunctionalStressX<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
-    pr);
+  LocalBoundaryFunctionalStressX<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(pr);
+  LocalFunctionalBulk<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalFunctionalCrack<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   pr.read_parameters(paramfile);
 
 
   /*********************************************************************************/
   // Reading mesh and creating triangulation
-  Triangulation<DIM> triangulation;
+  Triangulation<DIM> triangulation/*(
+    Triangulation<DIM>::MeshSmoothing::patch_level_1)*/;
   GridIn<DIM> grid_in;
   grid_in.attach_triangulation(triangulation);
   std::ifstream input_file("unit_slit.inp");
@@ -185,7 +189,11 @@ main(int argc, char **argv)
 
   /*********************************************************************************/
   // Assigning finite elements
-  FE<DIM> state_fe(FE_Q<DIM>(1), 2, FE_Q<DIM>(1), 1);
+  // (1) = polynomial degree - please test (2) for u and phi
+  // zweite Zahl: Anzahl der Komponenten
+  FE<DIM> state_fe(FE_Q<DIM>(1), 2, // vector-valued (here dim=2): displacements 
+		   FE_Q<DIM>(1), 1, // scalar-valued phase-field
+    		   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
 
   QUADRATURE quadrature_formula(3);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -198,15 +206,17 @@ main(int argc, char **argv)
   /*********************************************************************************/
   // Defining goal functional
   LocalBoundaryFunctionalStressX<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFSX(pr);
-
+  LocalFunctionalBulk<EDC, FDC, DOFHANDLER, VECTOR, DIM> LFB(pr);
+  LocalFunctionalCrack<EDC, FDC, DOFHANDLER, VECTOR, DIM> LFC(pr);
 
   /*********************************************************************************/
-  // Create a time grid of [0,0.02] with
-  // 80 subintervalls for the timediscretization.
+  // Create a time grid of [0,0.015] with
+  // 150 subintervalls for the timediscretization.
+  // timestep size -> 10e-4
   Triangulation<1> times;
-  unsigned int num_intervals = 140;
+  unsigned int num_intervals = 150;
   double initial_time = 0.0;
-  double end_time = 1.4e-2;
+  double end_time = 0.015;
   GridGenerator::subdivided_hyper_cube(times, num_intervals, initial_time, end_time);
 
   /*********************************************************************************/
@@ -216,12 +226,16 @@ main(int argc, char **argv)
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   DOFH(triangulation, state_fe, times);
 
+
+  // Finales Problem, was alles handled
   OP P(LPDE, DOFH);
 
 
   /*********************************************************************************/
   // Add quantity of interest to the problem
   P.AddFunctional(&LBFSX);
+  P.AddFunctional(&LFB);
+  P.AddFunctional(&LFC);
 
   // We want to evaluate the stress on the top boundary with id = 3
   P.SetBoundaryFunctionalColors(3);
@@ -229,33 +243,27 @@ main(int argc, char **argv)
 
   /*********************************************************************************/
   // Prescribing boundary values
-  // We have 3 components (2D displacements and scalar-valued phase-field)
-  std::vector<bool> comp_mask(3);
-  comp_mask[2] = false;
-
+  // We have 4 components (2D displacements and scalar-valued phase-field and a Lagrange multiplier for the inequality)
+  //                       i.e. u_x, u_y, phi, tau: 
+  std::vector<bool> comp_mask(4);
+  comp_mask[2] = false; // phase-field component (always hom. Neumann data)
+   
   // Fixed boundaries
-  DOpEWrapper::ZeroFunction<DIM> zf(3);
+  DOpEWrapper::ZeroFunction<DIM> zf(4);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
-  // Non-homogeneous boudary (on top where we tear)
+  // Non-homogeneous boundary (on top where we tear)
   NonHomoDirichletData dirichlet_data(pr);
   SimpleDirichletData<VECTOR, DIM> DD2(dirichlet_data);
 
-
-  comp_mask[0] = true;
-  comp_mask[1] = true;
-
-  // Left boundary
   comp_mask[0] = false;
   comp_mask[1] = true;
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
-  // Right boundary
   comp_mask[0] = false;
   comp_mask[1] = true;
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
 
-  // Bottom boundary
   comp_mask[0] = true;
   comp_mask[1] = true;
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
@@ -263,6 +271,7 @@ main(int argc, char **argv)
   // Top boundary (shear force via non-homo. Dirichlet)
   comp_mask[0] = true;
   comp_mask[1] = true;
+  //comp_mask[2] = true; // phase field =1 on top boundary
   P.SetDirichletBoundaryColors(3, comp_mask, &DD2);
 
 
@@ -272,11 +281,11 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(4, comp_mask, &DD1);
 
 
+
   /*********************************************************************************/
   // Initial data
   InitialData initial_data;
   P.SetInitialValues(&initial_data);
-
 
   /*********************************************************************************/
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
@@ -291,7 +300,9 @@ main(int argc, char **argv)
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&out);
   solver.RegisterExceptionHandler(&ex);
-
+  
+  //**************************************************************************************************
+ 
   try
     {
       //Before solving we have to reinitialize the stateproblem and outputhandler.

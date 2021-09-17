@@ -56,10 +56,14 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 namespace DOpE
 {
 #if DEAL_II_VERSION_GTE(9,3,0)
+  //FIXME: In deal 9.3.0 it should be possible to remove the DH template completely.
+  //The hp/non-hp case can be deduced by comparing with the FE given, i.e.
+  // std::is_same<FE<dealdim,dealdim>,hp::FECollection<dealdim,dealdim> >::value) returns true when hp is used.
   /**
    * Interface to the dimension depended functionality of a
    * SpaceTimeDoFHandler.
@@ -408,7 +412,7 @@ namespace DOpE
       DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
 #endif
     {
-      if (dof_handler.NeedIndexSetter ()) //with this we distinguish between hp and classic
+      if (std::is_same<FE<dealdim,dealdim>,dealii::hp::FECollection<dealdim,dealdim> >::value) //with this we distinguish between hp and classic
         {
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)
@@ -433,7 +437,7 @@ namespace DOpE
       DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler)
 #endif
     {
-      if (dof_handler.NeedIndexSetter ())
+      if (std::is_same<FE<dealdim,dealdim>,dealii::hp::FECollection<dealdim,dealdim> >::value)
         {
           for (auto element =
                  dof_handler.begin_active(); element != dof_handler.end(); ++element)
@@ -757,7 +761,11 @@ namespace DOpE
         auto &data_out = GetDataOut ();
         data_out.attach_dof_handler (GetStateDoFHandler ()); // TODO chose correct dofhandler
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+        data_out.add_data_vector (v, name, DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
+#else	
         data_out.add_data_vector (v, name, DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
+#endif
 #else
         data_out.add_data_vector (v, name, DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
 #endif
@@ -831,7 +839,11 @@ namespace DOpE
         data_out.attach_dof_handler (GetControlDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+        data_out.add_data_vector (v,name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
+#else
         data_out.add_data_vector (v,name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
+#endif
 #else
         data_out.add_data_vector (v,name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
 #endif
@@ -901,7 +913,11 @@ namespace DOpE
         data_out.attach_dof_handler(GetStateDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,1)
+        data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
+#else
         data_out.add_data_vector(v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
+#endif
 #else
         data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
 #endif
