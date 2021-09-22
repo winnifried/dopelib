@@ -57,6 +57,7 @@
 
 //H div spaces where we interpolate to
 #include <deal.II/fe/fe_raviart_thomas.h>
+#include <deal.II/fe/fe_bdm.h>
 
 using namespace std;
 using namespace dealii;
@@ -130,8 +131,11 @@ main(int argc, char **argv)
 
    
    // Raviart Thomas interpolation //
-   FE<DIM> state_fe(FE_Q<DIM>(2), DIM, FE_DGQ<DIM>(1), 1); //Q2Q1
-   FE_RaviartThomasNodal<DIM> fe_interpolate(1);
+   //FE<DIM> state_fe(FE_Q<DIM>(2), DIM, FE_DGQ<DIM>(1), 1); //Q2Q1
+   //FE_RaviartThomasNodal<DIM> fe_interpolate(1);
+   // Raviart Thomas interpolation //
+   FE<DIM> state_fe(FE_Q<DIM>(2), DIM, FE_DGP<DIM>(1), 1); //Q2DGP1
+   FE_BDM<DIM> fe_interpolate(2);
    
 
    QUADRATURE quadrature_formula(4);
