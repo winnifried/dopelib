@@ -24,7 +24,7 @@
 
  For the discretization we search $(\textbf{u}_h,p_h) \in V_h \times Q_h$,
  here given by continuous $Q_2$ finite elements for $V_h$ and discontinuous
- $Q_1$ finite elements for $Q_h$.
+ $P_1$ finite elements for $Q_h$.
  The gradient robust discretization of \eqref{eq:strong_form} is given as
   \begin{align}
    2\mu \int\limits_\Omega \varepsilon(\textbf{u}_h) : \varepsilon(\textbf{v}_h) \; \mathrm{d} x + 
@@ -38,7 +38,7 @@
  (q_h, \nabla \cdot \textbf{v}_h) = (q_h \nabla \cdot \bm{\pi}^{\rm{div}}\textbf{v}_h) 
  \]
  for all $q_h \in Q_h$ and $\textbf{v}_h \in V_h$. For the choice of $V_h,Q_h$ made here a
- suitable choice for this space $X_h$ is the space of Raviart-Thomas finite elements
+ suitable choice for this space $X_h$ is the space of Brezzi-Douglas-Marini $\mathcal{BDM}_2$ elements
  with the canonical interpolation.
 
  In contrast to standard mixed discretizations as discussed, e.g. in Section~\ref{PDE_Stat_Stokes} only some minor changes are needed which we discuss below. 
