@@ -761,7 +761,7 @@ namespace DOpE
         auto &data_out = GetDataOut ();
         data_out.attach_dof_handler (GetStateDoFHandler ()); // TODO chose correct dofhandler
 #if DEAL_II_VERSION_GTE(9,3,0)
-#if DEAL_II_VERSION_GTE(9,3,1)
+#if DEAL_II_VERSION_GTE(9,3,2)
         data_out.add_data_vector (v, name, DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
 #else	
         data_out.add_data_vector (v, name, DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
@@ -839,7 +839,7 @@ namespace DOpE
         data_out.attach_dof_handler (GetControlDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-#if DEAL_II_VERSION_GTE(9,3,1)
+#if DEAL_II_VERSION_GTE(9,3,2)
         data_out.add_data_vector (v,name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
 #else
         data_out.add_data_vector (v,name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
@@ -913,7 +913,7 @@ namespace DOpE
         data_out.attach_dof_handler(GetStateDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-#if DEAL_II_VERSION_GTE(9,3,1)
+#if DEAL_II_VERSION_GTE(9,3,2)
         data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
 #else
         data_out.add_data_vector(v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);

@@ -453,7 +453,7 @@ namespace DOpE
           state_mesh_transfer_ = NULL;
         }
 #if DEAL_II_VERSION_GTE(9,3,0)
-#if DEAL_II_VERSION_GTE(9,3,1)
+#if DEAL_II_VERSION_GTE(9,3,2)
       state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR,dealdim>(state_dof_handler_);
 #else
       state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, dealii::DoFHandler<dealdim, dealdim> >(state_dof_handler_);
