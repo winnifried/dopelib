@@ -44,6 +44,7 @@
 #include <deal.II/base/table.h>
 
 #include <opt_algorithms/reducedproximalgradientdescentalgorithm.h>
+#include <opt_algorithms/reducedgradientdescentalgorithm.h>
 #include <opt_algorithms/reducedbfgsalgorithm.h>
 
 #include <container/optproblemcontainer.h>
@@ -128,6 +129,7 @@ typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, S
 typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
 typedef ReducedProximalGradientDescentAlgorithm<OP, VECTOR> RNA;
+//typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
 //typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
 
 
@@ -194,7 +196,7 @@ main(int argc, char **argv){
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(100000);
+  COSTFUNCTIONAL LFunc(0.01);
 //  COSTFUNCTIONAL LFunc(0.01 /*100.0*/);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
@@ -210,7 +212,6 @@ main(int argc, char **argv){
 
 
 //TODO in  mol space time handler angepasst für NedelecRB
-
    P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
    P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
    P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
@@ -234,6 +235,10 @@ main(int argc, char **argv){
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q = 0;
 
+  //ZIEL-EIGENWERT
+  ControlVector<VECTOR> lambda_target_value(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
+  lambda_target_value = 1.5;
+
 
   local::Q_Control q_initial;
 // VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  q.GetSpacialVector());
@@ -247,22 +252,19 @@ main(int argc, char **argv){
 //    	  ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
     	  solver.ReInit();
     	  Alg.ReInit();
-
-
+    	  solver.AddUserDomainData("lambda_target_value", &(lambda_target_value.GetSpacialVector()));
 
 
 //    	  solver.ComputeReducedFunctionals(q);
 //    	  solver.ComputeReducedGradient(q,gradient,gradient_transposed);
 //    	  dq = gradient_transposed;
     	 // dq *= -1.;
-
-    	  //TODO es muss noch überall der Lambda Zielwert richtig übergeben werden
 //    	  Alg.ReInit();
-//    	  const double eps_diff = 0;
+    	  const double eps_diff = 0;
 //    	  Alg.CheckGrads(eps_diff, q, dq, 3);
-//    	  std::cout << "--------------------------------------------- " << std::endl;
-    	  Alg.ReInit();
-    	  Alg.Solve(q);
+
+
+  	  Alg.Solve(q);
         }
       catch (DOpEException &e)
         {

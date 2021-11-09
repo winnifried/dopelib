@@ -25,15 +25,20 @@
 #define EIGENVAL_PROBLEM_H_
 
 #include <interfaces/reducedprobleminterface.h>
+
+// Integrator for eigenvalue problems
 #include "integrator_eigenval.h"
-#include <include/parameterreader.h>
-#include <include/statevector.h>
+//problemdata for eigenvalue problems
 #include <problemdata/eigenvaluestateproblem.h>
 #include <problemdata/eigenvaluederivativeproblem.h>
+
+
+#include <include/parameterreader.h>
+#include <include/statevector.h>
+
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
-
 #include <deal.II/lac/petsc_parallel_vector.h>
 
 #include <container/optproblemcontainer.h>
@@ -180,6 +185,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		 */
 		void ComputeReducedFunctionals(const ControlVector<VECTOR> &q);
 
+		//Getter/Setter of first eigenvalue
 		double Get_actual_first_eigenvalue();
 		void Set_actual_first_eigenvalue(double eigenval);
 
@@ -226,7 +232,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		void ComputeReducedGradientOfGlobalConstraints(unsigned int num, const ControlVector<VECTOR> &q, const ConstraintVector<VECTOR> &g, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed);
 
 		/******************************************************/
-		void ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &v, /*PETScWrappers::MPI::Vector*/ StateVector<VECTOR> &eigenfunction, double eigenvalue, /*std::vector<PETScWrappers::MPI::Vector>*/ StateVector<VECTOR> &adjoint_eigenfunction, /*std::vector<double> &*/double adjoint_eigenvalue);
+		void ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &v, StateVector<VECTOR> &eigenfunction, double eigenvalue, StateVector<VECTOR> &adjoint_eigenfunction, double adjoint_eigenvalue);
 		/**
 		 * Implementation of Virtual Method in Base Class
 		 * ReducedProblemInterface
@@ -276,6 +282,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 
 		/******************************************************/
+		//Return of (state) eigenfunction and adjoint eigenfunction
 
 		StateVector<VECTOR> &GetEigfun(){
 		      return eigfun_;
@@ -292,7 +299,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		const StateVector<VECTOR> &GetAdjfun() const{
 			  return adjeigfun_;
 		}
-
+		/******************************************************/
 
 		NONLINEARSOLVER & GetNonlinearSolver(std::string type); CONTROLNONLINEARSOLVER & GetControlNonlinearSolver(); INTEGRATOR & GetIntegrator() { return integrator_; } CONTROLINTEGRATOR & GetControlIntegrator() { return control_integrator_; }
 
@@ -372,12 +379,18 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		bool build_state_matrix_ = false, build_adjoint_matrix_ = false,
 		build_control_matrix_ = false;
+		unsigned int cost_needs_precomputations_;
+
+
+
 		bool eigenvaluestate_reinit_, eigenvalueadjoint_reinit_,
 		eigenvaluederivative_reinit_;
-		unsigned int cost_needs_precomputations_;
 		std::vector<PETScWrappers::MPI::Vector> eigenfunctions,	adjoint_eigenfunctions;
 		std::vector<double> eigenvalues,adjoint_eigenvalues;
+
+		//the first two eigenvalues/eigenvectors are important to check
 		double numOfEigenval = 2;
+
 
 		friend class SolutionExtractor< EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
@@ -582,7 +595,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> void EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, StateVector<VECTOR> &eigenfunction, double /*eigenvalue*/, StateVector<VECTOR> &adjoint_eigenfunction, double adjoint_eigenvalue) {
+		dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, StateVector<VECTOR> &eigenfunction, double /*eigenvalue*/, StateVector<VECTOR> &adjoint_eigenfunction, double /*adjoint_eigenvalue*/) {
 			this->GetOutputHandler()->Write("Computing EigenvalueAdjoint:", 4 + this->GetBasePriority());
 			this->SetProblemType("eigenvalueadjoint");
 			auto &problem = this->GetProblem()->GetEigenvalueAdjointProblem();
@@ -611,42 +624,27 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		adjoint_eigenvalues.resize(numOfEigenval);
 		PETScWrappers::SparseMatrix matrixM;
 		matrixM.clear();
-//		SparseMatrix<double> testM = matrixM;
 
 		build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint").EigenvalueSolve(problem,matrixM, adjoint_eigenvalues, adjoint_eigenfunctions, true, build_adjoint_matrix_/*, n*/);
 
-
-
-//			PETScWrappers::MPI::Vector vec;
-		//TODO ACHTUNG adjoint_eigenfunctions[1] wird hier neu zugewiesen und hat nichts mehr mit dem eigenfunctions zutun -- ändern
+		//TODO ACHTUNG adjoint_eigenfunctions[1] wird hier neu zugewiesen und hat nichts mehr mit eigenfunctions zutun
 			MatMult(matrixM,adjoint_eigenfunctions[0],adjoint_eigenfunctions[1]); // = matrixM*adjoint_eigenfunctions[i];
 			PetscScalar scalar_factor[1];
 			VecDot(adjoint_eigenfunctions[1],eigenfunctions[0],scalar_factor);//= scalar_product(vec,eigenfunctions[i]);
-//			std::cout << scalar_factor[0] << std::endl;
 
-
-			//TODO nicht schoen..
 			std::map<std::string, const VECTOR *>  x = this->GetUserDomainData();
-			 auto xx = x.find("lambda_target_value");
-			     auto y =  xx->second;
-			     double fval = y[0][0];
-			     std::cout << fval << std::endl;
-
-//			auto y = x[1];
-//			double fval = 1;//x[1][0]; //TODO übergeben
+			auto xx = x.find("lambda_target_value");
+			auto y =  xx->second;
+			double fval = y[0][0];
 
 			adjoint_eigenfunctions[0]/= scalar_factor[0];
 			adjoint_eigenfunctions[0] *= -(eigenvalues[0]-fval);
 
 
-		GetAdjfun().GetSpacialVector() = 0.;
-		/*adjoint_eigenfunction.GetSpacialVector() = adjoint_eigenfunctions[0];   //Needed?*/
+//		GetAdjfun().GetSpacialVector() = 0.;
 		adjeigfun_ .GetSpacialVector() = adjoint_eigenfunctions[0];
 		GetAdjfun().GetSpacialVector() = adjoint_eigenfunctions[0];
 
-//		for (unsigned int i = 0; i < adjeigfun_ .GetSpacialVector().size();i++){
-//			std::cout << adjeigfun_ .GetSpacialVector()[i] << std::endl;
-//		}
 
 		std::cout << "################################################################" << std::endl;
 		for (unsigned int i = 0; i < numOfEigenval; ++i) {
@@ -680,13 +678,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		dopedim,
 		dealdim>::ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed){
 
-			this->ComputeEigenvalueAdjoint(q, eigfun_, eigenval_, adjeigfun_, adjeigenval_);
+		this->ComputeEigenvalueAdjoint(q, eigfun_, eigenval_, adjeigfun_, adjeigenval_);
+		this->GetOutputHandler()->Write("Computing Gradient for Eigenvalueproblem:", 4 + this->GetBasePriority());
 
-			this->GetOutputHandler()->Write("Computing Gradient for Eigenvalueproblem:", 4 + this->GetBasePriority());
-
-			if (this->GetProblem()->HasControlInDirichletData()) {
-				std::cout << "TODO CONTROL IN DIRICHLETDATA " << std::endl;
-			}
 
 		this->SetProblemType("eigenvaluederivative");
 		if (eigenvaluederivative_reinit_ == true){
@@ -779,25 +773,12 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 			build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(problem, matrixM, eigenvalues, eigenfunctions, true, build_state_matrix_ /*, n*/);
 
-
-
-				PETScWrappers::MPI::Vector vec;
-//
-				MatMult(matrixM,eigenfunctions[0],eigenfunctions[1]); // VECTOR vec = matrixM.vmult(eigenfunctions[i]);
-
-				//TODO ACHTUNG: eigenfunctions[1] wird hier neu definiert --- TODO eigenen PETSCVector initialisieren mit richtiger länge für mehr übersicht
-				PetscScalar scalar_factor[1];
-				VecDot(eigenfunctions[1],eigenfunctions[0],scalar_factor);
-				scalar_factor[0] = sqrt(scalar_factor[0]);  //double scalar_factor = sqrt(scalar_product(vec,eigenfunctions[i]));
-				eigenfunctions[0]/= scalar_factor[0];
-
-
-
-//			std::cout << "################################################################" << std::endl;
-//				for (unsigned int i = 0; i < numOfEigenval; ++i) {
-//					std::cout << "k^2 " << " = " << eigenvalues[i] << std::endl;
-//				}
-//				std::cout << "################################################################" << std::endl;
+			PETScWrappers::MPI::Vector vec;
+			MatMult(matrixM,eigenfunctions[0],eigenfunctions[1]); // VECTOR vec = matrixM.vmult(eigenfunctions[i]);
+			PetscScalar scalar_factor[1];
+			VecDot(eigenfunctions[1],eigenfunctions[0],scalar_factor);
+			scalar_factor[0] = sqrt(scalar_factor[0]);  //double scalar_factor = sqrt(scalar_product(vec,eigenfunctions[i]));
+			eigenfunctions[0]/= scalar_factor[0];
 
 		}catch ( DOpEException &e){
 			if (dopedim == dealdim){

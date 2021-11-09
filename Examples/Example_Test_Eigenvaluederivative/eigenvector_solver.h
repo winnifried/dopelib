@@ -81,6 +81,7 @@ namespace DOpE
     double nonlinear_global_tol_, nonlinear_tol_, nonlinear_rho_;
        double linesearch_rho_;
        int nonlinear_maxiter_, line_maxiter_;
+       double target_eigenvalue_ ;
   };
 
   /**********************************Implementation*******************************************/
@@ -89,14 +90,16 @@ namespace DOpE
   void EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::declare_params(ParameterReader &param_reader)
   {
-	  param_reader.SetSubsection("newtonsolver parameters");
+	  param_reader.SetSubsection("eigenvector_solver parameters");
 	     param_reader.declare_entry("nonlinear_global_tol", "1.e-12",Patterns::Double(0),"global tolerance for the newton iteration");
 	     param_reader.declare_entry("nonlinear_tol", "1.e-10",Patterns::Double(0),"relative tolerance for the newton iteration");
 	     param_reader.declare_entry("nonlinear_maxiter", "10",Patterns::Integer(0),"maximal number of newton iterations");
 	     param_reader.declare_entry("nonlinear_rho", "0.1",Patterns::Double(0),"minimal  newton reduction, if actual reduction is less, matrix is rebuild ");
 
 	     param_reader.declare_entry("line_maxiter", "4",Patterns::Integer(0),"maximal number of linesearch steps");
-	     param_reader.declare_entry("linesearch_rho", "0.9",Patterns::Double(0),"reduction rate for the linesearch damping paramete");
+	     param_reader.declare_entry("linesearch_rho", "0.9",Patterns::Double(0),"reduction rate for the linesearch damping parameter");
+
+	     param_reader.declare_entry("target_eigenvalue", "0.001", Patterns::Double(0),"for eigenvalue solving");
 
 	     LINEARSOLVER::declare_params(param_reader);
 
@@ -108,7 +111,7 @@ namespace DOpE
   ::EigenvectorSolver(INTEGRATOR &integrator, ParameterReader &param_reader)
     : LINEARSOLVER(param_reader), integrator_(integrator)
   {
-	    param_reader.SetSubsection("newtonsolver parameters");
+	    param_reader.SetSubsection("eigenvector_solver parameters");
 	    nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
 	    nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
 	    nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
@@ -116,6 +119,7 @@ namespace DOpE
 
 	    line_maxiter_   = param_reader.get_integer ("line_maxiter");
 	    linesearch_rho_ = param_reader.get_double ("linesearch_rho");
+	    target_eigenvalue_ = param_reader.get_double ("target_eigenvalue");
   }
 
   /*******************************************************************************************/
@@ -154,9 +158,9 @@ namespace DOpE
                    std::string /*algo_level*/
 				   )
   {
-	  matrixM_.clear();
+	 matrixM_.clear();
 	 matrixM_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
-	  pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
+	 pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
 
    bool build_matrix = force_matrix_build;
 
@@ -173,13 +177,10 @@ namespace DOpE
       }
       linear_maxiter_ = pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs();
       dealii::SolverControl solver_control (linear_maxiter_, 1e-5/*,false,false*/);
-          SLEPcWrappers::SolverLAPACK/*SolverJacobiDavidson*/eigensolver(solver_control, MPI_COMM_WORLD);
-          eigensolver.set_which_eigenpairs(EPS_TARGET_MAGNITUDE);
-          eigensolver.set_target_eigenvalue(0.001);
-
-          eigensolver.solve(matrixK_, matrixM_, eigenvalues, eigenfunctions, eigenvalues.size());
-
-
+      SLEPcWrappers::SolverLAPACK/*SolverJacobiDavidson*/eigensolver(solver_control, MPI_COMM_WORLD);
+      eigensolver.set_which_eigenpairs(EPS_TARGET_MAGNITUDE);
+      eigensolver.set_target_eigenvalue(target_eigenvalue_);
+      eigensolver.solve(matrixK_, matrixM_, eigenvalues, eigenfunctions, eigenvalues.size());
 
 
     return build_matrix;

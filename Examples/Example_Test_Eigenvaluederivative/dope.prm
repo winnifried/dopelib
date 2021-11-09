@@ -1,7 +1,7 @@
 # Listing of Parameters
 # ---------------------
 
-subsection newtonsolver parameters
+subsection eigenvector_solver parameters
  # maximal number of linesearch steps
  set line_maxiter         = 8
 
@@ -12,13 +12,15 @@ subsection newtonsolver parameters
  set nonlinear_global_tol = 1.e-12
 
   # maximal number of newton iterations
- set nonlinear_maxiter    = 10
+ set nonlinear_maxiter    = 100
 
   # minimal  newton reduction, if actual reduction is less, matrix is rebuild
  set nonlinear_rho        = 0.1
 
   # relative tolerance for the newton iteration
  set nonlinear_tol        = 1.e-10
+ 
+ set target_eigenvalue = 0.001
 end
 
 
@@ -63,8 +65,9 @@ subsection reducedgradientdescentalgorithm parameters
 set linesearch_c         = 0.1
 set linesearch_rho       = 0.9
 set nonlinear_global_tol = 1.e-11
-set nonlinear_maxiter    = 100
+set nonlinear_maxiter    = 1000
 set nonlinear_tol        = 1.e-8
+set eigenvalue_tol = 1.e-5
  set compute_functionals_in_every_step = false
 end
 
@@ -76,7 +79,7 @@ end
 # set linesearch_gamma = 0.3 
 # set linesearch_eta = 0.6 
 ## set memory = 40
-#set init_inverse_scale = 0.01   # identisch zu alpha und neq 0
+#set init_inverse_scale = 10   # identisch zu alpha und neq 0
 #   set compute_functionals_in_every_step = false 
 #end
 

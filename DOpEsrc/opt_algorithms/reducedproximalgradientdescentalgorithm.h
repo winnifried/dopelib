@@ -21,6 +21,8 @@
 *
 **/
 
+//TODO: rename "Reducedgradienddescent_for_Eigenvalueproblems"
+
 #ifndef REDUCEDPROXIMALGRADIENTDESCENT__ALGORITHM_H_
 #define REDUCEDPROXIMALGRADIENTDESCENT__ALGORITHM_H_
 
@@ -149,7 +151,6 @@ namespace DOpE
     param_reader.declare_entry("nonlinear_tol", "1.e-7",Patterns::Double(0));
     param_reader.declare_entry("eigenvalue_tol", "1.e-7",Patterns::Double(0));
     param_reader.declare_entry("nonlinear_global_tol", "1.e-11",Patterns::Double(0));
-
     param_reader.declare_entry("line_maxiter", "10",Patterns::Integer(0));
     param_reader.declare_entry("linesearch_rho", "0.9",Patterns::Double(0));
     param_reader.declare_entry("linesearch_c", "0.1",Patterns::Double(0));
@@ -174,6 +175,8 @@ namespace DOpE
     nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
     nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
     nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
+
+    //TODO for possibly a new termination criteria
     eigenvalue_tol_ = param_reader.get_double ("eigenvalue_tol");
 
     line_maxiter_         = param_reader.get_integer ("line_maxiter");
@@ -240,16 +243,19 @@ namespace DOpE
 
 	     //Solve j'(q) = 0
 	     ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
-	     ControlVector<VECTOR> initial_control_(q);
-	     double counter = 0;
 
-	     initial_control_ = counter;
+	     //TODO ControlCounter and initial_control just needed for "proximal gradient"
+//	     ControlVector<VECTOR> initial_control_(q);
+//	     double counter = 0;
+//	     initial_control_ = counter;
 
 	     unsigned int iter=0;
 	     double cost=0.;
 	     std::stringstream out;
 	     this->GetOutputHandler()->InitNewtonOut(out);
-	 	double fval = 1.5;
+
+	     //TODO Übergabe von Zieleigenwert
+	 	 double fval = 1.5;
 
 	     out << "**************************************************\n";
 	     out << "*        Starting Reduced GradientDescent Algorithm       *\n";
@@ -269,9 +275,9 @@ namespace DOpE
 
 	     try
 	       {
-	    	 this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
+//	    	 this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
 	         cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);
-	         this->GetReducedProblem()->DeleteUserDomainData("control_counter");
+//	         this->GetReducedProblem()->DeleteUserDomainData("control_counter");
 	       }
 	     catch (DOpEException &e)
 	       {
@@ -295,9 +301,9 @@ namespace DOpE
 
 	     try
 	       {
-	    	 this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
+//	    	 this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
 	         this->GetReducedProblem()->ComputeReducedGradient(q,gradient,gradient_transposed);
-	         this->GetReducedProblem()->DeleteUserDomainData("control_counter");
+//	         this->GetReducedProblem()->DeleteUserDomainData("control_counter");
 	       }
 	     catch (DOpEException &e)
 	       {
@@ -312,6 +318,7 @@ namespace DOpE
 	        this->GetOutputHandler()->Write(gradient,"GradientDescentResidual"+postindex_,"control");
 	        out<< "\t GradientDescent step: " <<iter<<"\t Residual (abs.): "<<sqrt(res)<<"\n";
 	        out<< "\t GradientDescent step: " <<iter<<"\t Residual (rel.): "<<std::scientific<<sqrt(res)/sqrt(res)<<"\n";
+	        //TODO Return of actual eigenvalue in iterationstep
 	        out<<"\t Actual eigenvalue: " << this->GetReducedProblem()->Get_actual_first_eigenvalue() <<"\n";
 	        this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 	        int lineiter =0;
@@ -320,10 +327,14 @@ namespace DOpE
 	          miniter = 1;
 	        global_tol =  std::max(nonlinear_global_tol_,global_tol);
 
+	        // for return of the eigenvalue of the initial pde
+	        double actual_first_eigenvalue;
+
+
 //	        this->GetReducedProblem()->DeleteUserDomainData("control_counter");
 
-	        //###################################################################
-	       //#### Vorbereitung für q_previous####################################
+/*	        //###################################################################
+	       //#### TODO Vorbereitung für q_previous####################################
 	       //###################################################################
 
 	  	  ControlVector<VECTOR> q_previous(q);
@@ -331,7 +342,8 @@ namespace DOpE
 
 	  	//#####################################################################
 	  	//TODO Neue Abbruchbedingungung... wenn Eigenwert +- 0.05 erreicht wird.. (geeignete Abweichung festlegen..abhängig von Gitter..)
-	  	// TODO Uebergabe!!!
+	  	 Ist das sinnvoll?
+
 //	  	std::map<std::string, const VECTOR *>  x = this->GetReducedProblem()->GetIntegrator()->GetDomainData();
 //	  	auto xx = x.find("lambda_target_value");
 //	  	auto y =  xx->second;
@@ -340,29 +352,31 @@ namespace DOpE
 
 	  	double fval_min = fval-eigenvalue_tol_;
 	  	double fval_max = fval+eigenvalue_tol_;
-	  	double actual_first_eigenvalue;
+
 	  	bool a = 0, b = 0;
 
 	  	//#####################################################################
+	  	 *
+	  	 */
 //	  	std::map<std::string, const VECTOR *>  x =  this->GetReducedProblem()->GetUserDomainData();
 
 	        while (( ((res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ) ||  iter < miniter) /*&& !(a==1 && b==1) */)
 	              {
 
-	        	a = actual_first_eigenvalue>fval_min;
-	        	b = actual_first_eigenvalue<fval_max;
+//	        	a = actual_first_eigenvalue>fval_min;
+//	        	b = actual_first_eigenvalue<fval_max;
 //	        	std::cout <<"fval_min = " << a  << std::endl;
 //	        	std::cout <<"fval_max = " << b  << std::endl;
 //	        	bool c = (a==1 && b==1);
 //	        	std::cout <<"stopp? " << c  << std::endl;
 
-	        	counter++;
-	        	initial_control_ = counter;
+//	        	counter++;
+//	        	initial_control_ = counter;
 
-	        		this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
+//	        		this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
 
-	        		q_previous = q;
-	        	 	this->GetReducedProblem()->AddUserDomainData("q_previous", &(q_previous.GetSpacialVector()));
+//	        		q_previous = q;
+//	        	 	this->GetReducedProblem()->AddUserDomainData("q_previous", &(q_previous.GetSpacialVector()));
 
 
 
@@ -423,19 +437,14 @@ namespace DOpE
 
 	        	 	        res = Residual(gradient,gradient_transposed);//gradient*gradient_transposed;
 	        	 	        out<<"\t GradientDescent step: " <<iter<<"\t Residual (rel.): "<<this->GetOutputHandler()->ZeroTolerance(sqrt(res)/sqrt(firstres),1.0)<< "\t LineSearch {"<<lineiter<<"} ";
-	        	 	       //###################
 	        	 	        out<<"\t Actual eigenvalue =  " << this->GetReducedProblem()/*->GetProblem()*/->Get_actual_first_eigenvalue() <<"\n";
 
-	        	 	       	//###################
 	        	 	        this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 	        	 	        const double eps_diff = 0;
-	        	 	          this->CheckGrads(eps_diff, q, dq, 5);
+	        	 	        this->CheckGrads(eps_diff, q, dq, 5);
 
-
-
-
-	        		this->GetReducedProblem()->DeleteUserDomainData("q_previous");
-	        		this->GetReducedProblem()->DeleteUserDomainData("control_counter");
+//	        		this->GetReducedProblem()->DeleteUserDomainData("q_previous");
+//	        		this->GetReducedProblem()->DeleteUserDomainData("control_counter");
 
 	           }
 
@@ -443,9 +452,10 @@ namespace DOpE
 	     out<< "CostFunctional: " << cost;
 	     this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
 	     try
-	       {this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
+	       {
+//	    	 this->GetReducedProblem()->AddUserDomainData("control_counter", &(initial_control_.GetSpacialVector()));
 	         this->GetReducedProblem()->ComputeReducedFunctionals(q);
-	         this->GetReducedProblem()->DeleteUserDomainData("control_counter");
+//	         this->GetReducedProblem()->DeleteUserDomainData("control_counter");
 	       }
 	     catch (DOpEException &e)
 	       {
