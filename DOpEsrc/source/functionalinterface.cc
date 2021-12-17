@@ -520,6 +520,8 @@ namespace DOpE
                         "FunctionalInterface::AlgebraicValue");
   }
 
+
+
   /********************************************/
 
   template<

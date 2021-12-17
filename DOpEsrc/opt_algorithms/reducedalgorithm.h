@@ -24,7 +24,7 @@
 #ifndef REDUCED_ALGORITHM_H_
 #define REDUCED_ALGORITHM_H_
 
-#include <container/optproblemcontainer.h>
+//#include <container/optproblemcontainer.h>
 #include <interfaces/reducedprobleminterface.h>
 #include <include/dopeexceptionhandler.h>
 #include <include/outputhandler.h>

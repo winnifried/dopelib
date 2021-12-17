@@ -45,9 +45,6 @@
 #include <problemdata/stateproblem.h>
 #include <problemdata/tangentproblem.h>
 #include <problemdata/adjointproblem.h>
-#include <problemdata/eigenvaluestateproblem.h>
-#include <problemdata/eigenvalueadjointproblem.h>
-#include <problemdata/eigenvaluederivativeproblem.h>
 #include <problemdata/adjoint_hessianproblem.h>
 #include <problemdata/opt_adjoint_for_eeproblem.h>
 #include <basic/dopetypes.h>
@@ -150,23 +147,7 @@ namespace DOpE
       return *state_problem_;
     }
 
-    //TODO ------__EIGENVALUESTATE PROBLEM
-    EigenvalueStateProblem<
-       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
-                           GetEigenvalueStateProblem()
-       {
-         if (eigenvaluestate_problem_ == NULL)
-           {
-        	 eigenvaluestate_problem_ = new EigenvalueStateProblem<
-             OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-             DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-               *this, this->GetPDE());
-           }
-         return *eigenvaluestate_problem_;
-       }
+
 
     /**
      * Returns a description of the Tangent PDE
@@ -207,42 +188,6 @@ namespace DOpE
         }
       return *adjoint_problem_;
     }
-
-
-    EigenvalueAdjointProblem<
-        OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
-        GetEigenvalueAdjointProblem()
-        {
-          if (eigenvalueadjoint_problem_ == NULL)
-            {
-        	  eigenvalueadjoint_problem_ = new EigenvalueAdjointProblem<
-              OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-              CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-              DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-                *this, this->GetPDE());
-            }
-          return *eigenvalueadjoint_problem_;
-        }
-
-
-    EigenvalueDerivativeProblem<
-        OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
-        GetEigenvalueDerivativeProblem()
-        {
-          if (eigenvaluederivative_problem_ == NULL)
-            {
-        	  eigenvaluederivative_problem_ = new EigenvalueDerivativeProblem<
-              OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-              CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-              DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-                *this, this->GetPDE());
-            }
-          return *eigenvaluederivative_problem_;
-        }
 
 
     /**
@@ -415,7 +360,8 @@ namespace DOpE
     double
     AlgebraicFunctional(
       const std::map<std::string, const dealii::Vector<double>*> &values,
-      const std::map<std::string, const VECTOR *> &block_values, double eigenvalue);
+      const std::map<std::string, const VECTOR *> &block_values);
+
 
     /**
      * This function returns a residual to an equation that is depending
@@ -517,10 +463,7 @@ namespace DOpE
     void
     ElementRhs(const DATACONTAINER &dc,
                dealii::Vector<double> &local_vector, double scale = 1.);
-   template<typename DATACONTAINER>
-       void
-       ElementRhs(const DATACONTAINER &dc,
-                  dealii::Vector<double> &local_vector, double scale = 1., double eigenvalue = 1.);
+
 
     /******************************************************/
 
@@ -1521,10 +1464,6 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                         CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * state_problem_;
-    EigenvalueStateProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvaluestate_problem_;
     TangentProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                         CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -1533,14 +1472,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                         CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_problem_;
-   EigenvalueAdjointProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvalueadjoint_problem_;
-   EigenvalueDerivativeProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvaluederivative_problem_;
+
     Adjoint_HessianProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                         CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -1555,10 +1487,6 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
-    friend class EigenvalueStateProblem<
-      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class TangentProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -1567,14 +1495,6 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
-    friend class EigenvalueAdjointProblem<
-          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
-    friend class EigenvalueDerivativeProblem<
-          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class Adjoint_HessianProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -1595,9 +1515,8 @@ namespace DOpE
                         FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
                         SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
                         ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
-                          &constraints), STH_(&STH), state_problem_(NULL), eigenvaluestate_problem_(NULL),
-                        tangent_problem_(NULL),/* eigenvaluetangent_problem_(NULL),*/ adjoint_problem_(NULL), eigenvalueadjoint_problem_(NULL),
-						eigenvaluederivative_problem_(NULL), /*eigenvalueadjoint_hessian_problem_(NULL),*/ adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
+                          &constraints), STH_(&STH), state_problem_(NULL),
+                        tangent_problem_(NULL), adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
@@ -1659,10 +1578,6 @@ namespace DOpE
       {
         delete state_problem_;
       }
-    if (eigenvaluestate_problem_ != NULL)
-      {
-        delete eigenvaluestate_problem_;
-      }
     if (tangent_problem_ != NULL)
       {
         delete tangent_problem_;
@@ -1671,14 +1586,6 @@ namespace DOpE
       {
         delete adjoint_problem_;
      }
-    if (eigenvalueadjoint_problem_ != NULL)
-      {
-        delete eigenvalueadjoint_problem_;
-      }
-    if (eigenvaluederivative_problem_ != NULL)
-      {
-           delete eigenvaluederivative_problem_;
-      }
     if (adjoint_hessian_problem_ != NULL)
       {
         delete adjoint_hessian_problem_;
@@ -1705,11 +1612,7 @@ namespace DOpE
         delete state_problem_;
         state_problem_ = NULL;
       }
-    if (eigenvaluestate_problem_ != NULL)
-      {
-        delete eigenvaluestate_problem_;
-        eigenvaluestate_problem_ = NULL;
-      }
+
     if (tangent_problem_ != NULL)
       {
         delete tangent_problem_;
@@ -1720,16 +1623,6 @@ namespace DOpE
         delete adjoint_problem_;
         adjoint_problem_ = NULL;
       }
-    if (eigenvalueadjoint_problem_ != NULL)
-      {
-        delete eigenvalueadjoint_problem_;
-        eigenvalueadjoint_problem_ = NULL;
-      }
-    if (eigenvaluederivative_problem_ != NULL)
-       {
-        delete eigenvaluederivative_problem_;
-        eigenvaluederivative_problem_ = NULL;
-       }
     if (adjoint_hessian_problem_ != NULL)
       {
         delete adjoint_hessian_problem_;
@@ -1795,18 +1688,18 @@ namespace DOpE
             //Prepare DoFHandlerPointer
 
             {
-              if (this->GetType() == "state" || this->GetType() == "adjoint" || this->GetType() == "eigenvalueadjoint"
+              if (this->GetType() == "state" || this->GetType() == "adjoint"
                   || this->GetType() == "adjoint_for_ee" || this->GetType() == "cost_functional"
                   || this->GetType() == "cost_functional_pre"
                   || this->GetType() == "cost_functional_pre_tangent"
                   || this->GetType() == "aux_functional" || this->GetType() == "functional_for_ee"
-                  || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian" || this->GetType() =="eigenvaluestate"
+                  || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian"
                   || this->GetType() == "error_evaluation"
                   || this->GetType().find("constraints") != std::string::npos)
                 {
                   GetSpaceTimeHandler()->SetDoFHandlerOrdering(1,0);
                 }
-              else if (this->GetType() == "gradient"||this->GetType() == "eigenvaluederivative"||this->GetType() == "eigenvaluegradient"||this->GetType() == "hessian"||this->GetType() == "eigenvaluehessian"||this->GetType() == "hessian_inverse" || this->GetType() == "global_constraint_gradient"|| this->GetType() == "global_constraint_hessian")
+              else if (this->GetType() == "gradient"||this->GetType() == "hessian"||this->GetType() == "hessian_inverse" || this->GetType() == "global_constraint_gradient"|| this->GetType() == "global_constraint_hessian")
                 {
                   GetSpaceTimeHandler()->SetDoFHandlerOrdering(0,1);
                 }
@@ -1826,8 +1719,7 @@ namespace DOpE
           //Prepare DoFHandlerPointer
           {
 
-            if (this->GetType() == "state" || this->GetType() == "adjoint" || this->GetType() == "eigenvaluestate"
-            	|| this->GetType() == "eigenvalueadjoint"
+            if (this->GetType() == "state" || this->GetType() == "adjoint"
                 || this->GetType() == "adjoint_for_ee"
                 || this->GetType() == "functional_for_ee"
                 || this->GetType() == "cost_functional"
@@ -1841,9 +1733,7 @@ namespace DOpE
                 GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
               }
             else if (this->GetType() == "gradient"
-            		 || this->GetType() == "eigenvaluederivative"
                      || this->GetType() == "hessian_inverse"
-                     || this->GetType() == "eigenvaluehessian"
                      || this->GetType() == "hessian")
               {
                 GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
@@ -2043,13 +1933,13 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
                         const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values, double eigenvalue)
+                        const std::map<std::string, const VECTOR *> &domain_values)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
       {
         // state values in quadrature points
-        return GetFunctional()->AlgebraicValue(param_values, domain_values, eigenvalue);
+        return GetFunctional()->AlgebraicValue(param_values, domain_values);
       }
     else if (this->GetType() == "aux_functional")
       {
@@ -2070,7 +1960,9 @@ namespace DOpE
       }
   }
 
+
   /******************************************************/
+
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
@@ -2084,7 +1976,7 @@ namespace DOpE
                         double scale, double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian" || this->GetType() == "eigenvaluehessian" || (this->GetType() == "eigenvaluederivative")))
+        || (this->GetType() == "hessian" ))
       {
         // control values in quadrature points
         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
@@ -2110,7 +2002,7 @@ namespace DOpE
                           double scale)
     {
 	  if ((this->GetType() == "gradient")
-	         || (this->GetType() == "hessian") || (this->GetType() == "eigenvaluehessian") || (this->GetType() == "eigenvaluehessian")||(this->GetType() == "eigenvaluederivative"))
+	         || (this->GetType() == "hessian") )
 	       {
 	         // control values in quadrature point
 	         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
@@ -2231,42 +2123,6 @@ namespace DOpE
       }
   }
 
-  /******************************************************/
-
-   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-   template<int, int> class DH>
-   template<typename DATACONTAINER>
-   void
-   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
-                         const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                         double scale, double eigenvalue)
-   {
-
- 	    if (this->GetType() == "eigenvaluederivative")
- 	      {
-
- 	        if (GetFunctional()->NeedTime())
- 	          {
- 	            if (GetFunctional()->GetType().find("domain") != std::string::npos)
- 	              {
- 	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
- 	              }
- 	          }
-
- 	       this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_ , eigenvalue);
- 	       scale *= -1;
- 	       this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_);
-
-
- 	   }else
- 		        {
- 		          throw DOpEException("Not implemented",
- 		                              "OptProblemContainer::ElementRhs");
- 		        }
-   }
 
 
   /******************************************************/
@@ -2625,7 +2481,7 @@ namespace DOpE
   {
 
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+        || (this->GetType() == "hessian"))
       {
         // control values in quadrature points
         this->GetPDE().ControlElementMatrix(edc, local_entry_matrix, scale*c_interval_length_);
@@ -2655,7 +2511,7 @@ namespace DOpE
   {
 
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian") || (this->GetType() == "eigenvaluederivative"))
+        || (this->GetType() == "hessian") )
       {
               throw DOpEException("Not implemented",
                             "OptProblemContainer::ElementMassMatrix");
@@ -2681,7 +2537,7 @@ namespace DOpE
                           const DATACONTAINER &edc, FullMatrix<double> &local_entry_matrix)
     {
       if ((this->GetType() == "gradient")
-          || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+          || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
                               "OptProblemContainer::ElementMassMatrix");
@@ -2711,7 +2567,7 @@ namespace DOpE
   {
 
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+        || (this->GetType() == "hessian"))
       {
               throw DOpEException("Not implemented",
                             "OptProblemContainer::ElementTimeMatrix");
@@ -2740,7 +2596,7 @@ namespace DOpE
                         const DATACONTAINER &edc, FullMatrix<double> &local_entry_matrix)
   {
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian")/*|| (this->GetType() == "eigenvaluederivative")*/)
+        || (this->GetType() == "hessian"))
       {
         throw DOpEException("Not implemented",
                             "OptProblemContainer::ElementTimeMatrix");
@@ -2927,7 +2783,7 @@ namespace DOpE
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
-        || (this->GetType() == "hessian_inverse")|| (this->GetType() == "eigenvaluederivative")|| this->GetType() == "eigenvaluehessian")
+        || (this->GetType() == "hessian_inverse"))
       {
         return "control";
       }
@@ -2949,7 +2805,7 @@ namespace DOpE
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
-        || (this->GetType() == "global_constraint_gradient")|| (this->GetType() == "eigenvaluederivative")|| this->GetType() == "eigenvaluehessian")
+        || (this->GetType() == "global_constraint_gradient"))
       {
 #if dope_dimension > 0
         if (dopedim == dealdim)
@@ -2999,7 +2855,7 @@ namespace DOpE
       {
         r = this->GetPDE().GetUpdateFlags();
         if ((this->GetType() == "hessian")
-            || (this->GetType() == "gradient")|| (this->GetType() == "eigenvaluederivative")|| this->GetType() == "eigenvaluehessian")
+            || (this->GetType() == "gradient"))
           {
             r = r | this->GetFunctional()->GetUpdateFlags();
           }
@@ -3038,7 +2894,7 @@ namespace DOpE
       {
         r = this->GetPDE().GetFaceUpdateFlags();
         if (this->GetType() == "gradient"
-            || (this->GetType() == "hessian")|| this->GetType() == "eigenvaluehessian"|| this->GetType() == "eigenvaluederivative")
+            || (this->GetType() == "hessian"))
           {
             r = r | this->GetFunctional()->GetFaceUpdateFlags();
           }
@@ -3227,7 +3083,7 @@ namespace DOpE
 			) const
   {
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian")|| this->GetType() == "eigenvaluehessian"|| this->GetType() == "eigenvaluederivative")
+        || (this->GetType() == "hessian"))
       {
 #if  dope_dimension > 0
         this->GetSpaceTimeHandler()->ComputeControlSparsityPattern(sparsity);
@@ -3490,11 +3346,11 @@ namespace DOpE
       }
     else
       {
-        if ((this->GetType() == "gradient")||(this->GetType() == "eigenvaluederivative"))
+        if (this->GetType() == "gradient")
           {
             return this->GetPDE().HasFaces();
           }
-        else if ((this->GetType() == "hessian") ||( this->GetType() == "eigenvaluehessian"))
+        else if (this->GetType() == "hessian")
           {
             return this->GetPDE().HasFaces() || this->GetFunctional()->HasFaces();
           }
@@ -3523,11 +3379,11 @@ namespace DOpE
         // We dont need PointRhs in this cases.
         return false;
       }
-    else if ((this->GetType() == "hessian")|| (this->GetType() == "eigenvaluehessian"))
+    else if (this->GetType() == "hessian")
       {
         return this->GetFunctional()->HasPoints();
       }
-    else if (this->GetType() == "gradient"||(this->GetType() == "eigenvaluederivative"))
+    else if (this->GetType() == "gradient")
       {
         return this->GetFunctional()->HasPoints();
       }
@@ -3564,7 +3420,7 @@ namespace DOpE
     else
       {
         if ((this->GetType() == "gradient")
-            || (this->GetType() == "hessian")||(this->GetType() == "eigenvaluederivative")|| this->GetType() == "eigenvaluehessian")
+            || (this->GetType() == "hessian"))
           {
             return this->GetPDE().HasInterfaces();
           }
@@ -3602,7 +3458,7 @@ namespace DOpE
         return false;
       }
     else if ((this->GetType() == "gradient")
-	     || (this->GetType() == "hessian") || (this->GetType() == "error_evaluation")|| (this->GetType() == "eigenvaluederivative")|| this->GetType() == "eigenvaluehessian")
+	     || (this->GetType() == "hessian") || (this->GetType() == "error_evaluation"))
     {
       return this->GetPDE().HasVertices();
     }
@@ -3639,7 +3495,7 @@ namespace DOpE
     else
       {
         if ((this->GetType() == "gradient")
-            || (this->GetType() == "hessian")||(this->GetType() == "eigenvaluederivative")|| this->GetType() == "eigenvaluehessian")
+            || (this->GetType() == "hessian"))
           {
             return this->GetPDE().AtInterface(element,face);
           }
@@ -3752,7 +3608,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative")
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
       {
         return control_dirichlet_colors_;
@@ -3773,7 +3629,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletColors() const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
       {
         return control_transposed_dirichlet_colors_;
       }
@@ -3796,7 +3652,7 @@ namespace DOpE
                         unsigned int color) const
   {
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+        || (this->GetType() == "hessian"))
       {
         unsigned int comp = control_dirichlet_colors_.size();
         for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
@@ -3833,7 +3689,7 @@ namespace DOpE
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
                         unsigned int color) const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
       {
         unsigned int comp = dirichlet_colors_.size();
         for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
@@ -3875,7 +3731,7 @@ namespace DOpE
   {
 
     unsigned int col = dirichlet_colors_.size();
-    if (this->GetType() == "gradient" || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+    if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
       {
         col = control_dirichlet_colors_.size();
         for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
@@ -3900,7 +3756,7 @@ namespace DOpE
                             "OptProblemContainer::GetDirichletValues");
       }
 
-    if (this->GetType() == "gradient" || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+    if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
       {
         return *(control_dirichlet_values_[col]);
       }
@@ -3924,7 +3780,7 @@ namespace DOpE
                         const std::map<std::string, const VECTOR *> &domain_values) const
   {
     unsigned int col = control_transposed_dirichlet_colors_.size();
-    if (this->GetType() == "gradient" || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
+    if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
       {
         for (unsigned int i = 0;
              i < control_transposed_dirichlet_colors_.size(); ++i)
@@ -3950,7 +3806,7 @@ namespace DOpE
                             "OptProblemContainer::GetTransposedDirichletValues");
       }
 
-    if ((this->GetType() == "gradient")|| (this->GetType() == "eigenvaluederivative"))
+    if (this->GetType() == "gradient")
       {
         transposed_control_gradient_dirichlet_values_[col]->ReInit(param_values,
                                                                    domain_values, color);
@@ -3979,7 +3835,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
   {
-    if (this->GetType() == "gradient" || (this->GetType() == "hessian"|| (this->GetType() == "eigenvaluederivative")|| (this->GetType() == "eigenvaluehessian"))
+    if (this->GetType() == "gradient" || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
       {
         return control_boundary_equation_colors_;
@@ -4199,16 +4055,13 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetNBlocks() const
   {
-    if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee")||(this->GetType() == "eigenvaluestate")
-    	||(this->GetType() == "eigenvalueadjoint")
-        || (this->GetType() == "adjoint") || (this->GetType() == "tangent")|| (this->GetType() == "eigenvaluetangent")
-        || (this->GetType() == "adjoint_hessian")|| (this->GetType() == "eigenvalueadjoint_hessian"))
+    if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee")
+        || (this->GetType() == "adjoint") || (this->GetType() == "tangent")
+        || (this->GetType() == "adjoint_hessian"))
       {
         return this->GetStateNBlocks();
       }
     else if ((this->GetType() == "gradient")
-    		|| (this->GetType() == "eigenvaluegradient")
-			|| (this->GetType() == "eigenvaluederivative")
              || (this->GetType() == "hessian"))
       {
         return this->GetControlNBlocks();
@@ -4230,19 +4083,14 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const
   {
-    if ((this->GetType() == "state") || (this->GetType() == "adjoint")||(this->GetType() == "eigenvaluestate")
-    		||(this->GetType() == "eigenvalueadjoint")
+    if ((this->GetType() == "state") || (this->GetType() == "adjoint")
         || (this->GetType() == "adjoint_for_ee")
         || (this->GetType() == "tangent")
-		|| (this->GetType() == "eigenvaluetangent")
-        || (this->GetType() == "adjoint_hessian")
-		 || (this->GetType() == "eigenvalueadjoint_hessian"))
+        || (this->GetType() == "adjoint_hessian"))
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       }
     else if ((this->GetType() == "gradient")
-    		 || (this->GetType() == "eigenvaluegradient")
-			 || (this->GetType() == "eigenvaluederivative")
              || (this->GetType() == "hessian"))
       {
         return GetSpaceTimeHandler()->GetControlDoFsPerBlock();
@@ -4266,7 +4114,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative")|| (this->GetType() == "eigenvaluehessian")
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
       {
         return GetSpaceTimeHandler()->GetControlDoFConstraints();
@@ -4282,7 +4130,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative")|| (this->GetType() == "eigenvaluehessian")
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
       {
         return GetSpaceTimeHandler()->GetControlDoFConstraints();
@@ -4307,7 +4155,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative")
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
       {
         return GetSpaceTimeHandler()->GetControlHNConstraints();
@@ -4323,7 +4171,7 @@ namespace DOpE
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
   {
-    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative")
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
       {
         return GetSpaceTimeHandler()->GetControlHNConstraints();

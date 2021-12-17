@@ -478,6 +478,7 @@ namespace DOpE
     AlgebraicValue(
       const std::map<std::string, const dealii::Vector<double>*> &param_values,
       const std::map<std::string, const VECTOR *> &domain_values);
+
     /**
      * Implements the gradient of a functional that can be computed by the values in some given Vectors or BlockVectors
      */
