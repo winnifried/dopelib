@@ -30,6 +30,7 @@
 using namespace std;
 using namespace dealii;
 using namespace DOpE;
+using namespace local;
 
 template<
 		template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -59,7 +60,8 @@ public:
 	    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 	    unsigned int n_q_points = edc.GetNQPoints();
 	    {
-	      assert(this->problem_type_ == "eigenvaluederivative");
+	      assert(this->problem_type_ == "eigenvaluegradient");
+
 	      funcgradvalues_.resize(n_q_points, Vector<double>(2));
 	      edc.GetValuesControl("last_newton_solution", funcgradvalues_);
 	    }
@@ -119,8 +121,6 @@ public:
 			double /*scale_ico*/) {
 		const DOpEWrapper::FEValues<dealdim> &state_fe_values =
 				edc.GetFEValuesState();
-//		const DOpEWrapper::FEValues<dealdim> &control_fe_values =
-//				edc.GetFEValuesControl();
 		const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 		const unsigned int n_q_points = edc.GetNQPoints();
 
@@ -175,10 +175,10 @@ public:
 					local_matrix(i, j) += scale *((1/detDF)*phi_curl_u[j]*(1/detDF)*phi_curl_u[i])
 											* state_fe_values.JxW(q_point);
 
-					local_matrix(i, j) += scale* scalar_product(/*DF_Inverse_T**/phi_grads_u[j]*DF_Inverse,
+					local_matrix(i, j) += scale* scalar_product(phi_grads_u[j]*DF_Inverse,
 							DF_Inverse_T*phi_u[i])* state_fe_values.JxW(q_point);
 
-					local_matrix(i, j) += scale* scalar_product(DF_Inverse_T*phi_u[j], /*DF_Inverse_T **/ phi_grads_u[i]*DF_Inverse)
+					local_matrix(i, j) += scale* scalar_product(DF_Inverse_T*phi_u[j], phi_grads_u[i]*DF_Inverse)
 																		* state_fe_values.JxW(q_point);
 
 
@@ -255,27 +255,22 @@ public:
 		unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 		unsigned int n_q_points = edc.GetNQPoints();
 
-		assert(this->problem_type_ == "eigenvaluederivative");
+		assert(this->problem_type_ == "eigenvaluegradient");
 
 		uvalues_.resize(n_q_points, Vector<double>(3));
 		zvalues_.resize(n_q_points, Vector<double>(3));
 		qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 		ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
 		zgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
-		eigValues_.resize(n_q_points, Vector<double>(3));
 
 		edc.GetGradsControl("control", qgrads_);
 		edc.GetValuesState("state", uvalues_);
 		edc.GetGradsState("state", ugrads_);
 		edc.GetValuesState("adjoint", zvalues_);
 		edc.GetGradsState("adjoint", zgrads_);
-		edc.GetValuesState("eigenvalue",eigValues_);
 
-		//TEST ---
-//		  qvalues_old_.resize(n_q_points, Vector<double>(2));
+//		 qvalues_old_.resize(n_q_points, Vector<double>(2));
 //		 edc.GetValuesControl("q_previous", qvalues_old_);
-
-		//__TESTENDE
 
 		vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
 		const FEValuesExtractors::Vector dv(0);
@@ -298,8 +293,7 @@ public:
 		Tensor<2, 2> DFdq;
 		Tensor<2, 2> DF_Inverse_Tdq;
 		Tensor<2, 2> DF_Inversedq;
-		double detDFINVdq = 0;
-		double eigval = 0;
+		double detDFINVdq;
 
 		for (unsigned int q_point = 0; q_point < n_q_points; q_point++) {
 		u.clear();
@@ -339,13 +333,9 @@ public:
 		curl_u =  ugrads_[q_point][2][0] - ugrads_[q_point][1][1];
 		curl_z =  zgrads_[q_point][2][0] - zgrads_[q_point][1][1];
 
-		eigval = eigValues_[q_point][0];
-
 		uDF_Inv_T = DF_Inverse_T*u;
 		zDF_Inv_T = DF_Inverse_T*z;
 
-//		z = zDF_Inv_T *transpose_(DF)  ;
-//		std::cout << " -----LOCALPDE_ELEMENTEQ_Q------------ " << std::endl;
 		for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 			grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
@@ -359,48 +349,20 @@ public:
 			DF_Inversedq = -((1/detDF)*adjunkte_(grad_phi_v[i])+detDFINVdq*adjunkte_(DF));
 
 
-
-//        	std::cout << "detDFINVdq = " << detDFINVdq << std::endl;
-//        	std::cout << " ----------------- " << std::endl;
-
-
-//			//Curl Term
-			local_vector(i) += scale*/*2**/detDFINVdq*curl_z * (1/detDF)*curl_u
+			//Curl Term
+			local_vector(i) += scale*detDFINVdq*curl_z * (1/detDF)*curl_u
 					* state_fe_values.JxW(q_point);
 
 			//1. Grad Term
 			local_vector(i) += scale*
-					(scalar_product(/*DF_Inverse_T**/grad_u*DF_Inverse, DF_Inverse_Tdq*z)
-					/*+scalar_product(DF_Inverse_Tdq*grad_z,uDF_Inv_T)*/)
+					(scalar_product(grad_u*DF_Inverse, DF_Inverse_Tdq*z))
 					* state_fe_values.JxW(q_point);
 
 			//2. Grad Term
-			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*z,
-					/*DF_Inverse_T**/grad_u*DF_Inverse)
-					/*+
-					scalar_product(uDF_Inv_T, DF_Inverse_Tdq*grad_z)*/
-			)* state_fe_values.JxW(q_point);
-
-////
-//						//Curl Term
-//						local_vector(i) += scale*2*detDFINVdq*curl_z * (1/detDF)*curl_u
-//								* state_fe_values.JxW(q_point);
-//
-//						//1. Grad Term
-//						local_vector(i) += scale*
-//								(scalar_product(/*DF_Inverse_T**/grad_u*DF_Inverse, DF_Inverse_Tdq*z)
-//								+scalar_product(/*DF_Inverse_Tdq**/grad_z*DF_Inversedq,uDF_Inv_T))
-//								* state_fe_values.JxW(q_point);
-//
-//						//2. Grad Term
-//						local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*z,
-//								/*DF_Inverse_T**/grad_u*DF_Inverse)
-//								+
-//								scalar_product(uDF_Inv_T, /*DF_Inverse_Tdq**/grad_z*DF_Inversedq)
-//						)* state_fe_values.JxW(q_point);
+			local_vector(i) += scale*(scalar_product(DF_Inverse_Tdq*z, grad_u*DF_Inverse)
+				)* state_fe_values.JxW(q_point);
 
 		}
-
 
 		}
 
@@ -420,28 +382,23 @@ public:
 			unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 			unsigned int n_q_points = edc.GetNQPoints();
 
-			assert(this->problem_type_ == "eigenvaluederivative");
+			assert(this->problem_type_ == "eigenvaluegradient");
 
 			uvalues_.resize(n_q_points, Vector<double>(3));
 			zvalues_.resize(n_q_points, Vector<double>(3));
 			qgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-			eigValues_.resize(n_q_points, Vector<double>(3));
-
 			ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
 			zgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
-
 
 			edc.GetValuesState("state", uvalues_);
 			edc.GetValuesState("adjoint", zvalues_);
 			edc.GetGradsControl("control", qgrads_);
-//			edc.GetValuesState("eigenvalue",eigValues_)
 			edc.GetGradsState("state", ugrads_);
 			edc.GetGradsState("adjoint", zgrads_);;
 
 			vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
 			const FEValuesExtractors::Vector dv(0);
 
-//			double eigval = 0;
 			Tensor<1, 2> u;
 			Tensor<1, 2> z;
 			Tensor<1, 2> uDF_Inv_T;
@@ -460,8 +417,6 @@ public:
 			Tensor<2, 2> DF_Inverse_Tdq;
 			Tensor<2, 2> qgrads;
 
-			double c = 0;
-//			std::cout << " -----LOCALPDE_ELEMENTMASSEQ------------ " << std::endl;
 			for (unsigned int q_point = 0; q_point < n_q_points; q_point++) {
 				uDF_Inv_T.clear();
 				zDF_Inv_T.clear();
@@ -486,8 +441,6 @@ public:
 
 				DF = deformation_tensor_(qgrads);
 				detDF = determinante_(DF);
-//				std::cout << "det(DF) = " << detDF << std::endl;
-
 				DF_Inverse = inverse_(DF);
 				DF_Inverse_T = inverse_transpose_(DF);
 
@@ -502,8 +455,6 @@ public:
 				uDF_Inv_T = DF_Inverse_T*u;
 				zDF_Inv_T = (DF_Inverse_T*z);
 
-//			z =   zDF_Inv_T *transpose_(DF) ;
-//
 				for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 					grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
@@ -515,18 +466,12 @@ public:
 										+grad_phi_v[i][1][1]
 										+grad_phi_v[i][0][0] );
 
-					DF_Inversedq = -((1/detDF)*adjunkte_(grad_phi_v[i])+detDFINVdq*adjunkte_(DF)); //TODO vorzeichen?
+					DF_Inversedq = -((1/detDF)*adjunkte_(grad_phi_v[i])+detDFINVdq*adjunkte_(DF));
 					DF_Inverse_Tdq =  -((1/detDF)* adjunkte_transposed_(grad_phi_v[i])+detDFINVdq*adjunkte_transposed_(DF));
 
 
-//		        	std::cout << "detDFINVdq = " << detDFINVdq << std::endl;
-//		        	std::cout << " detDF = " << detDF << std::endl;
-//		        	if(detDF< 0.5){
-//		        		std::cout << "achtung det<0.5" << std::endl;
-//		        	}
-//		        	std::cout << " ----------------- " << std::endl;
 
-//					local_vector(i) += scale*4*eigenvalue*(
+//					local_vector(i) += scale*eigenvalue*(
 //						scalar_product(uDF_Inv_T ,DF_Inverse_Tdq*z))
 //				* state_fe_values.JxW(q_point);
 
@@ -582,76 +527,19 @@ private:
 	vector<Vector<double> > uvalues_;
 	vector<Vector<double> > duvalues_;
 	vector<Vector<double> > zvalues_;
-
-
 	vector<Vector<double> >  eigValues_;
+	vector<Vector<double> > qvalues_;
+	//	vector<Vector<double> > qvalues_old_;
+	vector<Vector<double> > funcgradvalues_;
+
 	vector<vector<Tensor<1, dealdim> > > ugrads_;
 	vector<vector<Tensor<1, dealdim> > > dugrads_;
 	vector<vector<Tensor<1, dealdim> > > zgrads_;
 	vector<vector<Tensor<1, dealdim> > > qgrads_;
 
-	  vector<Vector<double> > qvalues_old_;
-
-
-
-	vector<Vector<double> > qvalues_;
-	vector<Vector<double> > funcgradvalues_;
 
 	vector<unsigned int> control_block_component_;
 	vector<unsigned int> state_block_component_;
-
-
-// ---------------------------------------------------------------
-// Hier alle Funktionen, die in Bezug zu DF benötigt werden
-	Tensor<2, 2> deformation_tensor_(Tensor<2, 2> qgrads) {
-		Tensor<2, 2> DF_;
-		DF_[0][0] = qgrads[0][0] + 1;
-		DF_[1][1] = qgrads[1][1] + 1;
-		DF_[1][0] = qgrads[1][0];
-		DF_[0][1] = qgrads[0][1];
-
-		return DF_;
-	}
-	double determinante_(Tensor<2, 2> tensor) {
-		return tensor[0][0] * tensor[1][1] - tensor[1][0] * tensor[0][1];
-	}
-	Tensor<2, 2> adjunkte_(Tensor<2, 2> tensor) {
-		Tensor<2, 2> adjunkte;
-		adjunkte[0][0] = tensor[1][1];
-		adjunkte[1][1] = tensor[0][0];
-		adjunkte[1][0] = -tensor[1][0];
-		adjunkte[0][1] = -tensor[0][1];
-
-		return adjunkte;
-	}
-	Tensor<2, 2> adjunkte_transposed_(Tensor<2, 2> tensor) {
-		Tensor<2, 2> adjunkte_transposed;
-		adjunkte_transposed =transpose_(adjunkte_(tensor));
-
-		return adjunkte_transposed;
-	}
-
-	Tensor<2, 2> inverse_(Tensor<2, 2> tensor) {
-		Tensor<2, 2> inverse = (1/determinante_(tensor))*adjunkte_(tensor);
-
-		return inverse;
-	}
-
-	Tensor<2, 2> inverse_transpose_(Tensor<2, 2> tensor) {
-		Tensor<2, 2> tensor_inv_t = transpose_(inverse_(tensor));
-
-		return tensor_inv_t;
-	}
-
-	Tensor<2,2> transpose_(Tensor<2, 2> tensor){
-		Tensor <2,2> transposed_tensor;
-		transposed_tensor[0][0] = tensor[0][0];
-		transposed_tensor[1][1] = tensor[1][1];
-		transposed_tensor[1][0] = tensor[0][1];
-		transposed_tensor[0][1] = tensor[1][0];
-
-		return transposed_tensor;
-	}
 
 };
 

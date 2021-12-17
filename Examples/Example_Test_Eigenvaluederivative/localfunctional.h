@@ -25,10 +25,12 @@
 #define LOCALFunctional_
 
 #include <interfaces/functionalinterface.h>
+#include "functions.h"
 
 using namespace std;
 using namespace dealii;
 using namespace DOpE;
+using namespace local;
 
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -39,9 +41,11 @@ class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 {
 public:
-  LocalFunctional(double alpha)
+  LocalFunctional(ParameterReader &param_reader, double alpha)
   {
     alpha_ = alpha;
+    param_reader.SetSubsection("localfunctional parameters");
+    target_eigenvalue_    = param_reader.get_double("target_eigenvalue");
   }
 
   double
@@ -59,19 +63,15 @@ public:
     edc.GetValuesControl("control", qvalues_);
     edc.GetGradsControl("control", qgrads_);
 //    edc.GetValuesControl("control_counter", control_initial_iteration);
-
-//std::cout << "control_initial_iteration[0][0]" << control_initial_iteration[0][0] << std::endl;
 //    if(control_initial_iteration[0][0] != 0 ){
 //       qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 //       edc.GetGradsControl("q_previous", qgrads_old_);
 //   }
-
     Tensor<2, 2> qgrads;
     Tensor<2, 2> qgrads_old;
     Tensor<2, 2> DF;
     double detDF;
     double r = 0.;
-
 
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
@@ -90,18 +90,12 @@ public:
 //		    	qgrads_old[0][1] = qgrads_old_[q_point][0][1];
 //		}
 
-
 		DF = deformation_tensor_(qgrads);
 		detDF = determinante_(DF);
 		if(detDF < 0.001){
-//			std::cout << " detDF = " << detDF<< std::endl;
 			r = 10.e20;
-			return r ;
-
-		}
-
-
-         r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
+		} else{
+		         r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
 
 //		if(control_initial_iteration[0][0] == 0){
@@ -109,38 +103,25 @@ public:
 //		}else{
 //			r += 0.5 * alpha_  * (scalar_product((qgrads[0] - qgrads_old_[q_point][0] ),(qgrads[0]-qgrads_old_[q_point][0]))+scalar_product((qgrads[1]-qgrads_old_[q_point][1]),(qgrads[1]-qgrads_old_[q_point][1]))) * state_fe_values.JxW(q_point);
 //       }
-
-
-
-         //  log(detDF)
-
-
-//         r +=  0.5 *alpha_ *
-//        		  (std::log(detDF)-1)*  (std::log(detDF) -1)* state_fe_values.JxW(q_point);
-
-//		 r +=  0.5 *alpha_ *  (detDF)*  (detDF)* state_fe_values.JxW(q_point);
-
-
-
-// std::cout << " detDF_alt = " << determinante_(deformation_tensor_(qgrads_old))<< std::endl;
+		}
       }
-//    std::cout << " ############################ " << std::endl;
-
     return r;
-
   }
 
   double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                         const std::map<std::string, const VECTOR *> &domain_values, double eigenvalue)
+                         const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
    {
      assert(this->GetProblemType() == "cost_functional");
 
-     //TODO nicht schoen..
-     auto x = domain_values.find("lambda_target_value");
-     auto y =  x->second;
-     double fval = y[0][0];
-     return 0.5*(eigenvalue- fval)*(eigenvalue - fval);
+     return 0.5*(eigenvalue- target_eigenvalue_)*(eigenvalue - target_eigenvalue_);
 
+   }
+
+  double AlgebraicValue_U(const EDC<DH, VECTOR, dealdim> &edc,
+          dealii::Vector<double> &local_vector, double scale, double eigenvalue)
+   {
+
+     return eigenvalue - target_eigenvalue_; //TODO Rueckgabe Void
    }
 
   void
@@ -166,10 +147,7 @@ public:
 //    if(control_initial_iteration[0][0] != 0 ){
 //    	 qgrads_old_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 //    	 edc.GetGradsControl("q_previous", qgrads_old_);
-//
 //    }
-
-//    std::cout << "control-counter = "<< control_initial_iteration[0]<< std::endl;
 
     Tensor<2, 2> qgrads;
     Tensor<2, 2> qgrads_old;
@@ -216,7 +194,6 @@ public:
         	local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
         	        	              * state_fe_values.JxW(q_point);
 
-
 //        	if(control_initial_iteration[0][0] == 0){
             	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
 
@@ -225,16 +202,10 @@ public:
 //            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0]-qgrads_old[0])+scalar_product(grad_phi_v[i][1],qgrads[1]-qgrads_old[1])) * state_fe_values.JxW(q_point);
 //
 //        	}
-
-
-//        	local_vector(i) += scale *alpha_ *(detDF)* detDFdq * state_fe_values.JxW(q_point);
-
-//       	local_vector(i) += scale *alpha_ *(std::log(detDF)-1)* (1/detDFdq) * state_fe_values.JxW(q_point);
           }
       }
 
   }
-
 
 
   UpdateFlags
@@ -255,76 +226,28 @@ public:
     return "cost functional";
   }
 
+  static void
+  declare_params(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("localfunctional parameters");
+    param_reader.declare_entry("target_eigenvalue", "1.5", Patterns::Double(0));
+  }
+
 private:
   vector<Vector<double> > uvalues_;
-
-  vector<Vector<double> > evalues_;
   vector<Vector<double> > qvalues_;
-
+//  vector<Vector<double> > qvalues_old_;
+//  vector<Vector<double> > control_initial_iteration;
   vector<Vector< double > >lambda_target_value_;
-  vector<Vector<double> > qvalues_old_;
-  vector<Vector<double> > control_initial_iteration;
 
   vector<Vector<double> > funcgradvalues_;
 
   vector<vector<Tensor<1, dealdim> > > qgrads_;
-  vector<vector<Tensor<1, dealdim> > > qgrads_old_;
+//  vector<vector<Tensor<1, dealdim> > > qgrads_old_;
 
   double alpha_ ;
+  double target_eigenvalue_;
 
-  // ---------------------------------------------------------------
-  // Hier alle Funktionen, die in Bezug zu DF benötigt werden
-  // ---------------------------------------------------------------
-  // Hier alle Funktionen, die in Bezug zu DF benötigt werden
-  	Tensor<2, 2> deformation_tensor_(Tensor<2, 2> qgrads) {
-  		Tensor<2, 2> DF_;
-  		DF_[0][0] = qgrads[0][0] + 1;
-  		DF_[1][1] = qgrads[1][1] + 1;
-  		DF_[1][0] = qgrads[1][0];
-  		DF_[0][1] = qgrads[0][1];
-
-  		return DF_;
-  	}
-  	double determinante_(Tensor<2, 2> tensor) {
-  		return tensor[0][0] * tensor[1][1] - tensor[1][0] * tensor[0][1];
-  	}
-  	Tensor<2, 2> adjunkte_(Tensor<2, 2> tensor) {
-  		Tensor<2, 2> adjunkte;
-  		adjunkte[0][0] = tensor[1][1];
-  		adjunkte[1][1] = tensor[0][0];
-  		adjunkte[1][0] = -tensor[1][0];
-  		adjunkte[0][1] = -tensor[0][1];
-
-  		return adjunkte;
-  	}
-  	Tensor<2, 2> adjunkte_transposed_(Tensor<2, 2> tensor) {
-  		Tensor<2, 2> adjunkte_transposed;
-  		adjunkte_transposed =transpose_(adjunkte_(tensor));
-
-  		return adjunkte_transposed;
-  	}
-
-  	Tensor<2, 2> inverse_(Tensor<2, 2> tensor) {
-  		Tensor<2, 2> inverse = (1/determinante_(tensor))*adjunkte_(tensor);
-
-  		return inverse;
-  	}
-
-  	Tensor<2, 2> inverse_transpose_(Tensor<2, 2> tensor) {
-  		Tensor<2, 2> tensor_inv_t = transpose_(inverse_(tensor));
-
-  		return tensor_inv_t;
-  	}
-
-  	Tensor<2,2> transpose_(Tensor<2, 2> tensor){
-  		Tensor <2,2> transposed_tensor;
-  		transposed_tensor[0][0] = tensor[0][0];
-  		transposed_tensor[1][1] = tensor[1][1];
-  		transposed_tensor[1][0] = tensor[0][1];
-  		transposed_tensor[0][1] = tensor[1][0];
-
-  		return transposed_tensor;
-  	}
 
 
 };

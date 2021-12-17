@@ -43,27 +43,28 @@
 #include <deal.II/base/function_lib.h>
 #include <deal.II/base/table.h>
 
-#include <opt_algorithms/reducedproximalgradientdescentalgorithm.h>
+#include <opt_algorithms/reducedgradientdescentalgorithm_eigenvalueproblems.h>
 #include <opt_algorithms/reducedgradientdescentalgorithm.h>
 #include <opt_algorithms/reducedbfgsalgorithm.h>
 
-#include <container/optproblemcontainer.h>
+#include <container/eigenvalueproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
 #include <include/parameterreader.h>
 #include <problemdata/simpledirichletdata.h>
 #include <problemdata/noconstraints.h>
 #include <wrapper/preconditioner_wrapper.h>
 #include <container/integratordatacontainer.h>
+#include <reducedproblems/eigenvaluereducedproblem.h>
 
 #include <include/solutionextractor.h>
 
-#include <templates/integrator.h>
+#include <templates/integratoreigenvalue.h>
+#include <templates/newtonsolver_eigenvalueproblems.h>
 
 #include <templates/voidlinearsolver.h>
 #include <templates/directlinearsolver.h>
 #include <templates/cglinearsolver.h>
-
-//#include <templates/newtonsolver.h>
+#include <templates/eigenvalue_solver_lapack.h>
 
 #include <deal.II/lac/petsc_sparse_matrix.h>
 #include <deal.II/lac/petsc_full_matrix.h>
@@ -74,10 +75,7 @@
 #include "localpde.h"
 #include "localfunctional.h"
 #include "functions.h"
-#include "eigenvector_solver.h"
-#include "eigenvalueproblem.h"
-#include "integrator_eigenval.h"
-#include "mol_spacetimehandler.h"
+#include <basic/test_mol_spacetimehandler.h>
 
 using namespace std;
 using namespace dealii;
@@ -88,29 +86,23 @@ const static int CDIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-
-//typedef QGaussLobatto<DIM> QUADRATURE;
-//typedef QGaussLobatto<DIM - 1> FACEQUADRATURE;
+#define CDC ElementDataContainer
+#define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
 
-
 typedef PETScWrappers::SparseMatrix MATRIX;
 typedef SparseMatrix<double> MATRIXFORLINSOLVE;
-typedef /*Block*/SparsityPattern SPARSITYPATTERN;
-typedef /*Block*/Vector<double> VECTOR;
+typedef SparsityPattern SPARSITYPATTERN;
 
-typedef std::vector<double> EIGENVALUES;
-typedef std::vector<PETScWrappers::MPI::Vector> EIGENVECTORS;
-
-#define CDC ElementDataContainer
-#define FDC FaceDataContainer
+typedef Vector<double> VECTOR;
+typedef double EIGENVALUE;
 
 typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
-typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
+typedef EigenvalueProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
         LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
@@ -124,15 +116,14 @@ typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
 typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
 
-typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER> EVS;
-
-typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
+typedef Newtonsolver_Eigenvalueproblems<INTEGRATOR,VECTOR,EIGENVALUE ,MATRIX, SPARSITYPATTERN, LINEARSOLVER> NS;
+typedef EigenvalueSolver_LAPACK<INTEGRATOR,VECTOR, MATRIX> EVS;
+typedef EigenvalueReducedProblem<NS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
-typedef ReducedProximalGradientDescentAlgorithm<OP, VECTOR> RNA;
-//typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
+
+//typedef ReducedGradientDescentAlgorithm_EigenvalueProblems<OP, VECTOR> RNA;
 //typedef ReducedBFGSAlgorithm<OP, VECTOR> RNA;
-
-
+typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
 
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
@@ -154,8 +145,11 @@ main(int argc, char **argv){
       return -1;
     }
   ParameterReader pr;
+  RP::declare_params(pr);
+  NS::declare_params(pr);
   EVS::declare_params(pr);
   RNA::declare_params(pr);
+  COSTFUNCTIONAL::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
 
   pr.read_parameters(paramfile);
@@ -189,15 +183,13 @@ main(int argc, char **argv){
    FE<DIM> control_fe(FE_Q<DIM>(1), 2);
    FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
 
-
   QUADRATURE quadrature_formula(8);
   FACEQUADRATURE face_quadrature_formula(8);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(0.01);
-//  COSTFUNCTIONAL LFunc(0.01 /*100.0*/);
+  COSTFUNCTIONAL LFunc(pr, 0.01);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -209,7 +201,6 @@ main(int argc, char **argv){
    comp_mask[0] = true;
    DOpEWrapper::ZeroFunction<DIM> zf(3);
    SimpleDirichletData<VECTOR, DIM> DD1(zf);
-
 
 //TODO in  mol space time handler angepasst für NedelecRB
    P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
@@ -231,13 +222,11 @@ main(int argc, char **argv){
   solver.RegisterExceptionHandler(&ex);
   solver.ReInit();
 
-//  out.ReInit();
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q = 0;
 
-  //ZIEL-EIGENWERT
   ControlVector<VECTOR> lambda_target_value(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
-  lambda_target_value = 1.5;
+
 
 
   local::Q_Control q_initial;
@@ -248,23 +237,18 @@ main(int argc, char **argv){
 
       try
         {
-
-//    	  ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q);
     	  solver.ReInit();
     	  Alg.ReInit();
-    	  solver.AddUserDomainData("lambda_target_value", &(lambda_target_value.GetSpacialVector()));
+
+    	  // Bisher wird nur nach mit kleinstem Eigenwert optimiert
+    	  //TODO Vector von target_eigenvalues übergeben. Die Länge des Vektors entscheidet über Anzahl der zu bestimmenden Eigenvektoren.
 
 
-//    	  solver.ComputeReducedFunctionals(q);
-//    	  solver.ComputeReducedGradient(q,gradient,gradient_transposed);
-//    	  dq = gradient_transposed;
-    	 // dq *= -1.;
-//    	  Alg.ReInit();
+//    	  solver.AddUserDomainData("lambda_target_value", &(lambda_target_value.GetSpacialVector()));
+
     	  const double eps_diff = 0;
-//    	  Alg.CheckGrads(eps_diff, q, dq, 3);
-
-
-  	  Alg.Solve(q);
+    	  Alg.CheckGrads(eps_diff, q, dq, 3);
+    	  Alg.Solve(q);
         }
       catch (DOpEException &e)
         {

@@ -1,7 +1,7 @@
 # Listing of Parameters
 # ---------------------
 
-subsection eigenvector_solver parameters
+subsection newtonsolver_eigenvalueproblem parameters
  # maximal number of linesearch steps
  set line_maxiter         = 8
 
@@ -19,10 +19,22 @@ subsection eigenvector_solver parameters
 
   # relative tolerance for the newton iteration
  set nonlinear_tol        = 1.e-10
- 
- set target_eigenvalue = 0.001
 end
 
+subsection eigenvalue_solver parameters
+ set tol = 1.e-5
+ set target_eigenvalue = 0.001
+ set maxiter = 1000
+end
+
+subsection localfunctional parameters
+	set target_eigenvalue = 1.5
+end 
+
+subsection eigenvaluereducedproblem parameters
+	set number_of_eigenvalues = 4
+	set eigenvalue_index = 0 #first eigenvalue: index = 0
+end
 
 subsection output parameters
   # File format for the output of control variables
@@ -67,7 +79,8 @@ set linesearch_rho       = 0.9
 set nonlinear_global_tol = 1.e-11
 set nonlinear_maxiter    = 1000
 set nonlinear_tol        = 1.e-8
-set eigenvalue_tol = 1.e-5
+#set number_of_eigenvalues = 2
+#set eigenvalue_tol = 1.e-5
  set compute_functionals_in_every_step = false
 end
 
@@ -83,7 +96,7 @@ end
 #   set compute_functionals_in_every_step = false 
 #end
 
-subsection cglinearsolver_withmatrix parameters # gmres_withmatrix parameters #
+subsection cglinearsolver_withmatrix parameters 
    set linear_maxiter = 1000
    set linear_tol = 1.e-12
    set linear_global_tol = 1.e-12
