@@ -461,14 +461,6 @@ namespace DOpE
     virtual void
     ComputeReducedFunctionals(const ControlVector<VECTOR> &q)=0;
 
-    /********for eigenvalue problems**********************************************/
-
-    virtual double Get_actual_first_eigenvalue()= 0;
-
-    virtual void Set_actual_first_eigenvalue(double firsteigenval)=0;
-
-
-    /******************************************************/
     /**
      * Basic function to compute the reduced gradient solution.
      * We assume that adjoint state z(u(q)) is already computed.
