@@ -605,27 +605,27 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
             // only between the case 1 and the other two, because these will be
             // distinguished in in the FaceDataContainer.
 
-//            if (element[0]->neighbor(face)->has_children()) {
-//              // first: neighbour is finer
-//
-//              for (unsigned int subface_no = 0;
-//                   subface_no < element[0]->face(face)->n_children();
-//                   ++subface_no) {
-//                // TODO Now here we have to initialise the subface_values on the
-//                // actual element and then the facevalues of the neighbours
-//                fdc.ReInit(face, subface_no);
-//                fdc.ReInitNbr();
-//
-//                pde.InterfaceEquation(fdc, local_vector, 1., 1.);
-//              }
-//            } else {
-//              // either neighbor is as fine as this element or
-//              // it is coarser
-//
-//              fdc.ReInit(face);
-//              fdc.ReInitNbr();
-//              pde.InterfaceEquation(fdc, local_vector, 1., 1.);
-//            }
+            if (element[0]->neighbor(face)->has_children()) {
+              // first: neighbour is finer
+
+              for (unsigned int subface_no = 0;
+                   subface_no < element[0]->face(face)->n_children();
+                   ++subface_no) {
+                // TODO Now here we have to initialise the subface_values on the
+                // actual element and then the facevalues of the neighbours
+                fdc.ReInit(face, subface_no);
+                fdc.ReInitNbr();
+
+                pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+              }
+            } else {
+              // either neighbor is as fine as this element or
+              // it is coarser
+
+              fdc.ReInit(face);
+              fdc.ReInitNbr();
+              pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+            }
 
           } // endif atinterface
         }   // endfor faces
