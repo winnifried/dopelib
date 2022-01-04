@@ -177,7 +177,7 @@ main(int argc, char **argv){
 
 
 
-  triangulation.refine_global(3);
+  triangulation.refine_global(2);
 
   //------------- FE-System ---------------------------------------------
    FE<DIM> control_fe(FE_Q<DIM>(1), 2);
@@ -189,7 +189,7 @@ main(int argc, char **argv){
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(pr, 0.01);
+  COSTFUNCTIONAL LFunc(pr, 0.001);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -224,8 +224,6 @@ main(int argc, char **argv){
 
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q = 0;
-
-  ControlVector<VECTOR> lambda_target_value(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
 
 
 

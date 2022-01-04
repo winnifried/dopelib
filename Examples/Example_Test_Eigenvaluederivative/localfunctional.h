@@ -68,7 +68,7 @@ public:
 //       edc.GetGradsControl("q_previous", qgrads_old_);
 //   }
     Tensor<2, 2> qgrads;
-    Tensor<2, 2> qgrads_old;
+//    Tensor<2, 2> qgrads_old;
     Tensor<2, 2> DF;
     double detDF;
     double r = 0.;
@@ -77,7 +77,7 @@ public:
       {
     	DF.clear();
     	qgrads.clear();
-    	qgrads_old.clear();
+//    	qgrads_old.clear();
 		qgrads[0][0] = qgrads_[q_point][0][0];
 		qgrads[1][1] = qgrads_[q_point][1][1];
 		qgrads[1][0] = qgrads_[q_point][1][0];
@@ -150,10 +150,10 @@ public:
 //    }
 
     Tensor<2, 2> qgrads;
-    Tensor<2, 2> qgrads_old;
+//    Tensor<2, 2> qgrads_old;
     Tensor<2, 2> DF;
-    double detDF;
-    double detDFdq;
+//    double detDF = 0;
+//    double detDFdq = 0;
 
 	vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
 	vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
@@ -162,7 +162,7 @@ public:
     {
     	DF.clear();
     	qgrads.clear();
-    	qgrads_old.clear();
+//    	qgrads_old.clear();
 
     	qgrads[0][0] = qgrads_[q_point][0][0];
     	qgrads[1][1] = qgrads_[q_point][1][1];
@@ -178,17 +178,17 @@ public:
 //    	}
 
     	DF = deformation_tensor_(qgrads);
-    	detDF = determinante_(DF);
+//    	detDF = determinante_(DF);
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
         	phi_q[i]=  control_fe_values[dv].value(i,q_point);
         	grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
-        	detDFdq =  ((qgrads[0][0]+1)*grad_phi_v[i][1][1]
-					+ (qgrads[1][1]+1)*grad_phi_v[i][0][0]
-					-qgrads[1][0]*grad_phi_v[i][0][1]
-					-qgrads[0][1]*grad_phi_v[i][1][0] );
+//        	detDFdq =  ((qgrads[0][0]+1)*grad_phi_v[i][1][1]
+//					+ (qgrads[1][1]+1)*grad_phi_v[i][0][0]
+//					-qgrads[1][0]*grad_phi_v[i][0][1]
+//					-qgrads[0][1]*grad_phi_v[i][1][0] );
 
 
         	local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])

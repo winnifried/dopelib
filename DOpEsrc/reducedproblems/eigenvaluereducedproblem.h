@@ -223,7 +223,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		void ComputeReducedGradientOfGlobalConstraints(unsigned int num, const ControlVector<VECTOR> &q, const ConstraintVector<VECTOR> &g, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed);
 
 		/******************************************************/
-		void ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &v, std::vector<StateVector<VECTOR>> &eigenfunction, std::vector<double> eigenvalue, std::vector<StateVector<VECTOR>> &adjoint_eigenfunction, std::vector<double> adjoint_eigenvalue);
+		void ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q);//, std::vector<StateVector<VECTOR>> &eigenfunction, std::vector<double> eigenvalue, std::vector<StateVector<VECTOR>> &adjoint_eigenfunction, std::vector<double> adjoint_eigenvalue);
 		/**
 		 * Implementation of Virtual Method in Base Class
 		 * ReducedProblemInterface
@@ -589,7 +589,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> void EigenvalueReducedProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, std::vector<StateVector<VECTOR>> &eigenfunction,std::vector<double> /*eigenvalue*/, std::vector<StateVector<VECTOR>> &/*adjoint_eigenfunction*/, std::vector<double> /*adjoint_eigenvalue*/) {
+		dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q){//, std::vector<StateVector<VECTOR>> &eigenfunction,std::vector<double> /*eigenvalue*/, std::vector<StateVector<VECTOR>> &/*adjoint_eigenfunction*/, std::vector<double> /*adjoint_eigenvalue*/) {
 			this->GetOutputHandler()->Write("Computing EigenvalueAdjoint:", 4 + this->GetBasePriority());
 			this->SetProblemType("eigenvalueadjoint");
 			auto &problem = this->GetProblem()->GetEigenvalueAdjointProblem();
@@ -643,7 +643,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		dopedim,
 		dealdim>::ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed){
 
-		this->ComputeEigenvalueAdjoint(q, uvecs_, uvals_, zvecs_, zvals_);
+		this->ComputeEigenvalueAdjoint(q);//, uvecs_, uvals_, zvecs_, zvals_);
 		this->GetOutputHandler()->Write("Computing Gradient for Eigenvalueproblem:", 4 + this->GetBasePriority());
 
 
