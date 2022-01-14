@@ -1173,7 +1173,6 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMassMa
 
       local_dof_indices.resize(0);
       local_dof_indices.resize(dofs_per_element, 0);
-//TODO
      pde.ElementMassMatrix(edc, local_matrix);//Time
       if (need_boundary_integrals) {
         for (unsigned int face = 0;

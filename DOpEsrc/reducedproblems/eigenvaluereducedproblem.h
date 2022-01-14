@@ -613,10 +613,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		AddUDD();
 
 		build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint").EigenvalueSolve(problem,zvals_, zvecs_,  true, build_adjoint_matrix_);
+		 this->GetNonlinearSolver("eigenvalueadjoint").GetNormalizedVectorAdjoint(problem, zvals_, zvecs_,uvecs_);
 
 		//TODO
 //		double normalization_factor = this->GetIntegrator().ComputeAlgebraicScalar_U(*(this->GetProblem()),uvals_[eval_index_]);
-		zvecs_[eval_index_]*= -(uvals_[eval_index_]- target_eigenvalue_); //normalization_factor;//
+		zvecs_[eval_index_]*= -((uvals_[eval_index_]- target_eigenvalue_)); //normalization_factor;
 
 
 		if (dopedim == dealdim) {
@@ -731,7 +732,8 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		}
 		try{
 
-			build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(problem, uvals_, uvecs_, true, build_state_matrix_ );
+		build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(problem, uvals_, uvecs_, true, build_state_matrix_ );
+		this->GetNonlinearSolver("eigenvaluestate").GetNormalizedVectorState(problem, uvecs_);
 
 		}catch ( DOpEException &e){
 			if (dopedim == dealdim){
@@ -978,7 +980,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		typename VECTOR, int dopedim,
 		int dealdim> void EigenvalueReducedProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
-CalculatePreFunctional(std::string /*name*/,
+		CalculatePreFunctional(std::string /*name*/,
 		std::string /*postfix*/,
 		unsigned int /*n_pre*/,
 		unsigned int /*prob_num*/)
