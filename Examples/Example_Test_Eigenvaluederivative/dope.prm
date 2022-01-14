@@ -28,11 +28,13 @@ subsection eigenvalue_solver parameters
 end
 
 subsection localfunctional parameters
-	set target_eigenvalue = 1.5
+	set target_eigenvalue = 3.5
 end 
 
 subsection eigenvaluereducedproblem parameters
-	set number_of_eigenvalues = 4
+	#TODO
+	set target_eigenvalue = 3.5
+	set number_of_eigenvalues = 2
 	set eigenvalue_index = 0 #first eigenvalue: index = 0
 end
 
@@ -76,9 +78,9 @@ subsection reducedgradientdescentalgorithm parameters
  set line_maxiter         = 1000
 set linesearch_c         = 0.1
 set linesearch_rho       = 0.9
-set nonlinear_global_tol = 1.e-11
+set nonlinear_global_tol = 1.e-3
 set nonlinear_maxiter    = 1000
-set nonlinear_tol        = 1.e-8
+set nonlinear_tol        = 1.e-5
 #set number_of_eigenvalues = 2
 #set eigenvalue_tol = 1.e-5
  set compute_functionals_in_every_step = false

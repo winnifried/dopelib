@@ -158,15 +158,10 @@ main(int argc, char **argv){
 
   GridGenerator::hyper_rectangle(triangulation,
   		  Point<2>(0,0),
-  		  Point<2>(M_PI/3,M_PI/2));
-//  std::vector< unsigned int > x(2);
-//  x[0]=2;
-//  x[1]=3;
-//  GridGenerator::subdivided_hyper_rectangle(triangulation, x, Point<2>(0,0),
-//  		  Point<2>(M_PI/3,M_PI/2));
+  		  Point<2>(M_PI/3,M_PI/2));   //1. EW ~4.0
 
-//GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);
-//  GridGenerator::hyper_ball(triangulation, Point<2>(2*M_PI, 2*M_PI), M_PI);
+
+//GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);  //1. EW ~1.0
 
 //
 //  //------------READ MESH--------------------
@@ -177,7 +172,7 @@ main(int argc, char **argv){
 
 
 
-  triangulation.refine_global(2);
+  triangulation.refine_global(3);
 
   //------------- FE-System ---------------------------------------------
    FE<DIM> control_fe(FE_Q<DIM>(1), 2);
@@ -189,7 +184,7 @@ main(int argc, char **argv){
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(pr, 0.001);
+  COSTFUNCTIONAL LFunc(pr, 0.1);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -225,8 +220,6 @@ main(int argc, char **argv){
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q = 0;
 
-
-
   local::Q_Control q_initial;
 // VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  q.GetSpacialVector());
   ControlVector<VECTOR> dq(q);
@@ -239,13 +232,9 @@ main(int argc, char **argv){
     	  Alg.ReInit();
 
     	  // Bisher wird nur nach mit kleinstem Eigenwert optimiert
-    	  //TODO Vector von target_eigenvalues übergeben. Die Länge des Vektors entscheidet über Anzahl der zu bestimmenden Eigenvektoren.
 
-
-//    	  solver.AddUserDomainData("lambda_target_value", &(lambda_target_value.GetSpacialVector()));
-
-    	  const double eps_diff = 0;
-    	  Alg.CheckGrads(eps_diff, q, dq, 3);
+//    	  const double eps_diff = 0;
+//    	  Alg.CheckGrads(eps_diff, q, dq, 8, 1);
     	  Alg.Solve(q);
         }
       catch (DOpEException &e)

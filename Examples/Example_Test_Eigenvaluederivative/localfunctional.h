@@ -99,7 +99,7 @@ public:
              * state_fe_values.JxW(q_point);
 
 //		if(control_initial_iteration[0][0] == 0){
-			r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
+//			r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
 //		}else{
 //			r += 0.5 * alpha_  * (scalar_product((qgrads[0] - qgrads_old_[q_point][0] ),(qgrads[0]-qgrads_old_[q_point][0]))+scalar_product((qgrads[1]-qgrads_old_[q_point][1]),(qgrads[1]-qgrads_old_[q_point][1]))) * state_fe_values.JxW(q_point);
 //       }
@@ -152,7 +152,7 @@ public:
     Tensor<2, 2> qgrads;
 //    Tensor<2, 2> qgrads_old;
     Tensor<2, 2> DF;
-//    double detDF = 0;
+    double detDF = 0;
 //    double detDFdq = 0;
 
 	vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
@@ -178,7 +178,7 @@ public:
 //    	}
 
     	DF = deformation_tensor_(qgrads);
-//    	detDF = determinante_(DF);
+    	detDF = determinante_(DF);
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -189,19 +189,22 @@ public:
 //					+ (qgrads[1][1]+1)*grad_phi_v[i][0][0]
 //					-qgrads[1][0]*grad_phi_v[i][0][1]
 //					-qgrads[0][1]*grad_phi_v[i][1][0] );
-
+        	if(detDF < 0.001){
+        		local_vector(i) += 0;
+        	} else{
 
         	local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
         	        	              * state_fe_values.JxW(q_point);
 
 //        	if(control_initial_iteration[0][0] == 0){
-            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
+//            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
 
 //        	}else{
 ////        		std::cout << " detDF_alt = " << determinante_(deformation_tensor_(qgrads_old))<< std::endl;
 //            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0]-qgrads_old[0])+scalar_product(grad_phi_v[i][1],qgrads[1]-qgrads_old[1])) * state_fe_values.JxW(q_point);
 //
 //        	}
+        			}
           }
       }
 
