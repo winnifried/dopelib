@@ -893,9 +893,120 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> void EigenvalueReducedProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::ComputeReducedFunctionals( const ControlVector<VECTOR> &/*q*/) {
+		dealdim>::ComputeReducedFunctionals( const ControlVector<VECTOR> &q) {
 
-			throw DOpEException("not implemented", "StatReducedProblem::ComputeReducedFunctional");
+			 this->GetOutputHandler()->Write("Computing Functionals:",
+			                                    4 + this->GetBasePriority());
+
+			    this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+			    if (dopedim == dealdim)
+			      {
+			        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+			      }
+			    else if (dopedim == 0)
+			      {
+			        this->GetIntegrator().AddParamData("control",
+			                                           &(q.GetSpacialVectorCopy()));
+			      }
+			    else
+			      {
+			        throw DOpEException("dopedim not implemented",
+			                            "StatReducedProblem::ComputeReducedFunctionals");
+			      }
+			    this->GetIntegrator().AddDomainData("state",&(GetUVec(eval_index_).GetSpacialVector()));
+			    AddUDD();
+
+			    for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
+			      {
+			        double ret = 0;
+			        bool found = false;
+
+			        this->SetProblemType("aux_functional", i);
+//			        if (this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+//			          {
+//			            std::stringstream tmp;
+//			            tmp << "aux_functional_"<<i<<"_pre";
+//			            AllocateAuxiliaryParams(tmp.str(),this->GetProblem()->FunctionalNeedPrecomputations());
+//			            CalculatePreFunctional("aux_functional","_pre",
+//			                                   this->GetProblem()->FunctionalNeedPrecomputations(),i);
+//			            auto func_vals = GetAuxiliaryParams(tmp.str());
+//			            this->GetIntegrator().AddParamData(tmp.str(),&(func_vals->second));
+//			          }
+
+			        if (this->GetProblem()->GetFunctionalType().find("domain")
+			            != std::string::npos)
+			          {
+			            found = true;
+			            ret += this->GetIntegrator().ComputeDomainScalar(
+			                     *(this->GetProblem()));
+			          }
+//			        if (this->GetProblem()->GetFunctionalType().find("point")
+//			            != std::string::npos)
+//			          {
+//			            found = true;
+//			            ret += this->GetIntegrator().ComputePointScalar(
+//			                     *(this->GetProblem()));
+//			          }
+//			        if (this->GetProblem()->GetFunctionalType().find("boundary")
+//			            != std::string::npos)
+//			          {
+//			            found = true;
+//			            ret += this->GetIntegrator().ComputeBoundaryScalar(
+//			                     *(this->GetProblem()));
+//			          }
+//			        if (this->GetProblem()->GetFunctionalType().find("face")
+//			            != std::string::npos)
+//			          {
+//			            found = true;
+//			            ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+//			          }
+			        if (this->GetProblem()->GetFunctionalType().find("algebraic")
+			            != std::string::npos)
+			          {
+			            found = true;
+			            ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()),uvals_[eval_index_]);
+			          }
+
+			        if (!found)
+			          {
+			            throw DOpEException(
+			              "Unknown Functional Type: "
+			              + this->GetProblem()->GetFunctionalType(),
+			              "StatReducedProblem::ComputeReducedFunctionals");
+			          }
+//			        if (this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+//			          {
+//			            std::stringstream tmp;
+//			            tmp << "aux_functional_"<<i<<"_pre";
+//			            this->GetIntegrator().DeleteParamData(tmp.str());
+//			          }
+
+			        this->GetFunctionalValues()[i + 1].push_back(ret);
+			        std::stringstream out;
+			        this->GetOutputHandler()->InitOut(out);
+			        out << this->GetProblem()->GetFunctionalName() << ": " << ret;
+			        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+			      }
+
+			    if (dopedim == dealdim)
+			      {
+			        this->GetIntegrator().DeleteDomainData("control");
+			      }
+			    else if (dopedim == 0)
+			      {
+			        this->GetIntegrator().DeleteParamData("control");
+			        q.UnLockCopy();
+			      }
+			    else
+			      {
+			        throw DOpEException("dopedim not implemented",
+			                            "StatReducedProblem::ComputeReducedFunctionals");
+			      }
+			    this->GetIntegrator().DeleteDomainData("state");
+			    DeleteUDD();
+			    this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
 
 		}
 
