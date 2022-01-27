@@ -46,6 +46,7 @@ public:
     alpha_ = alpha;
     param_reader.SetSubsection("localfunctional parameters");
     target_eigenvalue_    = param_reader.get_double("target_eigenvalue");
+    epsilon_ = param_reader.get_double("epsilon");
   }
 
   double
@@ -92,14 +93,14 @@ public:
 
 		DF = deformation_tensor_(qgrads);
 		detDF = determinante_(DF);
-		if(detDF < 0.001){
+		if(detDF < epsilon_){
 			r = 10.e20;
 		} else{
 		         r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
 
 //		if(control_initial_iteration[0][0] == 0){
-//			r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
+			r += 0.5 * alpha_  * (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
 //		}else{
 //			r += 0.5 * alpha_  * (scalar_product((qgrads[0] - qgrads_old_[q_point][0] ),(qgrads[0]-qgrads_old_[q_point][0]))+scalar_product((qgrads[1]-qgrads_old_[q_point][1]),(qgrads[1]-qgrads_old_[q_point][1]))) * state_fe_values.JxW(q_point);
 //       }
@@ -189,7 +190,7 @@ public:
 //					+ (qgrads[1][1]+1)*grad_phi_v[i][0][0]
 //					-qgrads[1][0]*grad_phi_v[i][0][1]
 //					-qgrads[0][1]*grad_phi_v[i][1][0] );
-        	if(detDF < 0.001){
+        	if(detDF < epsilon_){
         		local_vector(i) += 0;
         	} else{
 
@@ -197,7 +198,7 @@ public:
         	        	              * state_fe_values.JxW(q_point);
 
 //        	if(control_initial_iteration[0][0] == 0){
-//            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
+            	local_vector(i) += scale * alpha_  *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
 
 //        	}else{
 ////        		std::cout << " detDF_alt = " << determinante_(deformation_tensor_(qgrads_old))<< std::endl;
@@ -234,6 +235,7 @@ public:
   {
     param_reader.SetSubsection("localfunctional parameters");
     param_reader.declare_entry("target_eigenvalue", "1.5", Patterns::Double(0));
+    param_reader.declare_entry("epsilon", "0.001", Patterns::Double(0));
   }
 
 private:
@@ -249,7 +251,7 @@ private:
 //  vector<vector<Tensor<1, dealdim> > > qgrads_old_;
 
   double alpha_ ;
-  double target_eigenvalue_;
+  double target_eigenvalue_, epsilon_;
 
 
 
