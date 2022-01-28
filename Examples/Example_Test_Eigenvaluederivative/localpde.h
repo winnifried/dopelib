@@ -63,22 +63,34 @@ public:
 	      assert(this->problem_type_ == "eigenvaluegradient");
 
 	      funcgradvalues_.resize(n_q_points, Vector<double>(2));
+	      funcgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 	      edc.GetValuesControl("last_newton_solution", funcgradvalues_);
+	      edc.GetGradsControl("last_newton_solution", funcgrads_);
 	    }
 		const FEValuesExtractors::Vector controlextractor(0);
 		vector<Tensor<1, dealdim> > psi_q(n_dofs_per_element);
+		vector<Tensor<2, dealdim> > psi_grads_q(n_dofs_per_element);
+
 		Tensor<1, 2> funcgradval;
+		Tensor<2,2> funcgrad;
 	    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	      {
 	    	funcgradval.clear();
 	    	funcgradval[0] = funcgradvalues_[q_point][0];
 	    	funcgradval[1] = funcgradvalues_[q_point][1];
 
+	    	funcgrad[0][0] = funcgrads_[q_point][0][0];
+	    	funcgrad[1][0] = funcgrads_[q_point][1][0];
+	    	funcgrad[0][1] = funcgrads_[q_point][0][1];
+	    	funcgrad[1][1] = funcgrads_[q_point][1][1];
+
+
 
 			for (unsigned int i = 0; i < n_dofs_per_element; i++) {
 				psi_q[i] = control_fe_values[controlextractor].value(i,q_point);
-
+				psi_grads_q[i] = control_fe_values[controlextractor].gradient(i,q_point);
 				local_vector(i) += scale * scalar_product(funcgradval, psi_q[i]) * control_fe_values.JxW(q_point);
+				local_vector(i) += scale *(scalar_product(psi_grads_q[i][0],funcgrad[0])+scalar_product(psi_grads_q[i][1],funcgrad[1]))* control_fe_values.JxW(q_point);
 			}
 	      }
 	  }
@@ -96,10 +108,13 @@ public:
 	    unsigned int n_q_points = edc.GetNQPoints();
 	    const FEValuesExtractors::Vector controlextractor(0);
 	    vector<Tensor<1, dealdim> > psi_q(n_dofs_per_element);
+	    vector<Tensor<2, dealdim> > psi_grads_q(n_dofs_per_element);
+
 	    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	      {
 	    	for (unsigned int i = 0; i < n_dofs_per_element; i++){
 	    		psi_q[i] = control_fe_values[controlextractor].value(i,q_point);
+	    		psi_grads_q[i] = control_fe_values[controlextractor].gradient(i,q_point);
 	    	}
 
 	        for (unsigned int i = 0; i < n_dofs_per_element; i++)
@@ -109,6 +124,9 @@ public:
 
 	                local_matrix(i, j) += scale *  psi_q[i] * psi_q[j]
 	                                    * control_fe_values.JxW(q_point);
+	                local_matrix(i, j) += scale * (scalar_product(psi_grads_q[i][0],psi_grads_q[j][0])+scalar_product(psi_grads_q[i][1],psi_grads_q[j][1]))
+	                				* control_fe_values.JxW(q_point);
+
 	              }
 	          }
 	      }
@@ -545,6 +563,8 @@ private:
 	vector<Vector<double> > qvalues_;
 	//	vector<Vector<double> > qvalues_old_;
 	vector<Vector<double> > funcgradvalues_;
+
+	vector<vector<Tensor<1, dealdim> > > funcgrads_;
 
 	vector<vector<Tensor<1, dealdim> > > ugrads_;
 	vector<vector<Tensor<1, dealdim> > > dugrads_;
