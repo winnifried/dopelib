@@ -28,6 +28,8 @@ ELSE()
   MESSAGE(STATUS "Found DOpElib at ${DOpE}.")
 ENDIF()
 
+Project(${TARGET} CXX)
+
 #Load default example rules
 INCLUDE(${DOpE}/Examples/CMakeExamples.txt)
 

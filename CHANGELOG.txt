@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+22.02.2022: Fixed 'missing Project' in example CMakeLists.txt
 24.09.2021: Adjustments for deal 9.3.2, fixes to 9.3.1
 17.09.2021: Adjustments for deal 9.3.1
 16.09.2021: Specify namespace for boost placeholder _1. Introduction of namespace avoids
