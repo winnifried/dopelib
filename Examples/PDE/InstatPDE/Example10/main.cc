@@ -246,7 +246,7 @@ main(int argc, char **argv)
   comp_mask[2] = false; // phase-field component (always hom. Neumann data)
    
   // Fixed boundaries
-  DOpEWrapper::ZeroFunction<DIM> zf(3);
+  DOpEWrapper::ZeroFunction<DIM> zf(4);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
   // Non-homogeneous boudary (on top where we tear)
