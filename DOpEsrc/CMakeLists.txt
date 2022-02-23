@@ -59,5 +59,5 @@ EXPORT(PACKAGE DOpElib)
 
 GET_FILENAME_COMPONENT(DOPELIB_ROOT_DIR "${CMAKE_SOURCE_DIR}/../" ABSOLUTE)
 
-CONFIGURE_FILE(DOpElibConfig.cmake.in ${DOPELIB_ROOT_DIR}/lib/cmake/DOpElib/DOpElibConfig.cmake )
+CONFIGURE_FILE(DOpElibConfig.cmake.in ${DOPELIB_ROOT_DIR}/lib/cmake/DOpElib/DOpElibConfig.cmake @ONLY)
 
