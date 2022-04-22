@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.2
+Using dealii Version: 9.3
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -19,133 +19,94 @@ Using dealii Version: 9.2
 	Computing State Solution:
 LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
-			 Newton step: 0	 Residual (abs.):   1.0000e+00
-			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
+			 Newton step: 0	 Residual (abs.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		TCV: 0
 		BulkEnergy: 0
 		BulkEnergyMixed: 0
 		CrackEnergy: 21.2918
 		 Timestep: 1 (0 -> 1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.7754e+00
-			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.):   2.0941e-01	 LineSearch {0} M 
-			 Newton step: 2	 Residual (rel.):   1.8846e-01	 LineSearch {1} M 
+			 Newton step: 0	 Residual (abs.):   4.78e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.09e-01	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   1.88e-01	 LineSearch {1} M 
 			 Newton step: 3	 Recalculate with new Matrix
-			 Newton step: 3	 Residual (rel.):   1.6581e-01	 LineSearch {0} M 
+			 Newton step: 3	 Residual (rel.):   1.59e-01	 LineSearch {0} M 
 			 Newton step: 4	 Recalculate with new Matrix
-			 Newton step: 4	 Residual (rel.):   7.4202e-02	 LineSearch {0} M 
+			 Newton step: 4	 Residual (rel.):   6.74e-02	 LineSearch {0} M 
 			 Newton step: 5	 Recalculate with new Matrix
-			 Newton step: 5	 Residual (rel.):   5.5948e-02	 LineSearch {0} M 
-			 Newton step: 6	 Recalculate with new Matrix
-			 Newton step: 6	 Residual (rel.):   1.4754e-02	 LineSearch {0} M 
+			 Newton step: 5	 Residual (rel.):   5.70e-02	 LineSearch {0} M 
+			 Newton step: 6	 Residual (rel.):   5.70e-02	 LineSearch {0} 
 			 Newton step: 7	 Recalculate with new Matrix
-			 Newton step: 7	 Residual (rel.):   9.6761e-03	 LineSearch {0} M 
-			 Newton step: 8	 Recalculate with new Matrix
-			 Newton step: 8	 Residual (rel.):   6.3942e-03	 LineSearch {0} M 
+			 Newton step: 7	 Residual (rel.):   5.13e-02	 LineSearch {1} M 
+			 Newton step: 8	 Residual (rel.):   4.62e-02	 LineSearch {1} M 
 			 Newton step: 9	 Recalculate with new Matrix
-			 Newton step: 9	 Residual (rel.):   4.2509e-03	 LineSearch {0} M 
+			 Newton step: 9	 Residual (rel.):   4.16e-02	 LineSearch {1} M 
 			 Newton step: 10	 Recalculate with new Matrix
-			 Newton step: 10	 Residual (rel.):   2.8398e-03	 LineSearch {0} M 
-			 Newton step: 11	 Recalculate with new Matrix
-			 Newton step: 11	 Residual (rel.):   1.9049e-03	 LineSearch {0} M 
+			 Newton step: 10	 Residual (rel.):   3.74e-02	 LineSearch {1} M 
+			 Newton step: 11	 Residual (rel.):   3.37e-02	 LineSearch {1} M 
 			 Newton step: 12	 Recalculate with new Matrix
-			 Newton step: 12	 Residual (rel.):   1.2822e-03	 LineSearch {0} M 
+			 Newton step: 12	 Residual (rel.):   3.03e-02	 LineSearch {1} M 
 			 Newton step: 13	 Recalculate with new Matrix
-			 Newton step: 13	 Residual (rel.):   8.6553e-04	 LineSearch {0} M 
+			 Newton step: 13	 Residual (rel.):   2.73e-02	 LineSearch {1} M 
 			 Newton step: 14	 Recalculate with new Matrix
-			 Newton step: 14	 Residual (rel.):   5.8578e-04	 LineSearch {0} M 
+			 Newton step: 14	 Residual (rel.):   2.45e-02	 LineSearch {1} M 
 			 Newton step: 15	 Recalculate with new Matrix
-			 Newton step: 15	 Residual (rel.):   3.9733e-04	 LineSearch {0} M 
+			 Newton step: 15	 Residual (rel.):   2.21e-02	 LineSearch {1} M 
 			 Newton step: 16	 Recalculate with new Matrix
-			 Newton step: 16	 Residual (rel.):   2.7005e-04	 LineSearch {0} M 
+			 Newton step: 16	 Residual (rel.):   1.99e-02	 LineSearch {1} M 
 			 Newton step: 17	 Recalculate with new Matrix
-			 Newton step: 17	 Residual (rel.):   2.4401e-04	 LineSearch {0} M 
-			 Newton step: 18	 Residual (rel.):   2.4401e-04	 LineSearch {0} 
-			 Newton step: 19	 Residual (rel.):   2.1961e-04	 LineSearch {1} M 
-			 Newton step: 20	 Residual (rel.):   1.9765e-04	 LineSearch {1} M 
-			 Newton step: 21	 Recalculate with new Matrix
-			 Newton step: 21	 Residual (rel.):   1.7788e-04	 LineSearch {1} M 
-			 Newton step: 22	 Recalculate with new Matrix
-			 Newton step: 22	 Residual (rel.):   1.6009e-04	 LineSearch {1} M 
-			 Newton step: 23	 Recalculate with new Matrix
-			 Newton step: 23	 Residual (rel.):   1.4408e-04	 LineSearch {1} M 
-			 Newton step: 24	 Residual (rel.):   1.1054e-04	 LineSearch {1} M 
-			 Newton step: 25	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
+			 Newton step: 17	 Residual (rel.):   1.79e-02	 LineSearch {1} M 
+			 Newton step: 18	 Recalculate with new Matrix
+			 Newton step: 18	 Residual (rel.):   1.61e-02	 LineSearch {1} M 
+			 Newton step: 19	 Recalculate with new Matrix
+			 Newton step: 19	 Residual (rel.):   1.35e-02	 LineSearch {1} M 
+			 Newton step: 20	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		TCV: 0.0115219
 		BulkEnergy: 1.71687e-06
 		BulkEnergyMixed: 1.80723e-06
 		CrackEnergy: 6.56043
 		 Timestep: 2 (1 -> 2) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.1098e-05
-			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.):   6.9472e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.9896e-03	 LineSearch {0} M 
+			 Newton step: 0	 Residual (abs.):   7.11e-05
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.95e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.99e-03	 LineSearch {0} M 
 			 Newton step: 3	 Recalculate with new Matrix
-			 Newton step: 3	 Residual (rel.):   1.9842e-03	 LineSearch {0} M 
+			 Newton step: 3	 Residual (rel.):   1.98e-03	 LineSearch {0} M 
 			 Newton step: 4	 Recalculate with new Matrix
-			 Newton step: 4	 Residual (rel.):   2.8168e-04	 LineSearch {0} M 
+			 Newton step: 4	 Residual (rel.):   2.82e-04	 LineSearch {0} M 
 			 Newton step: 5	 Recalculate with new Matrix
-			 Newton step: 5	 Residual (rel.):   6.9060e-05	 LineSearch {0} M 
-			 Newton step: 6	 Residual (rel.):   6.9060e-05	 LineSearch {0} 
-			 Newton step: 7	 Recalculate with new Matrix
-			 Newton step: 7	 Residual (rel.):   6.2154e-05	 LineSearch {1} M 
-			 Newton step: 8	 Residual (rel.):   5.5939e-05	 LineSearch {1} M 
-			 Newton step: 9	 Recalculate with new Matrix
-			 Newton step: 9	 Residual (rel.):   5.0345e-05	 LineSearch {1} M 
-			 Newton step: 10	 Residual (rel.):   4.5310e-05	 LineSearch {1} M 
-			 Newton step: 11	 Recalculate with new Matrix
-			 Newton step: 11	 Residual (rel.):   4.0779e-05	 LineSearch {1} M 
-			 Newton step: 12	 Recalculate with new Matrix
-			 Newton step: 12	 Residual (rel.):   3.6701e-05	 LineSearch {1} M 
-			 Newton step: 13	 Recalculate with new Matrix
-			 Newton step: 13	 Residual (rel.):   3.3031e-05	 LineSearch {1} M 
-			 Newton step: 14	 Recalculate with new Matrix
-			 Newton step: 14	 Residual (rel.):   2.9728e-05	 LineSearch {1} M 
-			 Newton step: 15	 Residual (rel.):   2.6755e-05	 LineSearch {1} M 
-			 Newton step: 16	 Recalculate with new Matrix
-			 Newton step: 16	 Residual (rel.):   2.4080e-05	 LineSearch {1} M 
-			 Newton step: 17	 Recalculate with new Matrix
-			 Newton step: 17	 Residual (rel.):   2.1672e-05	 LineSearch {1} M 
-			 Newton step: 18	 Residual (rel.):   1.9505e-05	 LineSearch {1} M 
-			 Newton step: 19	 Recalculate with new Matrix
-			 Newton step: 19	 Residual (rel.):   1.7554e-05	 LineSearch {1} M 
-			 Newton step: 20	 Recalculate with new Matrix
-			 Newton step: 20	 Residual (rel.):   1.5799e-05	 LineSearch {1} M 
-			 Newton step: 21	 Recalculate with new Matrix
-			 Newton step: 21	 Residual (rel.):   1.4219e-05	 LineSearch {1} M 
-			 Newton step: 22	 Recalculate with new Matrix
-			 Newton step: 22	 Residual (rel.):   1.2797e-05	 LineSearch {1} M 
-			 Newton step: 23	 Recalculate with new Matrix
-			 Newton step: 23	 Residual (rel.):   1.0018e-05	 LineSearch {1} M 
-			 Newton step: 24	 Residual (rel.):   1.8934e-11	 LineSearch {0} M 
+			 Newton step: 5	 Residual (rel.):   6.91e-05	 LineSearch {0} M 
+			 Newton step: 6	 Recalculate with new Matrix
+			 Newton step: 6	 Residual (rel.):   1.93e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		TCV: 0.0416945
 		BulkEnergy: 2.06163e-05
 		BulkEnergyMixed: 2.45323e-05
 		CrackEnergy: 6.56043
 		 Timestep: 3 (2 -> 3) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.0310e-10
-			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.):   6.4219e-06	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.03e-10
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.19e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		TCV: 0.0416946
 		BulkEnergy: 2.06164e-05
 		BulkEnergyMixed: 2.45324e-05
 		CrackEnergy: 6.56043
 		 Timestep: 4 (3 -> 4) using backward Euler
-			 Newton step: 0	 Residual (abs.): < 1.0000e-11
-			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 0	 Residual (abs.): < 1.00e-11
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 		         Precalculating functional values 
 		TCV: 0.0416946
 		BulkEnergy: 2.06164e-05
 		BulkEnergyMixed: 2.45324e-05
 		CrackEnergy: 6.56043
 		 Timestep: 5 (4 -> 5) using backward Euler
-			 Newton step: 0	 Residual (abs.): < 1.0000e-11
-			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 0	 Residual (abs.): < 1.00e-11
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 		         Precalculating functional values 
 		TCV: 0.0416946
 		BulkEnergy: 2.06164e-05
