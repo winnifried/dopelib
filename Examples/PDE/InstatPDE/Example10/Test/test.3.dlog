@@ -558,7 +558,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 4	 Residual (rel.):   2.07e-06	 LineSearch {1} 
 			 Newton step: 5	 Recalculate with new Matrix
 			 Newton step: 5	 Residual (rel.):   1.86e-06	 LineSearch {1} 
-			 Newton step: 6	 Recalculate with new Matrix
 			 Newton step: 6	 Residual (rel.):   1.68e-06	 LineSearch {1} 
 			 Newton step: 7	 Recalculate with new Matrix
 			 Newton step: 7	 Residual (rel.):   1.51e-06	 LineSearch {1} 
@@ -566,7 +565,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 8	 Residual (rel.):   1.36e-06	 LineSearch {1} 
 			 Newton step: 9	 Recalculate with new Matrix
 			 Newton step: 9	 Residual (rel.):   1.22e-06	 LineSearch {1} 
-			 Newton step: 10	 Recalculate with new Matrix
 			 Newton step: 10	 Residual (rel.):   1.10e-06	 LineSearch {1} 
 			 Newton step: 11	 Recalculate with new Matrix
 			 Newton step: 11	 Residual (rel.):   9.90e-07	 LineSearch {1} 
@@ -578,125 +576,96 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 14	 Residual (rel.):   6.50e-07	 LineSearch {1} 
 			 Newton step: 15	 Recalculate with new Matrix
 			 Newton step: 15	 Residual (rel.):   4.69e-07	 LineSearch {0} 
-			 Newton step: 16	 Residual (rel.):   2.62e-08	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   4.69e-07	 LineSearch {0} 
+			 Newton step: 17	 Recalculate with new Matrix
+			 Newton step: 17	 Residual (rel.):   3.78e-07	 LineSearch {1} 
+			 Newton step: 18	 Residual (rel.):   1.67e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   1.14e-07	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   7.87e-08	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   5.49e-08	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   4.47e-08	 LineSearch {0} 
+			 Newton step: 23	 Residual (rel.):   4.47e-08	 LineSearch {0} 
+			 Newton step: 24	 Residual (rel.):   4.42e-08	 LineSearch {0} 
+			 Newton step: 25	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		StressX: 742.799
 		 Timestep: 60 (0.0059 -> 0.006) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.54e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.31e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   4.90e-06	 LineSearch {0} 
-			 Newton step: 4	 Recalculate with new Matrix
-			 Newton step: 4	 Residual (rel.):   4.41e-06	 LineSearch {1} 
-			 Newton step: 5	 Recalculate with new Matrix
-			 Newton step: 5	 Residual (rel.):   3.97e-06	 LineSearch {1} 
-			 Newton step: 6	 Recalculate with new Matrix
-			 Newton step: 6	 Residual (rel.):   3.57e-06	 LineSearch {1} 
-			 Newton step: 7	 Residual (rel.):   3.21e-06	 LineSearch {1} 
-			 Newton step: 8	 Recalculate with new Matrix
-			 Newton step: 8	 Residual (rel.):   2.89e-06	 LineSearch {1} 
-			 Newton step: 9	 Recalculate with new Matrix
-			 Newton step: 9	 Residual (rel.):   2.60e-06	 LineSearch {1} 
-			 Newton step: 10	 Residual (rel.):   2.34e-06	 LineSearch {1} 
-			 Newton step: 11	 Residual (rel.):   2.11e-06	 LineSearch {1} 
-			 Newton step: 12	 Recalculate with new Matrix
-			 Newton step: 12	 Residual (rel.):   1.90e-06	 LineSearch {1} 
-			 Newton step: 13	 Recalculate with new Matrix
-			 Newton step: 13	 Residual (rel.):   1.70e-06	 LineSearch {1} 
-			 Newton step: 14	 Residual (rel.):   1.51e-06	 LineSearch {1} 
-			 Newton step: 15	 Recalculate with new Matrix
-			 Newton step: 15	 Residual (rel.):   1.36e-06	 LineSearch {1} 
-			 Newton step: 16	 Recalculate with new Matrix
-			 Newton step: 16	 Residual (rel.):   1.23e-06	 LineSearch {1} 
-			 Newton step: 17	 Residual (rel.):   1.08e-06	 LineSearch {0} 
-			 Newton step: 18	 Residual (rel.):   6.99e-08	 LineSearch {0} 
-			 Newton step: 19	 Residual (rel.):   2.87e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   6.26e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.13e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.77e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.06e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.16e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   7.16e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.54e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   3.04e-06	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   2.04e-06	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   1.44e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   1.02e-06	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   7.36e-07	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   5.43e-07	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   4.00e-07	 LineSearch {0} 
+			 Newton step: 15	 Residual (rel.):   2.95e-07	 LineSearch {0} 
+			 Newton step: 16	 Residual (rel.):   2.18e-07	 LineSearch {0} 
+			 Newton step: 17	 Residual (rel.):   1.61e-07	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   1.19e-07	 LineSearch {0} 
+			 Newton step: 19	 Residual (rel.):   8.82e-08	 LineSearch {0} 
+			 Newton step: 20	 Residual (rel.):   6.62e-08	 LineSearch {0} 
+			 Newton step: 21	 Residual (rel.):   4.99e-08	 LineSearch {0} 
+			 Newton step: 22	 Residual (rel.):   3.77e-08	 LineSearch {0} 
 		         Precalculating functional values 
 		StressX: 746.921
 		 Timestep: 61 (0.006 -> 0.0061) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.50e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.30e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   8.08e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   7.38e-06	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   7.38e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   6.65e-06	 LineSearch {1} 
-			 Newton step: 7	 Residual (rel.):   5.98e-06	 LineSearch {1} 
-			 Newton step: 8	 Recalculate with new Matrix
-			 Newton step: 8	 Residual (rel.):   5.38e-06	 LineSearch {1} 
-			 Newton step: 9	 Recalculate with new Matrix
-			 Newton step: 9	 Residual (rel.):   4.84e-06	 LineSearch {1} 
-			 Newton step: 10	 Residual (rel.):   4.36e-06	 LineSearch {1} 
-			 Newton step: 11	 Recalculate with new Matrix
-			 Newton step: 11	 Residual (rel.):   3.92e-06	 LineSearch {1} 
-			 Newton step: 12	 Recalculate with new Matrix
-			 Newton step: 12	 Residual (rel.):   3.53e-06	 LineSearch {1} 
-			 Newton step: 13	 Recalculate with new Matrix
-			 Newton step: 13	 Residual (rel.):   2.73e-06	 LineSearch {1} 
-			 Newton step: 14	 Recalculate with new Matrix
-			 Newton step: 14	 Residual (rel.):   2.46e-06	 LineSearch {1} 
-			 Newton step: 15	 Recalculate with new Matrix
-			 Newton step: 15	 Residual (rel.):   2.10e-06	 LineSearch {1} 
-			 Newton step: 16	 Recalculate with new Matrix
-			 Newton step: 16	 Residual (rel.):   1.45e-06	 LineSearch {0} 
-			 Newton step: 17	 Residual (rel.):   1.17e-06	 LineSearch {0} 
-			 Newton step: 18	 Residual (rel.):   9.71e-07	 LineSearch {0} 
-			 Newton step: 19	 Residual (rel.):   8.22e-07	 LineSearch {0} 
-			 Newton step: 20	 Residual (rel.):   7.19e-07	 LineSearch {0} 
-			 Newton step: 21	 Residual (rel.):   6.41e-07	 LineSearch {0} 
-			 Newton step: 22	 Residual (rel.):   6.22e-07	 LineSearch {0} 
-			 Newton step: 23	 Residual (rel.):   6.22e-07	 LineSearch {0} 
-			 Newton step: 24	 Residual (rel.):   6.09e-07	 LineSearch {0} 
-			 Newton step: 25	 Residual (rel.):   8.67e-09	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.51e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.37e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.54e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.40e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.40e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   5.76e-06	 LineSearch {1} 
+			 Newton step: 7	 Residual (rel.):   5.18e-06	 LineSearch {1} 
+			 Newton step: 8	 Residual (rel.):   4.66e-06	 LineSearch {1} 
+			 Newton step: 9	 Residual (rel.):   3.72e-06	 LineSearch {1} 
+			 Newton step: 10	 Recalculate with new Matrix
+			 Newton step: 10	 Residual (rel.):   1.65e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   1.65e-06	 LineSearch {0} 
+			 Newton step: 12	 Residual (rel.):   1.65e-06	 LineSearch {0} 
+			 Newton step: 13	 Residual (rel.):   8.06e-08	 LineSearch {0} 
+			 Newton step: 14	 Residual (rel.):   1.14e-08	 LineSearch {0} 
 		         Precalculating functional values 
-		StressX: 749.512
+		StressX: 749.514
 		 Timestep: 62 (0.0061 -> 0.0062) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.25e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.58e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   3.40e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.83e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.07e-05	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   6.72e-06	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   4.28e-06	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   2.87e-06	 LineSearch {0} 
-			 Newton step: 9	 Residual (rel.):   1.96e-06	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   1.35e-06	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.):   9.28e-07	 LineSearch {0} 
-			 Newton step: 12	 Residual (rel.):   6.62e-07	 LineSearch {0} 
-			 Newton step: 13	 Residual (rel.):   4.71e-07	 LineSearch {0} 
-			 Newton step: 14	 Residual (rel.):   3.35e-07	 LineSearch {0} 
-			 Newton step: 15	 Residual (rel.):   2.38e-07	 LineSearch {0} 
-			 Newton step: 16	 Residual (rel.):   1.69e-07	 LineSearch {0} 
-			 Newton step: 17	 Residual (rel.):   1.20e-07	 LineSearch {0} 
-			 Newton step: 18	 Residual (rel.):   8.56e-08	 LineSearch {0} 
-			 Newton step: 19	 Residual (rel.):   6.09e-08	 LineSearch {0} 
-			 Newton step: 20	 Residual (rel.):   4.33e-08	 LineSearch {0} 
-			 Newton step: 21	 Residual (rel.):   3.08e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.43e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.26e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.23e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.21e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.20e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
 		         Precalculating functional values 
-		StressX: 750.243
+		StressX: 750.242
 		 Timestep: 63 (0.0062 -> 0.0063) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.36e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.08e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   2.08e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   2.07e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   5.63e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.35e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.12e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.12e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.10e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.92e-07	 LineSearch {0} 
 			 Newton step: 6	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
 		         Precalculating functional values 
-		StressX: 748.683
+		StressX: 748.682
 		 Timestep: 64 (0.0063 -> 0.0064) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.39e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.51e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   3.51e-05	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.50e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.50e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   3.50e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.71e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.74e-06	 LineSearch {0} 
 			 Newton step: 6	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		StressX: 744.217
@@ -705,10 +674,14 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.95e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.00e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   6.00e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   5.97e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   3.53e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   3.54e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.37e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.51e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.30e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   9.88e-08	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   4.37e-08	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.):   1.97e-08	 LineSearch {0} 
 		         Precalculating functional values 
 		StressX: 736.064
 		 Timestep: 66 (0.0065 -> 0.0066) using Crank-Nicolson
@@ -718,8 +691,8 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 2	 Residual (rel.):   9.02e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.02e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   9.01e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   4.34e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.33e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.24e-09	 LineSearch {0} 
 		         Precalculating functional values 
 		StressX: 723.107
 		 Timestep: 67 (0.0066 -> 0.0067) using Crank-Nicolson
@@ -730,9 +703,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 3	 Residual (rel.):   1.39e-04	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   1.39e-04	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.):   5.45e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   2.72e-10	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
 		         Precalculating functional values 
-		StressX: 703.925
+		StressX: 703.926
 		 Timestep: 68 (0.0067 -> 0.0068) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
@@ -756,7 +729,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 7	 Residual (rel.):   1.39e-04	 LineSearch {0} 
 			 Newton step: 8	 Residual (rel.):   1.39e-04	 LineSearch {0} 
 			 Newton step: 9	 Residual (rel.):   1.38e-04	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   2.92e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   3.01e-07	 LineSearch {0} 
 			 Newton step: 11	 Residual (rel.):   3.09e-08	 LineSearch {0} 
 		         Precalculating functional values 
 		StressX: 643.015
@@ -783,10 +756,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 7	 Residual (rel.):   1.20e-04	 LineSearch {0} 
 			 Newton step: 8	 Residual (rel.):   1.20e-04	 LineSearch {0} 
 			 Newton step: 9	 Residual (rel.):   1.18e-04	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   7.90e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   7.98e-07	 LineSearch {0} 
 			 Newton step: 11	 Residual (rel.):   1.57e-08	 LineSearch {0} 
 		         Precalculating functional values 
-		StressX: 561.727
+		StressX: 561.728
 		 Timestep: 72 (0.0071 -> 0.0072) using Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-03
 			 Newton step: 0	 Residual (rel.):     1.00e+00
