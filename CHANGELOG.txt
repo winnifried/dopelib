@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+08.06.2022: Adjustments for deal 9.4.0
 21.02.2022: Adjustments for deal 9.3.3
 22.02.2022: Fixed 'missing Project' in example CMakeLists.txt
 24.09.2021: Adjustments for deal 9.3.2, fixes to 9.3.1
