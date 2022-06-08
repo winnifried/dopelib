@@ -580,12 +580,12 @@ namespace DOpE
         data_out.attach_dof_handler (GetStateDoFHandler ());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-//#if DEAL_II_VERSION_GTE(9,3,2)
-//	data_out.add_data_vector (v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
-//#else
+#if DEAL_II_VERSION_GTE(9,4,0)
+	data_out.add_data_vector (v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
+#else	//Deal Version in [9.3.0,9.4.0)
 	data_out.add_data_vector (v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
-//#endif
-#else
+#endif
+#else  //Deal Version < 9.3.0
 	data_out.add_data_vector (v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
 #endif
         data_out.build_patches ();
@@ -682,12 +682,12 @@ namespace DOpE
         data_out.attach_dof_handler(GetStateDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-//#if DEAL_II_VERSION_GTE(9,3,2)
-//	data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
-//#else
+#if DEAL_II_VERSION_GTE(9,4,0)
+	data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
+#else	//Deal Version in [9.3.0,9.4.0) 
 	data_out.add_data_vector(v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
-//#endif
-#else
+#endif
+#else  //Deal Version < 9.3.0
 	data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
 #endif
         data_out.build_patches(n_patches);

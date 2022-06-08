@@ -670,11 +670,18 @@ namespace DOpE
     dealii::Vector<SCALAR> local_vector(dofs);
 
     std::vector<unsigned int> dirichlet_colors = pde.GetTransposedDirichletColors();
-    std::vector<bool> selected_components;
+#if DEAL_II_VERSION_GTE(9,4,0)
+    IndexSet boundary_dofs;
+#else
+    std::vector<bool> boundary_dofs;
+#endif
     if (dirichlet_colors.size() > 0)
       {
-        selected_components.resize(
+#if DEAL_II_VERSION_GTE(9,4,0)
+#else
+	boundary_dofs.resize(
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->n_dofs());
+#endif
         const std::vector<Point<dimhigh> > &support_points =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetMapDoFToSupportPoints();
 
@@ -693,17 +700,36 @@ namespace DOpE
                 if (comp_mask[j])
                   {
                     current_comp[j] = true;
+#if DEAL_II_VERSION_GTE(9,4,0)
+		    boundary_dofs.clear();
+                    //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
+                    boundary_dofs = DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
+								    current_comp, boundary_indicators);
+#else
                     //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
                     DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
-                                                    current_comp, selected_components, boundary_indicators);
+                                                    current_comp, boundary_dofs, boundary_indicators);
+#endif
                   }
                 const TransposedDirichletDataInterface<dimhigh> &DD =
                   pde.GetTransposedDirichletValues(color,
                                                    this->GetParamData(),
                                                    this->GetDomainData());
-                for (unsigned int k = 0; k < selected_components.size(); k++)
+#if DEAL_II_VERSION_GTE(9,4,0)
+                for (types::global_dof_index k : boundary_dofs)
+		{
+		  local_vector = 0.;
+		  DD.value(support_points[k], j, k, local_vector);
+		  for (unsigned int l = 0; l < dofs; ++l)
+		  {
+		    u(l) += scale * local_vector(l);
+		  }
+                  
+		}
+#else
+                for (unsigned int k = 0; k < boundary_dofs.size(); k++)
                   {
-                    if (selected_components[k])
+                    if (boundary_dofs[k])
                       {
                         local_vector = 0.;
                         DD.value(support_points[k], j, k, local_vector);
@@ -713,6 +739,7 @@ namespace DOpE
                           }
                       }
                   }
+#endif
               }
             //end loop over components
           }
