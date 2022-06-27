@@ -344,7 +344,7 @@ namespace DOpE
     dealii::TrilinosWrappers::SparsityPattern &sparsity,
     const dealii::AffineConstraints<double> &hanging_node_constraints,
     const std::vector<
-    unsigned int> &blocks,
+    unsigned int> &/*blocks*/,
     const MPI_Comm mpi_comm) const
 #else
   template <template <int, int> class DH, int dim>
@@ -354,7 +354,7 @@ namespace DOpE
     dealii::TrilinosWrappers::SparsityPattern &sparsity,
     const dealii::ConstraintMatrix &hanging_node_constraints,
     const std::vector<
-    unsigned int> &blocks,
+    unsigned int> &/*blocks*/,
     const MPI_Comm mpi_comm) const
 #endif
   {
