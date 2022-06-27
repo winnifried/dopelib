@@ -358,10 +358,6 @@ namespace DOpE
     const MPI_Comm mpi_comm) const
 #endif
   {
-    unsigned int total_dofs = 0;
-    for (unsigned int j = 0; j < blocks.size (); j++)
-      total_dofs += blocks.at (j);
-
     IndexSet locally_relevant;
     IndexSet locally_owned =
       dof_handler.GetDEALDoFHandler ().locally_owned_dofs ();
