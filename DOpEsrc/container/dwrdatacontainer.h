@@ -617,6 +617,8 @@ namespace DOpE
     void
     PrepareWeights(const ControlVector<VECTOR> &q)
     {
+      (void)q;
+
       //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
       switch (GetEETerms())
         {

@@ -822,9 +822,14 @@ namespace DOpE
             break;
 
           case DOpEtypes::RefinementType::optimized:
-          GridRefinement::refine_and_coarsen_optimize(triangulation_,
-                                                      ref_container.GetLocalErrorIndicators(),
-                                                      ref_container.GetConvergenceOrder());
+          //FIXME: refine_and_coarse_optimize takes an unsigned int argument
+          // for the convergence order. We thus have to convert the double
+          // stored in ref_container to an unsigned int keeping the "floor
+          // rounding" in mind that is performed by type casting:
+          GridRefinement::refine_and_coarsen_optimize(
+            triangulation_,
+            ref_container.GetLocalErrorIndicators(),
+            static_cast<unsigned int>(ref_container.GetConvergenceOrder() + 0.5));
             break;
 
 	  case DOpEtypes::RefinementType::geometry:

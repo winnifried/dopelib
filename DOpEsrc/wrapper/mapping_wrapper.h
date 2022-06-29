@@ -69,8 +69,13 @@ namespace DOpEWrapper
   public:
     Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
               false) :
-      dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
+      dealii::MappingQ<dim>(p
+#if ! DEAL_II_VERSION_GTE(9,4,0)
+                            , use_mapping_q_on_all_elements
+#endif
+                            )
     {
+      (void)use_mapping_q_on_all_elements;
     }
 
     Mapping(const dealii::MappingQ<dim> &mapping) :
@@ -184,8 +189,13 @@ namespace DOpEWrapper
   public:
     Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
               false) :
-      dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
+      dealii::MappingQ<dim>(p
+#if ! DEAL_II_VERSION_GTE(9,4,0)
+                            , use_mapping_q_on_all_elements
+#endif
+                            )
     {
+      (void)use_mapping_q_on_all_elements;
     }
 
     Mapping(const dealii::MappingQ<dim> &mapping) :

@@ -344,7 +344,7 @@ namespace DOpE
     dealii::TrilinosWrappers::SparsityPattern &sparsity,
     const dealii::AffineConstraints<double> &hanging_node_constraints,
     const std::vector<
-    unsigned int> &blocks,
+    unsigned int> &/*blocks*/,
     const MPI_Comm mpi_comm) const
 #else
   template <template <int, int> class DH, int dim>
@@ -354,14 +354,10 @@ namespace DOpE
     dealii::TrilinosWrappers::SparsityPattern &sparsity,
     const dealii::ConstraintMatrix &hanging_node_constraints,
     const std::vector<
-    unsigned int> &blocks,
+    unsigned int> &/*blocks*/,
     const MPI_Comm mpi_comm) const
 #endif
   {
-    unsigned int total_dofs = 0;
-    for (unsigned int j = 0; j < blocks.size (); j++)
-      total_dofs += blocks.at (j);
-
     IndexSet locally_relevant;
     IndexSet locally_owned =
       dof_handler.GetDEALDoFHandler ().locally_owned_dofs ();
