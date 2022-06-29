@@ -25,9 +25,7 @@
 #define MAPPING_WRAPPER_H_
 
 #include <deal.II/dofs/dof_handler.h>
-//#include <deal.II/multigrid/mg_dof_handler.h>
-#if DEAL_II_VERSION_GTE(9,3,0)
-#else
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
 #endif
 #include <deal.II/hp/mapping_collection.h>

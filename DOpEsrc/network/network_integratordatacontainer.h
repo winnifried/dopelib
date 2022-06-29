@@ -27,7 +27,9 @@
 #include <deal.II/base/quadrature.h>
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/hp/q_collection.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
+#endif
 #include <deal.II/lac/vector.h>
 
 #include <wrapper/dofhandler_wrapper.h>
