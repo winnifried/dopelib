@@ -26,8 +26,9 @@
 
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/dofs/dof_handler.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
-//#include <deal.II/multigrid/mg_dof_handler.h>
+#endif
 
 namespace DOpEWrapper
 {

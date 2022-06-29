@@ -2025,8 +2025,8 @@ namespace DOpE
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
     CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
-      const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-      double scale)
+      const DATACONTAINER & /*edc*/, dealii::Vector<double> &/*local_vector*/,
+      double /*scale*/)
   {
 
     if ((this->GetType() == "gradient")
@@ -2056,8 +2056,8 @@ namespace DOpE
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
     CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
-      const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-      double scale)
+      const DATACONTAINER & /*edc*/, dealii::Vector<double> &/*local_vector*/,
+      double /*scale*/)
   {
 
     if ((this->GetType() == "gradient")
@@ -2506,7 +2506,7 @@ namespace DOpE
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
     CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
-      const DATACONTAINER &edc, FullMatrix<double> &local_entry_matrix)
+      const DATACONTAINER & /*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
@@ -2536,8 +2536,8 @@ namespace DOpE
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
     CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
-      const DATACONTAINER &edc,
-      dealii::FullMatrix<double> &local_entry_matrix)
+      const DATACONTAINER &/*edc*/,
+      dealii::FullMatrix<double> &/*local_entry_matrix*/)
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
