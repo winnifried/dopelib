@@ -236,12 +236,12 @@ namespace DOpE
           pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
           pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
 
-          double newres = residual.linfty_norm();
+          res = residual.linfty_norm();
           int lineiter=0;
 	  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
           double rho = linesearch_rho_;
           double alpha=1;
-          if ( newres > res && build_matrix == false)
+          if ( res > lastres && build_matrix == false)
             {
               build_matrix = true;
               // Reuse of Matrix seems to be a bad idea, rebuild and repeat
@@ -260,10 +260,10 @@ namespace DOpE
 	      bool was_build = build_matrix;
               build_matrix = false;
 	      pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
-              while (newres > res)
+              while (res > lastres)
                 {
                   out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
-                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
+                     <<pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
 		  if(was_build)
 		    out<<"M ";
@@ -285,7 +285,7 @@ namespace DOpE
                   pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
 		  pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
 
-                  newres = residual.linfty_norm();
+                  res = residual.linfty_norm();
 
                 }
 
@@ -294,7 +294,6 @@ namespace DOpE
                   build_matrix=true;
                 }
               lastres=res;
-              res=newres;
 
               out << algo_level
                   << "Newton step: "

@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.0
+Using dealii Version: 9.3
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -32,115 +32,115 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 2 (0.05 -> 0.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.03e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00002.vtk]
 		         Precalculating functional values 
 		 Timestep: 3 (0.1 -> 0.15) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.92e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00003.vtk]
 		         Precalculating functional values 
 		 Timestep: 4 (0.15 -> 0.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.28e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00004.vtk]
 		         Precalculating functional values 
 		 Timestep: 5 (0.2 -> 0.25) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.71e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00005.vtk]
 		         Precalculating functional values 
 		 Timestep: 6 (0.25 -> 0.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.21e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00006.vtk]
 		         Precalculating functional values 
 		 Timestep: 7 (0.3 -> 0.35) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.89e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00007.vtk]
 		         Precalculating functional values 
 		 Timestep: 8 (0.35 -> 0.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.70e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00008.vtk]
 		         Precalculating functional values 
 		 Timestep: 9 (0.4 -> 0.45) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.49e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00009.vtk]
 		         Precalculating functional values 
 		 Timestep: 10 (0.45 -> 0.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.41e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		 Timestep: 11 (0.5 -> 0.55) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.30e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00011.vtk]
 		         Precalculating functional values 
 		 Timestep: 12 (0.55 -> 0.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00012.vtk]
 		         Precalculating functional values 
 		 Timestep: 13 (0.6 -> 0.65) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00013.vtk]
 		         Precalculating functional values 
 		 Timestep: 14 (0.65 -> 0.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.08e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00014.vtk]
 		         Precalculating functional values 
 		 Timestep: 15 (0.7 -> 0.75) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.04e+00
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00015.vtk]
 		         Precalculating functional values 
 		 Timestep: 16 (0.75 -> 0.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.83e-01
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00016.vtk]
 		         Precalculating functional values 
 		 Timestep: 17 (0.8 -> 0.85) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.42e-01
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00017.vtk]
 		         Precalculating functional values 
 		 Timestep: 18 (0.85 -> 0.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.97e-01
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00018.vtk]
 		         Precalculating functional values 
 		 Timestep: 19 (0.9 -> 0.95) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.60e-01
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00019.vtk]
 		         Precalculating functional values 
 		 Timestep: 20 (0.95 -> 1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.22e-01
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Space-Time Pointevaluation: 2.24846

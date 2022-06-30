@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.0
+Using dealii Version: 9.3
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -17,10 +17,11 @@ Using dealii Version: 9.0
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.):   3.7038e-01	 LineSearch {0} M 
 			 Newton step: 2	 Residual (rel.):   1.1734e-03	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.):   2.3562e-06	 LineSearch {0} M 
-			 Newton step: 4	 Residual (rel.):   8.4246e-08	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.9904e-09	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   8.8008e-11	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.1758e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.8297e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.9761e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.7567e-10	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Computing Functionals:
 	X-displacement: 0.0449791
 	Flux: 1.33325

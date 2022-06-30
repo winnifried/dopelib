@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.0
+Using dealii Version: 9.3
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -35,7 +35,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 2 (1000 -> 2000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.4395e+10
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00002.vtk]
 		         Precalculating functional values 
 		P1: 9.47387e+06
@@ -43,7 +43,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 3 (2000 -> 3000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7227e+10
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00003.vtk]
 		         Precalculating functional values 
 		P1: 1.24235e+07
@@ -51,7 +51,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 4 (3000 -> 4000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2855e+10
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00004.vtk]
 		         Precalculating functional values 
 		P1: 1.45975e+07
@@ -59,7 +59,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 5 (4000 -> 5000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   9.5296e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00005.vtk]
 		         Precalculating functional values 
 		P1: 1.62033e+07
@@ -67,7 +67,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 6 (5000 -> 6000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   7.0477e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00006.vtk]
 		         Precalculating functional values 
 		P1: 1.73917e+07
@@ -75,7 +75,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 7 (6000 -> 7000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   5.1876e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00007.vtk]
 		         Precalculating functional values 
 		P1: 1.8273e+07
@@ -83,7 +83,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 8 (7000 -> 8000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8142e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00008.vtk]
 		         Precalculating functional values 
 		P1: 1.89277e+07
@@ -91,7 +91,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 9 (8000 -> 9000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.8059e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00009.vtk]
 		         Precalculating functional values 
 		P1: 1.94146e+07
@@ -99,7 +99,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 10 (9000 -> 10000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.0687e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
 		P1: 1.97771e+07
@@ -107,7 +107,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 11 (10000 -> 11000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.5353e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00011.vtk]
 		         Precalculating functional values 
 		P1: 2.0047e+07
@@ -115,7 +115,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 12 (11000 -> 12000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1533e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00012.vtk]
 		         Precalculating functional values 
 		P1: 2.0248e+07
@@ -123,7 +123,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 13 (12000 -> 13000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0872e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00013.vtk]
 		         Precalculating functional values 
 		P1: 2.03975e+07
@@ -131,7 +131,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 14 (13000 -> 14000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0075e+09
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00014.vtk]
 		         Precalculating functional values 
 		P1: 2.05085e+07
@@ -139,7 +139,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 15 (14000 -> 15000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   9.2317e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00015.vtk]
 		         Precalculating functional values 
 		P1: 2.05906e+07
@@ -147,7 +147,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 16 (15000 -> 16000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   8.4210e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00016.vtk]
 		         Precalculating functional values 
 		P1: 2.0651e+07
@@ -155,7 +155,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 17 (16000 -> 17000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   7.6810e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00017.vtk]
 		         Precalculating functional values 
 		P1: 2.06952e+07
@@ -163,7 +163,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 18 (17000 -> 18000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   7.0254e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00018.vtk]
 		         Precalculating functional values 
 		P1: 2.07273e+07
@@ -171,7 +171,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 19 (18000 -> 19000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   6.4545e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00019.vtk]
 		         Precalculating functional values 
 		P1: 2.07502e+07
@@ -179,7 +179,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 20 (19000 -> 20000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   5.9618e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		P1: 2.07662e+07
@@ -187,7 +187,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 21 (20000 -> 21000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   5.5379e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00021.vtk]
 		         Precalculating functional values 
 		P1: 2.07772e+07
@@ -195,7 +195,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 22 (21000 -> 22000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   5.1728e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00022.vtk]
 		         Precalculating functional values 
 		P1: 2.07843e+07
@@ -203,7 +203,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 23 (22000 -> 23000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.8570e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00023.vtk]
 		         Precalculating functional values 
 		P1: 2.07885e+07
@@ -211,7 +211,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 24 (23000 -> 24000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.5821e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00024.vtk]
 		         Precalculating functional values 
 		P1: 2.07906e+07
@@ -219,7 +219,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 25 (24000 -> 25000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3411e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00025.vtk]
 		         Precalculating functional values 
 		P1: 2.0791e+07
@@ -227,7 +227,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 26 (25000 -> 26000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.1278e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00026.vtk]
 		         Precalculating functional values 
 		P1: 2.07904e+07
@@ -235,7 +235,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 27 (26000 -> 27000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.9376e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00027.vtk]
 		         Precalculating functional values 
 		P1: 2.07888e+07
@@ -243,7 +243,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 28 (27000 -> 28000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.7666e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00028.vtk]
 		         Precalculating functional values 
 		P1: 2.07866e+07
@@ -251,7 +251,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 29 (28000 -> 29000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.6115e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00029.vtk]
 		         Precalculating functional values 
 		P1: 2.07839e+07
@@ -259,7 +259,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 30 (29000 -> 30000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.4698e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		P1: 2.07808e+07
@@ -267,7 +267,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 31 (30000 -> 31000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.3397e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00031.vtk]
 		         Precalculating functional values 
 		P1: 2.07775e+07
@@ -275,7 +275,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 32 (31000 -> 32000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.2194e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00032.vtk]
 		         Precalculating functional values 
 		P1: 2.0774e+07
@@ -283,7 +283,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 33 (32000 -> 33000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.1077e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00033.vtk]
 		         Precalculating functional values 
 		P1: 2.07704e+07
@@ -291,7 +291,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 34 (33000 -> 34000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.0035e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00034.vtk]
 		         Precalculating functional values 
 		P1: 2.07667e+07
@@ -299,7 +299,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 35 (34000 -> 35000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.9060e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00035.vtk]
 		         Precalculating functional values 
 		P1: 2.07629e+07
@@ -307,7 +307,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 36 (35000 -> 36000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.8144e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00036.vtk]
 		         Precalculating functional values 
 		P1: 2.0759e+07
@@ -315,7 +315,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 37 (36000 -> 37000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.7281e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00037.vtk]
 		         Precalculating functional values 
 		P1: 2.07552e+07
@@ -323,7 +323,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 38 (37000 -> 38000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.6467e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00038.vtk]
 		         Precalculating functional values 
 		P1: 2.07513e+07
@@ -331,7 +331,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 39 (38000 -> 39000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.5697e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00039.vtk]
 		         Precalculating functional values 
 		P1: 2.07474e+07
@@ -339,7 +339,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 40 (39000 -> 40000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.4967e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		P1: 2.07434e+07
@@ -347,7 +347,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 41 (40000 -> 41000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.4273e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00041.vtk]
 		         Precalculating functional values 
 		P1: 2.07395e+07
@@ -355,7 +355,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 42 (41000 -> 42000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.3614e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00042.vtk]
 		         Precalculating functional values 
 		P1: 2.07356e+07
@@ -363,7 +363,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 43 (42000 -> 43000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.2987e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00043.vtk]
 		         Precalculating functional values 
 		P1: 2.07317e+07
@@ -371,7 +371,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 44 (43000 -> 44000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.2389e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00044.vtk]
 		         Precalculating functional values 
 		P1: 2.07278e+07
@@ -379,7 +379,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 45 (44000 -> 45000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.1818e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00045.vtk]
 		         Precalculating functional values 
 		P1: 2.07238e+07
@@ -387,7 +387,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 46 (45000 -> 46000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.1272e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00046.vtk]
 		         Precalculating functional values 
 		P1: 2.07199e+07
@@ -395,7 +395,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 47 (46000 -> 47000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.0751e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00047.vtk]
 		         Precalculating functional values 
 		P1: 2.0716e+07
@@ -403,7 +403,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 48 (47000 -> 48000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   2.0251e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00048.vtk]
 		         Precalculating functional values 
 		P1: 2.07121e+07
@@ -411,7 +411,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 49 (48000 -> 49000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.9772e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00049.vtk]
 		         Precalculating functional values 
 		P1: 2.07082e+07
@@ -419,7 +419,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 50 (49000 -> 50000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.9313e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
 		P1: 2.07043e+07
@@ -427,7 +427,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 51 (50000 -> 51000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.8873e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00051.vtk]
 		         Precalculating functional values 
 		P1: 2.07004e+07
@@ -435,7 +435,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 52 (51000 -> 52000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.8477e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00052.vtk]
 		         Precalculating functional values 
 		P1: 2.06966e+07
@@ -443,7 +443,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 53 (52000 -> 53000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.8162e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00053.vtk]
 		         Precalculating functional values 
 		P1: 2.06927e+07
@@ -451,7 +451,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 54 (53000 -> 54000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7858e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00054.vtk]
 		         Precalculating functional values 
 		P1: 2.06888e+07
@@ -459,7 +459,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 55 (54000 -> 55000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7563e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00055.vtk]
 		         Precalculating functional values 
 		P1: 2.0685e+07
@@ -467,7 +467,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 56 (55000 -> 56000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7278e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00056.vtk]
 		         Precalculating functional values 
 		P1: 2.06811e+07
@@ -475,7 +475,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 57 (56000 -> 57000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7002e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00057.vtk]
 		         Precalculating functional values 
 		P1: 2.06773e+07
@@ -483,7 +483,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 58 (57000 -> 58000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.6733e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00058.vtk]
 		         Precalculating functional values 
 		P1: 2.06735e+07
@@ -491,7 +491,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 59 (58000 -> 59000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.6473e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00059.vtk]
 		         Precalculating functional values 
 		P1: 2.06696e+07
@@ -499,7 +499,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 60 (59000 -> 60000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.6221e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
 		P1: 2.06658e+07
@@ -507,7 +507,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 61 (60000 -> 61000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.5975e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00061.vtk]
 		         Precalculating functional values 
 		P1: 2.0662e+07
@@ -515,7 +515,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 62 (61000 -> 62000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.5737e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00062.vtk]
 		         Precalculating functional values 
 		P1: 2.06582e+07
@@ -523,7 +523,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 63 (62000 -> 63000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.5505e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00063.vtk]
 		         Precalculating functional values 
 		P1: 2.06544e+07
@@ -531,7 +531,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 64 (63000 -> 64000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.5280e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00064.vtk]
 		         Precalculating functional values 
 		P1: 2.06506e+07
@@ -539,7 +539,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 65 (64000 -> 65000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.5060e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00065.vtk]
 		         Precalculating functional values 
 		P1: 2.06468e+07
@@ -547,7 +547,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 66 (65000 -> 66000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.4846e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00066.vtk]
 		         Precalculating functional values 
 		P1: 2.06431e+07
@@ -555,7 +555,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 67 (66000 -> 67000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.4638e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00067.vtk]
 		         Precalculating functional values 
 		P1: 2.06393e+07
@@ -563,7 +563,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 68 (67000 -> 68000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.4436e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00068.vtk]
 		         Precalculating functional values 
 		P1: 2.06355e+07
@@ -571,7 +571,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 69 (68000 -> 69000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.4238e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00069.vtk]
 		         Precalculating functional values 
 		P1: 2.06318e+07
@@ -579,7 +579,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 70 (69000 -> 70000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.4045e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
 		P1: 2.06281e+07
@@ -587,7 +587,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 71 (70000 -> 71000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3857e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00071.vtk]
 		         Precalculating functional values 
 		P1: 2.06243e+07
@@ -595,7 +595,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 72 (71000 -> 72000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3674e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00072.vtk]
 		         Precalculating functional values 
 		P1: 2.06206e+07
@@ -603,7 +603,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 73 (72000 -> 73000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3494e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00073.vtk]
 		         Precalculating functional values 
 		P1: 2.06169e+07
@@ -611,7 +611,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 74 (73000 -> 74000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3319e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00074.vtk]
 		         Precalculating functional values 
 		P1: 2.06132e+07
@@ -619,7 +619,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 75 (74000 -> 75000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3149e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00075.vtk]
 		         Precalculating functional values 
 		P1: 2.06095e+07
@@ -627,7 +627,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 76 (75000 -> 76000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2982e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00076.vtk]
 		         Precalculating functional values 
 		P1: 2.06058e+07
@@ -635,7 +635,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 77 (76000 -> 77000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2819e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00077.vtk]
 		         Precalculating functional values 
 		P1: 2.06021e+07
@@ -643,7 +643,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 78 (77000 -> 78000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2659e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00078.vtk]
 		         Precalculating functional values 
 		P1: 2.05984e+07
@@ -651,7 +651,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 79 (78000 -> 79000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2503e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00079.vtk]
 		         Precalculating functional values 
 		P1: 2.05947e+07
@@ -659,7 +659,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 80 (79000 -> 80000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2350e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
 		P1: 2.05911e+07
@@ -667,7 +667,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 81 (80000 -> 81000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2201e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00081.vtk]
 		         Precalculating functional values 
 		P1: 2.05874e+07
@@ -675,7 +675,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 82 (81000 -> 82000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.2055e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00082.vtk]
 		         Precalculating functional values 
 		P1: 2.05838e+07
@@ -683,7 +683,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 83 (82000 -> 83000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1912e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00083.vtk]
 		         Precalculating functional values 
 		P1: 2.05801e+07
@@ -691,7 +691,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 84 (83000 -> 84000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1772e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00084.vtk]
 		         Precalculating functional values 
 		P1: 2.05765e+07
@@ -699,7 +699,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 85 (84000 -> 85000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1635e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00085.vtk]
 		         Precalculating functional values 
 		P1: 2.05729e+07
@@ -707,7 +707,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 86 (85000 -> 86000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1501e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00086.vtk]
 		         Precalculating functional values 
 		P1: 2.05692e+07
@@ -715,7 +715,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 87 (86000 -> 87000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1369e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00087.vtk]
 		         Precalculating functional values 
 		P1: 2.05656e+07
@@ -723,7 +723,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 88 (87000 -> 88000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1240e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00088.vtk]
 		         Precalculating functional values 
 		P1: 2.0562e+07
@@ -731,7 +731,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 89 (88000 -> 89000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.1114e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00089.vtk]
 		         Precalculating functional values 
 		P1: 2.05584e+07
@@ -739,7 +739,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 90 (89000 -> 90000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0990e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00090.vtk]
 		         Precalculating functional values 
 		P1: 2.05548e+07
@@ -747,7 +747,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 91 (90000 -> 91000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0868e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00091.vtk]
 		         Precalculating functional values 
 		P1: 2.05513e+07
@@ -755,7 +755,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 92 (91000 -> 92000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0749e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00092.vtk]
 		         Precalculating functional values 
 		P1: 2.05477e+07
@@ -763,7 +763,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 93 (92000 -> 93000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0632e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00093.vtk]
 		         Precalculating functional values 
 		P1: 2.05441e+07
@@ -771,7 +771,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 94 (93000 -> 94000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0517e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00094.vtk]
 		         Precalculating functional values 
 		P1: 2.05406e+07
@@ -779,7 +779,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 95 (94000 -> 95000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0405e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00095.vtk]
 		         Precalculating functional values 
 		P1: 2.0537e+07
@@ -787,7 +787,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 96 (95000 -> 96000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0294e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00096.vtk]
 		         Precalculating functional values 
 		P1: 2.05335e+07
@@ -795,7 +795,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 97 (96000 -> 97000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0186e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00097.vtk]
 		         Precalculating functional values 
 		P1: 2.05299e+07
@@ -803,7 +803,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 98 (97000 -> 98000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.0079e+08
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00098.vtk]
 		         Precalculating functional values 
 		P1: 2.05264e+07
@@ -811,7 +811,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 99 (98000 -> 99000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   9.9745e+07
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00099.vtk]
 		         Precalculating functional values 
 		P1: 2.05229e+07
@@ -819,7 +819,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 100 (99000 -> 100000) using backward Euler
 			 Newton step: 0	 Residual (abs.):   9.8718e+07
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.): < 3.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00100.vtk]
 		         Precalculating functional values 
 		P1: 2.05194e+07
