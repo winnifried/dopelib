@@ -97,6 +97,7 @@ namespace DOpE
   private:
     SPARSITYPATTERN sparsity_pattern_;
     MATRIX matrix_;
+    PRECONDITIONER *precondition_;
 
     double linear_global_tol_, linear_tol_;
     int  linear_maxiter_;
@@ -122,7 +123,7 @@ namespace DOpE
     linear_global_tol_ = param_reader.get_double ("linear_global_tol");
     linear_tol_        = param_reader.get_double ("linear_tol");
     linear_maxiter_    = param_reader.get_integer ("linear_maxiter");
-
+    precondition_ = NULL;
   }
 
   /******************************************************/
@@ -130,6 +131,8 @@ namespace DOpE
   template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::~CGLinearSolverWithMatrix()
   {
+    if(precondition_ != NULL)
+      delete precondition_;
   }
 
   /******************************************************/
@@ -141,6 +144,10 @@ namespace DOpE
     matrix_.clear();
     pde.ComputeSparsityPattern(sparsity_pattern_);
     matrix_.reinit(sparsity_pattern_);
+    if(precondition_ != NULL)
+      delete precondition_;
+    precondition_ = new PRECONDITIONER;
+
   }
 
   /******************************************************/
@@ -155,15 +162,14 @@ namespace DOpE
     if (force_matrix_build)
       {
         integr.ComputeMatrix (pde,matrix_);
+	precondition_->initialize(matrix_);
       }
 
 
     dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
     dealii::SolverCG<VECTOR> cg (solver_control);
-    PRECONDITIONER precondition;
-    precondition.initialize(matrix_);
     cg.solve (matrix_, solution, rhs,
-              precondition);
+              *precondition_);
 
     pde.GetDoFConstraints().distribute(solution);
   }
