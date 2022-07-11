@@ -177,9 +177,9 @@ namespace DOpE
 //              static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
       DoFRenumbering::component_wise(
 #if DEAL_II_VERSION_GTE(9,3,0)
-	static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_));
+	static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #else
-        static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
+      static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #endif
 
       state_hn_constraints_.clear();

@@ -197,9 +197,9 @@ namespace DOpE
       	state_dof_handlers_[j]->distribute_dofs(GetFESystem("state"));
       	DoFRenumbering::component_wise(
 #if DEAL_II_VERSION_GTE(9,3,0)
-	  static_cast<dealii::DoFHandler<dealdim, dealdim>&>(*state_dof_handlers_[j]));
+	  static_cast<dealii::DoFHandler<dealdim, dealdim>&>(*state_dof_handlers_[j]),state_block_component);
 #else
-	  static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]));
+	static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]),state_block_component);
 #endif
 
 	//DoFConstraints including Dirichlet constraints

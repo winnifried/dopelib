@@ -260,9 +260,9 @@ namespace DOpE
 
 #if dope_dimension > 0
 #if DEAL_II_VERSION_GTE(9,3,0)
-      DoFRenumbering::component_wise (static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_));
+      DoFRenumbering::component_wise (static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_),control_block_component);
 #else
-      DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_));
+      DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),control_block_component);
 #endif
       if (dopedim==dealdim)
         {
@@ -347,9 +347,9 @@ namespace DOpE
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
 #if DEAL_II_VERSION_GTE(9,3,0)
-      DoFRenumbering::component_wise(static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_));
+      DoFRenumbering::component_wise(static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #else
-      DoFRenumbering::component_wise(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
+      DoFRenumbering::component_wise(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #endif
       
       state_hn_constraints_.clear();
