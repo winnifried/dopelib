@@ -51,6 +51,7 @@ public:
   LocalPDE(ParameterReader &param_reader) :
     state_block_component_(2, 0)
   {
+    state_block_component_[1] = 1;
     param_reader.SetSubsection("localpde parameters");
     R_      = param_reader.get_double("R");
     T_      = param_reader.get_double("T");
@@ -594,7 +595,7 @@ public:
   unsigned int
   GetStateNBlocks() const
   {
-    return 1;
+    return 2;
   }
   std::vector<unsigned int> &
   GetControlBlockComponent()

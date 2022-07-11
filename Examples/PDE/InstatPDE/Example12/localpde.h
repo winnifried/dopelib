@@ -74,9 +74,10 @@ public:
 SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 		state_block_component_(5, 0)
 	{
-		state_block_component_[2] = 1;
-		state_block_component_[3] = 2;
-		state_block_component_[4] = 3;
+		state_block_component_[1] = 1;
+		state_block_component_[2] = 2;
+		state_block_component_[3] = 3;
+		state_block_component_[4] = 4;
 
 		param_reader.SetSubsection("Local PDE parameters");
 		constant_k_ = param_reader.get_double("constant_k");
@@ -1186,8 +1187,8 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	unsigned int
 	GetStateNBlocks() const
 	{
-		// Four Blocks: u, phi, p, tau
-		return 4;
+		// Four Blocks: u_x, u_y, phi, p, tau
+		return 5;
 	}
 
 	std::vector<unsigned int> &
