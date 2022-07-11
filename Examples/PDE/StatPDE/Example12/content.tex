@@ -3,8 +3,10 @@ This example shows the use of the Raviart-Thomas (RT) element in \texttt{DOpElib
 is taken from \texttt{dealii} step-20 and shows how this step can be implemented in \texttt{DOpElib}. The vector valued Laplace equation is solved in the mixed formulation.
 
 Most things are identical to all the other programs. However there is a subtle difference in 
-\texttt{localpde.h}: Although the element used has 3 components (two for the RT-Element and 1 for the pressure)
-the block\underline{ }component vector mapping blocks to components has only 2 entries. 1 for each finite element used!
+\texttt{localpde.h}: The block\underline{ }component vector mapping
+blocks to components has 3 entries, but since the first finite element
+is non-primitive we need to assign both components (0 and 1) to the
+same block.
 
 The second difference is that we have to initialize the mapping explicitly. This is due to the fact that the 
 default 

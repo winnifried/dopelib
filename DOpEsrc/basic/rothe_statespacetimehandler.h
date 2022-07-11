@@ -251,17 +251,18 @@ namespace DOpE
 	//HN Constraints finished
 	
 #if DEAL_II_VERSION_GTE(9,2,0)
-      state_dofs_per_block_[j] = DoFTools::count_dofs_per_fe_block(
+      state_dofs_per_block_[j] = DoFTools::count_dofs_per_fe_component(
 #if DEAL_II_VERSION_GTE(9,3,0)
 	  static_cast<dealii::DoFHandler<dealdim, dealdim>&>(*state_dof_handlers_[j]),
 #else
 	  static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]),
 #endif
+	  true,
 	  state_block_component);
 #else
-      	DoFTools::count_dofs_per_block(
+      	DoFTools::count_dofs_per_component(
 	  static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]),
-	  state_dofs_per_block_[j], state_block_component);
+	  state_dofs_per_block_[j], true, state_block_component);
 #endif //dealii older than 9.2.0
 	if(support_points_.size() > j)
 	{
