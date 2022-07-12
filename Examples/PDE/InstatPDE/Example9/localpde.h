@@ -300,7 +300,7 @@ public:
   GetUpdateFlags() const
   {
     if (this->problem_type_ == "state" || this->problem_type_=="error_evaluation")
-      return update_values | update_gradients | update_quadrature_points;
+      return update_values | update_gradients | update_quadrature_points | update_hessians;
     else
       throw DOpEException("Unknown Problem Type " + this->problem_type_,
                           "LocalPDE::GetUpdateFlags");

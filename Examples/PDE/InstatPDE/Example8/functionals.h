@@ -240,8 +240,7 @@ public:
   UpdateFlags
   GetUpdateFlags() const
   {
-    return update_values | update_quadrature_points | update_gradients
-           | update_normal_vectors;
+    return update_values | update_quadrature_points | update_gradients;
   }
 
   string
@@ -335,8 +334,7 @@ public:
   UpdateFlags
   GetUpdateFlags() const
   {
-    return update_values | update_quadrature_points | update_gradients
-           | update_normal_vectors;
+    return update_values | update_quadrature_points | update_gradients;
   }
 
   string
