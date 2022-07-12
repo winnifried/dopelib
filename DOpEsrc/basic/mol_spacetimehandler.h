@@ -410,7 +410,7 @@ namespace DOpE
 	true,
         state_block_component);
 #else
-      DoFTools::count_dofs_per_block(
+      DoFTools::count_dofs_per_component(
 	static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),
         state_dofs_per_block_,true, state_block_component);
 #endif //dealii older than 9.2.0
