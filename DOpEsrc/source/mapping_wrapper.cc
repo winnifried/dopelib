@@ -39,6 +39,15 @@ namespace DOpEWrapper
   StaticMappingQ1<dim, dealii::hp::DoFHandler>::mapping_q1(
     StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
 
+  template<int dim>
+  Mapping<dim, dealii::DoFHandler> StaticMappingQ2<dim, dealii::DoFHandler>::mapping_q2 (
+    2);
+
+  template<int dim>
+  Mapping<dim, dealii::hp::DoFHandler>
+  StaticMappingQ2<dim, dealii::hp::DoFHandler>::mapping_q2(
+    StaticMappingQ2<dim, dealii::DoFHandler >::mapping_q2);
+
 //  template<int dim>
 //    Mapping<dim, dealii::MGDoFHandler>
 //    StaticMappingQ1<dim, dealii::MGDoFHandler >::mapping_q1(
@@ -69,3 +78,16 @@ template struct DOpEWrapper::StaticMappingQ1<3, dealii::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<1, dealii::hp::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<2, dealii::hp::DoFHandler>;
 template struct DOpEWrapper::StaticMappingQ1<3, dealii::hp::DoFHandler>;
+
+
+template struct DOpEWrapper::StaticMappingQ2<1, dealii::DoFHandler>;
+template struct DOpEWrapper::StaticMappingQ2<2, dealii::DoFHandler>;
+template struct DOpEWrapper::StaticMappingQ2<3, dealii::DoFHandler>;
+
+//template struct DOpEWrapper::StaticMappingQ1<1, dealii::MGDoFHandler>;
+//template struct DOpEWrapper::StaticMappingQ1<2, dealii::MGDoFHandler>;
+//template struct DOpEWrapper::StaticMappingQ1<3, dealii::MGDoFHandler>;
+
+template struct DOpEWrapper::StaticMappingQ2<1, dealii::hp::DoFHandler>;
+template struct DOpEWrapper::StaticMappingQ2<2, dealii::hp::DoFHandler>;
+template struct DOpEWrapper::StaticMappingQ2<3, dealii::hp::DoFHandler>;
