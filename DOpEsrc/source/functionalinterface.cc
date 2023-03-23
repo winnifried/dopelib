@@ -521,7 +521,17 @@ namespace DOpE
   }
 
 
+  /********************************************/
 
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  double
+  FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetDetDF() const
+  {
+    return 0; //no update
+  }
   /********************************************/
 
   template<

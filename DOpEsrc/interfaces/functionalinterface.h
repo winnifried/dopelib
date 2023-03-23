@@ -543,6 +543,8 @@ namespace DOpE
     virtual dealii::UpdateFlags
     GetUpdateFlags() const;
 
+    virtual double GetDetDF() const;
+
     /**
      * This function tells what dealii::UpdateFlags are required by the functional to be used when initializing the
      * DOpEWrapper::FEFaceValues on a face.
