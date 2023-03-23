@@ -188,6 +188,33 @@ namespace DOpEWrapper
   public:
     static Mapping<dim, dealii::hp::DoFHandler> mapping_q1;
   };
+  /************************************************************************************/
+
+    template<int dim, template<int, int> class DH>
+    struct StaticMappingQ2
+    {
+    };
+
+    template<int dim>
+    struct StaticMappingQ2<dim, dealii::DoFHandler>
+    {
+    public:
+      static Mapping<dim, dealii::DoFHandler> mapping_q2;
+    };
+
+  // template<int dim>
+  //    struct StaticMappingQ1<dim, dealii::MGDoFHandler >
+  //    {
+  //      public:
+  //        static Mapping<dim, dealii::MGDoFHandler > mapping_q1;
+  //    };
+
+    template<int dim>
+    struct StaticMappingQ2<dim, dealii::hp::DoFHandler>
+    {
+    public:
+      static Mapping<dim, dealii::hp::DoFHandler> mapping_q2;
+    };
 }
 
 #endif /* MAPPING_WRAPPER_H_ */
