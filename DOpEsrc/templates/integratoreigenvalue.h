@@ -945,6 +945,7 @@ template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
 template <typename PROBLEM, typename MATRIX>
 void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
     PROBLEM &pde, MATRIX &matrix) {
+
   matrix = 0.;
   // Begin integration
   unsigned int dofs_per_element;
@@ -1290,7 +1291,7 @@ void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMassMa
       element[dh]++;
     }
   } // endfor element
-
+//TODO exception
   matrix.compress(VectorOperation::add);
 }
 
@@ -2280,6 +2281,16 @@ INTEGRATORDATACONT &Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
 }
 
 /*******************************************************************************************/
+
+//template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+//          int dim>
+//double Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
+//                dim>::GetDetDF() const {
+// return pde.GetDetDF();
+//}
+//
+
+/*****************************************************************************************/
 
 template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
           int dim>
