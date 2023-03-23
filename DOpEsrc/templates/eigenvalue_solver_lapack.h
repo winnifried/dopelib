@@ -53,9 +53,9 @@ namespace DOpE
     void ReInit(PROBLEM &pde);
 
     template<typename PROBLEM>
-    void GetNormalizedVectorState(PROBLEM &pde, std::vector<StateVector<VECTOR>> &stateeigenfunctions);
+    void GetNormalizedVectorState(PROBLEM &pde,StateVector<VECTOR> &stateeigenfunction);
     template<typename PROBLEM>
-        void GetNormalizedVectorAdjoint(PROBLEM &pde, std::vector<double> &eigenvalues, std::vector<StateVector<VECTOR>> &adjeigenfunctions,std::vector<StateVector<VECTOR>> &stateeigenfunctions);
+        void GetNormalizedVectorAdjoint(PROBLEM &pde, StateVector<VECTOR> &adjeigenfunction,StateVector<VECTOR> &stateeigenfunction, double value);
 
     template<typename PROBLEM>
     bool EigenvalueSolve(PROBLEM &pde, std::vector<double> &eigenvalues, std::vector<StateVector<VECTOR>> &eigenfunctions,
@@ -70,7 +70,10 @@ namespace DOpE
     MATRIX matrixK_, matrixM_;
 
     IndexSet eigenfunction_index_set;
-    std::vector<PETScWrappers::MPI::Vector> eigenvectors_, eigenvectors_normalization_;
+    std::vector<PETScWrappers::MPI::Vector> eigenvectors_;
+
+	PETScWrappers::MPI::Vector state_for_normalization;
+	PETScWrappers::MPI::Vector adjoint_for_normalization;
     std::vector<double> eigenvalues_;
     bool build_matrix_ = true;
 
@@ -124,7 +127,7 @@ namespace DOpE
 	     matrixM_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
 	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
 	     eigenvectors_.clear();
-	     eigenvectors_normalization_.clear();
+//	     eigenvectors_normalization_.clear();
 	     eigenvalues_.clear();
   }
 
@@ -144,7 +147,7 @@ namespace DOpE
 
    bool build_matrix = force_matrix_build;
    if (force_matrix_build) {
-   	   this->ReInit(pde);
+  	   this->ReInit(pde);
 	   integrator_.ComputeMatrix(pde,matrixK_);
 	   integrator_.ComputeMassMatrix(pde,matrixM_);
    }
@@ -160,9 +163,12 @@ namespace DOpE
    	  eigenvalues_.resize(eigenvalues.size());
    	  int max_it = pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs();
       dealii::SolverControl solver_control (/*maxiter_,*/max_it, tol_);
-      SLEPcWrappers::SolverLAPACK eigensolver(solver_control, MPI_COMM_WORLD);
-      eigensolver.set_which_eigenpairs(EPS_TARGET_MAGNITUDE);
+      SLEPcWrappers::/*SolverJacobiDavidson*/SolverLAPACK eigensolver(solver_control);//, MPI_COMM_WORLD);
+      eigensolver.set_problem_type(EPS_GNHEP);
       eigensolver.set_target_eigenvalue(target_eigenvalue_);
+
+      eigensolver.set_which_eigenpairs(EPS_TARGET_MAGNITUDE);
+
       eigensolver.solve(matrixK_, matrixM_, eigenvalues_, eigenvectors_, eigenvalues_.size());
 
 
@@ -176,48 +182,64 @@ namespace DOpE
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
    template<typename PROBLEM>
-    void EigenvalueSolver_LAPACK<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &pde,  std::vector<StateVector<VECTOR>> &stateeigenfunctions){
+    void EigenvalueSolver_LAPACK<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &pde,  StateVector<VECTOR> &stateeigenfunction){
 
-	  integrator_.ComputeMassMatrix(pde,matrixM_);
+//	  integrator_.ComputeMassMatrix(pde,matrixM_);
+	  state_for_normalization.clear();
+	  state_for_normalization.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
+	  state_for_normalization = stateeigenfunction.GetSpacialVector();
 
-	    for(unsigned int i = 0; i<eigenvectors_.size(); i++){
+
 		   PETScWrappers::MPI::Vector vec;
 		  PetscScalar scalar_factor[1];
 	      vec.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
-	      MatMult(matrixM_,eigenvectors_[i],vec);
-	      VecDot(vec,eigenvectors_[i],scalar_factor);
+	      MatMult(matrixM_,state_for_normalization,vec);
+	      VecDot(state_for_normalization,vec,scalar_factor);
 	      scalar_factor[0] = sqrt(scalar_factor[0]);
-	      eigenvectors_[i]/= scalar_factor[0];
-	      stateeigenfunctions[i].GetSpacialVector() = eigenvectors_[i];
-	    }
+	      state_for_normalization/= scalar_factor[0];
+	      stateeigenfunction.GetSpacialVector() = state_for_normalization;
+
+	   	 PetscScalar test[1];
+	   	VecDot(state_for_normalization,state_for_normalization,test);
+
   }
 
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
      template<typename PROBLEM>
-      void EigenvalueSolver_LAPACK<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorAdjoint(PROBLEM &pde, std::vector<double> &eigenvalues, std::vector<StateVector<VECTOR>> &adjointeigenfunctions, std::vector<StateVector<VECTOR>> &stateeigenfunctions){
-	 integrator_.ComputeMassMatrix(pde,matrixM_);
+      void EigenvalueSolver_LAPACK<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorAdjoint(PROBLEM &pde,  StateVector<VECTOR> &adjointeigenfunction, StateVector<VECTOR> &stateeigenfunction, double value){
+//	 integrator_.ComputeMassMatrix(pde,matrixM_);
 
-	 eigenvectors_normalization_.clear();
-  	 eigenvectors_normalization_.resize(eigenvalues.size());
+//	  std::cout << "factor" << value << std::endl;
+
+	 state_for_normalization.clear();
+  	 adjoint_for_normalization.clear();
+
   	 eigenfunction_index_set = pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
 
-  	   for (unsigned int i = 0; i < eigenvectors_.size(); ++i) {
-  	 	  eigenvectors_normalization_[i].reinit(eigenfunction_index_set, MPI_COMM_WORLD);
-  	 	  eigenvectors_normalization_[i] = stateeigenfunctions[i].GetSpacialVector();
-  	  }
+  	state_for_normalization.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
+  	state_for_normalization = stateeigenfunction.GetSpacialVector();
 
-  	   for(unsigned int i = 0; i<eigenvalues_.size(); i++){
-  		 PETScWrappers::MPI::Vector vec;
+  	adjoint_for_normalization.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
+  	adjoint_for_normalization =  adjointeigenfunction.GetSpacialVector();
+
+	 PETScWrappers::MPI::Vector vec;
   		  PetscScalar scalar_factor[1];
   		   vec.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
-  		   MatMult(matrixM_,eigenvectors_[i],vec); // = matrixM*adjoint_eigenfunctions[i];
-  		   VecDot(vec,eigenvectors_normalization_[i],scalar_factor);//= scalar_product(vec,eigenfunctions[i]);
-  		   eigenvectors_[i]/= scalar_factor[0];
-  		   adjointeigenfunctions[i].GetSpacialVector() = eigenvectors_[i];
-      	  }
-  }
+  		   MatMult(matrixM_,adjoint_for_normalization,vec); // = matrixM*adjoint_eigenfunctions[i];
+  		   VecDot(state_for_normalization,vec,scalar_factor);//= scalar_product(vec,eigenfunctions[i]);
+  		 adjoint_for_normalization/= (scalar_factor[0]);
+ 		 adjoint_for_normalization *= value;
+ 		adjointeigenfunction.GetSpacialVector() = adjoint_for_normalization;
 
+  PETScWrappers::MPI::Vector vecTest;
+  vecTest.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
+  		   MatMult(matrixM_,adjoint_for_normalization,vecTest);
+	PetscScalar test[1];
+  	VecDot(state_for_normalization,vecTest,test);
+//  	std::cout << "scalarproduct_state_adjoint = " << test[0] << std::endl;
+
+  }
 
 
   /*******************************************************************************************/
