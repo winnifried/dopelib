@@ -408,6 +408,10 @@ namespace DOpE
     ElementEquation(const DATACONTAINER &edc,
                     dealii::Vector<double> &local_vector, double scale);
 
+    template<typename DATACONTAINER>
+        double
+        GetDetDF();
+
     /******************************************************/
 
     /**
@@ -1340,6 +1344,16 @@ namespace DOpE
     }
 
 
+
+    double
+    GetDetDF()
+    {
+ 	   return this->GetPDE().GetDetDF();
+
+    }
+   /******************************************************/
+
+
   protected:
     FUNCTIONAL *
     GetFunctional();
@@ -2020,7 +2034,9 @@ namespace DOpE
 
   }
 
+
   /******************************************************/
+
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
@@ -2088,7 +2104,7 @@ namespace DOpE
 
  	      this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_,scale*interval_length_);
 // 	       this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_);
-
+ 	     scale *= -1;
 
  	   }else
  		        {

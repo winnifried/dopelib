@@ -613,11 +613,18 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		AddUDD();
 
 		build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint").EigenvalueSolve(problem,zvals_, zvecs_,  true, build_adjoint_matrix_);
-		 this->GetNonlinearSolver("eigenvalueadjoint").GetNormalizedVectorAdjoint(problem, zvals_, zvecs_,uvecs_);
+
+//		std::cout << "state_eigenvalue = " << uvals_[eval_index_] << std:: endl;
+//		std::cout << "adjoint_eigenvalue = " << zvals_[eval_index_] << std:: endl;
+
+		double normalization_factor = target_eigenvalue_ - uvals_[eval_index_];
+		 this->GetNonlinearSolver("eigenvalueadjoint").GetNormalizedVectorAdjoint(problem, zvecs_[eval_index_],uvecs_[eval_index_], normalization_factor);
 
 		//TODO
 //		double normalization_factor = this->GetIntegrator().ComputeAlgebraicScalar_U(*(this->GetProblem()),uvals_[eval_index_]);
-		zvecs_[eval_index_]*= -((uvals_[eval_index_]- target_eigenvalue_)); //normalization_factor;
+
+//		zvecs_[eval_index_] *= ((uvals_[eval_index_]- target_eigenvalue_)); //normalization_factor; //TODO
+
 
 
 		if (dopedim == dealdim) {
@@ -644,7 +651,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		dopedim,
 		dealdim>::ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed){
 
-		this->ComputeEigenvalueAdjoint(q);//, uvecs_, uvals_, zvecs_, zvals_);
+		this->ComputeEigenvalueAdjoint(q);
 		this->GetOutputHandler()->Write("Computing Gradient for Eigenvalueproblem:", 4 + this->GetBasePriority());
 
 
@@ -690,6 +697,15 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		} else {
 			throw DOpEException("dopedim not implemented", "EigenvalueProblem::ComputeEigenvalueDerivative");
 		}
+//
+//		//Test Berechnung Eigenfrequenz von Cavity für Vergleich mit Ergebnissen Jacobo
+//		double c = 299792458;
+//		double mu_0 = 1.2566370621210*pow(10,-6);//4 * M_PI * pow(10, -7);
+//		double eps_0 = 1 / (mu_0 * pow(c, 2));
+////		double f = sqrt(uvals_[eval_index_]/( mu_0 * eps_0));///(2*M_PI);
+
+
+
 
 		DeleteUDD();
 		DeleteUDDControl();
@@ -701,7 +717,19 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetOutputHandler()->Write(gradient, "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 		this->GetOutputHandler()->Write(gradient_transposed, "Gradient_Transposed" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 		std::stringstream out;
-		out<< "\t Actual eigenvalue at index " <<eval_index_<<" = " <<uvals_[eval_index_] <<"\n";
+
+//		double f = 0;
+		for (unsigned int i = 0; i < uvals_.size() ; i++){
+			out<< "\t Actual eigenvalue at index " <<i<<" = " <<uvals_[i] <<"\n";
+//			f = sqrt(uvals_[i]/( mu_0 * eps_0 ))/(2*M_PI);
+//			out<< "\t Actual frequency at index " <<i<<" = " << f <<"\n";
+//			out<< "----------------------------------------------------- " <<"\n";
+		}
+		out<< "----------------------------------------------------- " <<"\n";
+
+
+
+
 		this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
 		}
 
@@ -733,7 +761,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		try{
 
 		build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(problem, uvals_, uvecs_, true, build_state_matrix_ );
-		this->GetNonlinearSolver("eigenvaluestate").GetNormalizedVectorState(problem, uvecs_);
+		this->GetNonlinearSolver("eigenvaluestate").GetNormalizedVectorState(problem, uvecs_[eval_index_]);
 
 		}catch ( DOpEException &e){
 			if (dopedim == dealdim){
@@ -881,6 +909,17 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
 		this->GetFunctionalValues()[0].push_back(ret);
+
+//		std::stringstream out;
+//		for (unsigned int i = 0; i < uvals_.size() ; i++){
+//					out<< "\t Actual eigenvalue at index " <<i<<" = " <<uvals_[i] <<"\n";
+//
+//		}
+//		out<< "----------------------------------------------------- " <<"\n";
+
+//		this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
+
+
 		return ret;
 
 		}
