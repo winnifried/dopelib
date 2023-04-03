@@ -369,7 +369,7 @@ namespace DOpE
       RSAProb.setNeG ( neG );
 #endif
       
-      DOpEWrapper::SNOPT_A_userfunc_interface = boost::bind<int>(boost::mem_fn(&Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::rsa_func_),boost::ref(*this),_1);
+      DOpEWrapper::SNOPT_A_userfunc_interface = boost::bind<int>(boost::mem_fn(&Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::rsa_func_),boost::ref(*this),boost::placeholders::_1);
 #if SNOPT_VERSION_GTE(7,6)
 #else
       RSAProb.setUserFun ( DOpEWrapper::SNOPT_A_userfunc_ );

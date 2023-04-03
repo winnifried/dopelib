@@ -585,9 +585,9 @@ namespace DOpE
     {
       //Attach the ResidualModifier to the PDE.
       pde.ResidualModifier = boost::bind<void>(
-					       boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc), _1);
+					       boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
       pde.VectorResidualModifier = boost::bind<void>(
-						     boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc), _1);
+						     boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
       
       VECTOR u_old;
       
