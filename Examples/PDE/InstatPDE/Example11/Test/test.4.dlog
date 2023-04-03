@@ -30,6 +30,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   5.97e-01
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.40e-01	 LineSearch {2} M 
+			 Newton step: 2	 Recalculate with new Matrix
 			 Newton step: 2	 Residual (rel.):   4.32e-01	 LineSearch {1} M 
 			 Newton step: 3	 Residual (rel.):   3.84e-01	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   1.77e-01	 LineSearch {0} 
@@ -42,21 +43,22 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 11	 Residual (rel.):   3.97e-02	 LineSearch {0} 
 			 Newton step: 12	 Residual (rel.):   3.56e-02	 LineSearch {0} 
 			 Newton step: 13	 Residual (rel.):   3.21e-02	 LineSearch {0} 
-			 Newton step: 14	 Residual (rel.):   2.91e-02	 LineSearch {0} 
-			 Newton step: 15	 Residual (rel.):   1.91e-02	 LineSearch {1} M 
-			 Newton step: 16	 Residual (rel.):   1.61e-02	 LineSearch {1} M 
+			 Newton step: 14	 Residual (rel.):   2.28e-02	 LineSearch {1} M 
+			 Newton step: 15	 Recalculate with new Matrix
+			 Newton step: 15	 Residual (rel.):   1.92e-02	 LineSearch {1} M 
+			 Newton step: 16	 Recalculate with new Matrix
+			 Newton step: 16	 Residual (rel.):   1.63e-02	 LineSearch {1} M 
 			 Newton step: 17	 Recalculate with new Matrix
-			 Newton step: 17	 Residual (rel.):   1.37e-02	 LineSearch {1} M 
+			 Newton step: 17	 Residual (rel.):   1.42e-02	 LineSearch {1} M 
 			 Newton step: 18	 Recalculate with new Matrix
-			 Newton step: 18	 Residual (rel.):   1.19e-02	 LineSearch {1} M 
+			 Newton step: 18	 Residual (rel.):   9.59e-03	 LineSearch {2} M 
 			 Newton step: 19	 Recalculate with new Matrix
-			 Newton step: 19	 Residual (rel.):   8.74e-03	 LineSearch {2} M 
+			 Newton step: 19	 Residual (rel.):   8.35e-03	 LineSearch {1} M 
 			 Newton step: 20	 Recalculate with new Matrix
-			 Newton step: 20	 Residual (rel.):   7.65e-03	 LineSearch {1} M 
+			 Newton step: 20	 Residual (rel.):   6.40e-03	 LineSearch {1} M 
 			 Newton step: 21	 Recalculate with new Matrix
-			 Newton step: 21	 Residual (rel.):   5.85e-03	 LineSearch {1} M 
-			 Newton step: 22	 Recalculate with new Matrix
-			 Newton step: 22	 Residual (rel.):   5.59e-07	 LineSearch {0} M 
+			 Newton step: 21	 Residual (rel.):   5.93e-03	 LineSearch {1} M 
+			 Newton step: 22	 Residual (rel.):   1.08e-07	 LineSearch {0} M 
 		         Precalculating functional values 
 		TCV: 0.00563401
 		BulkEnergy: 2.01671e-06
@@ -65,17 +67,18 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.16e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Recalculate with new Matrix
-			 Newton step: 1	 Residual (rel.):   5.24e-03	 LineSearch {0} M 
-			 Newton step: 2	 Residual (rel.):   1.68e-04	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.):   5.47e-05	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.06e-03	 LineSearch {0} M 
+			 Newton step: 2	 Recalculate with new Matrix
+			 Newton step: 2	 Residual (rel.):   1.63e-04	 LineSearch {0} M 
+			 Newton step: 3	 Residual (rel.):   5.33e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   3.68e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   2.69e-05	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   2.04e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.65e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.03e-05	 LineSearch {0} 
 			 Newton step: 7	 Residual (rel.):   1.63e-05	 LineSearch {0} 
 			 Newton step: 8	 Residual (rel.):   1.33e-05	 LineSearch {0} 
 			 Newton step: 9	 Residual (rel.):   1.10e-05	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   9.25e-06	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.):   7.83e-06	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   9.26e-06	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.):   7.82e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06466e-06
@@ -83,7 +86,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 3 (2 -> 3) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.67e-10
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.67e-01	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.65e-01	 LineSearch {0} 
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06467e-06
@@ -91,14 +94,13 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 4 (3 -> 4) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.62e-10
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.40e-01	 LineSearch {2} M 
-			 Newton step: 2	 Residual (rel.):   5.00e-01	 LineSearch {1} M 
+			 Newton step: 1	 Residual (rel.):   4.06e-01	 LineSearch {0} 
 		         Precalculating functional values 
 		TCV: 0.00818098
 		BulkEnergy: 4.06467e-06
 		CrackEnergy: 2.89463
 		 Timestep: 5 (4 -> 5) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.58e-11
+			 Newton step: 0	 Residual (abs.):   6.60e-11
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 		         Precalculating functional values 
 		TCV: 0.00818098

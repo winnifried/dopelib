@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+11.07.2022: Fixes in GMRES and CGLinearSolverWithMatrix. The Preconditioner is
+	    now only reinitialized once the matrix is recomputed.
+	    BlockComponents are now used in DoFOrdering in the SpaceTimeHandlers
 08.06.2022: Adjustments for deal 9.4.0
 21.02.2022: Adjustments for deal 9.3.3
 22.02.2022: Fixed 'missing Project' in example CMakeLists.txt

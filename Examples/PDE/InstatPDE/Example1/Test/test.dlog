@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.2
+Using dealii Version: 9.3
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -29,815 +29,988 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.11e-02	 LineSearch {0} M 
-			 Newton step: 2	 Residual (rel.):   3.66e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.17e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.73e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.63e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.10548
-		Drag: 0.19756
-		Lift: -0.00025542
+		Pressure_difference: 0.1055
+		Drag: 0.1976
+		Lift: -0.0002554
 		 Timestep: 2 (0.1 -> 0.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.10e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.95e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.95e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.12423
-		Drag: 0.24183
-		Lift: -0.00021416
+		Pressure_difference: 0.1242
+		Drag: 0.2418
+		Lift: -0.0002142
 		 Timestep: 3 (0.2 -> 0.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.11e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.48e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.13905
-		Drag: 0.27886
-		Lift: -0.00016543
+		Pressure_difference: 0.139
+		Drag: 0.2789
+		Lift: -0.0001654
 		 Timestep: 4 (0.3 -> 0.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.75e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.38e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.59e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.23e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.78e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.15559
+		Pressure_difference: 0.1556
 		Drag: 0.3144
-		Lift: -7.2709e-05
+		Lift: -7.271e-05
 		 Timestep: 5 (0.4 -> 0.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.20e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.70e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   9.89e-07	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.62e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.38e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.36e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.11e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.21e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.17627
+		Pressure_difference: 0.1763
 		Drag: 0.3532
-		Lift: 7.3952e-05
+		Lift: 7.395e-05
 		 Timestep: 6 (0.5 -> 0.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.19e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.02e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.26e-02	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   5.16e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.64e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.72e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.20393
-		Drag: 0.39829
-		Lift: 0.00027981
+		Pressure_difference: 0.2039
+		Drag: 0.3983
+		Lift: 0.0002798
 		 Timestep: 7 (0.6 -> 0.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.18e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.44e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.10e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.36e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.95e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.08e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.24049
-		Drag: 0.45244
-		Lift: 0.00052873
+		Pressure_difference: 0.2405
+		Drag: 0.4524
+		Lift: 0.0005287
 		 Timestep: 8 (0.7 -> 0.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.16e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.33e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.09e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.24e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.73e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.12e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.88e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.28647
-		Drag: 0.51665
-		Lift: 0.00078661
+		Pressure_difference: 0.2865
+		Drag: 0.5166
+		Lift: 0.0007866
 		 Timestep: 9 (0.8 -> 0.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.23e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.74e-07	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.63e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.15e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.69e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.34073
+		Pressure_difference: 0.3407
 		Drag: 0.5902
-		Lift: 0.00097583
+		Lift: 0.0009758
 		 Timestep: 10 (0.9 -> 1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.13e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.13e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.58e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.17e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.54e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.14e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.81e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00010.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.40158
-		Drag: 0.67096
-		Lift: 0.00092716
+		Pressure_difference: 0.4016
+		Drag: 0.671
+		Lift: 0.0009272
 		 Timestep: 11 (1 -> 1.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.12e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.32e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.90e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.46e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.46e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.33e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.46777
-		Drag: 0.75659
-		Lift: 0.00040035
+		Pressure_difference: 0.4678
+		Drag: 0.7566
+		Lift: 0.0004003
 		 Timestep: 12 (1.1 -> 1.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.10e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.79e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.10e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.42e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.49e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.07e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.53858
-		Drag: 0.84552
+		Pressure_difference: 0.5386
+		Drag: 0.8455
 		Lift: -0.000748
 		 Timestep: 13 (1.2 -> 1.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.07e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.49e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.50e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.32e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.69e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.61e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.61345
-		Drag: 0.93696
-		Lift: -0.0023667
+		Pressure_difference: 0.6135
+		Drag: 0.937
+		Lift: -0.002367
 		 Timestep: 14 (1.3 -> 1.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.05e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.60e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.02e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.29e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.59e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.52e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.76e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.69185
-		Drag: 1.0305
-		Lift: -0.0039901
+		Pressure_difference: 0.6919
+		Drag: 1.03
+		Lift: -0.00399
 		 Timestep: 15 (1.4 -> 1.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.03e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.24e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.41e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.07e-02	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   3.42e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.72e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.02e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.77328
-		Drag: 1.1255
-		Lift: -0.0050726
+		Pressure_difference: 0.7733
+		Drag: 1.126
+		Lift: -0.005073
 		 Timestep: 16 (1.5 -> 1.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.60e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.25e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.54e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.59e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.45e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.52e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 0.8572
-		Drag: 1.2215
-		Lift: -0.0053513
+		Drag: 1.222
+		Lift: -0.005351
 		 Timestep: 17 (1.6 -> 1.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.71e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.84e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.29e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.02e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.49e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.14e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.94308
+		Pressure_difference: 0.9431
 		Drag: 1.318
-		Lift: -0.0050842
+		Lift: -0.005084
 		 Timestep: 18 (1.7 -> 1.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.41e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.13e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.83e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.97e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.91e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.93e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.0304
-		Drag: 1.4145
-		Lift: -0.0049251
+		Pressure_difference: 1.03
+		Drag: 1.414
+		Lift: -0.004925
 		 Timestep: 19 (1.8 -> 1.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.10e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.17e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.48e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.09e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.75e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.81e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.34e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.1185
-		Drag: 1.5104
-		Lift: -0.0054308
+		Pressure_difference: 1.119
+		Drag: 1.51
+		Lift: -0.005431
 		 Timestep: 20 (1.9 -> 2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.77e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.84e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.89e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.72e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.52e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.21e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.70e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00020.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.2071
-		Drag: 1.6053
-		Lift: -0.0065673
+		Pressure_difference: 1.207
+		Drag: 1.605
+		Lift: -0.006567
 		 Timestep: 21 (2 -> 2.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.99e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.46e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.21e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.74e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.2954
-		Drag: 1.6987
-		Lift: -0.0077179
+		Pressure_difference: 1.295
+		Drag: 1.699
+		Lift: -0.007718
 		 Timestep: 22 (2.1 -> 2.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.09e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.05e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.84e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.60e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.11e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.08e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.08e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.38e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 1.383
-		Drag: 1.7902
-		Lift: -0.0082846
+		Drag: 1.79
+		Lift: -0.008285
 		 Timestep: 23 (2.2 -> 2.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.72e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.34e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.03e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   8.10e-03	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   1.76e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.98e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.83e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.4694
-		Drag: 1.8794
-		Lift: -0.0083125
+		Pressure_difference: 1.469
+		Drag: 1.879
+		Lift: -0.008312
 		 Timestep: 24 (2.3 -> 2.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.35e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.91e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.51e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.92e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.08e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.41e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.80e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.5541
-		Drag: 1.9658
-		Lift: -0.0084199
+		Pressure_difference: 1.554
+		Drag: 1.966
+		Lift: -0.00842
 		 Timestep: 25 (2.4 -> 2.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.96e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.64e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.78e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.86e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.80e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.36e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.6365
-		Drag: 2.0491
+		Pressure_difference: 1.636
+		Drag: 2.049
 		Lift: -0.009055
 		 Timestep: 26 (2.5 -> 2.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.56e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.68e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.73e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.39e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.88e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.82e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.30e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.7162
-		Drag: 2.1288
-		Lift: -0.0099588
+		Pressure_difference: 1.716
+		Drag: 2.129
+		Lift: -0.009959
 		 Timestep: 27 (2.6 -> 2.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.16e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.66e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.59e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.53e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.69e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.37e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.7927
-		Drag: 2.2045
-		Lift: -0.010534
+		Pressure_difference: 1.793
+		Drag: 2.205
+		Lift: -0.01053
 		 Timestep: 28 (2.7 -> 2.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.74e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.89e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.76e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.41e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.16e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.32e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.8656
+		Pressure_difference: 1.866
 		Drag: 2.276
-		Lift: -0.010647
+		Lift: -0.01065
 		 Timestep: 29 (2.8 -> 2.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.31e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.36e-07	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   7.31e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.99e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.36e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.9343
-		Drag: 2.3428
-		Lift: -0.010771
+		Pressure_difference: 1.934
+		Drag: 2.343
+		Lift: -0.01077
 		 Timestep: 30 (2.9 -> 3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.88e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.41e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.59e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.38e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.40e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.50e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00030.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.9986
-		Drag: 2.4048
-		Lift: -0.011272
+		Pressure_difference: 1.999
+		Drag: 2.405
+		Lift: -0.01127
 		 Timestep: 31 (3 -> 3.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.73e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.04e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.70e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.31e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.23e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.0581
-		Drag: 2.4614
-		Lift: -0.011893
+		Pressure_difference: 2.058
+		Drag: 2.461
+		Lift: -0.01189
 		 Timestep: 32 (3.1 -> 3.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.07e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.72e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.84e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.88e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.00e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.27e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.1123
-		Drag: 2.5126
-		Lift: -0.012186
+		Pressure_difference: 2.112
+		Drag: 2.513
+		Lift: -0.01219
 		 Timestep: 33 (3.2 -> 3.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.55e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.27e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.78e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   6.24e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.35e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.77e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.1609
+		Pressure_difference: 2.161
 		Drag: 2.558
-		Lift: -0.012195
+		Lift: -0.01219
 		 Timestep: 34 (3.3 -> 3.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.32e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.40e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.57e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.93e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.59e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.22e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.57e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2038
-		Drag: 2.5974
-		Lift: -0.012342
+		Pressure_difference: 2.204
+		Drag: 2.597
+		Lift: -0.01234
 		 Timestep: 35 (3.4 -> 3.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.12e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.88e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.61e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.08e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.86e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.14e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2405
-		Drag: 2.6306
+		Pressure_difference: 2.24
+		Drag: 2.631
 		Lift: -0.01273
 		 Timestep: 36 (3.5 -> 3.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.85e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.03e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.51e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.99e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.73e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.50e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2709
-		Drag: 2.6574
-		Lift: -0.013012
+		Pressure_difference: 2.271
+		Drag: 2.657
+		Lift: -0.01301
 		 Timestep: 37 (3.6 -> 3.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.83e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.25e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.82e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.02e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.77e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.27e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2948
-		Drag: 2.6778
-		Lift: -0.012987
+		Pressure_difference: 2.295
+		Drag: 2.678
+		Lift: -0.01299
 		 Timestep: 38 (3.7 -> 3.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.19e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.04e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.25e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.17e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.01e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.12e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.83e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
 		Pressure_difference: 2.312
-		Drag: 2.6916
-		Lift: -0.012909
+		Drag: 2.692
+		Lift: -0.01291
 		 Timestep: 39 (3.8 -> 3.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.93e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.02e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.83e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.73e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.3225
-		Drag: 2.6986
-		Lift: -0.013026
+		Pressure_difference: 2.322
+		Drag: 2.699
+		Lift: -0.01303
 		 Timestep: 40 (3.9 -> 4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.65e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.55e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.06e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.77e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.40e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.51e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.64e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00040.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.3261
+		Pressure_difference: 2.326
 		Drag: 2.699
-		Lift: -0.013175
+		Lift: -0.01318
 		 Timestep: 41 (4 -> 4.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.39e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.36e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.93e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.18e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.24e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.02e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.3228
-		Drag: 2.6926
-		Lift: -0.013091
+		Pressure_difference: 2.323
+		Drag: 2.693
+		Lift: -0.01309
 		 Timestep: 42 (4.1 -> 4.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.48e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.23e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.29e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.13e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.30e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.3127
-		Drag: 2.6794
-		Lift: -0.012853
+		Pressure_difference: 2.313
+		Drag: 2.679
+		Lift: -0.01285
 		 Timestep: 43 (4.2 -> 4.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.57e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.42e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.41e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.09e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.54e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2957
-		Drag: 2.6595
-		Lift: -0.012721
+		Pressure_difference: 2.296
+		Drag: 2.66
+		Lift: -0.01272
 		 Timestep: 44 (4.3 -> 4.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.67e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   8.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.52e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.35e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.31e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2721
+		Pressure_difference: 2.272
 		Drag: 2.633
-		Lift: -0.012691
+		Lift: -0.01269
 		 Timestep: 45 (4.4 -> 4.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.14e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.95e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   9.73e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.63e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.98e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.64e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2418
+		Pressure_difference: 2.242
 		Drag: 2.6
-		Lift: -0.012524
+		Lift: -0.01252
 		 Timestep: 46 (4.5 -> 4.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.61e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.44e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   9.96e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.81e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.28e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.28e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.2051
-		Drag: 2.5605
-		Lift: -0.012166
+		Pressure_difference: 2.205
+		Drag: 2.561
+		Lift: -0.01217
 		 Timestep: 47 (4.6 -> 4.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.07e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.37e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.30e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.76e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.73e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.55e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.1621
-		Drag: 2.5149
-		Lift: -0.011818
+		Pressure_difference: 2.162
+		Drag: 2.515
+		Lift: -0.01182
 		 Timestep: 48 (4.7 -> 4.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.53e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.58e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.80e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.59e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.19e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.1132
-		Drag: 2.4632
+		Pressure_difference: 2.113
+		Drag: 2.463
 		Lift: -0.01159
 		 Timestep: 49 (4.8 -> 4.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.78e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.79e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.41e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 2.0586
-		Drag: 2.4056
-		Lift: -0.011338
+		Pressure_difference: 2.059
+		Drag: 2.406
+		Lift: -0.01134
 		 Timestep: 50 (4.9 -> 5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.98e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   8.07e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.51e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.81e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00050.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.9986
-		Drag: 2.3426
-		Lift: -0.010914
+		Pressure_difference: 1.999
+		Drag: 2.343
+		Lift: -0.01091
 		 Timestep: 51 (5 -> 5.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.88e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.18e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.51e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.48e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.51e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.22e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.9335
-		Drag: 2.2742
-		Lift: -0.010401
+		Pressure_difference: 1.934
+		Drag: 2.274
+		Lift: -0.0104
 		 Timestep: 52 (5.1 -> 5.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.31e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.38e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.30e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.43e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.52e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.13e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.8638
-		Drag: 2.2008
-		Lift: -0.0099685
+		Pressure_difference: 1.864
+		Drag: 2.201
+		Lift: -0.009969
 		 Timestep: 53 (5.2 -> 5.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.74e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.57e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.16e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.68e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.88e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.76e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.22e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.7897
-		Drag: 2.1228
-		Lift: -0.0096163
+		Pressure_difference: 1.79
+		Drag: 2.123
+		Lift: -0.009616
 		 Timestep: 54 (5.3 -> 5.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.16e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.75e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.11e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.69e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.19e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.89e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.94e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.7118
-		Drag: 2.0404
-		Lift: -0.0091924
+		Pressure_difference: 1.712
+		Drag: 2.04
+		Lift: -0.009192
 		 Timestep: 55 (5.4 -> 5.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.56e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.94e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   7.01e-03	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   1.19e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.6305
-		Drag: 1.9541
-		Lift: -0.0086269
+		Pressure_difference: 1.631
+		Drag: 1.954
+		Lift: -0.008627
 		 Timestep: 56 (5.5 -> 5.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.96e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.11e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   1.73e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.70e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.50e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.5463
-		Drag: 1.8642
-		Lift: -0.0080242
+		Pressure_difference: 1.546
+		Drag: 1.864
+		Lift: -0.008024
 		 Timestep: 57 (5.6 -> 5.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.35e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.29e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.85e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.40e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.21e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.04e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.58e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.4596
-		Drag: 1.7712
-		Lift: -0.0075115
+		Pressure_difference: 1.46
+		Drag: 1.771
+		Lift: -0.007512
 		 Timestep: 58 (5.7 -> 5.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.72e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.46e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.05e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.66e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.20e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.62e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.3709
-		Drag: 1.6755
-		Lift: -0.0070779
+		Pressure_difference: 1.371
+		Drag: 1.675
+		Lift: -0.007078
 		 Timestep: 59 (5.8 -> 5.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.09e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.62e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   8.66e-03	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   1.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.10e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.2809
-		Drag: 1.5774
-		Lift: -0.0066068
+		Pressure_difference: 1.281
+		Drag: 1.577
+		Lift: -0.006607
 		 Timestep: 60 (5.9 -> 6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.78e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.14e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.06e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.37e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00060.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.1899
-		Drag: 1.4776
-		Lift: -0.0060276
+		Pressure_difference: 1.19
+		Drag: 1.478
+		Lift: -0.006028
 		 Timestep: 61 (6 -> 6.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.77e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.93e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.51e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.15e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.74e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.28e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.52e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.0985
-		Drag: 1.3763
+		Pressure_difference: 1.098
+		Drag: 1.376
 		Lift: -0.005391
 		 Timestep: 62 (6.1 -> 6.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.10e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.07e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   9.77e-03	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   2.45e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.97e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.04e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 1.0072
-		Drag: 1.2742
-		Lift: -0.0048035
+		Pressure_difference: 1.007
+		Drag: 1.274
+		Lift: -0.004803
 		 Timestep: 63 (6.2 -> 6.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.41e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.21e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.42e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.15e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.90e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.98e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.42e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.91663
-		Drag: 1.1716
-		Lift: -0.0043191
+		Pressure_difference: 0.9166
+		Drag: 1.172
+		Lift: -0.004319
 		 Timestep: 64 (6.3 -> 6.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.71e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.34e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   3.95e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.76e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.08e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.07e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.19e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.82722
-		Drag: 1.0691
-		Lift: -0.0039033
+		Pressure_difference: 0.8272
+		Drag: 1.069
+		Lift: -0.003903
 		 Timestep: 65 (6.4 -> 6.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.47e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.06e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.52e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.02e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.34e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.73951
-		Drag: 0.96718
-		Lift: -0.0034816
+		Pressure_difference: 0.7395
+		Drag: 0.9672
+		Lift: -0.003482
 		 Timestep: 66 (6.5 -> 6.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.03e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.59e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.21e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.03e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.02e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.69e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.73e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.65399
-		Drag: 0.86629
-		Lift: -0.0030078
+		Pressure_difference: 0.654
+		Drag: 0.8663
+		Lift: -0.003008
 		 Timestep: 67 (6.6 -> 6.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.05e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.70e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.47e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.76e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.15e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.63e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.01e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.57114
-		Drag: 0.76694
+		Pressure_difference: 0.5711
+		Drag: 0.7669
 		Lift: -0.002492
 		 Timestep: 68 (6.7 -> 6.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.07e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.79e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.14e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.15e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.27e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.02e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.49142
-		Drag: 0.66962
-		Lift: -0.0019828
+		Pressure_difference: 0.4914
+		Drag: 0.6696
+		Lift: -0.001983
 		 Timestep: 69 (6.8 -> 6.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.10e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.90e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.15e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   4.97e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.27e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.94e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.42e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.41527
-		Drag: 0.57481
-		Lift: -0.0015307
+		Pressure_difference: 0.4153
+		Drag: 0.5748
+		Lift: -0.001531
 		 Timestep: 70 (6.9 -> 7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.12e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.98e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.57e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.23e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.28e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.86e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.63e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00070.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.34309
-		Drag: 0.48296
-		Lift: -0.0011644
+		Pressure_difference: 0.3431
+		Drag: 0.483
+		Lift: -0.001164
 		 Timestep: 71 (7 -> 7.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.13e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.06e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.05e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.37e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.40e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.87e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.27525
-		Drag: 0.39454
-		Lift: -0.00088761
+		Pressure_difference: 0.2752
+		Drag: 0.3945
+		Lift: -0.0008876
 		 Timestep: 72 (7.1 -> 7.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.12e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.56e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.31e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.38e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.65e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.39e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.21205
-		Drag: 0.30998
-		Lift: -0.00068927
+		Pressure_difference: 0.2121
+		Drag: 0.31
+		Lift: -0.0006893
 		 Timestep: 73 (7.2 -> 7.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.16e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.18e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.09e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.44e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.46e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.27e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.15377
-		Drag: 0.22967
-		Lift: -0.00055594
+		Pressure_difference: 0.1538
+		Drag: 0.2297
+		Lift: -0.000556
 		 Timestep: 74 (7.3 -> 7.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.18e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.60e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.37e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.47e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.51e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.95e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.10059
-		Drag: 0.15399
-		Lift: -0.00047954
+		Pressure_difference: 0.1006
+		Drag: 0.154
+		Lift: -0.0004796
 		 Timestep: 75 (7.4 -> 7.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.19e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   5.80e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.47e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.78e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.76e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.052618
+		Pressure_difference: 0.05262
 		Drag: 0.08325
-		Lift: -0.00045928
+		Lift: -0.0004593
 		 Timestep: 76 (7.5 -> 7.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.20e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.13e-07	 LineSearch {0} M 
+			 Newton step: 1	 Residual (rel.):   2.41e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.51e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.96e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.08e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: 0.0098428
-		Drag: 0.017684
-		Lift: -0.00049998
+		Pressure_difference: 0.009843
+		Drag: 0.01768
+		Lift: -0.0005
 		 Timestep: 77 (7.6 -> 7.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.19e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.43e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.07e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.51e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.13e-07	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: -0.027901
+		Pressure_difference: -0.0279
 		Drag: -0.04258
-		Lift: -0.00060926
+		Lift: -0.0006093
 		 Timestep: 78 (7.7 -> 7.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.77e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.29e-02	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   4.50e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.77e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.83e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: -0.060987
-		Drag: -0.097578
-		Lift: -0.00079517
+		Pressure_difference: -0.06099
+		Drag: -0.09758
+		Lift: -0.0007952
 		 Timestep: 79 (7.8 -> 7.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.01e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.50e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.31e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.30e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.91e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: -0.090062
-		Drag: -0.14758
-		Lift: -0.0010646
+		Pressure_difference: -0.09006
+		Drag: -0.1476
+		Lift: -0.001065
 		 Timestep: 80 (7.9 -> 8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.75e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.26e-06	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.92e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.41e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.86e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} M 
 	Writing [./Mesh0/State_InstatPDEProblemContainer.00080.vtk]
 		         Precalculating functional values 
-		Pressure_difference: -0.11613
-		Drag: -0.19322
-		Lift: -0.0014221
+		Pressure_difference: -0.1161
+		Drag: -0.1932
+		Lift: -0.001422
 	Computing Functionals:
 	Pressure_difference too large. Writing to file instead: 
 	Writing [./Mesh0/Pressure_difference_InstatPDEProblemContainer.00080.gpl]

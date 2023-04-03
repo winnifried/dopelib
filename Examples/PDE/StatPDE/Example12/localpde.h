@@ -46,9 +46,9 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
   LocalPDE() :
-    state_block_component_(2, 0)
+    state_block_component_(3, 0)
   {
-    state_block_component_[1] = 1;
+    state_block_component_[2] = 1;
   }
 
   void

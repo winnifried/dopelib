@@ -260,9 +260,9 @@ namespace DOpE
 
 #if dope_dimension > 0
 #if DEAL_II_VERSION_GTE(9,3,0)
-      DoFRenumbering::component_wise (static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_));
+      DoFRenumbering::component_wise (static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_),control_block_component);
 #else
-      DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_));
+      DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),control_block_component);
 #endif
       if (dopedim==dealdim)
         {
@@ -317,17 +317,18 @@ namespace DOpE
 #if dope_dimension > 0
       {
 #if DEAL_II_VERSION_GTE(9,2,0)
-	control_dofs_per_block_ = DoFTools::count_dofs_per_fe_block (
+	control_dofs_per_block_ = DoFTools::count_dofs_per_fe_component (
 #if DEAL_II_VERSION_GTE(9,3,0)
 	  static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_),
 #else
 	  static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),
 #endif
+	  true,
 	  control_block_component);
 #else
-	DoFTools::count_dofs_per_block (
+	DoFTools::count_dofs_per_component (
 	  static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),
-	  control_dofs_per_block_,control_block_component);
+	  control_dofs_per_block_,true,control_block_component);
 #endif //dealii older than 9.2.0
         
       }
@@ -347,9 +348,9 @@ namespace DOpE
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
 #if DEAL_II_VERSION_GTE(9,3,0)
-      DoFRenumbering::component_wise(static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_));
+      DoFRenumbering::component_wise(static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #else
-      DoFRenumbering::component_wise(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
+      DoFRenumbering::component_wise(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #endif
       
       state_hn_constraints_.clear();
@@ -400,17 +401,18 @@ namespace DOpE
 
       state_dofs_per_block_.resize(state_n_blocks);
 #if DEAL_II_VERSION_GTE(9,2,0)
-      state_dofs_per_block_ = DoFTools::count_dofs_per_fe_block(
+      state_dofs_per_block_ = DoFTools::count_dofs_per_fe_component(
 #if DEAL_II_VERSION_GTE(9,3,0)
 	static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_),
 #else
 	static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),
 #endif
+	true,
         state_block_component);
 #else
-      DoFTools::count_dofs_per_block(
+      DoFTools::count_dofs_per_component(
 	static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),
-        state_dofs_per_block_, state_block_component);
+        state_dofs_per_block_,true, state_block_component);
 #endif //dealii older than 9.2.0
      
       support_points_.clear();

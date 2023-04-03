@@ -68,11 +68,13 @@ ENDIF()
 STRING(TOLOWER "${CMAKE_BUILD_TYPE}" _cmake_build_type)
 IF("${_cmake_build_type}" STREQUAL "debug")
   SET(_suffix ".g")
+  FIND_LIBRARY(DOPE_LIBRARY_DEBUG dope${_suffix} ${DOpE}/lib/${dope_dimension}d/${deal_dimension}d/)
+  SET(DOPE_LINK_LIBS ${DOPE_LIBRARY_DEBUG})
+ELSE()
+  FIND_LIBRARY(DOPE_LIBRARY_RELEASE dope ${DOpE}/lib/${dope_dimension}d/${deal_dimension}d/)
+  SET(DOPE_LINK_LIBS ${DOPE_LIBRARY_RELEASE})
 ENDIF()
 
-FIND_LIBRARY(DOPE_LIBRARY dope${_suffix} ${DOpE}/lib/${dope_dimension}d/${deal_dimension}d/)
-
-SET(DOPE_LINK_LIBS ${DOPE_LIBRARY})
 
 
 #Finding Thirdparty libraries

@@ -70,8 +70,9 @@ public:
   LocalPDE(ParameterReader &param_reader) :
     state_block_component_(4, 0)
   {
-    state_block_component_[2] = 1;
-    state_block_component_[3] = 2;
+    state_block_component_[1] = 1;
+    state_block_component_[2] = 2;
+    state_block_component_[3] = 3;
 
     param_reader.SetSubsection("Local PDE parameters");
 
@@ -507,8 +508,8 @@ public:
   unsigned int
   GetStateNBlocks() const
   {
-    // Three Blocks: u, phi, tau
-    return 3;
+    // Four Blocks: u_x, u_y, phi, tau
+    return 4;
   }
 
   std::vector<unsigned int> &
