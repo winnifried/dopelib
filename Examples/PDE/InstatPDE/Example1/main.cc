@@ -189,7 +189,7 @@ main(int argc, char **argv)
   // Create a time grid of [0,8] with
   // 80 subintervalls for the timediscretization.
   Triangulation<1> times;
-  GridGenerator::subdivided_hyper_cube(times, 80, 0, 8);
+  GridGenerator::subdivided_hyper_cube(times, 4*80, 0, 8);
 
   // We give the spatial and time triangulation as well as the state/control finite
   // elements to the MOL-space time handler. DOpEtypes::undefined marks
