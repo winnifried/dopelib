@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+12.05.2023: Fixe in matrix free CG solver in ReducedNewtonAlgorithm
 11.07.2022: Fixes in GMRES and CGLinearSolverWithMatrix. The Preconditioner is
 	    now only reinitialized once the matrix is recomputed.
 	    BlockComponents are now used in DoFOrdering in the SpaceTimeHandlers

@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.3
+Using dealii Version: 9.2
 
 	**************************************************
 	*        Starting Reduced Newton Algorithm       *
@@ -18,26 +18,20 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (abs.): 3.543
 		 Newton step: 0	 Residual (rel.): 1.0000e+00
 	
-	CostFunctional: 2.8364e+00
-		 Newton step: 1	 Residual (rel.):   4.7009e-01	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 2.4538e+00
-		 Newton step: 2	 Residual (rel.):   3.5633e-01	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 1.7061e+00
-		 Newton step: 3	 Residual (rel.):   3.4057e-02	 LinearIters [5]	 LineSearch {0} 
+	CostFunctional: 2.8363e+00
+		 Newton step: 1	 Residual (rel.):   4.6895e-01	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 2.4013e+00
+		 Newton step: 2	 Residual (rel.):   3.4326e-01	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 1.7621e+00
+		 Newton step: 3	 Residual (rel.):   1.1232e-01	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 1.7010e+00
-		 Newton step: 4	 Residual (rel.):   9.2916e-03	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 4	 Residual (rel.):   8.9670e-03	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 1.7006e+00
-		 Newton step: 5	 Residual (rel.):   3.0610e-04	 LinearIters [3]	 LineSearch {0} 
+		 Newton step: 5	 Residual (rel.):   1.1666e-03	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 1.7006e+00
-		 Newton step: 6	 Residual (rel.):   1.6285e-06	 LinearIters [4]	 LineSearch {0} 
- ERROR: The following `DOpEIterationException` reports!
- ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
- ERROR: Iteration count exceeded bounds!
- ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+		 Newton step: 6	 Residual (rel.):   5.3125e-07	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 1.7006e+00
-		 Newton step: 7	 Residual (rel.):   1.4292e-06	 LinearIters [5]	 LineSearch {-1} 
-	CostFunctional: 1.7006e+00
-		 Newton step: 8	 Residual (rel.): < 2.0000e-08	 LinearIters [5]	 LineSearch {0} 
+		 Newton step: 7	 Residual (rel.): < 2.0000e-08	 LinearIters [3]	 LineSearch {0} 
 	CostFunctional: 1.7006e+00
 	Pressure difference: -0.0029024
 	Drag: 0.31035
@@ -45,7 +39,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
-	*             after      8  Iterations           *
+	*             after      7  Iterations           *
 	*             with rel. Residual < 2.0000e-08          *
 	**************************************************
 

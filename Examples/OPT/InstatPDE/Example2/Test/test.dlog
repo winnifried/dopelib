@@ -1,10 +1,10 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
-Using dealii Version: 9.0
+	Status as of: 27/08/2018
+Using dealii Version: 9.2
 
 	**************************************************
 	*        Starting Reduced Newton Algorithm       *
@@ -23,7 +23,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	CostFunctional: 2.92e+00
-		 Newton step: 1	 Residual (rel.): < 1.00e-07	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.): < 1.00e-07	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 2.92e+00
 	Start-Time-Point evaluation: 1.026
 	End-Time-Point evaluation: 1.00733
@@ -50,21 +50,21 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	CostFunctional: 2.89e+00
-		 Newton step: 1	 Residual (rel.):   2.74e-01	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.):   2.72e-01	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 2	 Residual (rel.):   7.30e-02	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 2	 Residual (rel.):   7.17e-02	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 3	 Residual (rel.):   2.00e-02	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 3	 Residual (rel.):   1.95e-02	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 4	 Residual (rel.):   5.35e-03	 LinearIters [3]	 LineSearch {0} 
+		 Newton step: 4	 Residual (rel.):   5.15e-03	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 5	 Residual (rel.):   1.46e-03	 LinearIters [3]	 LineSearch {0} 
+		 Newton step: 5	 Residual (rel.):   1.40e-03	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 6	 Residual (rel.):   3.90e-04	 LinearIters [3]	 LineSearch {0} 
+		 Newton step: 6	 Residual (rel.):   3.69e-04	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 7	 Residual (rel.):   1.07e-04	 LinearIters [3]	 LineSearch {0} 
+		 Newton step: 7	 Residual (rel.):   1.00e-04	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
-		 Newton step: 8	 Residual (rel.):   2.85e-05	 LinearIters [4]	 LineSearch {0} 
+		 Newton step: 8	 Residual (rel.):   2.65e-05	 LinearIters [3]	 LineSearch {0} 
 	CostFunctional: 2.89e+00
 	Start-Time-Point evaluation: 1.00644
 	End-Time-Point evaluation: 0.999901
@@ -72,6 +72,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      8  Iterations           *
-	*             with rel. Residual    2.85e-05          *
+	*             with rel. Residual    2.65e-05          *
 	**************************************************
 

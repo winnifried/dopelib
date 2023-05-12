@@ -77,11 +77,10 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	Starting Reduced Linear Solver with Residual: 0.705317
-		 Cg step: 1	 Residual: 1.41063
-		 Cg step: 2	 Residual: 3.17914e-08
+		 Cg step: 1	 Residual: 1.84075e-08
 	CostFunctional: 4.29e+02
 	Writing [./Mesh0/Control_OptProblem.00002.vtk]
-		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 4.29e+02
 	PointValue: -1
 	L1-Norm: 0.405
@@ -124,7 +123,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 TR-Newton step: 3	delta: 7.87e+01->1.57e+02  accepting step!	 Residual:  (rel.):  1.12e-03	 LinearIters [2]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00002.vtk]
-	TR-Newton Predicted Reduction: 2.29e-10 Actual Reduction: 2.30e-10 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 3.65e-02
+	TR-Newton Predicted Reduction: 2.29e-10 Actual Reduction: 2.29e-10 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 3.65e-02
 		 TR-Newton step: 4	delta: 1.57e+02->3.15e+02  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [2]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00004.vtk]
@@ -154,11 +153,10 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	Starting Reduced Linear Solver with Residual: 0.70532
-		 Cg step: 1	 Residual: 1.41064
-		 Cg step: 2	 Residual: 1.99856e-09
+		 Cg step: 1	 Residual: 1.15718e-09
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00002.vtk]
-		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [1]	 LineSearch {0} 
 	CostFunctional: 4.29e+02
 	PointValue: -1
 	L1-Norm: 0.405
