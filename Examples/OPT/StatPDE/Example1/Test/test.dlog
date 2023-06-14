@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.2
+Using dealii Version: 9.4
 
 	**************************************************************
 	*        Starting Reduced Trustregion_Newton Algorithm       *
@@ -20,35 +20,35 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	TR-Newton Predicted Reduction: 2.20e-02 Actual Reduction: 2.20e-02 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+00
-		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual:  (rel.):  1.00e+00	 LinearIters [2]
+		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual:  (rel.):  1.00e+00	 LinearIters [1]
 	CostFunctional: 6.06e+02
 	Writing [./Mesh0/Control_OptProblem.00000.vtk]
 	TR-Newton Predicted Reduction: 2.19e-01 Actual Reduction: 2.19e-01 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+01
-		 TR-Newton step: 2	delta: 1.00e+01->1.00e+02  accepting step!	 Residual:  (rel.):  9.99e-01	 LinearIters [2]
+		 TR-Newton step: 2	delta: 1.00e+01->1.00e+02  accepting step!	 Residual:  (rel.):  9.99e-01	 LinearIters [1]
 	CostFunctional: 6.05e+02
 	Writing [./Mesh0/Control_OptProblem.00002.vtk]
 	TR-Newton Predicted Reduction: 2.19e+00 Actual Reduction: 2.19e+00 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+02
-		 TR-Newton step: 3	delta: 1.00e+02->1.00e+03  accepting step!	 Residual:  (rel.):  9.93e-01	 LinearIters [2]
+		 TR-Newton step: 3	delta: 1.00e+02->1.00e+03  accepting step!	 Residual:  (rel.):  9.93e-01	 LinearIters [1]
 	CostFunctional: 6.03e+02
 	Writing [./Mesh0/Control_OptProblem.00002.vtk]
 	TR-Newton Predicted Reduction: 2.11e+01 Actual Reduction: 2.11e+01 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+03
-		 TR-Newton step: 4	delta: 1.00e+03->1.00e+04  accepting step!	 Residual:  (rel.):  9.31e-01	 LinearIters [2]
+		 TR-Newton step: 4	delta: 1.00e+03->1.00e+04  accepting step!	 Residual:  (rel.):  9.31e-01	 LinearIters [1]
 	CostFunctional: 5.82e+02
 	Writing [./Mesh0/Control_OptProblem.00004.vtk]
 	TR-Newton Predicted Reduction: 1.36e+02 Actual Reduction: 1.36e+02 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+04
-		 TR-Newton step: 5	delta: 1.00e+04->2.00e+04  accepting step!	 Residual:  (rel.):  3.08e-01	 LinearIters [2]
+		 TR-Newton step: 5	delta: 1.00e+04->2.00e+04  accepting step!	 Residual:  (rel.):  3.08e-01	 LinearIters [1]
 	CostFunctional: 4.46e+02
 	Writing [./Mesh0/Control_OptProblem.00004.vtk]
 	TR-Newton Predicted Reduction: 1.68e+01 Actual Reduction: 1.68e+01 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 4.95e+03
-		 TR-Newton step: 6	delta: 2.00e+04->4.00e+04  accepting step!	 Residual:  (rel.):  1.78e-03	 LinearIters [2]
+		 TR-Newton step: 6	delta: 2.00e+04->4.00e+04  accepting step!	 Residual:  (rel.):  1.04e-03	 LinearIters [1]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh0/Control_OptProblem.00006.vtk]
-	TR-Newton Predicted Reduction: 7.92e-04 Actual Reduction: 7.92e-04 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 7.01e+01
-		 TR-Newton step: 7	delta: 4.00e+04->8.00e+04  accepting step!	 Residual:  (rel.):  1.83e-05	 LinearIters [2]
+	TR-Newton Predicted Reduction: 2.71e-04 Actual Reduction: 2.71e-04 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 4.10e+01
+		 TR-Newton step: 7	delta: 4.00e+04->8.00e+04  accepting step!	 Residual:  (rel.):  5.21e-06	 LinearIters [1]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh0/Control_OptProblem.00006.vtk]
-	TR-Newton Predicted Reduction: 6.11e-08 Actual Reduction: 6.11e-08 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 3.07e-01
-		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [4]
+	TR-Newton Predicted Reduction: 4.93e-09 Actual Reduction: 4.93e-09 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 8.71e-02
+		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [2]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh0/Control_OptProblem.00008.vtk]
 	CostFunctional: 4.29e+02
@@ -112,19 +112,19 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	TR-Newton Predicted Reduction: 6.47e-06 Actual Reduction: 6.47e-06 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+00
-		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual:  (rel.):  9.87e-01	 LinearIters [2]
+		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual:  (rel.):  9.87e-01	 LinearIters [1]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00000.vtk]
 	TR-Newton Predicted Reduction: 6.02e-05 Actual Reduction: 6.02e-05 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.00e+01
-		 TR-Newton step: 2	delta: 1.00e+01->7.87e+01  accepting step!	 Residual:  (rel.):  8.62e-01	 LinearIters [2]
+		 TR-Newton step: 2	delta: 1.00e+01->7.87e+01  accepting step!	 Residual:  (rel.):  8.62e-01	 LinearIters [1]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00002.vtk]
 	TR-Newton Predicted Reduction: 1.93e-04 Actual Reduction: 1.93e-04 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 6.87e+01
-		 TR-Newton step: 3	delta: 7.87e+01->1.57e+02  accepting step!	 Residual:  (rel.):  1.12e-03	 LinearIters [2]
+		 TR-Newton step: 3	delta: 7.87e+01->1.57e+02  accepting step!	 Residual:  (rel.):  4.63e-04	 LinearIters [1]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00002.vtk]
-	TR-Newton Predicted Reduction: 2.29e-10 Actual Reduction: 2.29e-10 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 3.65e-02
-		 TR-Newton step: 4	delta: 1.57e+02->3.15e+02  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [2]
+	TR-Newton Predicted Reduction: 3.94e-11 Actual Reduction: 3.85e-11 rho: 1.00e+00 where TR-Minimizer is 1 with lenght: 1.51e-02
+		 TR-Newton step: 4	delta: 1.57e+02->3.15e+02  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [1]
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00004.vtk]
 	CostFunctional: 4.29e+02
