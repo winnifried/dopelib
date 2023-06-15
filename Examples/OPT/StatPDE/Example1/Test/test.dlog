@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.4
+Using dealii Version: 9.3
 
 	**************************************************************
 	*        Starting Reduced Trustregion_Newton Algorithm       *
@@ -77,7 +77,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	Starting Reduced Linear Solver with Residual: 0.705317
-		 Cg step: 1	 Residual: 1.84075e-08
+		 Cg step: 1	 Residual: < 5.00e-08
 	CostFunctional: 4.29e+02
 	Writing [./Mesh0/Control_OptProblem.00002.vtk]
 		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [1]	 LineSearch {0} 
@@ -153,7 +153,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	Starting Reduced Linear Solver with Residual: 0.70532
-		 Cg step: 1	 Residual: 1.15718e-09
+		 Cg step: 1	 Residual: < 5.00e-08
 	CostFunctional: 4.29e+02
 	Writing [./Mesh1/Control_OptProblem.00002.vtk]
 		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [1]	 LineSearch {0} 

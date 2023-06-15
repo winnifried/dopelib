@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.2
+Using dealii Version: 9.3
 
 	**************************************************
 	*        Starting Reduced Newton Algorithm       *
@@ -63,7 +63,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 0.0552331
+		 Cg step: 1	 Residual:   5.52e-02
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.52e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -101,7 +101,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 0.00988431
+		 Cg step: 1	 Residual:   9.88e-03
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.26e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -138,7 +138,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 0.00149454
+		 Cg step: 1	 Residual:   1.49e-03
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.04e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -220,7 +220,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 0.000743702
+		 Cg step: 1	 Residual:   7.44e-04
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.26e-04
@@ -233,7 +233,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 2	 Residual: 2.99235e-15
+		 Cg step: 2	 Residual: < 3.00e-06
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.29e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -315,7 +315,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 0.000303955
+		 Cg step: 1	 Residual:   3.04e-04
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   8.82e-05
@@ -328,7 +328,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 2	 Residual: 2.93198e-15
+		 Cg step: 2	 Residual: < 3.00e-06
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.23e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -410,7 +410,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 0.000122617
+		 Cg step: 1	 Residual:   1.23e-04
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   3.47e-05
@@ -423,7 +423,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 2	 Residual: 4.72312e-16
+		 Cg step: 2	 Residual: < 3.00e-06
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.27e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -506,7 +506,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 4.88791e-05
+		 Cg step: 1	 Residual:   4.89e-05
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.38e-05
@@ -519,7 +519,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 2	 Residual: 2.64394e-17
+		 Cg step: 2	 Residual: < 3.00e-06
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   5.03e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -602,7 +602,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 1.93104e-05
+		 Cg step: 1	 Residual:   1.93e-05
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   5.49e-06
@@ -615,7 +615,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 2	 Residual: 4.03322e-16
+		 Cg step: 2	 Residual: < 3.00e-06
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.01e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -698,7 +698,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 1	 Residual: 7.58564e-06
+		 Cg step: 1	 Residual:   7.59e-06
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.): < 3.00e-06
@@ -711,7 +711,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		Computing Representation of the Hessian:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-		 Cg step: 2	 Residual: 9.18755e-17
+		 Cg step: 2	 Residual: < 3.00e-06
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.05e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00

@@ -540,7 +540,7 @@ namespace DOpE
             this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
           }
         assert(res >= 0.);
-        out<<"\t Cg step: " <<iter<<"\t Residual: "<<sqrt(res);
+        out<<"\t Cg step: " <<iter<<"\t Residual: "<<this->GetOutputHandler()->ZeroTolerance(sqrt(res),firstres);
         this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
 
         cgbeta = res / oldres; //Fletcher-Reeves
