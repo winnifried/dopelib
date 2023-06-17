@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.2
+Using dealii Version: 9.0
 
 	**************************************************
 	*        Starting Reduced Newton Algorithm       *
@@ -14,24 +14,24 @@ Using dealii Version: 9.2
 	**************************************************
 
 LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
-	CostFunctional: 601.9
-		 Newton step: 0	 Residual (abs.): 0.6952
-		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	CostFunctional: 6e+02
+		 Newton step: 0	 Residual (abs.): 0.7
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 4.2947e+02
-		 Newton step: 1	 Residual (rel.):   4.0026e-05	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2947e+02
-		 Newton step: 2	 Residual (rel.):   5.0435e-08	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2947e+02
-	PointValue: -0.964904
-	L1-Norm: 0.388022
-	QError: 162.992
-	UError: 0.00716886
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   4.00e-05	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+		 Newton step: 2	 Residual (rel.):   5.04e-08	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+	PointValue: -0.96
+	L1-Norm: 0.39
+	QError: 1.6e+02
+	UError: 0.0072
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual   5.0435e-08          *
+	*             with rel. Residual    5.04e-08          *
 	**************************************************
 
 
@@ -42,24 +42,24 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	*  SDoFs : 	289
 	**************************************************
 
-	CostFunctional: 601.9
-		 Newton step: 0	 Residual (abs.): 0.6955
-		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	CostFunctional: 6e+02
+		 Newton step: 0	 Residual (abs.): 0.7
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 4.2939e+02
-		 Newton step: 1	 Residual (rel.):   4.0080e-05	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2939e+02
-		 Newton step: 2	 Residual (rel.): < 5.0000e-09	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2939e+02
-	PointValue: -0.961539
-	L1-Norm: 0.387768
-	QError: 15.2505
-	UError: 0.0064747
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   4.01e-05	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+		 Newton step: 2	 Residual (rel.): < 5.00e-09	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+	PointValue: -0.96
+	L1-Norm: 0.39
+	QError: 15
+	UError: 0.0065
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual < 5.0000e-09          *
+	*             with rel. Residual  < 5.00e-09          *
 	**************************************************
 
 
@@ -70,24 +70,24 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	*  SDoFs : 	289
 	**************************************************
 
-	CostFunctional: 601.9
-		 Newton step: 0	 Residual (abs.): 0.6954
-		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	CostFunctional: 6e+02
+		 Newton step: 0	 Residual (abs.): 0.7
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 4.2939e+02
-		 Newton step: 1	 Residual (rel.):   4.0070e-05	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2939e+02
-		 Newton step: 2	 Residual (rel.): < 5.0000e-09	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2939e+02
-	PointValue: -0.961262
-	L1-Norm: 0.390456
-	QError: 23.5428
-	UError: 0.00661022
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   4.01e-05	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+		 Newton step: 2	 Residual (rel.): < 5.00e-09	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+	PointValue: -0.96
+	L1-Norm: 0.39
+	QError: 24
+	UError: 0.0066
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual < 5.0000e-09          *
+	*             with rel. Residual  < 5.00e-09          *
 	**************************************************
 
 
@@ -98,24 +98,24 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	*  SDoFs : 	1089
 	**************************************************
 
-	CostFunctional: 604.8
-		 Newton step: 0	 Residual (abs.): 0.7028
-		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	CostFunctional: 6e+02
+		 Newton step: 0	 Residual (abs.): 0.7
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 4.2940e+02
-		 Newton step: 1	 Residual (rel.):   1.0533e-05	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2940e+02
-		 Newton step: 2	 Residual (rel.): < 5.0000e-09	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2940e+02
-	PointValue: -0.990397
-	L1-Norm: 0.400942
-	QError: 0.94153
-	UError: 0.000410988
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   1.05e-05	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+		 Newton step: 2	 Residual (rel.): < 5.00e-09	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+	PointValue: -0.99
+	L1-Norm: 0.4
+	QError: 0.94
+	UError: 0.00041
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual < 5.0000e-09          *
+	*             with rel. Residual  < 5.00e-09          *
 	**************************************************
 
 
@@ -123,54 +123,54 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	*        Starting Reduced Newton Algorithm       *
 	*   Solving : OptProblem	*
 	*  CDoFs : 	1089
-	*  SDoFs : 	1463
+	*  SDoFs : 	1469
 	**************************************************
 
-	CostFunctional: 604.9
-		 Newton step: 0	 Residual (abs.): 0.7031
-		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	CostFunctional: 6e+02
+		 Newton step: 0	 Residual (abs.): 0.7
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 4.2940e+02
-		 Newton step: 1	 Residual (rel.):   1.3696e-05	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2940e+02
-		 Newton step: 2	 Residual (rel.):   1.2718e-08	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 4.2940e+02
-	PointValue: -0.988605
-	L1-Norm: 0.401622
-	QError: 0.870171
-	UError: 0.000320935
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   1.51e-05	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+		 Newton step: 2	 Residual (rel.):   1.63e-08	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+	PointValue: -0.99
+	L1-Norm: 0.4
+	QError: 0.87
+	UError: 0.00032
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual   1.2718e-08          *
+	*             with rel. Residual    1.63e-08          *
 	**************************************************
 
 
 	**************************************************
 	*        Starting Reduced Newton Algorithm       *
 	*   Solving : OptProblem	*
-	*  CDoFs : 	1429
-	*  SDoFs : 	1463
+	*  CDoFs : 	1432
+	*  SDoFs : 	1469
 	**************************************************
 
-	CostFunctional: 604.9
-		 Newton step: 0	 Residual (abs.): 0.7031
-		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	CostFunctional: 6e+02
+		 Newton step: 0	 Residual (abs.): 0.7
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 4.2940e+02
-		 Newton step: 1	 Residual (rel.):   1.3711e-05	 LinearIters [1]	 LineSearch {0} 
-	CostFunctional: 4.2940e+02
-		 Newton step: 2	 Residual (rel.):   1.2733e-08	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 4.2940e+02
-	PointValue: -0.988606
-	L1-Norm: 0.401621
-	QError: 0.938662
-	UError: 0.000321451
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   1.51e-05	 LinearIters [1]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+		 Newton step: 2	 Residual (rel.):   1.67e-08	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+	PointValue: -0.99
+	L1-Norm: 0.4
+	QError: 0.93
+	UError: 0.00032
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual   1.2733e-08          *
+	*             with rel. Residual    1.67e-08          *
 	**************************************************
 

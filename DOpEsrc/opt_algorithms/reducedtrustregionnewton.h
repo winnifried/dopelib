@@ -424,7 +424,7 @@ namespace DOpE
             throw DOpEIterationException("Iteration aborted due to too small update!","ReducedTrustregion_NewtonAlgorithm::Solve");
           }
 
-        out<<"TR-Newton Predicted Reduction: "<<-tr_model<<" Actual Reduction: "<<last_cost-cost<<" rho: "<<tr_rho<<" where TR-Minimizer is "<<good<<" with lenght: "<<norm;
+        out<<"TR-Newton Predicted Reduction: "<<this->GetOutputHandler()->ZeroTolerance(-tr_model,1.0)<<" Actual Reduction: "<<this->GetOutputHandler()->ZeroTolerance(last_cost-cost,1.0)<<" rho: "<<tr_rho<<" where TR-Minimizer is "<<good<<" with lenght: "<<norm;
         this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
         out<<"\t TR-Newton step: " <<iter<<"\t";
         out<<"delta: "<<tr_delta<<"->";

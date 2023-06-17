@@ -466,11 +466,10 @@ namespace DOpE
       {
         this->GetExceptionHandler()->HandleCriticalException(e,"Reduced_SnoptAlgorithm::Solve");
       }
-
     out << "**************************************************\n";
     out << "*        Stopping Solution Using SNOPT           *\n";
     out << "*             Relative reduction in cost functional:"<<std::scientific << std::setw(11) << this->GetOutputHandler()->ZeroTolerance((cost-cost_start)/fabs(0.5*(cost_start+cost)),1.0) <<"          *\n";
-    out.precision(7);
+    this->GetOutputHandler()->InitOut(out);
     out << "*             Final value: "<<cost<<"                                     *\n";
     out << "**************************************************";
     this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
