@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 8.5
+Using dealii Version: 9.5
 LOG: Allowing IterationCounter `p_iter' for filenames!
 
 	**************************************************
@@ -16,7 +16,7 @@ LOG: Allowing IterationCounter `p_iter' for filenames!
 	**************************************************
 
 LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
-	CostFunctional: 6.86825
+	CostFunctional: 6.9
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -29,7 +29,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*          with Exit Code:   1 (success)       *
 	************************************************
 	
-	CostFunctional: 3.77724
+	CostFunctional: 3.8
 
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
@@ -46,7 +46,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*  Constraints : 	257
 	**************************************************
 
-	CostFunctional: 21.984
+	CostFunctional: 22
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -59,7 +59,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*          with Exit Code:   1 (success)       *
 	************************************************
 	
-	CostFunctional: 6.2162
+	CostFunctional: 6.2
 
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
@@ -76,7 +76,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*  Constraints : 	1025
 	**************************************************
 
-	CostFunctional: 6.71775
+	CostFunctional: 6.7
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -89,7 +89,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*          with Exit Code:   1 (success)       *
 	************************************************
 	
-	CostFunctional: 3.82762
+	CostFunctional: 3.8
 
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
@@ -106,7 +106,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*  Constraints : 	1025
 	**************************************************
 
-	CostFunctional: 19.781
+	CostFunctional: 20
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -119,7 +119,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*          with Exit Code:   1 (success)       *
 	************************************************
 	
-	CostFunctional: 5.54149
+	CostFunctional: 5.5
 
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
