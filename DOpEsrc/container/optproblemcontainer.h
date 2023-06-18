@@ -2048,7 +2048,11 @@ namespace DOpE
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
     typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
     typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    bool DH>
+#else
     template<int, int> class DH>
+#endif
     template<typename DATACONTAINER>
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -2591,7 +2595,11 @@ namespace DOpE
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+    bool DH>
+#else
+    template<int, int> class DH>
+#endif
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -2620,7 +2628,11 @@ namespace DOpE
     template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
     typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
     typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    bool DH>
+#else
     template<int, int> class DH>
+#endif
     template<typename DATACONTAINER>
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -2647,7 +2659,11 @@ namespace DOpE
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+    bool DH>
+#else
+    template<int, int> class DH>
+#endif
   template<typename DATACONTAINER>
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -2666,7 +2682,7 @@ namespace DOpE
     else
       {
         throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementMatrix");
+                            "OptProblemContainer::ElementTimeMatrix");
       }
 
   }
