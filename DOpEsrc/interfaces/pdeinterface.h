@@ -834,7 +834,10 @@ namespace DOpE
     ElementMassMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
             dealii::FullMatrix<double> &/*local_entry_matrix*/,
             double /*scale*/,
-            double /*scale_ico*/);
+            double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMassMatrix");
+    }
 
     virtual void
     ElementTimeMatrix(
@@ -844,9 +847,6 @@ namespace DOpE
       throw DOpEException("Not Implemented", "PDEInterface::ElementTimeMatrix");
     }
 
-    virtual void
-    ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
     /******************************************************/
     /**
      * The transposed of ElementTimeEquation.
@@ -939,10 +939,10 @@ namespace DOpE
     /******************************************************/
  
     virtual void
-    ElementMassMatrix_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-			dealii::FullMatrix<double> &/*local_entry_matrix*/,
-			double /*scale*/,
-			double /*scale_ico*/)
+    ElementMassMatrix_T(const EDC<DH, VECTOR, dealdim> & edc,
+			dealii::FullMatrix<double> &local_entry_matrix,
+			double scale,
+			double scale_ico)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
       tmp_mat = 0.;
