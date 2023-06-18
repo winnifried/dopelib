@@ -27,7 +27,9 @@
 #include <deal.II/base/quadrature.h>
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/hp/q_collection.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
+#endif
 #include <deal.II/lac/vector.h>
 
 #include <wrapper/dofhandler_wrapper.h>
@@ -43,8 +45,13 @@ namespace DOpE
    * This class manages the different kind of element- and facedatacontainers
    * needed in the integrator.
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, typename QUADRATURE, typename FACEQUADRATURE,
+           typename VECTOR, int dim>
+#else
   template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
            typename VECTOR, int dim>
+#endif
   class IntegratorDataContainer
   {
   public:
@@ -87,12 +94,17 @@ namespace DOpE
     InitializeFDC(const FACEQUADRATURE &fquad, UpdateFlags update_flags,
                   STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
                   bool need_interfaces = false)
     {
-      delete fdc_;
+      if (fdc_ != NULL)
+        delete fdc_;
       fdc_ = new FaceDataContainer<DH, VECTOR, dim>(fquad,
                                                     update_flags, sth, element, param_values, domain_values,
                                                     need_interfaces);
@@ -106,7 +118,11 @@ namespace DOpE
     void
     InitializeFDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
                   bool need_interfaces = false)
@@ -123,7 +139,11 @@ namespace DOpE
     InitializeEDC(const QUADRATURE &quad, UpdateFlags update_flags,
                   STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
 		  bool need_vertices)
@@ -142,7 +162,11 @@ namespace DOpE
     void
     InitializeEDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
 		  bool need_vertices)
@@ -157,7 +181,11 @@ namespace DOpE
     template<typename STH>
     void
     InitializeMMFDC(UpdateFlags update_flags, STH &sth,
-                    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
+		    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
                     const typename std::vector<
                     typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
                     const std::map<std::string, const Vector<double>*> &param_values,
@@ -177,7 +205,11 @@ namespace DOpE
     template<typename STH>
     void
     InitializeMMEDC(UpdateFlags update_flags, STH &sth,
-                    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+#else
+		    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+#endif
                     const typename std::vector<
                     typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
                     const std::map<std::string, const Vector<double>*> &param_values,

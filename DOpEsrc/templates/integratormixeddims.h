@@ -38,9 +38,7 @@
 #include <container/elementdatacontainer.h>
 #include <container/facedatacontainer.h>
 #include <container/optproblemcontainer.h>
-#if DEAL_II_VERSION_GTE(7,3,0)
 #include <deal.II/base/types.h>
-#endif
 
 namespace DOpE
 {
@@ -210,15 +208,9 @@ namespace DOpE
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
                   if (element[0]->face(face)->at_boundary()
                       &&
                       (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                     {
                       fdc.ReInit(face);
                       pde.BoundaryRhs(fdc,local_vector,-1.);
@@ -339,15 +331,9 @@ namespace DOpE
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
                   if (element[0]->face(face)->at_boundary()
                       &&
                       (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                     {
                       fdc.ReInit(face);
                       pde.BoundaryRhs(fdc,local_vector,1.);
@@ -501,12 +487,22 @@ namespace DOpE
       SCALAR ret = 0.;
       // Begin integration
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const std::vector<const DOpEWrapper::DoFHandler<dimhigh>*> &dof_handler =
+#else
       const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler =
+#endif
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_element_iterator>
-      element(dof_handler.size());
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>
-      endc(dof_handler.size());
+#if DEAL_II_VERSION_GTE(9,3,0)
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>  element(dof_handler.size());
+#else
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_element_iterator>  element(dof_handler.size());
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator> endc(dof_handler.size());
+#else
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator> endc(dof_handler.size());
+#endif
 
       for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
         {
@@ -515,10 +511,12 @@ namespace DOpE
         }
 
       // Generate the data containers.
-      FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                                 pde.GetFaceUpdateFlags(),
-                                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                                 this->GetParamData(), this->GetDomainData());
+      idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                         element,
+                         this->GetParamData(),
+                         this->GetDomainData());
+      auto &fdc = idc_.GetFaceDataContainer();
 
       std::vector<unsigned int> boundary_functional_colors =
         pde.GetBoundaryFunctionalColors();
@@ -544,17 +542,10 @@ namespace DOpE
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
                   if (element[0]->face(face)->at_boundary()
                       &&
                       (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
                             element[0]->face(face)->boundary_id()) != boundary_functional_colors.end()))
-#else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-                            element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
-#endif
                     {
 //              pde.GetBaseProblem().GetSpaceTimeHandler()->ComputeFaceFEValues(element, face, pde.GetType());
                       fdc.ReInit(face);
@@ -581,12 +572,21 @@ namespace DOpE
       SCALAR ret = 0.;
 
       // Begin integration
-      const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>
-      element(dof_handler.size());
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>
-      endc(dof_handler.size());
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const std::vector<const DOpEWrapper::DoFHandler<dimhigh>*> &dof_handler = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+#else
+      const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   element(dof_handler.size());
+#else
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   element(dof_handler.size());
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   endc(dof_handler.size());
+#else
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   endc(dof_handler.size());
+#endif
 
       for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
         {
@@ -594,10 +594,12 @@ namespace DOpE
           endc[dh] = dof_handler[dh]->end();
         }
       // Generate the data containers.
-      FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                                 pde.GetFaceUpdateFlags(),
-                                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                                 this->GetParamData(), this->GetDomainData());
+      idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                         element,
+                         this->GetParamData(),
+                         this->GetDomainData());
+      auto &fdc = idc_.GetFaceDataContainer();
 
       bool need_faces = pde.HasFaces();
       if (!need_faces)
@@ -668,11 +670,18 @@ namespace DOpE
     dealii::Vector<SCALAR> local_vector(dofs);
 
     std::vector<unsigned int> dirichlet_colors = pde.GetTransposedDirichletColors();
-    std::vector<bool> selected_components;
+#if DEAL_II_VERSION_GTE(9,4,0)
+    IndexSet boundary_dofs;
+#else
+    std::vector<bool> boundary_dofs;
+#endif
     if (dirichlet_colors.size() > 0)
       {
-        selected_components.resize(
+#if DEAL_II_VERSION_GTE(9,4,0)
+#else
+	boundary_dofs.resize(
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->n_dofs());
+#endif
         const std::vector<Point<dimhigh> > &support_points =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetMapDoFToSupportPoints();
 
@@ -681,11 +690,8 @@ namespace DOpE
             unsigned int color = dirichlet_colors[i];
             std::vector<bool> comp_mask = pde.GetTransposedDirichletCompMask(color);
             std::vector<bool> current_comp(comp_mask.size(), false);
-#if DEAL_II_VERSION_GTE(7,3,0)
             std::set<types::boundary_id> boundary_indicators;
-#else
-            std::set<unsigned char> boundary_indicators;
-#endif
+
             boundary_indicators.insert(color);
             for (unsigned int j = 0; j < comp_mask.size(); j++)
               {
@@ -694,17 +700,36 @@ namespace DOpE
                 if (comp_mask[j])
                   {
                     current_comp[j] = true;
+#if DEAL_II_VERSION_GTE(9,4,0)
+		    boundary_dofs.clear();
+                    //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
+                    boundary_dofs = DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
+								    current_comp, boundary_indicators);
+#else
                     //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
                     DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
-                                                    current_comp, selected_components, boundary_indicators);
+                                                    current_comp, boundary_dofs, boundary_indicators);
+#endif
                   }
                 const TransposedDirichletDataInterface<dimhigh> &DD =
                   pde.GetTransposedDirichletValues(color,
                                                    this->GetParamData(),
                                                    this->GetDomainData());
-                for (unsigned int k = 0; k < selected_components.size(); k++)
+#if DEAL_II_VERSION_GTE(9,4,0)
+                for (types::global_dof_index k : boundary_dofs)
+		{
+		  local_vector = 0.;
+		  DD.value(support_points[k], j, k, local_vector);
+		  for (unsigned int l = 0; l < dofs; ++l)
+		  {
+		    u(l) += scale * local_vector(l);
+		  }
+                  
+		}
+#else
+                for (unsigned int k = 0; k < boundary_dofs.size(); k++)
                   {
-                    if (selected_components[k])
+                    if (boundary_dofs[k])
                       {
                         local_vector = 0.;
                         DD.value(support_points[k], j, k, local_vector);
@@ -714,6 +739,7 @@ namespace DOpE
                           }
                       }
                   }
+#endif
               }
             //end loop over components
           }

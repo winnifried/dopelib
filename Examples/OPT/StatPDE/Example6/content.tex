@@ -42,7 +42,7 @@ on the nodal values of the control vector. Thus, in the constraint
 description \texttt{localconstraints.h},
 these vectors are manipulated directly without additional integration. We 
 note that the constraints need to be written such, that a feasible control
-generates non positive entried, i.e., we 
+generates non positive entries, i.e., we 
 calculate the vector
 \[
  \mathcal C(q) = \begin{pmatrix}
@@ -70,7 +70,7 @@ The second entry \texttt{lcc[0][\textcolor{blue}{1}] = 2}, determines the number
 constraints on this local entry. Here, we impose 
 a lower and an upper bound, i.e., we give 2 constraints.
 This information tells the SpaceTimeHandler, that the vector 
-$\mathcal C(q)$ needs exactely twice the amount of unknowns as the vector $q$.
+$\mathcal C(q)$ needs exactly twice the amount of unknowns as the vector $q$.
 In general, the space needed for $\mathcal C(q)$ is given as 
 \[
 \frac{\text{\texttt{lcc[0][1]}}}{\text{\texttt{lcc[0][0]}}}

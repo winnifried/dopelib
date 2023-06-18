@@ -35,11 +35,19 @@ using namespace dealii;
  * See pdeinterface.h for more information.
  */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
 
@@ -62,9 +70,10 @@ public:
   }
 
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double scale_ico)
+  ElementEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double scale_ico)
   {
     assert(this->problem_type_ == "state");
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -131,9 +140,10 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale,
-                double scale_ico)
+  ElementMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix, double scale,
+    double scale_ico)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -207,25 +217,28 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> & /*local_vector*/,
-                       double /*scale*/)
+  ElementRightHandSide(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> & /*local_vector*/,
+    double /*scale*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                              dealii::Vector<double> & /*local_vector*/,
-                              double /*scale*/)
+  ElementTimeEquationExplicit(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> & /*local_vector*/,
+    double /*scale*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                      dealii::Vector<double> &local_vector,
-                      double scale)
+  ElementTimeEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector,
+    double scale)
   {
     assert(this->problem_type_ == "state");
 
@@ -259,15 +272,17 @@ public:
   }
 
   void
-  ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                            FullMatrix<double> &/*local_matrix*/)
+  ElementTimeMatrixExplicit(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    FullMatrix<double> &/*local_matrix*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                    FullMatrix<double> &local_matrix)
+  ElementTimeMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix)
   {
     assert(this->problem_type_ == "state");
 
@@ -301,9 +316,10 @@ public:
 
   // Values for boundary integrals
   void
-  BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
-                   dealii::Vector<double> &local_vector, double scale,
-                   double /*scale_ico*/)
+  BoundaryEquation(
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
 
     assert(this->problem_type_ == "state");
@@ -348,9 +364,10 @@ public:
   }
 
   void
-  BoundaryMatrix(const FDC<DH, VECTOR, dealdim> &fdc,
-                 dealii::FullMatrix<double> &local_matrix, double scale,
-                 double /*scale_ico*/)
+  BoundaryMatrix(
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    dealii::FullMatrix<double> &local_matrix, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
 
@@ -388,9 +405,10 @@ public:
   }
 
   void
-  BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> & /*local_vector*/,
-                        double /*scale*/)
+  BoundaryRightHandSide(
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    dealii::Vector<double> & /*local_vector*/,
+    double /*scale*/)
   {
     assert(this->problem_type_ == "state");
   }

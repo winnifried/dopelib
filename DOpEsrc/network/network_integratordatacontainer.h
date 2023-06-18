@@ -27,7 +27,9 @@
 #include <deal.II/base/quadrature.h>
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/hp/q_collection.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
+#endif
 #include <deal.II/lac/vector.h>
 
 #include <wrapper/dofhandler_wrapper.h>
@@ -43,8 +45,13 @@ namespace DOpE
      * This class manages the different kind of element- and facedatacontainers
      * needed in the integrator.
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, typename QUADRATURE, typename FACEQUADRATURE,
+           typename VECTOR, int dim>
+#else
     template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
              typename VECTOR, int dim>
+#endif
     class Network_IntegratorDataContainer
     {
     public:
@@ -77,7 +84,11 @@ namespace DOpE
                     const FACEQUADRATURE &fquad, UpdateFlags update_flags,
                     STH &sth,
                     const std::vector<
-                    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                     const std::map<std::string, const Vector<double>*> &param_values,
                     const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
                     bool need_interfaces = false)
@@ -97,7 +108,11 @@ namespace DOpE
       InitializeFDC(unsigned int pipe, unsigned int n_pipes, unsigned int n_comp,
                     UpdateFlags update_flags, STH &sth,
                     const std::vector<
-                    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                     const std::map<std::string, const Vector<double>*> &param_values,
                     const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
                     bool need_interfaces = false)
@@ -114,7 +129,11 @@ namespace DOpE
       InitializeEDC(unsigned int pipe, const QUADRATURE &quad, UpdateFlags update_flags,
                     STH &sth,
                     const std::vector<
-                    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                     const std::map<std::string, const Vector<double>*> &param_values,
                     const std::map<std::string, const dealii::BlockVector<double> *> &domain_values)
       {
@@ -132,7 +151,11 @@ namespace DOpE
       void
       InitializeEDC(unsigned int pipe, UpdateFlags update_flags, STH &sth,
                     const std::vector<
-                    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#if DEAL_II_VERSION_GTE(9,3,0)
+		    typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+#else
+		    typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+#endif
                     const std::map<std::string, const Vector<double>*> &param_values,
                     const std::map<std::string, const dealii::BlockVector<double> *> &domain_values)
       {

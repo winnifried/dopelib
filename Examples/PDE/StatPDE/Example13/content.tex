@@ -58,7 +58,7 @@ hence all objects must use the \texttt{LocalPDE}
 and not the \texttt{PDEInterface}.
 To make sure that this is the case, the \texttt{PDEProblemContainer} needs to be initialized with the following arguments
 \begin{verbatim}
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 \end{verbatim}
 

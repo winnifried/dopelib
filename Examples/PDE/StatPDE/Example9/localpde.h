@@ -30,11 +30,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
 template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
+  template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalPDE() :
@@ -49,7 +57,7 @@ public:
 
   // Domain values for elements
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
+    ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale,
                   double /*scale_ico*/)
   {
@@ -180,7 +188,7 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
+    ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
                 FullMatrix<double> &local_matrix, double scale,
                 double /*scale_ico*/)
   {
@@ -401,7 +409,7 @@ public:
 
   // Values for Boundary integrals
   void
-  BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
+      BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
                    dealii::Vector<double> &local_vector, double scale,
                    double /*scale_ico*/)
   {
@@ -462,7 +470,7 @@ public:
   }
 
   void
-  BoundaryMatrix(const FDC<DH, VECTOR, dealdim> &fdc,
+     BoundaryMatrix(const FDC<DH, VECTOR, dealdim> &fdc,
                  dealii::FullMatrix<double> &local_matrix, double scale,
                  double /*scale_ico*/)
   {
@@ -570,7 +578,7 @@ public:
   }
 
   void
-  BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }

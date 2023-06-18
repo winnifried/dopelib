@@ -66,9 +66,14 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -78,12 +83,12 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
@@ -91,7 +96,7 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP;
@@ -126,35 +131,19 @@ ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
       {
         if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(1);
-#else
-            element->face(face)->set_boundary_indicator(1);
-#endif
           }
         else if (std::fabs(element->face(face)->center()(0) - (upper_bound)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(0);
-#else
-            element->face(face)->set_boundary_indicator(0);
-#endif
           }
         else if (std::fabs(element->face(face)->center()(1) - (upper_bound)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(0);
-#else
-            element->face(face)->set_boundary_indicator(0);
-#endif
           }
         else if (std::fabs(element->face(face)->center()(0) - (0)) < 1e-12)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             element->face(face)->set_boundary_id(1);
-#else
-            element->face(face)->set_boundary_indicator(1);
-#endif
           }
       }
 }
@@ -180,7 +169,7 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   InitialData::declare_params(pr);
   pr.SetSubsection("Discretization parameters");
   pr.declare_entry("upper bound", "0.0", Patterns::Double(0));
@@ -201,8 +190,8 @@ main(int argc, char **argv)
 
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2> LPDE(pr);
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, 2> LPDE(pr);
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
 
   //Time grid of [0,expiration date] with 20 subintervalls.
   Triangulation<1> times;
@@ -212,7 +201,7 @@ main(int argc, char **argv)
   triangulation.refine_global(5);
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times);
-
+  
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPF);
@@ -280,7 +269,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.0
+Using dealii Version: 9.3
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -17,15 +17,17 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.25e+03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.91e-02	 LineSearch {0} M 
-			 Newton step: 2	 Residual (rel.):   4.08e-02	 LineSearch {1} M 
-			 Newton step: 3	 Recalculate with new Matrix
-			 Newton step: 3	 Residual (rel.):   2.91e-02	 LineSearch {0} M 
-			 Newton step: 4	 Residual (rel.):   3.66e-03	 LineSearch {0} M 
-			 Newton step: 5	 Residual (rel.):   4.90e-04	 LineSearch {0} M 
-			 Newton step: 6	 Residual (rel.):   9.04e-05	 LineSearch {0} M 
-			 Newton step: 7	 Residual (rel.):   6.73e-07	 LineSearch {0} M 
-			 Newton step: 8	 Residual (rel.): < 1.00e-11	 LineSearch {0} M 
-	Writing [./Mesh0/State_PDEProblemContainer.00008.vtk]
+			 Newton step: 2	 Residual (rel.):   4.04e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.54e-02	 LineSearch {3} M 
+			 Newton step: 4	 Residual (rel.):   2.65e-02	 LineSearch {2} M 
+			 Newton step: 5	 Residual (rel.):   1.33e-02	 LineSearch {1} M 
+			 Newton step: 6	 Residual (rel.):   5.55e-03	 LineSearch {0} M 
+			 Newton step: 7	 Residual (rel.):   1.19e-03	 LineSearch {0} M 
+			 Newton step: 8	 Residual (rel.):   9.04e-05	 LineSearch {0} M 
+			 Newton step: 9	 Residual (rel.):   3.11e-05	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.):   2.13e-09	 LineSearch {0} M 
+			 Newton step: 11	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Writing [./Mesh0/State_PDEProblemContainer.00011.vtk]
 	Computing Functionals:
 	x-displacement_in_(90,0): 0.0091938
 	y-displacement_in_(100,100): 0.190365
@@ -44,10 +46,10 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.96e-01	 LineSearch {0} M 
 			 Newton step: 2	 Residual (rel.):   5.46e-02	 LineSearch {0} M 
-			 Newton step: 3	 Residual (rel.):   8.93e-03	 LineSearch {0} M 
-			 Newton step: 4	 Residual (rel.):   3.15e-03	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   2.21e-04	 LineSearch {0} M 
-			 Newton step: 6	 Residual (rel.):   2.38e-09	 LineSearch {0} M 
+			 Newton step: 3	 Residual (rel.):   2.52e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.44e-03	 LineSearch {0} M 
+			 Newton step: 5	 Residual (rel.):   2.38e-06	 LineSearch {0} M 
+			 Newton step: 6	 Residual (rel.):   3.81e-09	 LineSearch {0} 
 			 Newton step: 7	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
 	Writing [./Mesh1/State_PDEProblemContainer.00007.vtk]
 	Computing Functionals:

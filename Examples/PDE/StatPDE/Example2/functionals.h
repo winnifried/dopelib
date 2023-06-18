@@ -34,12 +34,21 @@ using namespace DOpE;
  * Flux over the right hand side boundary.
  */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+class LocalBoundaryFunctionalMassFlux : public FunctionalInterface<EDC, FDC,
+  DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalBoundaryFunctionalMassFlux : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalBoundaryFunctionalMassFlux()
@@ -48,7 +57,7 @@ public:
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   {
     const unsigned int n_q_points = fdc.GetNQPoints();
     const unsigned int color = fdc.GetBoundaryIndicator();

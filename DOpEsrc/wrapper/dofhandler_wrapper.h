@@ -25,13 +25,106 @@
 #define DOPE_DOFHANDLER_H_
 
 #include <deal.II/dofs/dof_handler.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
+#endif
 #include <deal.II/fe/fe_system.h>
 
 namespace DOpEWrapper
 {
+  #if DEAL_II_VERSION_GTE(9,3,0)
+  /**
+   * @class DoFHandler
+   *
+   * Wrapper for the DoFHandler. This Wrapper is required to allow instantiations
+   * of DoFHandlers in dimension 0 as well as between ``normal'' and ``hp''
+   * DoFHandlers.
+   *
+   * @template dim              Dimension of the dofhandler.
+   */
+  template<int dim>
+  class DoFHandler : public dealii::DoFHandler<dim, dim>
+  {
+  public:
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+      dealii::DoFHandler<dim, dim>(tria)
+    {
+    }
+
+    /**
+     * This function is needed to get access to the base class, i.e.,
+     * the dealii DoFHandler which is wrapped.
+     *
+     * This is needed to avoid casts in the program when
+     * some functions need a dealii DoFHandler but have the
+     * DoFHandler as a template which is deduced by the
+     * arguments passed to the function
+     */
+    const dealii::DoFHandler<dim, dim> &
+    GetDEALDoFHandler() const
+    {
+      return *this;
+    }
+
+  };
 
   /**
+   * Template specializations for dim=0.
+   */
+  template<>
+  class DoFHandler<0>
+  {
+  private:
+    unsigned int dofs_ = 0;
+    dealii::Triangulation<1> tmp_tria_;
+    dealii::DoFHandler<1> tmp_dof_handler_;
+
+  public:
+    /**
+     * We actually never need the triangulation, this constructor merely exists
+     * to allow for dimension independent programming.
+     */
+    template<int dim>
+      DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/, const bool /*hp_capability_enabled*/=false)
+      : tmp_dof_handler_ (tmp_tria_)
+    {
+    }
+    template<int dim>
+    void
+    distribute_dofs(const dealii::FESystem<dim> &fe,
+                    const unsigned int /*offset*/=0)
+    {
+      dofs_ = fe.element_multiplicity(0);
+    }
+    template<int dim>
+    void
+    distribute_dofs(const dealii::hp::FECollection<dim> &fe,
+                    const unsigned int /*offset*/=0)
+    {
+      dofs_ = fe[0].element_multiplicity(0);
+    }
+    void
+    clear()
+    {
+    }
+    unsigned int
+    n_dofs() const
+    {
+      return dofs_;
+    }
+
+    // Quick-fix for dim = 0, just return some DoFHandler.
+    const dealii::DoFHandler<1> &
+    GetDEALDoFHandler () const
+    {
+      assert(false);
+      return tmp_dof_handler_;
+    }
+  };
+
+
+#else//Dealii older than 9.3.0
+    /**
    * @class DoFHandler
    *
    * Wrapper for the DoFHandler. This Wrapper is required to allow instantiations
@@ -51,7 +144,7 @@ namespace DOpEWrapper
   class DoFHandler : public DOFHANDLER<dim, dim>
   {
   public:
-    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+  DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       DOFHANDLER<dim, dim>(tria)
     {
     }
@@ -71,13 +164,6 @@ namespace DOpEWrapper
       return *this;
     }
 
-    /**
-     * Does the DoFHandler need an IndexSetter, i.e. is this
-     * an hp dofhandler?
-     */
-    static bool
-    NeedIndexSetter();
-
   };
 
   //Template specialization DOFHANDLER = dealii::DoFHandler<dim>
@@ -85,14 +171,9 @@ namespace DOpEWrapper
   class DoFHandler<dim, dealii::DoFHandler> : public dealii::DoFHandler<dim>
   {
   public:
-    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+  DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       dealii::DoFHandler<dim>(tria)
     {
-    }
-    static bool
-    NeedIndexSetter()
-    {
-      return false;
     }
     const dealii::DoFHandler<dim> &
     GetDEALDoFHandler() const
@@ -112,39 +193,12 @@ namespace DOpEWrapper
       dealii::hp::DoFHandler<dim>(tria)
     {
     }
-    static bool
-    NeedIndexSetter()
-    {
-      return true;
-    }
     const dealii::hp::DoFHandler<dim> &
     GetDEALDoFHandler() const
     {
       return *this;
     }
   };
-
-// //Template specialization DOFHANDLER = dealii::MGDoFHandler<dim>
-//  template<int dim>
-//    class DoFHandler<dim, dealii::MGDoFHandler > : public dealii::MGDoFHandler<
-//        dim>
-//    {
-//      public:
-//        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
-//            : dealii::MGDoFHandler<dim>(tria)
-//        {
-//        }
-//        static bool
-//        NeedIndexSetter()
-//        {
-//          return true;
-//        }
-//        const dealii::MGDoFHandler<dim>&
-//        GetDEALDoFHandler() const
-//        {
-//          return *this;
-//        }
-//    };
 
   /**
    * Template specializations for dim=0.
@@ -182,11 +236,6 @@ namespace DOpEWrapper
     n_dofs() const
     {
       return dofs_;
-    }
-    static bool
-    NeedIndexSetter()
-    {
-      return false;
     }
 
     // Quick-fix for dim = 0, just return some DoFHandler.
@@ -232,11 +281,6 @@ namespace DOpEWrapper
     {
       return dofs_;
     }
-    static bool
-    NeedIndexSetter()
-    {
-      return false;
-    }
     // Quick-fix for dim = 0, just return some DoFHandler.
     const dealii::hp::DoFHandler<1> &
     GetDEALDoFHandler () const
@@ -245,6 +289,8 @@ namespace DOpEWrapper
       return tmp_dof_handler_;
     }
   };
+
+#endif//Endof dealii older than 9.2.0
 }
 
 #endif

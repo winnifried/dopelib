@@ -50,6 +50,8 @@ namespace DOpE
     param_reader.declare_entry("debug","false",Patterns::Bool(),"Log Debug Information");
     param_reader.declare_entry("number_precision","5",Patterns::Integer(1),"Sets the precision of the output numbers in the newton schemes.");
     param_reader.declare_entry("functional_number_precision","6",Patterns::Integer(1),"Sets the precision of the output numbers for functionals.");
+    param_reader.declare_entry("filter_time","1",Patterns::Integer(1),"Only print every n-th time step, set to one for every timestep");
+    param_reader.declare_entry("filter_iteration","1",Patterns::Integer(1),"Only print every n-th iteration, set to one for every iteration. Use filter_time for timestep filtering");
     param_reader.declare_entry("eps_machine_set_by_user","0.0",Patterns::Double(),"Correlation of the output and machine precision");
     param_reader.declare_entry("number of patches", "0", Patterns::Integer(0));
     
@@ -81,7 +83,6 @@ namespace DOpE
       {
         Solver_ = SI;
       }
-
     /* Note that smaller printlevel prints less*/
     /*******************************************
         priority 0 : Things that must be printed always and can't be turned of.
@@ -104,6 +105,8 @@ namespace DOpE
     debug_             = param_reader.get_bool("debug");
     number_precision_  = param_reader.get_integer("number_precision");
     functional_number_precision_ = param_reader.get_integer("functional_number_precision");
+    filter_time_ =  param_reader.get_integer("filter_time");
+    filter_iterations_ =  param_reader.get_integer("filter_iteration");
     user_eps_machine_  = param_reader.get_double("eps_machine_set_by_user");
     n_patches_ = param_reader.get_integer("number of patches");
     
@@ -173,7 +176,17 @@ namespace DOpE
             log_<<"LOG: Allowing IterationCounter `"<<type<<"' for filenames!"<<std::endl;
             pos = ReorderAndInsert(type);
           }
-        iteration_number_[pos->second] = iteration;
+	if(type=="Time")
+	{
+	  // note ceil(a/b) = a/b + (a%b !=0) for integers a and b
+	  //set iteration value to ceil(a/b)*b hence all intermediate iterations
+	  //are overwritten.
+	  iteration_number_[pos->second] = (iteration/filter_time_ + (iteration%filter_time_ != 0))*filter_time_;
+	}
+        else
+	{
+	  iteration_number_[pos->second] = (iteration/filter_iterations_+ (iteration%filter_iterations_ != 0))*filter_iterations_;
+	}
       }
   }
 
@@ -441,25 +454,10 @@ namespace DOpE
   {
     if (AllowWrite(name))
       {
-        //Construct Name
-        std::stringstream outfile;
-        outfile<<results_basedir_;
-        outfile<<results_outdir_;
-        outfile<<name;
-        outfile<<GetPostIndex();
-        if (dof_type == "control")
-          outfile<<control_ending_;
+	if (dof_type == "control")
+          GetReducedProblem()->WriteToFile(q,name,ConstructOutputName(name,dof_type),dof_type,control_ending_);
         else if (dof_type == "state")
-          outfile<<ending_;
-        else
-          abort();
-
-        Write("Writing ["+outfile.str()+"]",4);
-
-        if (dof_type == "control")
-          GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,control_ending_);
-        else if (dof_type == "state")
-          GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,ending_);
+          GetReducedProblem()->WriteToFile(q,name,ConstructOutputName(name,dof_type),dof_type,ending_);
       }
   }
 
@@ -479,19 +477,7 @@ namespace DOpE
   {
     if (AllowWrite(name))
       {
-        //Construct Name
-        std::stringstream outfile;
-        outfile<<results_basedir_;
-        outfile<<results_outdir_;
-        outfile<<name;
-        outfile<<GetPostIndex();
-        if (dof_type == "time")
-          outfile<<".gpl";
-        else
-          abort();
-        Write("Writing ["+outfile.str()+"]",4);
-
-        GetReducedProblem()->WriteToFile(q,outfile.str());
+	GetReducedProblem()->WriteToFile(q,ConstructOutputName(name,dof_type));
       }
   }
 
@@ -546,26 +532,13 @@ namespace DOpE
   {
     if (AllowWrite(name))
       {
-        //Construct Name
-        std::stringstream outfile;
-        outfile << results_basedir_;
-        outfile << results_outdir_;
-        outfile << name;
-        outfile << GetPostIndex();
         if (dof_type == "control")
-          outfile << control_ending_;
-        else if (dof_type == "state")
-          outfile << ending_;
-        else
-          abort();
-
-        Write("Writing [" + outfile.str() + "]", 4);
-
-        if (dof_type == "control")
-          GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
+          GetReducedProblem()->WriteToFileElementwise(q, name,
+						      ConstructOutputName(name,dof_type),
                                                       dof_type, control_ending_,n_patches_);
         else if (dof_type == "state")
-          GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
+          GetReducedProblem()->WriteToFileElementwise(q, name, 
+						      ConstructOutputName(name,dof_type),
                                                       dof_type, ending_,n_patches_);
       }
   }
@@ -577,24 +550,26 @@ namespace DOpE
   DOpEOutputHandler<VECTOR>::ConstructOutputName(std::string name,
                                                  std::string dof_type)
   {
-    std::string outfile;
+    std::stringstream outfile;
     if (AllowWrite(name))
       {
         //Construct Name
-        outfile += results_basedir_;
-        outfile += results_outdir_;
-        outfile += name;
-        outfile += GetPostIndex();
+        outfile << results_basedir_;
+        outfile << results_outdir_;
+        outfile << name;
+        outfile << GetPostIndex();
         if (dof_type == "control")
-          outfile += control_ending_;
+          outfile << control_ending_;
         else if (dof_type == "state")
-          outfile += ending_;
+          outfile << ending_;
+	else if (dof_type == "time")
+          outfile<<".gpl";
         else
           abort();
 
-        Write("Writing [" + outfile + "]", 4);
+        Write("Writing [" + outfile.str() + "]", 4);
       }
-    return outfile;
+    return outfile.str();
   }
 
 

@@ -29,7 +29,7 @@ we need to include
 \end{verbatim}
 To initialize the different meshes, we prepare a vector
 \texttt{Rothe\_time\_to\_dof} which stores for each time-point a number
-indicating the numer of the DoF-Handler to be used. In this example,
+indicating the number of the DoF-Handler to be used. In this example,
 we want a different DoF-Handler at each time-point, hence we
 initialize
 \begin{verbatim}
@@ -57,11 +57,11 @@ for(unsigned int i = 0; i < Rothe_time_to_dof.size(); i++)
 Similarly, one could use one DoF-Handler for the first 10 time-points
 and then a different DoF-Handler by appropriately assigning values to \texttt{Rothe\_time\_to\_dof}.
 
-The only other change to other programms is that now the refinement
+The only other change to other programs is that now the refinement
 needs to be given error indicators for each time-point, i.e., a
 \verb|std::vector<dealii::Vector<float> >| where the outer
 \texttt{std::vector} needs to have the size \texttt{n\_time\_steps+1}.
-This is immeadiately given by the
+This is immediately given by the
 \texttt{ResidualErrorContainer}. Hence, for refinement of the
 different spatial meshes, we just have to call
 \begin{verbatim}

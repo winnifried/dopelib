@@ -369,7 +369,7 @@ namespace DOpE
       RSAProb.setNeG ( neG );
 #endif
       
-      DOpEWrapper::SNOPT_A_userfunc_interface = boost::bind<int>(boost::mem_fn(&Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::rsa_func_),boost::ref(*this),_1);
+      DOpEWrapper::SNOPT_A_userfunc_interface = boost::bind<int>(boost::mem_fn(&Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::rsa_func_),boost::ref(*this),boost::placeholders::_1);
 #if SNOPT_VERSION_GTE(7,6)
 #else
       RSAProb.setUserFun ( DOpEWrapper::SNOPT_A_userfunc_ );
@@ -466,11 +466,10 @@ namespace DOpE
       {
         this->GetExceptionHandler()->HandleCriticalException(e,"Reduced_SnoptAlgorithm::Solve");
       }
-
     out << "**************************************************\n";
     out << "*        Stopping Solution Using SNOPT           *\n";
     out << "*             Relative reduction in cost functional:"<<std::scientific << std::setw(11) << this->GetOutputHandler()->ZeroTolerance((cost-cost_start)/fabs(0.5*(cost_start+cost)),1.0) <<"          *\n";
-    out.precision(7);
+    this->GetOutputHandler()->InitOut(out);
     out << "*             Final value: "<<cost<<"                                     *\n";
     out << "**************************************************";
     this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);

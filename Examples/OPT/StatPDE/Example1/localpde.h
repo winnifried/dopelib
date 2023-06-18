@@ -30,11 +30,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalPDE(double alpha) :
@@ -44,7 +52,7 @@ public:
   }
 
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
+    ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale,
                   double /*scale_ico*/)
   {
@@ -78,7 +86,7 @@ public:
   }
 
   void
-  ElementEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
+		    ElementEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
                     dealii::Vector<double> &local_vector, double scale,
                     double /*scale_ico*/)
   {
@@ -105,7 +113,7 @@ public:
   }
 
   void
-  ElementEquation_UT(const EDC<DH, VECTOR, dealdim> &edc,
+      ElementEquation_UT(const EDC<DH, VECTOR, dealdim> &edc,
                      dealii::Vector<double> &local_vector, double scale,
                      double /*scale_ico*/)
   {
@@ -131,7 +139,7 @@ public:
   }
 
   void
-  ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> &edc,
+ ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> &edc,
                       dealii::Vector<double> &local_vector, double scale,
                       double /*scale_ico*/)
   {
@@ -157,7 +165,7 @@ public:
   }
 
   void
-  ElementEquation_Q(const EDC<DH, VECTOR, dealdim> &edc,
+     ElementEquation_Q(const EDC<DH, VECTOR, dealdim> &edc,
                     dealii::Vector<double> &local_vector, double scale,
                     double /*scale_ico*/)
   {
@@ -184,7 +192,7 @@ public:
   }
 
   void
-  ElementEquation_QT(const EDC<DH, VECTOR, dealdim> &edc,
+      ElementEquation_QT(const EDC<DH, VECTOR, dealdim> &edc,
                      dealii::Vector<double> &local_vector, double scale,
                      double /*scale_ico*/)
   {
@@ -212,7 +220,7 @@ public:
   }
 
   void
-  ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> &edc,
+ ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> &edc,
                       dealii::Vector<double> &local_vector, double scale,
                       double /*scale_ico*/)
   {
@@ -239,7 +247,7 @@ public:
   }
 
   void
-  ElementEquation_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+     ElementEquation_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                      dealii::Vector<double> &/*local_vector*/, double /*scale*/,
                      double /*scale_ico*/)
   {
@@ -349,7 +357,7 @@ public:
   }
 
   void
-  ControlElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
+ ControlElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
                        FullMatrix<double> &local_matrix, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
@@ -373,8 +381,8 @@ public:
 
   /******************************************************/
   void
-  StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
-                        const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+     StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
+			   const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
   {
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -410,8 +418,8 @@ public:
       }
   }
   void
-  StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> &edc,
-                          const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+     StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> &edc,
+			     const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
   {
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -444,8 +452,8 @@ public:
       }
   }
   void
-  StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim> &edc,
-                                const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+      StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim> &edc,
+				    const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
   {
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -510,8 +518,8 @@ public:
   }
 
   void
-  StrongFaceResidual_U(const FDC<DH, VECTOR, dealdim> &fdc,
-                       const FDC<DH, VECTOR, dealdim> &fdc_w, double &sum, double scale)
+   StrongFaceResidual_U(const FDC<DH, VECTOR, dealdim> &fdc,
+			const FDC<DH, VECTOR, dealdim> &fdc_w, double &sum, double scale)
   {
     unsigned int n_q_points = fdc.GetNQPoints();
     ugrads_.resize(n_q_points, Tensor<1, dealdim>());

@@ -13,7 +13,7 @@ As code verification, we evaluate two different types of functionals.
 First a point functional measuring the $x$-velocity and 
 a flux functional 
 \[
-\int_{\Gamma_{out}} v\cdot n \, ds,
+\int_{\Gamma_{out}} v\cdot n \, \mathrm{d}s,
 \]
 on the outflow boundary. Both a described in the 
 \texttt{functionals.h} file as described below.
@@ -42,7 +42,7 @@ The most important part of each example is the \textit{main.cc} file which conta
 \index{functional evaluation}
 Here, we declare all quantities of interest (functionals), e.g. point values, drag, lift, mean values of certain quantities over a subdomain etc. \\
 Each of these functionals is declared as a class of its own, but in \texttt{DOpElib} all classes are derived from a so-called \texttt{FunctionalInterface} class.\\
-As already mentioned previsously, in the current example we declare functionals for point values of the velocity and for the flux at the outflow boundary of the channel.\index{functional!point value} \index{functional!boundary flux}\\
+As already mentioned previously, in the current example we declare functionals for point values of the velocity and for the flux at the outflow boundary of the channel.\index{functional!point value} \index{functional!boundary flux}\\
 
 \vspace{0.2cm}
 

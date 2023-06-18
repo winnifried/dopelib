@@ -32,11 +32,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
 
@@ -48,9 +56,10 @@ public:
 
   //Initial Values from Control
   void
-  Init_ElementRhs(const dealii::Function<dealdim> * /*init_values*/,
-                  const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale)
+  Init_ElementRhs(
+    const dealii::Function<dealdim> * /*init_values*/,
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -71,8 +80,9 @@ public:
   }
   //Initial Values from Control
   void
-  Init_ElementRhs_Q(const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector, double scale)
+  Init_ElementRhs_Q(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -93,8 +103,9 @@ public:
   }
   //Initial Values from Control
   void
-  Init_ElementRhs_QT(const EDC<DH, VECTOR, dealdim> &edc,
-                     dealii::Vector<double> &local_vector, double scale)
+  Init_ElementRhs_QT(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -115,8 +126,9 @@ public:
   }
   //Initial Values from Control
   void
-  Init_ElementRhs_QTT(const EDC<DH, VECTOR, dealdim> &edc,
-                      dealii::Vector<double> &local_vector, double scale)
+  Init_ElementRhs_QTT(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -138,9 +150,10 @@ public:
 
   // Domain values for elements
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double /*scale_ico*/)
+  ElementEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
 
@@ -172,9 +185,10 @@ public:
   }
   // Domain values for elements
   void
-  ElementEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector, double scale,
-                    double /*scale_ico*/)
+  ElementEquation_U(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "adjoint");
 
@@ -208,9 +222,10 @@ public:
   }
   // Domain values for elements
   void
-  ElementEquation_UT(const EDC<DH, VECTOR, dealdim> &edc,
-                     dealii::Vector<double> &local_vector, double scale,
-                     double /*scale_ico*/)
+  ElementEquation_UT(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "tangent");
 
@@ -244,9 +259,10 @@ public:
   }
   // Domain values for elements
   void
-  ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> &edc,
-                      dealii::Vector<double> &local_vector, double scale,
-                      double /*scale_ico*/)
+  ElementEquation_UTT(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "adjoint_hessian");
 
@@ -280,9 +296,10 @@ public:
   }
   // Domain values for elements
   void
-  ElementEquation_UU(const EDC<DH, VECTOR, dealdim> &edc,
-                     dealii::Vector<double> &local_vector, double scale,
-                     double /*scale_ico*/)
+  ElementEquation_UU(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "adjoint_hessian");
 
@@ -311,45 +328,52 @@ public:
   }
 
   void
-  ElementEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                    double /*scale_ico*/)
+  ElementEquation_Q(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
   {
   }
   void
-  ElementEquation_QT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                     double /*scale_ico*/)
+  ElementEquation_QT(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
   {
   }
   void
-  ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                      double /*scale_ico*/)
+  ElementEquation_QTT(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
   {
   }
   void
-  ElementEquation_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                     double /*scale_ico*/)
+  ElementEquation_QU(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
   {
   }
   void
-  ElementEquation_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                     double /*scale_ico*/)
+  ElementEquation_UQ(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
   {
   }
   void
-  ElementEquation_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                     double /*scale_ico*/)
+  ElementEquation_QQ(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
   {
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale, double)
+  ElementMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix, double scale, double)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -391,8 +415,9 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
-                       dealii::Vector<double> &local_vector, double scale)
+  ElementRightHandSide(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     assert(this->problem_type_ == "state");
 
@@ -417,8 +442,9 @@ public:
   }
 
   void
-  ElementTimeEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                      dealii::Vector<double> &local_vector, double scale)
+  ElementTimeEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     assert(this->problem_type_ == "state");
 
@@ -443,8 +469,9 @@ public:
   }
 
   void
-  ElementTimeEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
-                        dealii::Vector<double> &local_vector, double scale)
+  ElementTimeEquation_U(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     assert(this->problem_type_ == "adjoint");
 
@@ -469,8 +496,9 @@ public:
   }
 
   void
-  ElementTimeEquation_UT(const EDC<DH, VECTOR, dealdim> &edc,
-                         dealii::Vector<double> &local_vector, double scale)
+  ElementTimeEquation_UT(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     assert(this->problem_type_ == "tangent");
 
@@ -495,8 +523,9 @@ public:
   }
 
   void
-  ElementTimeEquation_UTT(const EDC<DH, VECTOR, dealdim> &edc,
-                          dealii::Vector<double> &local_vector, double scale)
+  ElementTimeEquation_UTT(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     assert(this->problem_type_ == "adjoint_hessian");
 
@@ -522,7 +551,8 @@ public:
   }
 
   void
-  ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementTimeMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
                     FullMatrix<double> &local_matrix)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -550,39 +580,46 @@ public:
   }
 
   void
-  ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                              dealii::Vector<double> &, double)
+  ElementTimeEquationExplicit(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &, double)
   {
   }
   void
-  ElementTimeEquationExplicit_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                dealii::Vector<double> &, double)
+  ElementTimeEquationExplicit_U(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &, double)
   {
   }
   void
-  ElementTimeEquationExplicit_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                 dealii::Vector<double> &, double)
+  ElementTimeEquationExplicit_UT(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &, double)
   {
   }
   void
-  ElementTimeEquationExplicit_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                  dealii::Vector<double> &, double)
+  ElementTimeEquationExplicit_UTT(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &, double)
   {
   }
   void
-  ElementTimeEquationExplicit_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                 dealii::Vector<double> &, double)
+  ElementTimeEquationExplicit_UU(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &, double)
   {
   }
   void
-  ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                            FullMatrix<double> &/*local_matrix*/)
+  ElementTimeMatrixExplicit(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    FullMatrix<double> &/*local_matrix*/)
   {
   }
 
   void
-  ControlElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                         dealii::Vector<double> &local_vector, double scale)
+  ControlElementEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -608,8 +645,9 @@ public:
   }
 
   void
-  ControlElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                       FullMatrix<double> &local_matrix, double scale)
+  ControlElementMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();

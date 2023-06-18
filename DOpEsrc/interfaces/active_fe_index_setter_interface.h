@@ -44,7 +44,20 @@ namespace DOpE
     virtual
     ~ActiveFEIndexSetterInterface() {}
 
-    /**
+#if DEAL_II_VERSION_GTE(9,3,0)
+   /**
+     * Gets an iterator to a element and sets an active FE index
+     * on this element for the state variable. This function is
+     * used after the first grid generation.
+     *
+     */
+    virtual void
+    SetActiveFEIndexState(
+      typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
+    {
+    }
+#else  
+   /**
      * Gets an iterator to a element and sets an active FE index
      * on this element for the state variable. This function is
      * used after the first grid generation.
@@ -64,17 +77,22 @@ namespace DOpE
       typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
     {
     }
+#endif 
 
-    /**
-     * Just for compatibility issues.
+#if DEAL_II_VERSION_GTE(9,3,0)
+   /**
+     * Gets an iterator to a element and sets an active FE index
+     * on this element for the control variable. This function is
+     * used after the first grid generation.
+     *
      */
-//    virtual void
-//    SetActiveFEIndexState(
-//        typename dealii::MGDoFHandler<dealdim>::active_cell_iterator&) const
-//    {
-//    }
-
-    /**
+    virtual void
+    SetActiveFEIndexControl(
+      typename dealii::DoFHandler<dopedim>::active_cell_iterator &) const
+    {
+    }
+#else
+   /**
      * Gets an iterator to a element and sets an active FE index
      * on this element for the control variable. This function is
      * used after the first grid generation.
@@ -94,15 +112,7 @@ namespace DOpE
       typename dealii::DoFHandler<dopedim>::active_cell_iterator &) const
     {
     }
-
-    /**
-     * Just for compatibility issues.
-     */
-//    virtual void
-//    SetActiveFEIndexControl(
-//        typename dealii::MGDoFHandler<dopedim>::active_cell_iterator&) const
-//    {
-//    }
+#endif
 
   protected:
   };
@@ -116,7 +126,18 @@ namespace DOpE
     virtual
     ~ActiveFEIndexSetterInterface() {}
 
-    /*
+#if DEAL_II_VERSION_GTE(9,3,0)
+    /**
+     * Gets an iterator to a element and sets an active FE index
+     * on this element for the state variable. This function is
+     * used after the first grid generation.
+     *
+     */
+    virtual void SetActiveFEIndexState(typename dealii::DoFHandler<dealdim>::active_cell_iterator) const
+    {
+    }
+#else
+    /**
      * Gets an iterator to a element and sets an active FE index
      * on this element for the state variable. This function is
      * used after the first grid generation.
@@ -132,13 +153,7 @@ namespace DOpE
     virtual void SetActiveFEIndexState(typename dealii::DoFHandler<dealdim>::active_cell_iterator) const
     {
     }
-
-    /**
-      * Just for compatibility issues.
-      */
-//    virtual void SetActiveFEIndexState(typename dealii::MGDoFHandler<dealdim>::active_cell_iterator) const
-//    {
-//    }
+#endif
 
   protected:
   };

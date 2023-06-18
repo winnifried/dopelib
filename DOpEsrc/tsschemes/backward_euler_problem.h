@@ -41,21 +41,17 @@ namespace DOpE
    *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    * @tparam <dealdim>          The dimension of the state variable.
    * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
-   * @tparam <DH>               The type of the DoFHandler in use
-   *                            (to be more precise: The type of the dealii-DoFhandler which forms
-   *                            the base class of the DOpEWrapper::DoFHandler in use.)
    *
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-           int dealdim, template<int, int> class FE = dealii::FESystem,
-           template<int, int> class DH = dealii::DoFHandler>
+           int dealdim, template<int, int> class FE = dealii::FESystem>
   class BackwardEulerProblem : public PrimalTSBase<OPTPROBLEM,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
+    SPARSITYPATTERN, VECTOR, dealdim, FE>
   {
   public:
     BackwardEulerProblem(OPTPROBLEM &OP) :
       PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
-      FE, DH>(OP)
+      FE>(OP)
     {
       initial_problem_ = NULL;
     }
@@ -85,14 +81,14 @@ namespace DOpE
     */
     InitialProblem<
     BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                         dealdim, FE, DH>, VECTOR, dealdim>&
+                         dealdim, FE>, VECTOR, dealdim>&
                          GetInitialProblem()
     {
       if (initial_problem_ == NULL)
         {
           initial_problem_ = new InitialProblem<
           BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-          dealdim, FE, DH>, VECTOR, dealdim>(*this);
+          dealdim, FE>, VECTOR, dealdim>(*this);
         }
       return *initial_problem_;
     }
@@ -106,7 +102,7 @@ namespace DOpE
     * have their own description.
     */
     BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-    dealdim, FE, DH> &
+    dealdim, FE> &
     GetBaseProblem()
     {
       return *this;
@@ -555,7 +551,7 @@ namespace DOpE
   private:
     InitialProblem<
     BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                         dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
+                         dealdim, FE>, VECTOR, dealdim> * initial_problem_;
   };
 }
 

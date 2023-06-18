@@ -30,6 +30,15 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
@@ -37,6 +46,7 @@ template<
   dopedim>
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
   LocalFunctional(double alpha)
@@ -45,7 +55,7 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -79,7 +89,7 @@ public:
   }
 
   void
-  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
+ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
                  dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -111,7 +121,7 @@ public:
   }
 
   void
-  ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
+	       ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
                  dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
@@ -138,7 +148,7 @@ public:
   }
 
   void
-  ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
+     ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -162,13 +172,13 @@ public:
   }
 
   void
-  ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+   ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }

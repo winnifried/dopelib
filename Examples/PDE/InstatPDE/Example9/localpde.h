@@ -30,11 +30,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
 
@@ -46,9 +54,10 @@ public:
 
   // Domain values for elements
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double /*scale_ico*/)
+  ElementEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double /*scale_ico*/)
   {
     assert(this->problem_type_ == "state");
 
@@ -79,8 +88,9 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale, double)
+  ElementMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix, double scale, double)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -108,26 +118,29 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> & /*local_vector*/,
-                       double /*scale*/)
+  ElementRightHandSide(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> & /*local_vector*/,
+    double /*scale*/)
   {
     assert(this->problem_type_ == "state");
 
   }
 
   void
-  ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                              dealii::Vector<double> & /*local_vector*/,
-                              double /*scale*/)
+  ElementTimeEquationExplicit(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> & /*local_vector*/,
+    double /*scale*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                      dealii::Vector<double> &local_vector,
-                      double scale)
+  ElementTimeEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector,
+    double scale)
   {
     assert(this->problem_type_ == "state");
 
@@ -153,15 +166,17 @@ public:
   }
 
   void
-  ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                            FullMatrix<double> &/*local_matrix*/)
+  ElementTimeMatrixExplicit(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    FullMatrix<double> &/*local_matrix*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                    FullMatrix<double> &local_matrix)
+  ElementTimeMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix)
   {
     assert(this->problem_type_ == "state");
 
@@ -192,8 +207,10 @@ public:
   }
   ///Error Estimation
   void
-  StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
-                        const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+  StrongElementResidual(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    const EDC<DH, VECTOR, dealdim> &edc_w,
+    double &sum, double scale)
   {
     if(this->GetTime() > 0.)
     {
@@ -232,8 +249,8 @@ public:
   }
     void
   StrongFaceResidual(
-    const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc,
-    const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc_w,
     double &sum, double scale)
   {
     if(this->GetTime() > 0.)
@@ -272,8 +289,8 @@ public:
 
   void
   StrongBoundaryResidual(
-    const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &/*fdc*/,
-    const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &/*fdc_w*/,
+    const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+    const FDC<DH, VECTOR, dealdim> &/*fdc_w*/,
     double &sum, double /*scale*/)
   {
     sum = 0;
@@ -283,7 +300,7 @@ public:
   GetUpdateFlags() const
   {
     if (this->problem_type_ == "state" || this->problem_type_=="error_evaluation")
-      return update_values | update_gradients | update_quadrature_points;
+      return update_values | update_gradients | update_quadrature_points | update_hessians;
     else
       throw DOpEException("Unknown Problem Type " + this->problem_type_,
                           "LocalPDE::GetUpdateFlags");

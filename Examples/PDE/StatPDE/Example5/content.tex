@@ -43,7 +43,7 @@ First, additionally to all the things one has to do when just solving the equati
 higher_order_dwrc.h
 \end{verbatim}
 
-As we approximate the so called 'weights' $z-\phi_h$ in the error representation by a patchwise higher order interpolation of $z_h$ (the computed dual solution), we have to enforce patch-wise refinement of the grid by giving the flag 
+As we approximate the so called 'weights' $z-\phi_h$ in the error representation by a patch-wise higher order interpolation of $z_h$ (the computed dual solution), we have to enforce patch-wise refinement of the grid by giving the flag 
 \begin{verbatim}
 Triangulation<2>::MeshSmoothing::patch_level_1
 \end{verbatim}
@@ -95,7 +95,7 @@ To build this, we need the following:
 \item {\verb idc_high }: A \texttt{IntegratorDataContainer} in which we put some (face)quadrature formulas for the evaluation of the error Identity.
 \item A string which indicates how we want to store the weight-vectors (here: { \verb "fullmem" }).
 \item \texttt{pr}: The \texttt{ParameterReader} which we have already defined.
-\item A enum of type \texttt{EETerms} that tells the container, which error terms we want to compute (primal error indicators vs. dual error indicators, see \cite{BR03}).  
+\item An enum of type \texttt{EETerms} that tells the container, which error terms we want to compute (primal error indicators vs. dual error indicators, see \cite{BR03}).  
 \end{itemize}
 The last preparation step is now to initialize the \texttt{DWRDataContainer} with the problem in use:
 \begin{verbatim}

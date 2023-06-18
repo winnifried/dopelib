@@ -422,14 +422,27 @@ namespace DOpE
       inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
     private:
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,false,BlockVector<double>,0,1> STH_;
+      typedef MethodOfLines_StateSpaceTimeHandler<FESystem,false,SparsityPattern,Vector<double>,1> PIPE_STH_;
+#else
       typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> STH_;
       typedef MethodOfLines_StateSpaceTimeHandler<FESystem,DoFHandler,SparsityPattern,Vector<double>,1> PIPE_STH_;
-
+#endif
+      
+#if DEAL_II_VERSION_GTE(9,3,0)
+      template<bool DH>
+#else
       template<template<int, int> class DH>
+#endif
       void
       InterpolateBoundaryValues(
         const DOpEWrapper::Mapping<dim, DH> &mapping,
-        const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#if DEAL_II_VERSION_GTE(9,3,0)
+	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
         const std::vector<bool> &comp_mask) const;
@@ -697,17 +710,10 @@ namespace DOpE
 //            {
 //              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
 //                {
-//#if DEAL_II_VERSION_GTE(8,3,0)
 //                  if (element[0]->face(face)->at_boundary()
 //                      &&
 //                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
 //                            element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-//#else
-//                  if (element[0]->face(face)->at_boundary()
-//                      &&
-//                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-//                            element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-//#endif
 //                    {
 //                      fdc.ReInit(face);
 //                      pde.BoundaryEquation(fdc,local_vector, 1., 1.);
@@ -859,17 +865,10 @@ namespace DOpE
 //          {
 //            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
 //              {
-//#if DEAL_II_VERSION_GTE(8,3,0)
 //                if (element[0]->face(face)->at_boundary()
 //                    &&
 //                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
 //                          element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-//#else
-//                if (element[0]->face(face)->at_boundary()
-//                    &&
-//                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-//                          element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-//#endif
 //                  {
 //                    fdc.ReInit(face);
 //                    pde.BoundaryRhs(fdc,local_vector,1.);
@@ -1114,17 +1113,10 @@ namespace DOpE
 //            {
 //              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
 //                {
-//#if DEAL_II_VERSION_GTE(8,3,0)
 //                  if (element[0]->face(face)->at_boundary()
 //                      &&
 //                      (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
 //                            element[0]->face(face)->boundary_id()) != boundary_functional_colors.end()))
-//#else
-//                  if (element[0]->face(face)->at_boundary()
-//                      &&
-//                      (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-//                            element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
-//#endif
 //                    {
 //                      fdc.ReInit(face);
 //                      ret += pde.BoundaryFunctional(fdc);
@@ -2023,11 +2015,19 @@ namespace DOpE
 
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
              int dim>
-    template<template<int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+      template<bool DH>
+#else
+      template<template<int, int> class DH>
+#endif
     void
     Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-      const DOpEWrapper::Mapping<dim, DH> &mapping,
-      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+	const DOpEWrapper::Mapping<dim, DH> &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
       const unsigned int color, const dealii::Function<dim> &function,
       std::map<unsigned int, SCALAR> &boundary_values,
       const std::vector<bool> &comp_mask) const
@@ -2139,17 +2139,10 @@ namespace DOpE
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
                   if (element[0]->face(face)->at_boundary()
                       &&
                       (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
                             element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                     {
                       fdc.ReInit(face);
                       pde.BoundaryEquation(fdc,local_vector, 1., 1.);
@@ -2312,17 +2305,10 @@ namespace DOpE
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
                   if (element[0]->face(face)->at_boundary()
                       &&
                       (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
                             element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
-#else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-#endif
                     {
                       fdc.ReInit(face);
                       pde.BoundaryMatrix(fdc, local_matrix);

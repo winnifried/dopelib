@@ -30,6 +30,15 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
@@ -37,6 +46,7 @@ template<
   dopedim>
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
 
@@ -61,7 +71,8 @@ public:
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+  BoundaryValue(
+    const FDC<DH, VECTOR, dealdim> &fdc)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -145,8 +156,9 @@ public:
   }
 
   void
-  BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &fdc,
-                  dealii::Vector<double> &local_vector, double scale)
+  BoundaryValue_U(
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -188,8 +200,9 @@ public:
   }
 
   void
-  BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &fdc,
-                  dealii::Vector<double> &local_vector, double scale)
+  BoundaryValue_Q(
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -222,8 +235,9 @@ public:
   }
 
   void
-  BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &fdc,
-                   dealii::Vector<double> &local_vector, double scale)
+  BoundaryValue_QQ(
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -262,68 +276,78 @@ public:
   }
 
   void
-  BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryValue_UU(
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryValue_QU(
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryValue_UQ(
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> & /*edc*/)
+  ElementValue(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/)
   {
     return 0.;
   }
 
   void
-  ElementValue_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_U(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  ElementValue_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_Q(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  ElementValue_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_UU(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_QU(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_UQ(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementValue_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_QQ(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }

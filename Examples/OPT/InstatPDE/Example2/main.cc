@@ -70,9 +70,14 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -81,16 +86,16 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
 
 typedef OptProblemContainer<FUNC,
-        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
@@ -100,10 +105,10 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 
 //typedef InstatOptProblemContainer<TSP,DTSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, CDIM,DIM> OP;
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
         VECTOR, DIM, DIM> OP;
 #undef TSP
 #undef DTSP
@@ -161,10 +166,10 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   //Define the localPDE and the functionals we are interested in.
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LFunc;
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
-  LocalPointFunctional2<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF2;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LFunc;
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
+  LocalPointFunctional2<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF2;
 
   //Time grid of [0,1] with 20 subintervalls as initial discretization.
   dealii::Triangulation<1> times;
@@ -176,7 +181,8 @@ main(int argc, char **argv)
                                  DIM> DOFH(triangulation, control_fe, state_fe, times,
                                            DOpEtypes::VectorAction::stationary);
 
-  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
+  
+  NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
 
@@ -223,6 +229,6 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

@@ -1,0 +1,34 @@
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 27/08/2018
+Using dealii Version: 9.5
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 6
+		Total   DoFs: 322008
+		Minimal DoFs: 53668
+		Maximal DoFs: 53668
+	*  d = 0.0625 h = 0.0883883		*
+	**************************************************
+
+LOG: Allowing IterationCounter `Time' for filenames!
+	TCV too large. Writing to file instead: 
+	BulkEnergy too large. Writing to file instead: 
+	CrackEnergy too large. Writing to file instead: 
+
+	*******************************************************************************************************************************************************************************************************
+	*******************************************************************************************************************************************************************************************************
+	*  d_0 = 0.0625 h_0 = 0.0883883 with (2) geometric prerefines
+	* epsilon_0 = 0.353553
+	* E = 1 nu = 0.2
+	
+	Iter |       d      |      eps     |     TCV      |        LFB   |      LFC     |
+	-----+--------------+--------------+--------------+--------------+--------------+
+	0    |       0.0625 |     0.353553 |   0.00818098 |  4.06467e-06 |      2.89463
+	
+

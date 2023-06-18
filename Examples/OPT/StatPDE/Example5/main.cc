@@ -56,7 +56,12 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -67,16 +72,16 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 //We use the multimesh variants of Element- and FaceDataContainer
-#define CDC Multimesh_ElementDataContainer
+#define EDC Multimesh_ElementDataContainer
 #define FDC Multimesh_FaceDataContainer
 
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
@@ -141,17 +146,17 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   COSTFUNCTIONAL LFunc;
   //AuxFunctionals
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
-  LocalMeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
-  QErrorFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> QEF;
-  UErrorFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> UEF;
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
+  LocalMeanValueFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
+  QErrorFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> QEF;
+  UErrorFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> UEF;
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
-  NoConstraints<Multimesh_ElementDataContainer, Multimesh_FaceDataContainer,
+  NoConstraints<EDC, FDC,
                 DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
@@ -273,6 +278,6 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

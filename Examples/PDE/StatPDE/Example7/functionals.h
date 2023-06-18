@@ -35,21 +35,36 @@ using namespace DOpE;
 /**
  * This functional evaluates the x-displacement in (90,0).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_1 : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDisp_1 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 
 public:
 
   double
-  PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
-             const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-             const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
-             const std::map<std::string, const VECTOR *> &domain_values)
+  PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dealdim> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
+    const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
     Point<2> p1(90, 0);
 
@@ -82,21 +97,36 @@ public:
  * This functional evaluates the y-displacement in (100,100).
  */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_2 : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDisp_2 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 
 public:
 
   double
-  PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
-             const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-             const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-             const std::map<std::string, const VECTOR *> &domain_values)
+  PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dealdim> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
     Point<dealdim> p1(100, 100);
 
@@ -128,20 +158,34 @@ public:
 /**
  * This functional evaluates the x-displacement in (0,100).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_3 : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDisp_3 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 
 public:
 
   double
   PointValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::DoFHandler<dealdim> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+#else
     const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+#endif
     const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values)
   {
@@ -175,19 +219,28 @@ public:
 /**
  * This functional evaluates the yy-stress in (90,0).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalDomainFunctionalStress : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalDomainFunctionalStress : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 private:
 
 public:
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -254,12 +307,21 @@ public:
 /**
  * This functional evaluates they-displacement-integral on upper boundary.
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<EDC, FDC,
+  DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dealdim>
+#endif
 {
 public:
 
@@ -271,7 +333,7 @@ public:
 
   // compute y-displacement-integral
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

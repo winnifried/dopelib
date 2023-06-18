@@ -55,8 +55,12 @@ namespace DOpE
    * If we change distribution from global to local, this should
    * get changed.
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim = dopedim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
-  class UserDefinedDoFConstraints
+#endif
+    class UserDefinedDoFConstraints
   {
   public:
     UserDefinedDoFConstraints()
@@ -69,14 +73,22 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void
     MakeStateDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
+#else
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
+#endif
       dealii::AffineConstraints<double> &dof_constraints) const;
 
     virtual void
     MakeControlDoFConstraints(
-      const DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler,
-      dealii::AffineConstraints<double> &dof_constraints) const;
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &dof_handler,
 #else
+      const DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler,
+#endif
+      dealii::AffineConstraints<double> &dof_constraints) const;
+#else //older than 9.1.1.
     virtual void
     MakeStateDoFConstraints(
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
@@ -88,57 +100,89 @@ namespace DOpE
       dealii::ConstraintMatrix &dof_constraints) const;
 #endif
     void
-    RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH> &mapping)
+  RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH> &mapping)
     {
       mapping_ = &mapping;
     }
 
   protected:
-    const DOpEWrapper::Mapping<dealdim, DH> &
-    GetMapping() const
+  const DOpEWrapper::Mapping<dealdim, DH> &
+  GetMapping() const
     {
       return *mapping_;
     }
   private:
-    const DOpEWrapper::Mapping<dealdim, DH> *mapping_ = nullptr;
+  const DOpEWrapper::Mapping<dealdim, DH> *mapping_ = nullptr;
   };
 
 #if DEAL_II_VERSION_GTE(9,1,1)
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim>
-  void
-  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
-    const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
-    dealii::AffineConstraints<double> & /*dof_constraints*/) const
+#endif
+    void
+    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> & /*dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
+#endif
+      dealii::AffineConstraints<double> & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeStateDoFConstraints");
   }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim>
+#endif
   void
-  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
-    dealii::AffineConstraints<double> & /*dof_constraints*/) const
+    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+#endif
+      dealii::AffineConstraints<double> & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeControlDoFConstraints");
   }
 #else
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim>
+#endif
   void
-  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
-    const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
-    dealii::ConstraintMatrix & /*dof_constraints*/) const
+    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> & /*dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
+#endif
+      dealii::ConstraintMatrix & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeStateDoFConstraints");
   }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim>
-  void
-  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
-    dealii::ConstraintMatrix & /*dof_constraints*/) const
+#endif
+    void
+    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
+#else
+      const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+#endif
+      dealii::ConstraintMatrix & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeControlDoFConstraints");

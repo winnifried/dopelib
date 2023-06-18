@@ -1,4 +1,4 @@
-``#!/bin/bash
+#!/bin/bash
 failed=0
 #The individual Tests:
 function RUN_TEST() {

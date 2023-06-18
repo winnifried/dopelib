@@ -67,7 +67,11 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
 #define FE FESystem
 
 const static int DIM = 2;
@@ -80,16 +84,16 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
@@ -144,12 +148,12 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   RNA::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   COSTFUNCTIONAL::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
     pr);
   pr.read_parameters(paramfile);
 
@@ -186,21 +190,21 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
   COSTFUNCTIONAL LFunc(pr);
 
-  LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFP;
-  LocalPointFunctionalDeflectionX<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDX;
-  LocalPointFunctionalDeflectionY<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDY;
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFD(
+  LocalPointFunctionalPressure<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFP;
+  LocalPointFunctionalDeflectionX<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDX;
+  LocalPointFunctionalDeflectionY<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDY;
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFD(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
     pr);
 
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
+  NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
 
@@ -306,6 +310,6 @@ main(int argc, char **argv)
 
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

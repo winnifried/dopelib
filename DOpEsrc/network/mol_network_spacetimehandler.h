@@ -59,9 +59,15 @@ namespace DOpE
      *
      * Networks only work with dealdim = 1
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<template <int, int> class FE, bool DH,
+             typename VECTOR, int dopedim, int dealdim>
+      class MethodOfLines_Network_SpaceTimeHandler : public SpaceTimeHandler<FE, DH, dealii::BlockSparsityPattern, VECTOR, dopedim, dealdim>
+#else
     template<template <int, int> class FE, template<int, int> class DH,
              typename VECTOR, int dopedim, int dealdim>
     class MethodOfLines_Network_SpaceTimeHandler : public SpaceTimeHandler<FE, DH, dealii::BlockSparsityPattern, VECTOR, dopedim, dealdim>
+#endif
     {
     public:
       /**
@@ -81,8 +87,8 @@ namespace DOpE
                                              DOpEtypes::VectorAction type,
                                              NetworkInterface &network,
                                              bool flux_pattern = false) :
-        SpaceTimeHandler<FE, DH, dealii::BlockSparsityPattern,  VECTOR, dopedim, dealdim>(type),
-        control_dof_handler_(*triangulation[0]),
+      SpaceTimeHandler<FE, DH, dealii::BlockSparsityPattern,  VECTOR, dopedim, dealdim>(type),
+	control_dof_handler_(*triangulation[0]),
         control_fe_(&control_fe),
         network_(network)
       {
@@ -150,7 +156,7 @@ namespace DOpE
         sth_s_.resize(GetNPipes(),NULL);
         for (unsigned int i = 0; i < sth_s_.size(); i++)
           {
-            sth_s_[i] = new MethodOfLines_StateSpaceTimeHandler<FE,DH,dealii::SparsityPattern,dealii::Vector<double>,dealdim>
+	    sth_s_[i] = new MethodOfLines_StateSpaceTimeHandler<FE,DH,dealii::SparsityPattern,dealii::Vector<double>,dealdim>
             (*triangulation[i],state_fe,flux_pattern);
           }
         selected_pipe_=sth_s_.size();
@@ -212,7 +218,11 @@ namespace DOpE
       /**
        * Implementation of virtual function in SpaceTimeHandler
        */
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> &
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> &
+#endif
       GetControlDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         //There is only one control mesh, hence always return this
@@ -221,7 +231,11 @@ namespace DOpE
       /**
        * Implementation of virtual function in SpaceTimeHandler
        */
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> &
+#else
       const DOpEWrapper::DoFHandler<dealdim, DH> &
+#endif
       GetStateDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         if (selected_pipe_ < sth_s_.size())
@@ -732,7 +746,11 @@ namespace DOpE
        * ReInit.
        */
       void
-      SetSparsityMaker(SparsityMaker<DH, dealdim> &sparsity_maker)
+#if DEAL_II_VERSION_GTE(9,3,0)
+	SetSparsityMaker(SparsityMaker<dealdim> &sparsity_maker)
+#else
+	SetSparsityMaker(SparsityMaker<DH, dealdim> &sparsity_maker)
+#endif
       {
         for (unsigned int i = 0; i < sth_s_.size(); i++)
           {
@@ -855,7 +873,11 @@ namespace DOpE
           }
       }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+      DOpEWrapper::DoFHandler<dopedim> control_dof_handler_;
+#else
       DOpEWrapper::DoFHandler<dopedim, DH> control_dof_handler_;
+#endif
       const dealii::SmartPointer<const FE<dealdim, dealdim> > control_fe_;
 
       std::vector<unsigned int> control_dofs_per_block_;
@@ -881,10 +903,17 @@ namespace DOpE
     /**
      * The default case - is not implemented
      */
-    template<template <int, int> class FE, template<int, int> class DH,
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<template <int, int> class FE, bool DH,
              typename VECTOR, int dopedim, int dealdim>
     void
     MethodOfLines_Network_SpaceTimeHandler<FE,DH,VECTOR,dopedim,dealdim>::ComputeControlSparsityPattern(
+#else
+  template<template <int, int> class FE, template<int, int> class DH,
+             typename VECTOR, int dopedim, int dealdim>
+    void
+    MethodOfLines_Network_SpaceTimeHandler<FE,DH,VECTOR,dopedim,dealdim>::ComputeControlSparsityPattern(
+#endif
       dealii::BlockSparsityPattern &/*sparsity*/) const
     {
       abort();
@@ -894,7 +923,29 @@ namespace DOpE
     /**
      * The only reasonable case for networks - BlockVectors with 'normal' Sparsity pattern
      */
-    template<>
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<>
+  void
+  MethodOfLines_Network_SpaceTimeHandler<dealii::FESystem,
+  false,
+  dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+    dealii::BlockSparsityPattern &/*sparsity*/) const
+  {
+    abort();
+  }
+  
+  template<>
+  void
+  MethodOfLines_Network_SpaceTimeHandler<dealii::FESystem,
+  true,
+  dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+    dealii::BlockSparsityPattern &/*sparsity*/) const
+  {
+    abort();
+  }
+
+#else
+  template<>
     void
     MethodOfLines_Network_SpaceTimeHandler<dealii::FESystem,
                                            dealii::DoFHandler,
@@ -903,7 +954,7 @@ namespace DOpE
     {
       abort();
     }
-
+#endif
 
   }
 }

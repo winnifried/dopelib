@@ -32,6 +32,13 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template <template <template <int, int> class DH, typename VECTOR, int dealdim>
           class EDC,
           template <template <int, int> class DH, typename VECTOR, int dealdim>
@@ -40,6 +47,7 @@ template <template <template <int, int> class DH, typename VECTOR, int dealdim>
           typename VECTOR,
           int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalPDE()
@@ -47,10 +55,11 @@ public:
   {}
 
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &        local_vector,
-                  double                          scale,
-                  double /*scale_ico*/) override
+  ElementEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &        local_vector,
+    double                          scale,
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
 
@@ -93,10 +102,11 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &            local_matrix,
-                double                          scale,
-                double /*scale_ico*/) override
+  ElementMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &            local_matrix,
+    double                          scale,
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -128,9 +138,10 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
-                       dealii::Vector<double> &        local_vector,
-                       double                          scale) override
+  ElementRightHandSide(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &        local_vector,
+    double                          scale) override
   {
     assert(this->problem_type_ == "state");
 

@@ -24,6 +24,7 @@
 #ifndef POINTCONSTRAINTSMAKER_H_
 #define POINTCONSTRAINTSMAKER_H_
 
+#include <basic/sth_internals.h>
 #include <include/userdefineddofconstraints.h>
 
 namespace DOpE
@@ -38,13 +39,18 @@ namespace DOpE
    *                     indicate which components should be constraint at the point.
    *                     Both vetors are assumed to be in identical order!
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim = dopedim>
+    class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
   class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
-  {
+#endif
+    {
   public:
     PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
                      const std::vector<std::vector<bool> > &c_comps)
-      : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
+  : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
     {
       if (c_points_.size() != c_comps_.size())
         throw DOpEException("Number of Entries not matching!","PointConstraints::PointConstraints");
@@ -54,7 +60,11 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void MakeStateDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
+#else
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
+#endif
       dealii::AffineConstraints<double> &constraint_matrix) const;
 #else
     virtual void MakeStateDoFConstraints(
@@ -65,7 +75,11 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void
     MakeControlDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
+#else
       const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+#endif
       dealii::AffineConstraints<double> & /*dof_constraints*/) const {}
 #else
     virtual void
@@ -78,6 +92,14 @@ namespace DOpE
     const std::vector<Point<dealdim> > &c_points_;
     const std::vector<std::vector<bool> > &c_comps_;
   };
+  
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dopedim, int dealdim>
+    void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+    const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
+    dealii::AffineConstraints<double> &constraint_matrix) const
+
+#else
 #if DEAL_II_VERSION_GTE(9,1,1)
   template<template<int, int> class DH, int dopedim, int dealdim>
   void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
@@ -89,29 +111,21 @@ namespace DOpE
     const DOpEWrapper::DoFHandler<dealdim, DH > &dof_handler,
     dealii::ConstraintMatrix &constraint_matrix) const
 #endif
+#endif
   {
     std::vector<dealii::Point<dealdim> > support_points(dof_handler.n_dofs());
     STHInternals::MapDoFsToSupportPoints(this->GetMapping(),dof_handler, support_points);
     for (unsigned int i = 0; i < c_points_.size(); i++)
       {
-        std::vector<bool> selected_dofs(dof_handler.n_dofs());
 #if DEAL_II_VERSION_GTE(9,2,0)
+	IndexSet selected_dofs(dof_handler.n_dofs());
         dealii::ComponentMask components(c_comps_[i]);
-        DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components,selected_dofs);
+        selected_dofs = DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components);
 #else
-#if DEAL_II_VERSION_GTE(8,0,0)
         //Newer dealii Versions have changed the interface
+        std::vector<bool> selected_dofs(dof_handler.n_dofs());
         dealii::ComponentMask components(c_comps_[i]);
         DoFTools::extract_dofs(dof_handler,components,selected_dofs);
-#else //Less than 8.0
-#if DEAL_II_VERSION_GTE(7,3,0)
-        //Newer dealii Versions have changed the interface
-        dealii::ComponentMask components(c_comps_[i]);
-        DoFTools::extract_dofs(dof_handler,components,selected_dofs);
-#else //Less than 7.3
-        DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
-#endif
-#endif
 #endif
 
         bool found = false;
@@ -120,7 +134,11 @@ namespace DOpE
             if (c_points_[i].distance(support_points[p]) <= sqrt(support_points[p].square()+c_points_[i].square())*std::numeric_limits<double>::epsilon())
               {
                 found = true;
+#if DEAL_II_VERSION_GTE(9,2,0)
+                if (selected_dofs.is_element(p))
+#else
                 if (selected_dofs[p] == true)
+#endif
                   {
                     constraint_matrix.add_line(p);
                   }

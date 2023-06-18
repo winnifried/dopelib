@@ -33,12 +33,21 @@ namespace DOpE
    * A template for an arbitrary Constraints.
    * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
   template<
+    template<bool DH, typename VECTOR, int dealdim> class EDC,
+    template<bool DH, typename VECTOR, int dealdim> class FDC,
+    bool DH, typename VECTOR, int dopedim, int dealdim>
+    class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
+    dopedim, dealdim>
+#else
+    template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
   class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
     dopedim, dealdim>
+#endif
   {
   public:
     LocalConstraint(LocalConstraintAccessor &CA) :
@@ -72,7 +81,8 @@ namespace DOpE
     }
 
     double
-    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+    ElementValue(
+      const EDC<DH, VECTOR, dealdim> &edc)
     {
       if (this->GetProblemType() == "global_constraints"
           && this->GetProblemTypeNum() == 0)
@@ -100,14 +110,16 @@ namespace DOpE
     }
 
     void
-    ElementValue_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    ElementValue_U(
+      const EDC<DH, VECTOR, dealdim> & /*edc*/,
                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
 
     void
-    ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
-                   dealii::Vector<double> &local_vector, double scale)
+    ElementValue_Q(
+      const EDC<DH, VECTOR, dealdim> &edc,
+      dealii::Vector<double> &local_vector, double scale)
     {
       if (this->GetProblemType() == "global_constraint_gradient"
           && this->GetProblemTypeNum() == 0)
@@ -134,23 +146,27 @@ namespace DOpE
     }
 
     void
-    ElementValue_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    ElementValue_UU(
+      const EDC<DH, VECTOR, dealdim> & /*edc*/,
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
     void
-    ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    ElementValue_QU(
+      const EDC<DH, VECTOR, dealdim> & /*edc*/,
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
     void
-    ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    ElementValue_UQ(
+      const EDC<DH, VECTOR, dealdim> & /*edc*/,
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
     void
-    ElementValue_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    ElementValue_QQ(
+      const EDC<DH, VECTOR, dealdim> & /*edc*/,
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
     }
 

@@ -71,9 +71,14 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -82,7 +87,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDELaplace<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
         VECTOR, DIM> IDC;
@@ -93,7 +98,8 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
-typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
+
+typedef HigherOrderDWRContainer<STH, IDC, EDC<DOFHANDLER, VECTOR, DIM>,
         FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
 typedef L2ResidualErrorContainer<STH, VECTOR, DIM> L2_RESC;
 typedef H1ResidualErrorContainer<STH, VECTOR, DIM> H1_RESC;
@@ -194,8 +200,8 @@ main(int argc, char **argv)
   //**************************************************************************
 
   //Functionals*************************************************
-  LocalFaceFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
-  LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalFaceFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
+  LocalPDELaplace<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -300,6 +306,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

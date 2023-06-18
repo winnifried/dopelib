@@ -25,13 +25,157 @@
 #define MAPPING_WRAPPER_H_
 
 #include <deal.II/dofs/dof_handler.h>
-//#include <deal.II/multigrid/mg_dof_handler.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
+#endif
 #include <deal.II/hp/mapping_collection.h>
 #include <deal.II/fe/mapping_q.h>
 
 namespace DOpEWrapper
 {
+
+#if DEAL_II_VERSION_GTE(9,3,0)
+  /**
+   * @class Mapping
+   *
+   * A Wrapper that is used to automatically use the
+   * dealii::MappingCollection for hp::DoFHandlers and
+   * dealii::Mapping for all other DoFHandler objects
+   * and simultaneously beeing of the same type to
+   * allow us the use of DoFHandler as a template.
+   *
+   * @template dim              Dimension of the dofhandler.
+   * @template hp               true for hp, false for non hp dofhandler
+   */
+  template<int dim, bool hp>
+    class Mapping 
+  {
+  private:
+    Mapping()
+    {
+    }
+
+    ~Mapping()
+    {
+    }
+
+  };
+
+  /************************************************************************************/
+
+  template<int dim>
+  class Mapping<dim, false> : public dealii::MappingQ<dim>
+  {
+  public:
+    Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
+              false) :
+      dealii::MappingQ<dim>(p
+#if ! DEAL_II_VERSION_GTE(9,4,0)
+                            , use_mapping_q_on_all_elements
+#endif
+                            )
+    {
+      (void)use_mapping_q_on_all_elements;
+    }
+
+    Mapping(const dealii::MappingQ<dim> &mapping) :
+      dealii::MappingQ<dim>(mapping)
+    {
+    }
+
+    ~Mapping()
+    {
+    }
+
+    /**
+     * This function is needed for a workaround
+     * linked to the hp-version (i.e. deal.ii is not
+     * consistent at the current stage using Mappings
+     * or MappingCollections in the hp-framework).
+     */
+    const typename dealii::MappingQ<dim> &
+    operator[](const unsigned int /*index*/) const
+    {
+      //assert(index == 0);
+      return *this;
+    }
+
+  };
+
+
+  /************************************************************************************/
+
+  /**
+   * WARNING: At the current stage, it is note recommended to use MappingCollections
+   * with more than one mapping, as deal.ii is not consinstent in using
+   * Collections!
+   */
+  template<int dim>
+  class Mapping<dim, true> : public dealii::hp::MappingCollection<
+    dim>
+  {
+  public:
+    Mapping() :
+      dealii::hp::MappingCollection<dim>()
+    {
+    }
+
+    ~Mapping()
+    {
+    }
+
+    Mapping(const dealii::Mapping<dim> &mapping)
+      : dealii::hp::MappingCollection<dim>(mapping)
+    {
+    }
+    Mapping(const dealii::hp::MappingCollection<dim> &mapping_collection) :
+      dealii::hp::MappingCollection<dim>(mapping_collection)
+    {
+    }
+  };
+
+  /************************************************************************************/
+
+  template<int dim, bool hp>
+  struct StaticMappingQ1
+  {
+  };
+
+  template<int dim>
+  struct StaticMappingQ1<dim, false>
+  {
+  public:
+    static Mapping<dim, false> mapping_q1;
+  };
+
+  template<int dim>
+  struct StaticMappingQ1<dim, true>
+  {
+  public:
+    static Mapping<dim, true> mapping_q1;
+  };
+
+  /************************************************************************************/
+  
+  template<int dim, bool hp>
+  struct StaticMappingQ2
+  {
+  };
+  
+  template<int dim>
+  struct StaticMappingQ2<dim, false>
+  {
+  public:
+    static Mapping<dim, false> mapping_q2;
+  };
+  
+  template<int dim>
+  struct StaticMappingQ2<dim, true>
+  {
+  public:
+    static Mapping<dim, true> mapping_q2;
+  };
+#else
   /**
    * @class Mapping
    *
@@ -66,8 +210,13 @@ namespace DOpEWrapper
   public:
     Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
               false) :
-      dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
+      dealii::MappingQ<dim>(p
+#if ! DEAL_II_VERSION_GTE(9,4,0)
+                            , use_mapping_q_on_all_elements
+#endif
+                            )
     {
+      (void)use_mapping_q_on_all_elements;
     }
 
     Mapping(const dealii::MappingQ<dim> &mapping) :
@@ -94,41 +243,6 @@ namespace DOpEWrapper
 
   };
 
-//  /************************************************************************************/
-//
-//  template<int dim>
-//    class Mapping<dim, dealii::MGDoFHandler > : public dealii::MappingQ<dim>
-//    {
-//      public:
-//        Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
-//            false)
-//            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
-//        {
-//        }
-//
-//        Mapping(const dealii::MappingQ<dim> &mapping)
-//            : dealii::MappingQ<dim>(mapping)
-//        {
-//        }
-//
-//      ~Mapping()
-//  {
-//  }
-//
-//        /**
-//         * This function is needed for a workaround
-//         * linked to the hp-version (i.e. deal.ii is not
-//         * consistent at the current stage using Mappings
-//         * or MappingCollections in the hp-framework).
-//         */
-//        const typename dealii::MappingQ<dim> &
-//        operator[](const unsigned int index) const
-//        {
-//          assert(index == 0);
-//          return *this;
-//        }
-//
-//    };
 
   /************************************************************************************/
 
@@ -202,19 +316,13 @@ namespace DOpEWrapper
       static Mapping<dim, dealii::DoFHandler> mapping_q2;
     };
 
-  // template<int dim>
-  //    struct StaticMappingQ1<dim, dealii::MGDoFHandler >
-  //    {
-  //      public:
-  //        static Mapping<dim, dealii::MGDoFHandler > mapping_q1;
-  //    };
-
     template<int dim>
     struct StaticMappingQ2<dim, dealii::hp::DoFHandler>
     {
     public:
       static Mapping<dim, dealii::hp::DoFHandler> mapping_q2;
     };
+#endif //Older than 9.3.0
 }
 
 #endif /* MAPPING_WRAPPER_H_ */

@@ -26,8 +26,9 @@
 
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/dofs/dof_handler.h>
+#if ! DEAL_II_VERSION_GTE(9,3,0)
 #include <deal.II/hp/dof_handler.h>
-//#include <deal.II/multigrid/mg_dof_handler.h>
+#endif
 
 namespace DOpEWrapper
 {
@@ -47,25 +48,32 @@ namespace DOpEWrapper
    * @tparam <DH>               The dealii DofHandler type used.
    */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,4,0)
+  template <int dim, typename VECTOR>
+    class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR,dim>
+#else	//Deal Version in [9.3.0,9.4.0)
+  template <int dim, typename VECTOR>
+    class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
+#endif
+#else  //Deal Version < 9.3.0
   template <int dim, typename VECTOR, template<int, int> class DH = dealii::DoFHandler>
-  class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
+    class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
+#endif
   {
   public:
-    SolutionTransfer(const DH<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >(dof)
-    {
+#if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,4,0)
+    SolutionTransfer(const dealii::DoFHandler<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR,dim>(dof)
+#else	//Deal Version in [9.3.0,9.4.0)
+    SolutionTransfer(const dealii::DoFHandler<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
+#endif
+#else  //Deal Version < 9.3.0
+  SolutionTransfer(const DH<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >(dof)
+#endif
+  {
     }
   };
-
-// //Special treatment of MGDoFHandler...
-// template <int dim, typename VECTOR>
-//   class SolutionTransfer<dim,VECTOR,MGDoFHandler> : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
-//   {
-//    public:
-//     SolutionTransfer(const MGDoFHandler<dim,dim> &dof) :
-//          dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
-//    {
-//    }
-//   };
 
 }//Endof Namespace DOpEWrapper
 #endif

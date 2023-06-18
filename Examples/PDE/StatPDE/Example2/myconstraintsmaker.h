@@ -30,12 +30,21 @@ namespace DOpE
   /**
    * This class implements the periodicity-constraints.
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dim>
+    class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
+#else
   template<template<int, int> class DH, int dim>
-  class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
+    class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
+#endif    
   {
   public:
     PeriodicityConstraints() :
-      UserDefinedDoFConstraints<DH, dim>()
+#if DEAL_II_VERSION_GTE(9,3,0)
+    UserDefinedDoFConstraints<false, dim>()
+#else
+    UserDefinedDoFConstraints<DH, dim>()
+#endif    
     {
     }
     static void
@@ -44,7 +53,11 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void
     MakeStateDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dim> &dof_handler,
+#else
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+#endif
       dealii::AffineConstraints<double> &constraint_matrix) const;
 #else
     virtual void
@@ -78,9 +91,15 @@ namespace DOpE
 
   };
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dim>
+    void
+    PeriodicityConstraints<DH, dim>::declare_params(
+#else
   template<template<int, int> class DH, int dim>
-  void
+    void
   PeriodicityConstraints<DH, dim>::declare_params(
+#endif
     ParameterReader &param_reader)
   {
   }
@@ -92,10 +111,20 @@ namespace DOpE
    *
    */
 #if DEAL_II_VERSION_GTE(9,1,1)
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool DH, int dim>
+  void
+    PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+#else
   template<template<int, int> class DH, int dim>
   void
-  PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
-    const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+    PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+#endif
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::DoFHandler<dim> &dof_handler,
+#else
+      const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+#endif
     dealii::AffineConstraints<double> &constraint_matrix) const
 #else
   template<template<int, int> class DH, int dim>
@@ -142,18 +171,15 @@ namespace DOpE
       dof_locations[d].resize(n_components);
 
     //first loop over all elements...
-    for (typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator element =
+    for (auto element =
            dof_handler.begin_active(); element != dof_handler.end(); ++element)
       {
         //...then loop over all faces.
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             int boundary_indicator = element->face(face)->boundary_id();
-#else
-            int boundary_indicator = element->face(face)->boundary_indicator();
-#endif
+
             // Proceed only if the boundary indicator is lower than 4 and
             //if face is on a boundary and the corresponding boundary indicator is even
             if (element->face(face)->at_boundary() && boundary_indicator < 4
@@ -189,17 +215,13 @@ namespace DOpE
         couplings.at(i).resize(n_dofs);
       }
     dealii::Point<dim> actual_dof_location;
-    for (typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator element =
+    for (auto element =
            dof_handler.begin_active(); element != dof_handler.end(); ++element)
       {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
-#if DEAL_II_VERSION_GTE(8,3,0)
             int boundary_indicator = element->face(face)->boundary_id();
-#else
-            int boundary_indicator = element->face(face)->boundary_indicator();
-#endif
             //Now loop over the remaining dofs, i.e. the ones with an odd boundary_indicator
             if (element->face(face)->at_boundary() && boundary_indicator < 4
                 && boundary_indicator % 2 == 1)

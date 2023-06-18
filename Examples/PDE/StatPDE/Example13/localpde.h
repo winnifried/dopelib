@@ -33,11 +33,19 @@ using namespace dealii;
 using namespace DOpE;
 
 /***********************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalPDE() :
@@ -46,9 +54,10 @@ public:
   }
 
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double/*scale_ico*/)
+  ElementEquation(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale,
+    double/*scale_ico*/)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -88,7 +97,7 @@ public:
 
   void
   BoundaryEquation(
-    const FaceDataContainer<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -144,7 +153,7 @@ public:
 
   void
   FaceEquation(
-    const FaceDataContainer<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -194,7 +203,7 @@ public:
   }
   void
   InterfaceEquation(
-    const FaceDataContainer<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -246,7 +255,7 @@ public:
 
   void
   BoundaryMatrix(
-    const FaceDataContainer<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -290,7 +299,7 @@ public:
   }
   void
   FaceMatrix(
-    const FaceDataContainer<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -338,7 +347,7 @@ public:
 
   void
   InterfaceMatrix(
-    const FaceDataContainer<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -386,9 +395,10 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale,
-                double/*scale_ico*/)
+  ElementMatrix(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    FullMatrix<double> &local_matrix, double scale,
+    double/*scale_ico*/)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -425,22 +435,23 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementRightHandSide(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
   FaceRightHandSide(
-    const FaceDataContainer<DH, VECTOR, dealdim> & /*fdc*/,
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
   BoundaryRightHandSide(
-    const FaceDataContainer<DH, VECTOR, dealdim> & /*fdc*/,
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }

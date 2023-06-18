@@ -30,14 +30,24 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
 class LocalFunctional : public FunctionalInterface<
-  Multimesh_ElementDataContainer, Multimesh_FaceDataContainer, DH, VECTOR,
+  EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
   LocalFunctional()
@@ -46,7 +56,8 @@ public:
   }
 
   double
-  ElementValue(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> &edc)
+  ElementValue(
+    const EDC<DH, VECTOR, dealdim> &edc)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -81,8 +92,9 @@ public:
   }
 
   void
-  ElementValue_U(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> &edc,
-                 dealii::Vector<double> &local_vector, double scale)
+  ElementValue_U(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -113,8 +125,9 @@ public:
   }
 
   void
-  ElementValue_Q(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> &edc,
-                 dealii::Vector<double> &local_vector, double scale)
+  ElementValue_Q(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -140,8 +153,9 @@ public:
   }
 
   void
-  ElementValue_UU(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale)
+  ElementValue_UU(
+    const EDC<DH, VECTOR, dealdim> &edc,
+    dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -164,19 +178,22 @@ public:
   }
 
   void
-  ElementValue_QU(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> & /*edc*/,
+  ElementValue_QU(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  {
+  }
+
+  void
+  ElementValue_UQ(
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementValue_UQ(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
-  {
-  }
-
-  void
-  ElementValue_QQ(const Multimesh_ElementDataContainer<DH, VECTOR, dealdim> &edc,
+  ElementValue_QQ(
+    const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale)
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =

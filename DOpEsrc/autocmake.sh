@@ -34,6 +34,25 @@ else
       #remove files 
 	    rm -r autobuild
 	fi
+	if [ -f ../lib/cmake/DOpElib/DOpElibConfig.cmake ]
+	then
+	    rm ../lib/cmake/DOpElib/DOpElibConfig.cmake
+	fi
+	for i in `seq 0 3`
+	do
+	    for j in `seq 3`
+	    do
+		if [ -f ../lib/${i}d/${j}d/libdope.a ]
+		then
+		    rm ../lib/${i}d/${j}d/libdope.a
+		fi
+		if [ -f ../lib/${i}d/${j}d/libdope.g.a ]
+		then
+		    rm ../lib/${i}d/${j}d/libdope.g.a
+		fi
+	    done
+	done
+    
 	exit 0
     else
 	if [ $1 == "clean" ]

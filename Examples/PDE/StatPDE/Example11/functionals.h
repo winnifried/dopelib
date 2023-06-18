@@ -30,12 +30,21 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dealdim>
+  class BoundaryFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class BoundaryFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dealdim>
+#endif
 {
 public:
   BoundaryFunctional()
@@ -43,7 +52,7 @@ public:
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   {
     unsigned int n_q_points = fdc.GetNQPoints();
 

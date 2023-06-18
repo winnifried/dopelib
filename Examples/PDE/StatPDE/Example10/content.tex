@@ -80,11 +80,11 @@ As before, we build up the element and boundary equations and matrices in the \t
 In the \textit{main.cc} file, we have to include additional header files from the deal.II library concerning error estimation and grid refinement. Further on, everything is pretty much the same as in the last example, but we have to use the \texttt{SetBoundaryFunctionalColors} function of the \texttt{PDEProblemContainer} class to be able to compute drag and lift in the respective functional classes in \textit{functionals.h}.\\
 The main innovation in contrast to the preceding examples is the refinement of the grid combined with a simple error estimator given in the deal.II \texttt{KellyErrorEstimator} class. If we look at the output of our program, everything is computed several times (once on each refinement level). Furthermore, we see that several Newton steps are needed on each refinement level; this is due to the nonlinearity of the current problem.
 
-Finally this example demonstrates how to use the direct solvers provided by trilinos. 
+Finally this example demonstrates how to use the direct solvers provided by Trilinos. 
 This is done by the line 
 \begin{verbatim}
 typedef TrilinosDirectLinearSolverWithMatrix
          <SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 \end{verbatim}
-interfacing to the trilinos library. The selection of the precise direct solver can 
+interfacing to the Trilinos library. The selection of the precise direct solver can 
 be done using the parameter file.

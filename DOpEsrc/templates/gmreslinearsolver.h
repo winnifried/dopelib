@@ -99,7 +99,7 @@ namespace DOpE
   private:
     SPARSITYPATTERN sparsity_pattern_;
     MATRIX matrix_;
-
+    PRECONDITIONER *precondition_;
     double linear_global_tol_, linear_tol_ = 0;
     int  linear_maxiter_, no_tmp_vectors_;
   };
@@ -124,6 +124,7 @@ namespace DOpE
     linear_global_tol_ = param_reader.get_double ("linear_global_tol");
     linear_maxiter_    = param_reader.get_integer ("linear_maxiter");
     no_tmp_vectors_    = param_reader.get_integer ("no_tmp_vectors");
+    precondition_ = NULL;
   }
 
   /******************************************************/
@@ -131,6 +132,8 @@ namespace DOpE
   template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   GMRESLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::~GMRESLinearSolverWithMatrix()
   {
+    if(precondition_ != NULL)
+      delete precondition_;
   }
 
   /******************************************************/
@@ -142,6 +145,9 @@ namespace DOpE
     matrix_.clear();
     pde.ComputeSparsityPattern(sparsity_pattern_);
     matrix_.reinit(sparsity_pattern_);
+    if(precondition_ != NULL)
+      delete precondition_;
+    precondition_ = new PRECONDITIONER;
   }
 
   /******************************************************/
@@ -157,6 +163,7 @@ namespace DOpE
     if (force_matrix_build)
       {
         integr.ComputeMatrix (pde,matrix_);
+	precondition_->initialize(matrix_);
       }
 
 
@@ -169,10 +176,8 @@ namespace DOpE
 
 
     dealii::SolverGMRES<VECTOR> gmres (solver_control, vector_memory, gmres_data);
-    PRECONDITIONER precondition;
-    precondition.initialize(matrix_);
     gmres.solve (matrix_, solution, rhs,
-                 precondition);
+                 *precondition_);
 
     pde.GetDoFConstraints().distribute(solution);
   }

@@ -1,1 +1,17 @@
-SET(DOpE "${DOPELIB_ROOT_DIR}" )
+SET(DOpE "@DOPELIB_ROOT_DIR@" )
+
+FIND_PACKAGE(deal.II @DEAL_II_VERSION@ QUIET
+  HINTS @deal.II_DIR@ @DEAL_II_DIR@ 
+  )
+IF(NOT ${deal.II_FOUND})
+  MESSAGE(FATAL_ERROR "\n"
+    "*** Could not locate deal.II. ***\n\n"
+    "DOpElib was configured with deal.II at @deal.II_DIR@ \n"
+    "but no deal.II was found at that location.\n"
+    )
+ELSE()
+  MESSAGE(STATUS "Found deal.II at ${DEAL_II_PATH}.")
+ENDIF()
+
+DEAL_II_INITIALIZE_CACHED_VARIABLES()
+

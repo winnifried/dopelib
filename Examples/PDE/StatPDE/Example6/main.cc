@@ -51,9 +51,14 @@ using namespace DOpE;
 
 const static int DIM = 3;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -75,10 +80,10 @@ typedef DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX> PRECONDITIONERIDENTITY
 typedef DOpEWrapper::PreconditionSSOR_Wrapper<MATRIX> PRECONDITIONERSSOR;
 
 //Define problemcontainer for block and non block
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>,
         SimpleDirichletData<VECTORBLOCK, DIM>, SPARSITYPATTERNBLOCK, VECTORBLOCK,
         DIM> OPBLOCK;
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 
 //Define integratordatacontainer for block and non block vectors
@@ -162,11 +167,11 @@ main(int argc, char **argv)
   IDCBLOCK idcblock(quadrature_formula, face_quadrature_formula);
 
   //Set up the pde and the pointfunctional for block-vectors and non block vectors
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPDE1;
-  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPFX1;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPDE1;
+  LocalPointFunctionalX<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPFX1;
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE2;
-  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX2;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE2;
+  LocalPointFunctionalX<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX2;
 
   //Define the different STH and OP objects
   STHBLOCK DOFH1(triangulation, state_fe);
@@ -339,6 +344,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

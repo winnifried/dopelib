@@ -428,14 +428,22 @@ protected:
   inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
 private:
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <bool DH>
+#else
   template <template <int, int> class DH>
-  void
-  InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
-                            const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
-                            const unsigned int color,
-                            const dealii::Function<dim> &function,
-                            std::map<unsigned int, SCALAR> &boundary_values,
-                            const std::vector<bool> &comp_mask) const;
+#endif
+    void
+    InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+     			      const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+     			      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
+			      const unsigned int color,
+			      const dealii::Function<dim> &function,
+			      std::map<unsigned int, SCALAR> &boundary_values,
+			      const std::vector<bool> &comp_mask) const;
 
   //        /**
   //         * Given a vector of active element iterators and a facenumber,
@@ -579,7 +587,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
         }
       }
 
-      if (need_faces) {
+      if (need_faces && !need_interfaces) {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -604,7 +612,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
             // refined than/as the actual element. We have to distinguish here
             // only between the case 1 and the other two, because these will be
             // distinguished in in the FaceDataContainer.
-
+	    //TODO: Check if neighbor(face) exists!
             if (element[0]->neighbor(face)->has_children()) {
               // first: neighbour is finer
 
@@ -615,7 +623,11 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
                 // actual element and then the facevalues of the neighbours
                 fdc.ReInit(face, subface_no);
                 fdc.ReInitNbr();
-
+		if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		  pde.FaceRhs(fdc, local_vector, -1.);
+		}
                 pde.InterfaceEquation(fdc, local_vector, 1., 1.);
               }
             } else {
@@ -624,10 +636,23 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
               fdc.ReInit(face);
               fdc.ReInitNbr();
+	      if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		  pde.FaceRhs(fdc, local_vector, -1.);
+		}
               pde.InterfaceEquation(fdc, local_vector, 1., 1.);
             }
 
           } // endif atinterface
+	  else if(need_faces)
+	  {
+	    if (element[0]->neighbor_index(face) != -1) {
+	      fdc.ReInit(face);
+	      pde.FaceEquation(fdc, local_vector, 1., 1.);
+	      pde.FaceRhs(fdc, local_vector, -1.);
+	    }
+	  }
         }   // endfor faces
       }     // endif need_interfaces
 
@@ -738,7 +763,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
           }
         }
       }
-      if (need_faces) {
+      if (need_faces && !need_interfaces) {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -774,7 +799,10 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
                 // actual element and then the facevalues of the neighbours
                 fdc.ReInit(face, subface_no);
                 fdc.ReInitNbr();
-
+		if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		}
                 pde.InterfaceEquation(fdc, local_vector, 1., 1.);
               }
             } else {
@@ -783,9 +811,20 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
 
               fdc.ReInit(face);
               fdc.ReInitNbr();
-              pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+              if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		}
+	      pde.InterfaceEquation(fdc, local_vector, 1., 1.);
             }
           } // endif atinterface
+	  else if(need_faces)
+	  {
+	    if (element[0]->neighbor_index(face) != -1) {
+	      fdc.ReInit(face);
+	      pde.FaceEquation(fdc, local_vector, 1., 1.);
+	    }
+	  }
         }   // endfor face
       }     // endif need_interfaces
       // LocalToGlobal
@@ -1002,7 +1041,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
           }
         }
       }
-      if (need_faces) {
+      if (need_faces && !need_interfaces) {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -1057,6 +1096,10 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
                 C.distribute_local_to_global(local_interface_matrix,
                                              local_dof_indices,
                                              nbr_local_dof_indices, matrix);
+		if (need_faces)
+		{
+		  pde.FaceMatrix(fdc, local_matrix);
+		}
               }
             } else {
               // either neighbor is as fine as this element or it is coarser
@@ -1081,8 +1124,19 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
               C.distribute_local_to_global(local_interface_matrix,
                                            local_dof_indices,
                                            nbr_local_dof_indices, matrix);
+	      if (need_faces)
+	      {
+		pde.FaceMatrix(fdc, local_matrix);
+	      }
             }
           } // endif atinterface
+	  else if(need_faces)
+	  {
+	    if (element[0]->neighbor_index(face) != -1) {
+	      fdc.ReInit(face);
+	      pde.FaceMatrix(fdc, local_matrix);
+	    }
+	  }
         }   // endfor face
       }     // endif need_interfaces
 
@@ -1266,6 +1320,10 @@ SCALAR Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar(
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
             fdc.ReInit(face);
+	    if(need_interfaces)
+	    {
+	      fdc.ReInitNbr();
+	    }
             ret += pde.FaceFunctional(fdc);
           }
         }
@@ -2075,11 +2133,19 @@ INTEGRATORDATACONT &Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
 template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
           int dim>
-template <template <int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <bool DH>
+#else
+  template <template <int, int> class DH>
+#endif
 void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
     InterpolateBoundaryValues(
-        const DOpEWrapper::Mapping<dim, DH> &mapping,
-        const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+	const DOpEWrapper::Mapping<dim, DH> &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
+	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
         const std::vector<bool> &comp_mask) const {

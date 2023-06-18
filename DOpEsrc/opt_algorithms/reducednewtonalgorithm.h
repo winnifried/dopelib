@@ -460,7 +460,7 @@ namespace DOpE
 
     r            = gradient;
     r_transposed = gradient_transposed;
-    d = gradient_transposed;
+    d.equ(-1,gradient_transposed);
 
     double res = Residual(r,r_transposed);//r*r_transposed;
     double firstres = res;
@@ -540,12 +540,12 @@ namespace DOpE
             this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
           }
         assert(res >= 0.);
-        out<<"\t Cg step: " <<iter<<"\t Residual: "<<sqrt(res);
+        out<<"\t Cg step: " <<iter<<"\t Residual: "<<this->GetOutputHandler()->ZeroTolerance(sqrt(res),firstres);
         this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
 
         cgbeta = res / oldres; //Fletcher-Reeves
         d*= cgbeta;
-        d.equ(-1,r_transposed);
+        d.add(-1,r_transposed);
       }
     return iter;
   }
