@@ -458,7 +458,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
-                         unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
+                         unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override
     {
       switch (type)
         {
@@ -488,7 +488,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
-                            unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
+                            unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override
     {
       switch (type)
         {
@@ -531,7 +531,7 @@ namespace DOpE
      * Returns the control dofs per Block at the current time
      */
     virtual const std::vector<unsigned int> &
-    GetControlDoFsPerBlock (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const =0;
+    GetControlDoFsPerBlock (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override=0;
 
     /******************************************************/
 
@@ -541,7 +541,7 @@ namespace DOpE
      * \\TODO
      */
     virtual const std::vector<unsigned int> &
-    GetStateDoFsPerBlock (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const =0;
+    GetStateDoFsPerBlock (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override=0;
 
     /******************************************************/
     /**
@@ -549,7 +549,7 @@ namespace DOpE
      * time which has to be set prior to calling this function using SetTime.
      */
     virtual const std::vector<unsigned int> &
-    GetConstraintDoFsPerBlock (std::string name) const = 0;
+    GetConstraintDoFsPerBlock (std::string name) const override= 0;
 
     /******************************************************/
 
@@ -702,7 +702,7 @@ namespace DOpE
                  std::string name,
                  std::string outfile,
                  std::string dof_type,
-                 std::string filetype);
+                 std::string filetype) override;
 
     void
     WriteToFileElementwise(const Vector<float> &v,
@@ -710,7 +710,7 @@ namespace DOpE
                            std::string outfile,
 			   std::string dof_type,
 			   std::string filetype,
-			   int n_patches);
+			   int n_patches) override;
     /******************************************************/
 
   protected:
@@ -745,7 +745,7 @@ namespace DOpE
       std::string name,
       std::string outfile,
       std::string dof_type,
-      std::string filetype)
+      std::string filetype) 
   {
     // TODO remove MPI_COMM_WORLD
 #ifdef DOPELIB_WITH_MPI

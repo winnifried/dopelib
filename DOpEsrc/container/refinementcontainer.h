@@ -107,7 +107,7 @@ namespace DOpE
     }
 
     virtual const dealii::Vector<float> &
-    GetLocalErrorIndicators(unsigned int timepoint = std::numeric_limits<unsigned int>::max()) const;
+    GetLocalErrorIndicators(unsigned int timepoint = std::numeric_limits<unsigned int>::max()) const override;
 
   protected:
     /**
@@ -138,7 +138,7 @@ namespace DOpE
     }
 
     virtual const dealii::Vector<float> &
-    GetLocalErrorIndicators(unsigned int timepoint) const;
+    GetLocalErrorIndicators(unsigned int timepoint) const override;
 
   protected:
     /**
@@ -180,9 +180,9 @@ namespace DOpE
     }
 
     virtual double
-    GetTopFraction() const;
+    GetTopFraction() const override;
     virtual double
-    GetBottomFraction() const;
+    GetBottomFraction() const override;
   private:
     const double top_fraction_, bottom_fraction_;
   };
@@ -215,9 +215,9 @@ namespace DOpE
     }
 
     virtual double
-    GetTopFraction() const;
+    GetTopFraction() const override;
     virtual double
-    GetBottomFraction() const;
+    GetBottomFraction() const override;
 
   private:
     const double top_fraction_, bottom_fraction_;
@@ -248,7 +248,7 @@ namespace DOpE
     }
 
     virtual double
-    GetConvergenceOrder() const;
+    GetConvergenceOrder() const override;
 
   private:
     const double convergence_order_;
@@ -272,7 +272,7 @@ namespace DOpE
     }
 
     virtual double
-    GetConvergenceOrder() const;
+    GetConvergenceOrder() const override;
 
   private:
     const double convergence_order_;

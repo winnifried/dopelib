@@ -250,7 +250,7 @@ namespace DOpE
 #endif
            unsigned int state_n_blocks,
            const std::vector<unsigned int> &state_block_component,
-           const DirichletDescriptor &DD_state)
+           const DirichletDescriptor &DD_state) override
     {
 
 #if dope_dimension > 0
@@ -437,7 +437,7 @@ namespace DOpE
 #else
     const DOpEWrapper::DoFHandler<dopedim, DH> &
 #endif
-      GetControlDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+      GetControlDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       //There is only one mesh, hence always return this
       return control_dof_handler_;
@@ -450,7 +450,7 @@ namespace DOpE
 #else
     const DOpEWrapper::DoFHandler<dealdim, DH> &
 #endif
-      GetStateDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+      GetStateDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       //There is only one mesh, hence always return this
       return state_dof_handler_;
@@ -459,7 +459,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const DOpEWrapper::Mapping<dealdim, DH> &
-    GetMapping() const
+    GetMapping() const override
     {
       return *mapping_;
     }
@@ -468,7 +468,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     unsigned int
-    GetConstraintDoFsPerBlock(std::string name, unsigned int b) const
+    GetConstraintDoFsPerBlock(std::string name, unsigned int b) const override
     {
       return (constraints_.GetDoFsPerBlock(name))[b];
     }
@@ -476,7 +476,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetControlDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    GetControlDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       return control_dofs_per_block_;
     }
@@ -484,7 +484,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetStateDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    GetStateDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       return state_dofs_per_block_;
     }
@@ -492,7 +492,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetConstraintDoFsPerBlock(std::string name) const
+    GetConstraintDoFsPerBlock(std::string name) const override
     {
       return constraints_.GetDoFsPerBlock(name);
     }
@@ -501,7 +501,7 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,1,1)
     const dealii::AffineConstraints<double> &
-    GetControlDoFConstraints() const
+    GetControlDoFConstraints() const override
     {
       return control_dof_constraints_;
     }
@@ -517,7 +517,7 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,1,1)
     const dealii::AffineConstraints<double> &
-    GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       return state_dof_constraints_;
     }
@@ -534,7 +534,7 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,1,1)
     const dealii::AffineConstraints<double> &
-    GetControlHNConstraints() const
+    GetControlHNConstraints() const override
     {
       return control_hn_constraints_;
     }
@@ -550,7 +550,7 @@ namespace DOpE
      */
 #if DEAL_II_VERSION_GTE(9,1,1)
     const dealii::AffineConstraints<double> &
-    GetStateHNConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    GetStateHNConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       return state_hn_constraints_;
     }
@@ -567,7 +567,7 @@ namespace DOpE
     virtual void
     InterpolateControl(VECTOR &result,
                        const std::vector<VECTOR *> &local_vectors, double t,
-                       const TimeIterator &it) const
+                       const TimeIterator &it) const override
     {
       assert(it.get_left() <= t);
       assert(it.get_right() >= t);
@@ -589,7 +589,7 @@ namespace DOpE
     virtual void
     InterpolateState(VECTOR &result,
                      const std::vector<VECTOR *> &local_vectors, double t,
-                     const TimeIterator &it) const
+                     const TimeIterator &it) const override
     {
       assert(it.get_left() <= t);
       assert(it.get_right() >= t);
@@ -613,7 +613,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     unsigned int
-    GetControlNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    GetControlNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       return GetControlDoFHandler().n_dofs();
     }
@@ -621,7 +621,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     unsigned int
-    GetStateNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    GetStateNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       return GetStateDoFHandler().n_dofs();
     }
@@ -629,7 +629,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     unsigned int
-    GetConstraintNDoFs(std::string name) const
+    GetConstraintNDoFs(std::string name) const override
     {
       return constraints_.n_dofs(name);
     }
@@ -637,7 +637,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     unsigned int
-    GetNGlobalConstraints() const
+    GetNGlobalConstraints() const override
     {
       return constraints_.n_dofs("global");
       //return constraints_.global_n_dofs();
@@ -646,7 +646,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
     unsigned int
-    GetNLocalConstraints() const
+    GetNLocalConstraints() const override 
     {
       //return constraints_.local_n_dofs();
       return constraints_.n_dofs("local");
@@ -656,7 +656,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
-    GetMapDoFToSupportPoints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())
+    GetMapDoFToSupportPoints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) override
     {
       support_points_.resize(GetStateNDoFs());
       DOpE::STHInternals::MapDoFsToSupportPoints(this->GetMapping(),
@@ -667,7 +667,7 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
-    const std::vector<unsigned int>* GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())
+    const std::vector<unsigned int>* GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) override
     {
       if(n_neighbour_to_vertex_.size()!=triangulation_.n_vertices())
       {
@@ -682,7 +682,7 @@ namespace DOpE
      * of the scalar product in the control space.
      */
     void
-    ComputeControlSparsityPattern(SPARSITYPATTERN &sparsity) const;
+    ComputeControlSparsityPattern(SPARSITYPATTERN &sparsity) const override;
 
     /******************************************************/
     /**
@@ -690,7 +690,7 @@ namespace DOpE
      * of the PDE.
      */
     void
-      ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+      ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       this->GetSparsityMaker()->ComputeSparsityPattern(
         this->GetStateDoFHandler(), sparsity,
@@ -703,7 +703,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const FE<dealdim, dealdim> &
-    GetFESystem (std::string name) const // TODO enum
+    GetFESystem (std::string name) const override// TODO enum
     {
       if (name == "state")
         {
@@ -862,14 +862,14 @@ namespace DOpE
      */
     void
     SpatialMeshTransferControl(const VECTOR &old_values,
-                               VECTOR &new_values) const
+                               VECTOR &new_values) const override
     {
       if (control_mesh_transfer_ != NULL)
         control_mesh_transfer_->refine_interpolate(old_values, new_values);
     }
     void
     SpatialMeshTransferState(const VECTOR &old_values,
-                             VECTOR &new_values,unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+                             VECTOR &new_values,unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const override
     {
       if (state_mesh_transfer_ != NULL)
         state_mesh_transfer_->refine_interpolate(old_values, new_values);
@@ -881,7 +881,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
 
-    virtual bool TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    virtual bool TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const override
     {
       return false;
     }
@@ -892,7 +892,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
 
-    virtual bool TemporalMeshTransferState(VECTOR & /*new_values*/ , unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    virtual bool TemporalMeshTransferState(VECTOR & /*new_values*/ , unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const override
     {
       return false;
     }
