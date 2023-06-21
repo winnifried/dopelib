@@ -716,8 +716,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		this->GetOutputHandler()->Write(gradient, "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 		this->GetOutputHandler()->Write(gradient_transposed, "Gradient_Transposed" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
-		std::stringstream out;
-
+		/*std::stringstream out;
 //		double f = 0;
 		for (unsigned int i = 0; i < uvals_.size() ; i++){
 			out<< "\t Actual eigenvalue at index " <<i<<" = " <<uvals_[i] <<"\n";
@@ -727,10 +726,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		}
 		out<< "----------------------------------------------------- " <<"\n";
 
+		this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);*/
 
-
-
-		this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
+		for (unsigned int i = 0; i < uvals_.size() ; i++){
+			std::cout << "actual eigenvalue at " << i << " = " << uvals_[i] << std::endl;	
+		}
 		}
 
 		/******************************************************/
