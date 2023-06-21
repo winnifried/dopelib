@@ -40,7 +40,7 @@ public:
     const std::map<std::string, const dealii::Vector<double>*> *param_values,
     const std::map<std::string, const VECTOR *> */*domain_values*/,
     unsigned int color, const dealii::Point<dealdim> & /*point*/,
-    unsigned int component) const
+    unsigned int component) const override
   {
     qvalues_.reinit(5);
     GetParams(*param_values, "control", qvalues_);
@@ -64,7 +64,7 @@ public:
     const std::map<std::string, const dealii::Vector<double>*> *param_values,
     const std::map<std::string, const VECTOR *> */*domain_values*/,
     unsigned int color, const dealii::Point<dealdim> & /*point*/,
-    unsigned int component) const
+    unsigned int component) const override
   {
     qvalues_.reinit(5);
     GetParams(*param_values, "control", qvalues_);
@@ -91,7 +91,7 @@ public:
     const std::map<std::string, const VECTOR *> *domain_values,
     unsigned int color, const dealii::Point<dealdim> & /*point*/,
     unsigned int component, unsigned int dof_number,
-    dealii::Vector<double> &local_vector) const
+    dealii::Vector<double> &local_vector) const override
   {
     qvalues_.reinit(5);
     GetParams(*param_values, "control", qvalues_);
@@ -117,7 +117,7 @@ public:
     const std::map<std::string, const VECTOR *> *domain_values,
     unsigned int /*color*/, const dealii::Point<dealdim> & /*point*/,
     unsigned int component, unsigned int dof_number,
-    dealii::Vector<double> &local_vector) const
+    dealii::Vector<double> &local_vector) const override
   {
     qvalues_.reinit(5);
     GetParams(*param_values, "control", qvalues_);
@@ -129,12 +129,12 @@ public:
   }
 
   unsigned int
-  n_components() const
+  n_components() const override
   {
     return 2;
   }
   bool
-  NeedsControl() const
+  NeedsControl() const override
   {
     return true;
   }

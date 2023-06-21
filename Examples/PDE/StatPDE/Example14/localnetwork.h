@@ -15,17 +15,17 @@ public:
     pin_  = param_reader.get_double("pin");
   }
 
-  unsigned int GetNPipes() const
+  unsigned int GetNPipes() const override
   {
     return 2;
   }
-  unsigned int GetNNodes() const
+  unsigned int GetNNodes() const override
   {
     return 3;
   }
   void PipeCouplingResidual(dealii::Vector<double> &res,
                             const dealii::Vector<double> &u,
-                            const std::vector<bool> &present_in_outflow) const
+                            const std::vector<bool> &present_in_outflow) const override
   {
     //In the case here we have two pipes 1 and 2 with two unknowns per pipe.
     //The first two are the inflow to the first pipe
@@ -67,7 +67,7 @@ public:
   }
 
   void CouplingMatrix(dealii::SparseMatrix<double> &matrix,
-                      const std::vector<bool> &present_in_outflow) const
+                      const std::vector<bool> &present_in_outflow) const override
   {
     assert(present_in_outflow.size()==2*GetNPipes()*2);
     //First n_comp*n_pipes lines for the outflow linearization
@@ -97,7 +97,7 @@ public:
     matrix.set(7,3,-1);
   }
 
-  void GetFluxSparsityPattern(dealii::SparsityPattern &sparsity) const
+  void GetFluxSparsityPattern(dealii::SparsityPattern &sparsity) const override
   {
     sparsity.reinit(8,8,4); //8 Flux unkonwns with at most two unknowns coupled.
     //( coupling times 2 for symmetrize!)

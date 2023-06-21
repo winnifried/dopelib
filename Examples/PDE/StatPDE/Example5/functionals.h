@@ -54,7 +54,7 @@ public:
   }
 
   double
-    FaceValue(const FDC<DH,VECTOR,dealdim> &fdc)
+    FaceValue(const FDC<DH,VECTOR,dealdim> &fdc) override
   {
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int material_id = fdc.GetMaterialId();
@@ -87,7 +87,7 @@ public:
 
   void
     FaceValue_U(const FDC<DH,VECTOR,dealdim> &fdc,
-              dealii::Vector<double> &local_vector, double scale)
+              dealii::Vector<double> &local_vector, double scale) override
   {
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int material_id = fdc.GetMaterialId();
@@ -112,24 +112,24 @@ public:
 
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "face";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return true;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "Local Mean value";
   }

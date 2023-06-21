@@ -52,7 +52,7 @@ class LocalPointFunctionalP1 : public FunctionalInterface<EDC,
 public:
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
@@ -67,7 +67,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
 
     Point<2> p1(0.0, 0.0);
@@ -85,14 +85,14 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "P1";
   }
@@ -121,7 +121,7 @@ class LocalPointFunctionalP2 : public FunctionalInterface<EDC, FDC, DH,
 public:
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
@@ -136,7 +136,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
 
     Point<2> p1(50.0, 0.0);
@@ -153,14 +153,14 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "P2";
   }

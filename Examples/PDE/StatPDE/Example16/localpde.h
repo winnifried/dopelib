@@ -61,7 +61,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -135,7 +135,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -224,7 +224,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     assert(this->problem_type_ == "state");
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
@@ -253,7 +253,7 @@ public:
   StrongElementResidual(
     const EDC<DH, VECTOR, dealdim> &edc,
     const EDC<DH, VECTOR, dealdim> &edc_w,
-    double &sum, double scale)
+    double &sum, double scale) override
   {   
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();       
     unsigned int n_q_points = edc.GetNQPoints();
@@ -353,7 +353,7 @@ public:
     StrongFaceResidual(
       const FDC<DH, VECTOR, dealdim> &fdc,
       const FDC<DH, VECTOR, dealdim> &fdc_w,
-      double &sum, double scale)
+      double &sum, double scale) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -424,7 +424,7 @@ public:
     StrongBoundaryResidual(
       const FDC<DH, VECTOR, dealdim> &/*fdc*/,
       const FDC<DH, VECTOR, dealdim> &/*fdc_w*/,
-      double &/*sum*/, double /*scale*/)
+      double &/*sum*/, double /*scale*/) override
   {
     /*Not needed on homogeneous Dirichlet-boundary*/
   }
@@ -433,7 +433,7 @@ public:
   void ElementAuxRhs(
     const EDC<DH, VECTOR, dealdim> & edc,
     dealii::Vector<double> &local_vector,
-    double scale)
+    double scale) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -499,58 +499,58 @@ public:
   void FaceAuxRhs(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
     dealii::Vector<double> &/*local_vector*/,
-    double /*scale*/)
+    double /*scale*/) override
   {
   }
   
   void BoundaryAuxRhs(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
     dealii::Vector<double> &/*local_vector*/,
-    double /*scale*/)
+    double /*scale*/) override
   {
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_hessians
            | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 2;
   }
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return false;
   }
   bool
-  HasInterfaces() const
+  HasInterfaces() const override
   {
     return false;
   }
   bool
-  HasVertices() const
+  HasVertices() const override
   {
     return true;
   }

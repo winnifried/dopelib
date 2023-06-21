@@ -137,7 +137,7 @@ namespace DOpE
      *
      */
     void
-    ReInit();
+    ReInit() override;
 
     /******************************************************/
 
@@ -147,7 +147,7 @@ namespace DOpE
      *
      */
     void
-    ComputeReducedFunctionals();
+    ComputeReducedFunctionals() override;
 
     /******************************************************/
 
@@ -190,7 +190,7 @@ namespace DOpE
      *
      */
     void
-    StateSizeInfo(std::stringstream &out)
+    StateSizeInfo(std::stringstream &out) override
     {
       GetU().PrintInfos(out);
     }
@@ -207,7 +207,7 @@ namespace DOpE
      */
     void
     WriteToFile(const std::vector<double> &/*v*/,
-                std::string /*outfile*/)
+                std::string /*outfile*/) override
     {
       abort();
     }

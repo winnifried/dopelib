@@ -41,10 +41,10 @@ namespace DOpE
     }
 
     virtual double
-    value(const Point<2> &p, const unsigned int component = 0) const;
+    value(const Point<2> &p, const unsigned int component = 0) const override;
 
     virtual double
-    laplacian(const Point<2> &p, const unsigned int component = 0) const;
+    laplacian(const Point<2> &p, const unsigned int component = 0) const override;
 
   };
 

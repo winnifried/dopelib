@@ -39,8 +39,8 @@ namespace DOpE
     InitialData() : DOpEWrapper::Function<1>(2)
     {}
 
-    virtual double value(const Point<1> &p, const unsigned int component = 0) const;
-    virtual void vector_value(const Point<1> &p, Vector<double> &value) const;
+    virtual double value(const Point<1> &p, const unsigned int component = 0) const override;
+    virtual void vector_value(const Point<1> &p, Vector<double> &value) const override;
   private:
   };
 

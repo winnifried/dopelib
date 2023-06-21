@@ -58,12 +58,12 @@ namespace DOpE
 #else
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
 #endif
-      dealii::AffineConstraints<double> &constraint_matrix) const;
+      dealii::AffineConstraints<double> &constraint_matrix) const override;
 #else
     virtual void
     MakeStateDoFConstraints(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
-      dealii::ConstraintMatrix &constraint_matrix) const;
+      dealii::ConstraintMatrix &constraint_matrix) const override;
 #endif
     struct DoFInfo
     {
@@ -125,13 +125,13 @@ namespace DOpE
 #else
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
 #endif
-    dealii::AffineConstraints<double> &constraint_matrix) const
+    dealii::AffineConstraints<double> &constraint_matrix) const 
 #else
   template<template<int, int> class DH, int dim>
   void
   PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
-    dealii::ConstraintMatrix &constraint_matrix) const
+    dealii::ConstraintMatrix &constraint_matrix) const 
 #endif
   {
     /* Does not work on locally refined grids. We can only couple

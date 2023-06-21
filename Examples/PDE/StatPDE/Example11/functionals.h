@@ -52,7 +52,7 @@ public:
   }
 
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int n_q_points = fdc.GetNQPoints();
 
@@ -71,25 +71,25 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary";
   }
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return true;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "BoundaryPI";
   }

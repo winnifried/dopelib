@@ -112,7 +112,7 @@ namespace DOpE
        */
       void
       WriteToFile(const dealii::BlockVector<double> &v, std::string name, std::string outfile,
-                  std::string dof_type, std::string filetype);
+                  std::string dof_type, std::string filetype) override;
 
       /******************************************************/
 
@@ -125,7 +125,7 @@ namespace DOpE
        *  @param dof_type    Has the DoF type: state or control.
        */
       void
-      WriteToFile(const ControlVector<dealii::BlockVector<double>> &v, std::string name, std::string dof_type);
+      WriteToFile(const ControlVector<dealii::BlockVector<double>> &v, std::string name, std::string dof_type) override;
 
       /**
        * Basic function to write a std::vector to a file.
@@ -136,7 +136,7 @@ namespace DOpE
        */
       void
       WriteToFile(const std::vector<double> &/*v*/,
-                  std::string /*outfile*/)
+                  std::string /*outfile*/) override
       {
         abort();
       }

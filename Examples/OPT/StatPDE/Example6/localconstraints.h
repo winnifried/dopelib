@@ -61,7 +61,7 @@ namespace DOpE
     void
     EvaluateLocalControlConstraints(
       const dealii::BlockVector<double> &control,
-      dealii::BlockVector<double> &constraints)
+      dealii::BlockVector<double> &constraints) override
     {
       assert(constraints.block(0).size() == 2*control.block(0).size());
 
@@ -74,27 +74,27 @@ namespace DOpE
         }
     }
     void
-    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const
+    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const override
     {
       lb = q_min_;
       ub = q_max_;
     }
 
     std::string
-    GetType() const
+    GetType() const override
     {
       throw DOpEException("Unknown problem_type " + this->GetProblemType(),
                           "LocalConstraints::GetType");
     }
     std::string
-    GetName() const
+    GetName() const override
     {
       throw DOpEException("Unknown problem_type " + this->GetProblemType(),
                           "LocalConstraints::GetName");
     }
 
     dealii::UpdateFlags
-    GetUpdateFlags() const
+    GetUpdateFlags() const override
     {
       return update_values | update_quadrature_points;
     }

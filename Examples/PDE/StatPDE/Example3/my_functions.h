@@ -34,10 +34,10 @@ public:
   BoundaryParabel () : DOpEWrapper::Function<2>(3) {}
 
   virtual double value (const Point<2>   &p,
-                        const unsigned int  component = 0) const;
+                        const unsigned int  component = 0) const override;
 
   virtual void vector_value (const Point<2> &p,
-                             Vector<double>   &value) const;
+                             Vector<double>   &value) const override;
 
 private:
 

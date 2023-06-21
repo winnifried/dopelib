@@ -53,7 +53,7 @@ public:
   }
 
   double
-    ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+    ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     unsigned int n_q_points = edc.GetNQPoints();
 
@@ -75,30 +75,30 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "Mean-value";
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     if (fabs(this->GetTime() - 1.) < 1.e-13)
       return true;

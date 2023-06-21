@@ -40,11 +40,11 @@ public:
 #if DEAL_II_VERSION_GTE(9,3,0)
   virtual void
   SetActiveFEIndexState(
-    typename dealii::DoFHandler<dealdim>::active_cell_iterator &element) const
+    typename dealii::DoFHandler<dealdim>::active_cell_iterator &element) const override
 #else
   virtual void
   SetActiveFEIndexState(
-    typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &element) const
+    typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &element) const override
 #endif
   {
 

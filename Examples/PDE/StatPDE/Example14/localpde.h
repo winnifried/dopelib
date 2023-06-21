@@ -61,7 +61,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -97,7 +97,7 @@ public:
   BoundaryEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -158,7 +158,7 @@ public:
   FaceEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     //The face equation contains the coupling of the element DOFs
     //with the DOFs from the same element induced by the face integrals
@@ -195,7 +195,7 @@ public:
   InterfaceEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     //The interface equation contains the coupling of the element DOFs
     //with the DOFs from the neigbouring element induced by the face integrals
@@ -237,7 +237,7 @@ public:
   BoundaryMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -306,7 +306,7 @@ public:
   FaceMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -346,7 +346,7 @@ public:
   InterfaceMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_dofs_per_element_nbr = fdc.GetNbrNDoFsPerElement();
@@ -392,7 +392,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -426,7 +426,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -434,14 +434,14 @@ public:
   void
   FaceRightHandSide(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   BoundaryRightHandSide(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
@@ -449,7 +449,7 @@ public:
   ElementTimeEquationExplicit(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> & /*local_vector*/,
-    double /*scale*/)
+    double /*scale*/) override
   {
     assert(this->problem_type_ == "state");
   }
@@ -458,7 +458,7 @@ public:
   ElementTimeEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector,
-    double scale)
+    double scale) override
   {
     assert(this->problem_type_ == "state");
 
@@ -489,7 +489,7 @@ public:
   void
   ElementTimeMatrixExplicit(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    FullMatrix<double> &/*local_matrix*/)
+    FullMatrix<double> &/*local_matrix*/) override
   {
     assert(this->problem_type_ == "state");
   }
@@ -497,7 +497,7 @@ public:
   void
   ElementTimeMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
-    FullMatrix<double> &local_matrix)
+    FullMatrix<double> &local_matrix) override
   {
     assert(this->problem_type_ == "state");
 
@@ -531,7 +531,7 @@ public:
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector,
     double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(local_vector.size()==4);
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -585,7 +585,7 @@ public:
     std::vector<bool> & /*present_in_outflow*/,
     dealii::FullMatrix<double> &local_matrix,
     double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(local_matrix.m()==4);
     assert(local_matrix.n()==4);//Should be a square matrix of dimension n_comp*2 x n_comp*2
@@ -648,7 +648,7 @@ public:
     std::vector<bool> &present_in_outflow,
     dealii::Vector<double> &local_vector,
     double /*scale*/,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(local_vector.size()==8);
     //Values in local_vector
@@ -694,7 +694,7 @@ public:
     std::vector<bool> &present_in_outflow,
     dealii::FullMatrix<double> &local_matrix,
     double /*scale*/,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(local_matrix.m()==4);
     assert(local_matrix.n()==4);//Should be a square matrix of dimension n_comp*2 x n_comp*2
@@ -740,69 +740,69 @@ public:
 
   void PipeCouplingResidual(dealii::Vector<double> &res,
                             const dealii::Vector<double> &u,
-                            const std::vector<bool> &present_in_outflow)
+                            const std::vector<bool> &present_in_outflow) override
   {
     network_.PipeCouplingResidual(res,u,present_in_outflow);
   }
   void CouplingMatrix(dealii::SparseMatrix<double> &matrix,
-                      const std::vector<bool> &present_in_outflow)
+                      const std::vector<bool> &present_in_outflow) override
   {
     network_.CouplingMatrix(matrix,present_in_outflow);
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients
            | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
   }
 
   unsigned int
-  GetControlNBlocks() const
+  GetControlNBlocks() const override
   {
     return 1;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 1;
   }
   std::vector<unsigned int> &
-  GetControlBlockComponent()
+  GetControlBlockComponent() override
   {
     return control_block_component_;
   }
   const std::vector<unsigned int> &
-  GetControlBlockComponent() const
+  GetControlBlockComponent() const override
   {
     return control_block_component_;
   }
 
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return true;
   }
   bool
-  HasInterfaces() const
+  HasInterfaces() const override
   {
     return true;
   }

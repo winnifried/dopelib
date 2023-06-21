@@ -65,7 +65,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0.15, 0.2);
     Point<2> p2(0.25, 0.2);
@@ -88,12 +88,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Pressure difference";
   }
@@ -129,7 +129,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0.6, 0.2);
 
@@ -147,12 +147,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Deflection_X";
   }
@@ -188,7 +188,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0.6, 0.2);
 
@@ -206,12 +206,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Deflection_Y";
   }
@@ -263,14 +263,14 @@ public:
   }
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return true;
   }
 
   // compute drag value around cylinder
   double
-    BoundaryValue(const FDC<DH, VECTOR, 2> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -344,7 +344,7 @@ public:
   }
 
   double
-    FaceValue(const FDC<DH, VECTOR, 2> &fdc)
+    FaceValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
 
     unsigned int material_id = fdc.GetMaterialId();
@@ -423,19 +423,19 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary face";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Drag";
   }
@@ -490,14 +490,14 @@ public:
   }
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return true;
   }
 
   // compute drag value around cylinder
   double
-    BoundaryValue(const FDC<DH, VECTOR, 2> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
@@ -573,7 +573,7 @@ public:
 
   // compute drag value at interface
   double
-    FaceValue(const FDC<DH, VECTOR, 2> &fdc)
+    FaceValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
 
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -651,19 +651,19 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary face";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Lift";
   }

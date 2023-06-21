@@ -51,7 +51,7 @@ public:
 
   double
   ElementValue(
-    const EDC<DH, VECTOR, dealdim> &edc)
+    const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -82,19 +82,19 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "L^2-error";
   }

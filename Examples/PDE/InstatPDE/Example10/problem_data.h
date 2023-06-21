@@ -38,10 +38,10 @@ public:
   }
 
   virtual double value (const Point<2>   &p,
-                        const unsigned int  component = 0) const;
+                        const unsigned int  component = 0) const override;
 
   virtual void vector_value (const Point<2> &p,
-                             Vector<double>   &value) const;
+                             Vector<double>   &value) const override;
 
   static void declare_params(ParameterReader &param_reader)
   {
@@ -50,7 +50,7 @@ public:
                                Patterns::Double(0));
   }
 
-  void SetTime(double t) const
+  void SetTime(double t) const override
   {
     localtime=t;
   }
@@ -110,8 +110,8 @@ public:
   {
 
   }
-  virtual double value(const Point<2> &p, const unsigned int component = 0) const;
-  virtual void vector_value(const Point<2> &p, Vector<double> &value) const;
+  virtual double value(const Point<2> &p, const unsigned int component = 0) const override;
+  virtual void vector_value(const Point<2> &p, Vector<double> &value) const override;
 
 private:
 

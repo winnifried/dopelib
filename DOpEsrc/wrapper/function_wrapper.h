@@ -57,7 +57,7 @@ namespace DOpEWrapper
     /******************************************************/
     void
     vector_value(const dealii::Point<dim> &p,
-                 dealii::Vector<double> &return_value) const
+                 dealii::Vector<double> &return_value) const override
     {
       Assert(return_value.size() == this->n_components,
              dealii::ExcDimensionMismatch(return_value.size(), this->n_components));
@@ -115,14 +115,14 @@ namespace DOpEWrapper
 
     virtual double
     value(const dealii::Point<dim> &/*p*/,
-          const unsigned int /*component*/) const
+          const unsigned int /*component*/) const override
     {
       return 0.0;
     }
 
     virtual void
     vector_value(const dealii::Point<dim> &/*p*/,
-                 dealii::Vector<double> &return_value) const
+                 dealii::Vector<double> &return_value) const override
     {
       Assert(return_value.size() == this->n_components,
              ExcDimensionMismatch (return_value.size(), this->n_components));
@@ -133,7 +133,7 @@ namespace DOpEWrapper
     virtual void
     value_list(const std::vector<dealii::Point<dim> > &/*points*/,
                std::vector<double> &values,
-               const unsigned int /*component*/ = 0) const
+               const unsigned int /*component*/ = 0) const override
     {
       // Assert(values.size() == points.size(),
       //   ExcDimensionMismatch(values.size(), points.size()));
@@ -143,7 +143,7 @@ namespace DOpEWrapper
 
     virtual void
     vector_value_list(const std::vector<dealii::Point<dim> > &points,
-                      std::vector<dealii::Vector<double> > &values) const
+                      std::vector<dealii::Vector<double> > &values) const override
     {
       Assert(values.size() == points.size(),
              ExcDimensionMismatch(values.size(), points.size()));
@@ -158,14 +158,14 @@ namespace DOpEWrapper
 
     virtual dealii::Tensor<1, dim>
     gradient(const dealii::Point<dim> &/*p*/,
-             const unsigned int /*component*/ = 0) const
+             const unsigned int /*component*/ = 0) const override
     {
       return dealii::Tensor<1, dim>();
     }
 
     virtual void
     vector_gradient(const dealii::Point<dim> &/*p*/,
-                    std::vector<dealii::Tensor<1, dim> > &gradients) const
+                    std::vector<dealii::Tensor<1, dim> > &gradients) const override
     {
       Assert(gradients.size() == this->n_components,
              ExcDimensionMismatch(gradients.size(), this->n_components));
@@ -177,7 +177,7 @@ namespace DOpEWrapper
     virtual void
     gradient_list(const std::vector<dealii::Point<dim> > &points,
                   std::vector<dealii::Tensor<1, dim> > &gradients,
-                  const unsigned int /*component*/ = 0) const
+                  const unsigned int /*component*/ = 0) const override
     {
       Assert(gradients.size() == points.size(),
              ExcDimensionMismatch(gradients.size(), points.size()));
@@ -188,7 +188,7 @@ namespace DOpEWrapper
 
     virtual void
     vector_gradient_list(const std::vector<dealii::Point<dim> > &points,
-                         std::vector<std::vector<dealii::Tensor<1, dim> > > &gradients) const
+                         std::vector<std::vector<dealii::Tensor<1, dim> > > &gradients) const override
     {
       Assert(gradients.size() == points.size(),
              ExcDimensionMismatch(gradients.size(), points.size()));
@@ -227,14 +227,14 @@ namespace DOpEWrapper
 
     virtual double
     value(const dealii::Point<dim> &/*p*/,
-          const unsigned int /*component*/) const
+          const unsigned int /*component*/) const override
     {
       return function_value_;
     }
 
     virtual void
     vector_value(const dealii::Point<dim> &/*p*/,
-                 dealii::Vector<double> &return_value) const
+                 dealii::Vector<double> &return_value) const override
     {
       Assert(return_value.size() == this->n_components,
              ExcDimensionMismatch (return_value.size(), this->n_components));
@@ -245,7 +245,7 @@ namespace DOpEWrapper
     virtual void
     value_list(const std::vector<dealii::Point<dim> > &/*points*/,
                std::vector<double> &values,
-               const unsigned int /*component*/ = 0) const
+               const unsigned int /*component*/ = 0) const override
     {
 //      Assert(values.size() == points.size(),
 //       ExcDimensionMismatch(values.size(), points.size()));
@@ -255,7 +255,7 @@ namespace DOpEWrapper
 
     virtual void
     vector_value_list(const std::vector<dealii::Point<dim> > &points,
-                      std::vector<dealii::Vector<double> > &values) const
+                      std::vector<dealii::Vector<double> > &values) const override
     {
       Assert(values.size() == points.size(),
              ExcDimensionMismatch(values.size(), points.size()));

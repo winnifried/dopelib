@@ -36,8 +36,8 @@ public:
     param_reader.SetSubsection("Local PDE parameters");
     strike_= param_reader.get_double("strike price");
   }
-  virtual double value(const Point<2> &p, const unsigned int component = 0) const;
-  virtual void vector_value(const Point<2> &p, Vector<double> &value) const;
+  virtual double value(const Point<2> &p, const unsigned int component = 0) const override;
+  virtual void vector_value(const Point<2> &p, Vector<double> &value) const override;
   static void declare_params(ParameterReader &param_reader);
 private:
   double strike_;

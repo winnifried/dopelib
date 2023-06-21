@@ -50,7 +50,7 @@ class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, do
 {
 public:
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     if (this->GetTime() == 1.)
       return true;
@@ -68,7 +68,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
 
     Point<2> evaluation_point(0.5 * PI, 0.5 * PI);
@@ -83,14 +83,14 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "End-Time-Point evaluation";
   }
@@ -116,7 +116,7 @@ class StateErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
 {
 public:
   double
-    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -142,25 +142,25 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timedistributed";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "State L2-Error";
   }
@@ -189,7 +189,7 @@ class ControlErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
 {
 public:
   double
-    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -214,25 +214,25 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timedistributed";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "Control L2-Error";
   }

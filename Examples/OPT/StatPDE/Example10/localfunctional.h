@@ -71,7 +71,7 @@ public:
 
   double AlgebraicValue(
     const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/)
+                        const std::map<std::string, const VECTOR *> &/*domain_values*/) override
   {
     assert(this->GetProblemType() == "cost_functional");
     //Search the vector with the precomputed functional values
@@ -81,7 +81,7 @@ public:
   }
 
   double
-BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     if ( this->GetProblemType() == "cost_functional_pre" ||
          this->GetProblemType() == "cost_functional_pre_tangent" )
@@ -196,7 +196,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   BoundaryValue_U(
     const FDC<DH, VECTOR, dealdim> &fdc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     //Calculation of \partial_u g(k(v,p)) \phi is done as
     // g'(k(v,p)) k(phi) = \int_\gamma g'(k(v,p)) (drag) \ds
@@ -247,7 +247,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   BoundaryValue_Q(
     const FDC<DH, VECTOR, dealdim> &fdc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -282,7 +282,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   BoundaryValue_QQ(
     const FDC<DH, VECTOR, dealdim> &fdc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -323,7 +323,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   BoundaryValue_UU(
     const FDC<DH, VECTOR, dealdim> &fdc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     //Calculation of \partial_{uu} g(k(v,p))(du, tu) is done as
     // \partial_{uu} g(k(v,p)) \du \tu =
@@ -384,7 +384,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   BoundaryValue_QU(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -392,14 +392,14 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   BoundaryValue_UQ(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
 
   double
   ElementValue(
-    const EDC<DH, VECTOR, dealdim> & /*edc*/)
+    const EDC<DH, VECTOR, dealdim> & /*edc*/) override
   {
     return 0.;
   }
@@ -407,7 +407,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   ElementValue_U(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -415,7 +415,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   ElementValue_Q(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -423,7 +423,7 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   ElementValue_UU(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -431,34 +431,34 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   void
   ElementValue_QU(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   ElementValue_UQ(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   ElementValue_QQ(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     //More complicated selection to avoid implementing
     //unneeded derivatives
@@ -485,12 +485,12 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "cost functional";
   }
 
-  unsigned int NeedPrecomputations() const
+  unsigned int NeedPrecomputations() const override
   {
     return 1;
   }

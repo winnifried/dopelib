@@ -120,7 +120,7 @@ namespace DOpE
      * Further, the flags to build the system matrices are set to true.
      *
      */
-    void ReInit();
+    void ReInit() override;
 
     /******************************************************/
 
@@ -129,7 +129,7 @@ namespace DOpE
      * PDEProblemInterface
      *
      */
-    void ComputeReducedFunctionals();
+    void ComputeReducedFunctionals() override;
 
     /******************************************************/
     
@@ -179,7 +179,7 @@ namespace DOpE
      * PDEProblemInterface
      *
      */
-    void StateSizeInfo(std::stringstream &out)
+    void StateSizeInfo(std::stringstream &out) override
     {
       GetU().PrintInfos(out);
     }
@@ -193,7 +193,7 @@ namespace DOpE
      *  @param v           A std::vector to write to a file.
      *  @param outfile     The basic name for the output file to print.
      */
-    void WriteToFile(const std::vector<double> &v, std::string outfile);
+    void WriteToFile(const std::vector<double> &v, std::string outfile) override;
 
     /**
      * Import overloads from base class.

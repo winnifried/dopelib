@@ -556,14 +556,14 @@ namespace DOpE
                  std::string name,
                  std::string outfile,
                  std::string dof_type,
-                 std::string filetype)
+                 std::string filetype) override
     {
       this->GetProblem()->GetSpaceTimeHandler()->WriteToFile(v, name, outfile, dof_type, filetype);
     }
     virtual void
     WriteToFileElementwise(const Vector<float> &v, std::string name,
                            std::string outfile, std::string dof_type,
-                           std::string filetype, int n_patches)
+                           std::string filetype, int n_patches) override
     {
       this->GetProblem()->GetSpaceTimeHandler()->WriteToFileElementwise(v, name, outfile, dof_type, filetype,n_patches);
     }
@@ -576,7 +576,7 @@ namespace DOpE
 
   protected:
     virtual const std::map<std::string, unsigned int> &
-    GetFunctionalPosition() const
+    GetFunctionalPosition() const  override
     {
       return GetProblem()->GetFunctionalPosition();
     }

@@ -230,9 +230,9 @@ namespace DOpE
     inline Point<dim>
     GetCenter() const;
     inline const DOpEWrapper::FEValues<dim> &
-    GetFEValuesState() const;
+    GetFEValuesState() const override;
     inline const DOpEWrapper::FEValues<dim> &
-    GetFEValuesControl() const;
+    GetFEValuesControl() const override;
   protected:
     /*
      * Helper Functions
@@ -399,9 +399,9 @@ namespace DOpE
     GetCenter() const;
 
     inline const DOpEWrapper::FEValues<dim> &
-    GetFEValuesState() const;
+    GetFEValuesState() const override;
     inline const DOpEWrapper::FEValues<dim> &
-    GetFEValuesControl() const;
+    GetFEValuesControl() const override;
 
   private:
     unsigned int
@@ -776,7 +776,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementDataContainer<true, VECTOR, dim>::GetFEValuesState() const
+  ElementDataContainer<true, VECTOR, dim>::GetFEValuesState() const 
 #else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesState() const
 #endif
@@ -787,9 +787,9 @@ namespace DOpE
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementDataContainer<true, VECTOR, dim>::GetFEValuesControl() const
+  ElementDataContainer<true, VECTOR, dim>::GetFEValuesControl() const 
 #else
-  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const 
 #endif
   {
     return static_cast<const DOpEWrapper::FEValues<dim>&>(control_hp_fe_values_.get_present_fe_values());

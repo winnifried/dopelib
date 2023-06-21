@@ -54,7 +54,7 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
    void 
    ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
         dealii::Vector<double> &local_vector, double scale,
-        double /*scale_ico*/)
+        double /*scale_ico*/) override
    { 
       const DOpEWrapper::FEValues<dealdim> &state_fe_values = 
 	 edc.GetFEValuesState();
@@ -117,7 +117,7 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 
    void
    ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-        FullMatrix<double> &local_matrix, double scale, double /*scale_ico*/)
+        FullMatrix<double> &local_matrix, double scale, double /*scale_ico*/) override
    {
       const DOpEWrapper::FEValues<dealdim> &state_fe_values = 
 		edc.GetFEValuesState();
@@ -164,7 +164,7 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 
    void
    ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
-			dealii::Vector<double> &local_vector, double scale)
+			dealii::Vector<double> &local_vector, double scale) override
    {
       InterpolatedFEValues<dealdim> fe_values_interpolated = edc.GetInterpolatedFEValuesState();
       const DOpEWrapper::FEValues<dealdim> &state_fe_values = 
@@ -217,46 +217,46 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 
    void
    BoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/, double /*scale_ico*/)
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/, double /*scale_ico*/) override
    { }
      
    void
    BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-      dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/, double /*scale_ico*/)
+      dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/, double /*scale_ico*/) override
    { }
    
    void
    BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> & /*local_vector*/, double /*scale*/)
+                        dealii::Vector<double> & /*local_vector*/, double /*scale*/) override
    { } 
 
    UpdateFlags
-   GetUpdateFlags() const
+   GetUpdateFlags() const override
    {
       return update_values | update_gradients | update_quadrature_points;
    }
 
    UpdateFlags
-   GetFaceUpdateFlags() const
+   GetFaceUpdateFlags() const override
    {
       return update_values | update_gradients | update_normal_vectors |
 		update_quadrature_points;
    }
 
    unsigned int
-   GetStateNBlocks() const
+   GetStateNBlocks() const override
    {
       return 2;
    }
 
    std::vector<unsigned int> &
-   GetStateBlockComponent()
+   GetStateBlockComponent() override
    {
       return state_block_component_;
    }
 
    const std::vector<unsigned int> &
-   GetStateBlockComponent() const
+   GetStateBlockComponent() const override
    {
       return state_block_component_;
    }

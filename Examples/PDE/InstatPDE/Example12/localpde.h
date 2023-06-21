@@ -111,7 +111,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	void
 	ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
 			dealii::Vector<double> &local_vector, double scale,
-			double scale_ico)
+			double scale_ico) override
 	{
 		assert(this->problem_type_ == "state");
 		const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -275,7 +275,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	void
 	ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
 			FullMatrix<double> &local_matrix, double scale,
-			double scale_ico)
+			double scale_ico) override
 	{
 
 		const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -476,7 +476,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 
 	void
 	StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
-			const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+			const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale) override
 	{
 
 	  //specify in the main.cc via SetEstChoice which estimator should be computed 
@@ -691,7 +691,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	StrongFaceResidual(
 			const FDC<DH, VECTOR, dealdim> &fdc,
 			const FDC<DH, VECTOR, dealdim> &fdc_w,
-			double &sum, double scale)
+			double &sum, double scale) override
 	{
 
 	  //specify in the main.cc via SetEstChoice which estimator should be computed 
@@ -859,7 +859,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	StrongBoundaryResidual(
 			const FDC<DH, VECTOR, dealdim> &fdc,
 			const FDC<DH, VECTOR, dealdim> &fdc_w,
-			double &sum, double scale)
+			double &sum, double scale) override
 	{
 	  // int EstChoice_;
 	  //EstChoice_ = est_Choice_;
@@ -1028,7 +1028,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	void
 	ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &/*edc*/,
 			dealii::Vector<double> & /*local_vector*/,
-			double /*scale*/)
+			double /*scale*/) override
 	{
 		assert(this->problem_type_ == "state");
 	}
@@ -1036,7 +1036,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	void
 	ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 			dealii::Vector<double> & /*local_vector*/,
-			double /*scale*/)
+			double /*scale*/) override
 	{
 		assert(this->problem_type_ == "state");
 	}
@@ -1044,7 +1044,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	void
 	ElementTimeEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
 			dealii::Vector<double> & /*local_vector*/,
-			double /*scale*/)
+			double /*scale*/) override
 	{
 		assert(this->problem_type_ == "state");
 
@@ -1052,14 +1052,14 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 
 	void
 	ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-			FullMatrix<double> &/*local_matrix*/)
+			FullMatrix<double> &/*local_matrix*/) override
 	{
 		assert(this->problem_type_ == "state");
 	}
 
 	void
 	ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-			FullMatrix<double> &/*local_matrix*/)
+			FullMatrix<double> &/*local_matrix*/) override
 	{
 		assert(this->problem_type_ == "state");
 
@@ -1070,7 +1070,7 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	//Auxiliary Values for Error Estimation
 	void ElementAuxRhs(const EDC<DH, VECTOR, dealdim> & edc,
 			   dealii::Vector<double> &local_vector,
-			   double scale)
+			   double scale) override
 	{
 	  if( this->GetTime() != 0.0 )
 	    {
@@ -1147,26 +1147,26 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	
 	void FaceAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 			dealii::Vector<double> &/*local_vector*/,
-			double /*scale*/)
+			double /*scale*/) override
 	{
 	}
 	
 	void BoundaryAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 			    dealii::Vector<double> &/*local_vector*/,
-			    double /*scale*/)
+			    double /*scale*/) override
 	{
 	}
 	
 	/*NEU - ENDE */
 
 	UpdateFlags
-	GetUpdateFlags() const
+	GetUpdateFlags() const override
 	{
 		return update_values | update_gradients| update_hessians | update_quadrature_points;
 	}
 
 	UpdateFlags
-	GetFaceUpdateFlags() const
+	GetFaceUpdateFlags() const override
 	{
 		return update_values | update_gradients | update_normal_vectors
 				| update_quadrature_points;
@@ -1179,40 +1179,40 @@ SneddonMixedPDE(ParameterReader &param_reader,double eps, double d) :
 	 */
 
 	unsigned int
-	GetControlNBlocks() const
+	GetControlNBlocks() const override
 	{
 		return 1;
 	}
 
 	unsigned int
-	GetStateNBlocks() const
+	GetStateNBlocks() const override
 	{
 		// Four Blocks: u_x, u_y, phi, p, tau
 		return 5;
 	}
 
 	std::vector<unsigned int> &
-	GetControlBlockComponent()
+	GetControlBlockComponent() override
 	{
 		return control_block_component_;
 	}
 	const std::vector<unsigned int> &
-	GetControlBlockComponent() const
+	GetControlBlockComponent() const override
 	{
 		return control_block_component_;
 	}
 	std::vector<unsigned int> &
-	GetStateBlockComponent()
+	GetStateBlockComponent() override
 	{
 		return state_block_component_;
 	}
 	const std::vector<unsigned int> &
-	GetStateBlockComponent() const
+	GetStateBlockComponent() const override
 	{
 		return state_block_component_;
 	}
 	bool
-	HasVertices() const
+	HasVertices() const override
 	{
 		return true;
 	}

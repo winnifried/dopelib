@@ -160,7 +160,7 @@ namespace DOpE
 
     }
 
-    std::string GetName() const
+    std::string GetName() const override
     {
       return "InstatOptProblemContainer";
     }

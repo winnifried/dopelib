@@ -60,7 +60,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0.15, 0.2);
     Point<2> p2(0.25, 0.2);
@@ -83,12 +83,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Pressure difference";
   }
@@ -124,7 +124,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0.6, 0.2);
 
@@ -142,12 +142,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Deflection_X";
   }
@@ -183,7 +183,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0.6, 0.2);
 
@@ -201,12 +201,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Deflection_Y";
   }
@@ -248,13 +248,13 @@ public:
   }
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return false;
   }
 
   double
-BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -318,19 +318,19 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Drag";
   }
@@ -375,13 +375,13 @@ public:
   }
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return false;
   }
 
   double
-BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
 
@@ -432,19 +432,19 @@ BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Lift";
   }

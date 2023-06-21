@@ -51,7 +51,7 @@ class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
 public:
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     if (this->GetTime() == 0.5)
       return true;
@@ -69,7 +69,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
 
     Point<1> evaluation_point(0.5);
@@ -84,14 +84,14 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Space-Time Pointevaluation";
   }

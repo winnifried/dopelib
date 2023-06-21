@@ -83,9 +83,9 @@ namespace DOpE
      *                    file. Its default value is negative, so that it has no influence if not specified.
      */
     virtual int
-    Solve(ControlVector<VECTOR> &q, double global_tol = -1.);
+    Solve(ControlVector<VECTOR> &q, double global_tol = -1.) override;
 
-    void ReInit()
+    void ReInit()  override
     {
       ReducedAlgorithm<PROBLEM,VECTOR>::ReInit();
       start_=0; //Coldstart

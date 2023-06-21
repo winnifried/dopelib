@@ -39,8 +39,8 @@ InitialData(double meshsize, bool interpolate) :
       h_ = meshsize;
       interpolate_ = interpolate;
     }
-  virtual double value(const Point<2> &p, const unsigned int component = 0) const;
-  virtual void vector_value(const Point<2> &p, Vector<double> &value) const;
+  virtual double value(const Point<2> &p, const unsigned int component = 0) const override;
+  virtual void vector_value(const Point<2> &p, Vector<double> &value) const override;
   void SetParams(double d)
   {
     h_ = d;

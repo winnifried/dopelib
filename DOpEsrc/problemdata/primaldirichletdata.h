@@ -72,7 +72,7 @@ namespace DOpE
      * @return The component of the Dirichlet data at p, i.e., DD(q)(p)_{component}
      */
     double value (const dealii::Point<dealdim>   &p,
-                  const unsigned int  component) const
+                  const unsigned int  component) const override
     {
       return dirichlet_data_.Data(
                param_values_,
@@ -87,7 +87,7 @@ namespace DOpE
      *
      * @param time      The current time
      */
-    void SetTime(double time) const
+    void SetTime(double time) const override
     {
       dirichlet_data_.SetTime(time);
     }

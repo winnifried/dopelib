@@ -142,7 +142,7 @@ namespace DOpE
      *
      */
     void
-    ReInit();
+    ReInit() override;
 
     /******************************************************/
 
@@ -153,7 +153,7 @@ namespace DOpE
      */
     bool
     ComputeReducedConstraints(const ControlVector<VECTOR> &q,
-                              ConstraintVector<VECTOR> &g);
+                              ConstraintVector<VECTOR> &g) override;
 
     /******************************************************/
 
@@ -164,7 +164,7 @@ namespace DOpE
      */
     void
     GetControlBoxConstraints(ControlVector<VECTOR> &lb,
-                             ControlVector<VECTOR> &ub);
+                             ControlVector<VECTOR> &ub) override;
 
     /******************************************************/
 
@@ -176,7 +176,7 @@ namespace DOpE
     void
     ComputeReducedGradient(const ControlVector<VECTOR> &q,
                            ControlVector<VECTOR> &gradient,
-                           ControlVector<VECTOR> &gradient_transposed);
+                           ControlVector<VECTOR> &gradient_transposed) override;
 
     /******************************************************/
 
@@ -186,7 +186,7 @@ namespace DOpE
      *
      */
     double
-    ComputeReducedCostFunctional(const ControlVector<VECTOR> &q);
+    ComputeReducedCostFunctional(const ControlVector<VECTOR> &q) override;
 
     /******************************************************/
 
@@ -196,7 +196,7 @@ namespace DOpE
      *
      */
     void
-    ComputeReducedFunctionals(const ControlVector<VECTOR> &q);
+    ComputeReducedFunctionals(const ControlVector<VECTOR> &q) override;
 
     /******************************************************/
 
@@ -235,7 +235,7 @@ namespace DOpE
     ComputeReducedHessianVector(const ControlVector<VECTOR> &q,
                                 const ControlVector<VECTOR> &direction,
                                 ControlVector<VECTOR> &hessian_direction,
-                                ControlVector<VECTOR> &hessian_direction_transposed);
+                                ControlVector<VECTOR> &hessian_direction_transposed) override;
 
     /******************************************************/
 
@@ -248,7 +248,7 @@ namespace DOpE
     ComputeReducedGradientOfGlobalConstraints(unsigned int num,
                                               const ControlVector<VECTOR> &q, const ConstraintVector<VECTOR> &g,
                                               ControlVector<VECTOR> &gradient,
-                                              ControlVector<VECTOR> &gradient_transposed);
+                                              ControlVector<VECTOR> &gradient_transposed) override;
 
     /******************************************************/
 
@@ -257,7 +257,7 @@ namespace DOpE
      * ReducedProblemInterface
      */
     void
-    StateSizeInfo(std::stringstream &out)
+    StateSizeInfo(std::stringstream &out) override
     {
       GetU().PrintInfos(out);
     }
@@ -273,7 +273,7 @@ namespace DOpE
      *  @param dof_type    Has the DoF type: state or control.
      */
     virtual void
-    WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type)
+    WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type) override
     {
       this->GetOutputHandler()->Write(v.GetSpacialVector(), name, dof_type);
     }
@@ -287,7 +287,7 @@ namespace DOpE
      */
     virtual void
     WriteToFile(const std::vector<double> &/*v*/,
-                std::string /*outfile*/)
+                std::string /*outfile*/) override
     {
       abort();
     }
@@ -622,7 +622,7 @@ namespace DOpE
   typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-                     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
+                     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit() 
   {
     ReducedProblemInterface<PROBLEM, VECTOR>::ReInit();
 

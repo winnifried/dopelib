@@ -84,7 +84,7 @@ public:
   }
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return false;
   }
@@ -95,7 +95,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double scale_ico)
+    double scale_ico) override
   {
     assert(this->problem_type_ == "state");
 
@@ -306,7 +306,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double scale_ico)
+    double scale_ico) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -538,7 +538,7 @@ public:
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> & /*local_vector*/,
-    double /*scale*/)
+    double /*scale*/) override
   {
     assert(this->problem_type_ == "state");
   }
@@ -547,7 +547,7 @@ public:
   ElementTimeEquation(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> & /*local_vector*/,
-    double /*scale*/)
+    double /*scale*/) override
   {
     assert(this->problem_type_ == "state");
   }
@@ -555,7 +555,7 @@ public:
   void
   ElementTimeEquationExplicit(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     assert(this->problem_type_ == "state");
 
@@ -677,7 +677,7 @@ public:
   void
   ElementTimeMatrix(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    FullMatrix<double> &/*local_matrix*/)
+    FullMatrix<double> &/*local_matrix*/) override
   {
     assert(this->problem_type_ == "state");
   }
@@ -685,7 +685,7 @@ public:
   void
   ElementTimeMatrixExplicit(
     const EDC<DH, VECTOR, dealdim> &edc,
-    FullMatrix<double> &local_matrix)
+    FullMatrix<double> &local_matrix) override
   {
     assert(this->problem_type_ == "state");
 
@@ -826,7 +826,7 @@ public:
   BoundaryEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
 
     assert(this->problem_type_ == "state");
@@ -892,7 +892,7 @@ public:
   BoundaryMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::FullMatrix<double> &local_matrix, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
 
@@ -979,53 +979,53 @@ public:
   void
   BoundaryRightHandSide(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
     assert(this->problem_type_ == "state");
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
   }
 
   unsigned int
-  GetControlNBlocks() const
+  GetControlNBlocks() const override
   {
     return 1;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 4;
   }
 
   std::vector<unsigned int> &
-  GetControlBlockComponent()
+  GetControlBlockComponent() override
   {
     return control_block_component_;
   }
   const std::vector<unsigned int> &
-  GetControlBlockComponent() const
+  GetControlBlockComponent() const override
   {
     return control_block_component_;
   }
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }
