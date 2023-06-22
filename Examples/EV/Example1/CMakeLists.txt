@@ -17,7 +17,7 @@ SET(deal_dimension 2)
 # the dope shipped with the examples - unless we specifically move the 
 # directory
 FIND_PACKAGE(DOpElib QUIET
-  HINTS ${CMAKE_SOURCE_DIR}/../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
+  HINTS ${CMAKE_SOURCE_DIR}/../../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
   )
 IF(NOT ${DOpElib_FOUND})
   MESSAGE(FATAL_ERROR "\n"
@@ -27,6 +27,8 @@ IF(NOT ${DOpElib_FOUND})
 ELSE()
   MESSAGE(STATUS "Found DOpElib at ${DOpE}.")
 ENDIF()
+
+Project(${TARGET} CXX)
 
 #Load default example rules
 INCLUDE(${DOpE}/Examples/CMakeExamples.txt)
