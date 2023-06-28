@@ -1,0 +1,1744 @@
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 27/08/2018
+Using dealii Version: 9.5
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 151
+		Total   DoFs: 667420
+		Minimal DoFs: 4420
+		Maximal DoFs: 4420
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   9.77e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 0
+		BulkEnergy: 0
+		CrackEnergy: 2.7
+		 Timestep: 1 (0 -> 0.0001) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.08e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.47e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.10e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 6.4
+		BulkEnergy: 0.00032
+		CrackEnergy: 2.7
+		 Timestep: 2 (0.0001 -> 0.0002) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.08e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.41e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.93e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 13
+		BulkEnergy: 0.0013
+		CrackEnergy: 2.7
+		 Timestep: 3 (0.0002 -> 0.0003) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.08e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.32e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.71e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 19
+		BulkEnergy: 0.0029
+		CrackEnergy: 2.7
+		 Timestep: 4 (0.0003 -> 0.0004) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.07e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.73e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.21e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 26
+		BulkEnergy: 0.0051
+		CrackEnergy: 2.7
+		 Timestep: 5 (0.0004 -> 0.0005) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.07e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.20e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.42e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 32
+		BulkEnergy: 0.008
+		CrackEnergy: 2.7
+		 Timestep: 6 (0.0005 -> 0.0006) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.07e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.92e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.58e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 39
+		BulkEnergy: 0.012
+		CrackEnergy: 2.7
+		 Timestep: 7 (0.0006 -> 0.0007) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.07e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.17e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.38e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 45
+		BulkEnergy: 0.016
+		CrackEnergy: 2.7
+		 Timestep: 8 (0.0007 -> 0.0008) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.35e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.83e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 51
+		BulkEnergy: 0.02
+		CrackEnergy: 2.7
+		 Timestep: 9 (0.0008 -> 0.0009) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.64e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.96e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 58
+		BulkEnergy: 0.026
+		CrackEnergy: 2.7
+		 Timestep: 10 (0.0009 -> 0.001) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.22e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.49e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 64
+		BulkEnergy: 0.032
+		CrackEnergy: 2.7
+		 Timestep: 11 (0.001 -> 0.0011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.93e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.70e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 71
+		BulkEnergy: 0.039
+		CrackEnergy: 2.7
+		 Timestep: 12 (0.0011 -> 0.0012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.07e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.13e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 77
+		BulkEnergy: 0.046
+		CrackEnergy: 2.7
+		 Timestep: 13 (0.0012 -> 0.0013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.06e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.15e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.21e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 83
+		BulkEnergy: 0.054
+		CrackEnergy: 2.7
+		 Timestep: 14 (0.0013 -> 0.0014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.05e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.51e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.72e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 90
+		BulkEnergy: 0.063
+		CrackEnergy: 2.7
+		 Timestep: 15 (0.0014 -> 0.0015) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.04e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.88e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.89e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.58e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 96
+		BulkEnergy: 0.072
+		CrackEnergy: 2.7
+		 Timestep: 16 (0.0015 -> 0.0016) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.18e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.61e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.98e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1e+02
+		BulkEnergy: 0.082
+		CrackEnergy: 2.7
+		 Timestep: 17 (0.0016 -> 0.0017) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.98e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.76e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.47e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.1e+02
+		BulkEnergy: 0.092
+		CrackEnergy: 2.7
+		 Timestep: 18 (0.0017 -> 0.0018) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.39e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.16e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.20e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.23e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.2e+02
+		BulkEnergy: 0.1
+		CrackEnergy: 2.7
+		 Timestep: 19 (0.0018 -> 0.0019) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.41e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.07e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.01e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.2e+02
+		BulkEnergy: 0.11
+		CrackEnergy: 2.7
+		 Timestep: 20 (0.0019 -> 0.002) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.40e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.3e+02
+		BulkEnergy: 0.13
+		CrackEnergy: 2.7
+		 Timestep: 21 (0.002 -> 0.0021) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.39e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.3e+02
+		BulkEnergy: 0.14
+		CrackEnergy: 2.7
+		 Timestep: 22 (0.0021 -> 0.0022) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.06e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.38e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.4e+02
+		BulkEnergy: 0.15
+		CrackEnergy: 2.7
+		 Timestep: 23 (0.0022 -> 0.0023) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.05e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.37e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.5e+02
+		BulkEnergy: 0.17
+		CrackEnergy: 2.7
+		 Timestep: 24 (0.0023 -> 0.0024) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.05e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.36e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.5e+02
+		BulkEnergy: 0.18
+		CrackEnergy: 2.7
+		 Timestep: 25 (0.0024 -> 0.0025) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.05e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.35e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.6e+02
+		BulkEnergy: 0.2
+		CrackEnergy: 2.7
+		 Timestep: 26 (0.0025 -> 0.0026) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.05e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.34e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.7e+02
+		BulkEnergy: 0.21
+		CrackEnergy: 2.7
+		 Timestep: 27 (0.0026 -> 0.0027) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.05e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.33e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.17e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.7e+02
+		BulkEnergy: 0.23
+		CrackEnergy: 2.7
+		 Timestep: 28 (0.0027 -> 0.0028) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.04e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.32e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.8e+02
+		BulkEnergy: 0.25
+		CrackEnergy: 2.7
+		 Timestep: 29 (0.0028 -> 0.0029) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.04e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.31e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.9e+02
+		BulkEnergy: 0.26
+		CrackEnergy: 2.7
+		 Timestep: 30 (0.0029 -> 0.003) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.04e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.30e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 1.9e+02
+		BulkEnergy: 0.28
+		CrackEnergy: 2.6
+		 Timestep: 31 (0.003 -> 0.0031) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.03e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.29e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2e+02
+		BulkEnergy: 0.3
+		CrackEnergy: 2.6
+		 Timestep: 32 (0.0031 -> 0.0032) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.03e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.28e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.38e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2e+02
+		BulkEnergy: 0.32
+		CrackEnergy: 2.6
+		 Timestep: 33 (0.0032 -> 0.0033) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.03e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.11e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.1e+02
+		BulkEnergy: 0.34
+		CrackEnergy: 2.6
+		 Timestep: 34 (0.0033 -> 0.0034) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.03e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.2e+02
+		BulkEnergy: 0.36
+		CrackEnergy: 2.6
+		 Timestep: 35 (0.0034 -> 0.0035) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.02e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.26e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.25e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.2e+02
+		BulkEnergy: 0.38
+		CrackEnergy: 2.6
+		 Timestep: 36 (0.0035 -> 0.0036) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.02e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.25e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.46e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.3e+02
+		BulkEnergy: 0.4
+		CrackEnergy: 2.6
+		 Timestep: 37 (0.0036 -> 0.0037) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.02e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.24e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.06e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.4e+02
+		BulkEnergy: 0.42
+		CrackEnergy: 2.6
+		 Timestep: 38 (0.0037 -> 0.0038) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.01e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.24e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.4e+02
+		BulkEnergy: 0.45
+		CrackEnergy: 2.6
+		 Timestep: 39 (0.0038 -> 0.0039) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.01e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.23e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.32e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.47
+		CrackEnergy: 2.6
+		 Timestep: 40 (0.0039 -> 0.004) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.01e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.22e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.20e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.49
+		CrackEnergy: 2.6
+		 Timestep: 41 (0.004 -> 0.0041) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.00e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.22e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.25e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.52
+		CrackEnergy: 2.6
+		 Timestep: 42 (0.0041 -> 0.0042) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.00e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.21e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.55e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.13e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.54
+		CrackEnergy: 2.6
+		 Timestep: 43 (0.0042 -> 0.0043) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.00e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.21e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.61e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.07e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.56
+		CrackEnergy: 2.6
+		 Timestep: 44 (0.0043 -> 0.0044) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.99e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.20e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.88e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.14e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.59
+		CrackEnergy: 2.6
+		 Timestep: 45 (0.0044 -> 0.0045) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.99e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.20e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.19e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.21e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.62
+		CrackEnergy: 2.6
+		 Timestep: 46 (0.0045 -> 0.0046) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.98e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.19e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.53e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.28e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.9e+02
+		BulkEnergy: 0.64
+		CrackEnergy: 2.6
+		 Timestep: 47 (0.0046 -> 0.0047) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.98e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.18e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.26e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.35e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3e+02
+		BulkEnergy: 0.67
+		CrackEnergy: 2.6
+		 Timestep: 48 (0.0047 -> 0.0048) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.98e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.18e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.27e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.42e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3e+02
+		BulkEnergy: 0.69
+		CrackEnergy: 2.6
+		 Timestep: 49 (0.0048 -> 0.0049) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.97e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.18e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.28e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.49e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.1e+02
+		BulkEnergy: 0.72
+		CrackEnergy: 2.6
+		 Timestep: 50 (0.0049 -> 0.005) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.97e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.17e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.29e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.57e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.1e+02
+		BulkEnergy: 0.75
+		CrackEnergy: 2.6
+		 Timestep: 51 (0.005 -> 0.0051) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.96e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.17e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.37e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.64e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.2e+02
+		BulkEnergy: 0.78
+		CrackEnergy: 2.6
+		 Timestep: 52 (0.0051 -> 0.0052) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.96e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.48e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.72e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.3e+02
+		BulkEnergy: 0.81
+		CrackEnergy: 2.6
+		 Timestep: 53 (0.0052 -> 0.0053) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.95e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.61e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.79e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.3e+02
+		BulkEnergy: 0.84
+		CrackEnergy: 2.5
+		 Timestep: 54 (0.0053 -> 0.0054) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.95e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.81e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.87e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.4e+02
+		BulkEnergy: 0.86
+		CrackEnergy: 2.5
+		 Timestep: 55 (0.0054 -> 0.0055) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.95e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.33e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.94e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.4e+02
+		BulkEnergy: 0.89
+		CrackEnergy: 2.5
+		 Timestep: 56 (0.0055 -> 0.0056) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.94e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.34e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.12e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.5e+02
+		BulkEnergy: 0.92
+		CrackEnergy: 2.5
+		 Timestep: 57 (0.0056 -> 0.0057) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.94e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.34e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.09e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.6e+02
+		BulkEnergy: 0.95
+		CrackEnergy: 2.5
+		 Timestep: 58 (0.0057 -> 0.0058) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.93e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.35e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.68e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.6e+02
+		BulkEnergy: 0.98
+		CrackEnergy: 2.5
+		 Timestep: 59 (0.0058 -> 0.0059) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.93e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.36e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.24e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.7e+02
+		BulkEnergy: 1
+		CrackEnergy: 2.5
+		 Timestep: 60 (0.0059 -> 0.006) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.92e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.37e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.97e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.7e+02
+		BulkEnergy: 1
+		CrackEnergy: 2.5
+		 Timestep: 61 (0.006 -> 0.0061) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.92e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.38e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.30e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.8e+02
+		BulkEnergy: 1.1
+		CrackEnergy: 2.5
+		 Timestep: 62 (0.0061 -> 0.0062) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.91e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.58e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.88e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.9e+02
+		BulkEnergy: 1.1
+		CrackEnergy: 2.5
+		 Timestep: 63 (0.0062 -> 0.0063) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.91e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.93e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.58e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.9e+02
+		BulkEnergy: 1.1
+		CrackEnergy: 2.5
+		 Timestep: 64 (0.0063 -> 0.0064) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.90e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.32e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.57e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4e+02
+		BulkEnergy: 1.2
+		CrackEnergy: 2.5
+		 Timestep: 65 (0.0064 -> 0.0065) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.90e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.74e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.43e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4e+02
+		BulkEnergy: 1.2
+		CrackEnergy: 2.5
+		 Timestep: 66 (0.0065 -> 0.0066) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.89e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.20e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.99e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.1e+02
+		BulkEnergy: 1.2
+		CrackEnergy: 2.5
+		 Timestep: 67 (0.0066 -> 0.0067) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.89e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.95e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.84e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.1e+02
+		BulkEnergy: 1.3
+		CrackEnergy: 2.5
+		 Timestep: 68 (0.0067 -> 0.0068) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.88e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.46e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.13e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.2e+02
+		BulkEnergy: 1.3
+		CrackEnergy: 2.5
+		 Timestep: 69 (0.0068 -> 0.0069) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.88e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.64e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.20e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.2e+02
+		BulkEnergy: 1.3
+		CrackEnergy: 2.4
+		 Timestep: 70 (0.0069 -> 0.007) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.87e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.45e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.54e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.3e+02
+		BulkEnergy: 1.4
+		CrackEnergy: 2.4
+		 Timestep: 71 (0.007 -> 0.0071) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.87e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.27e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.17e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.4e+02
+		BulkEnergy: 1.4
+		CrackEnergy: 2.4
+		 Timestep: 72 (0.0071 -> 0.0072) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.86e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.65e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.53e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.4e+02
+		BulkEnergy: 1.4
+		CrackEnergy: 2.4
+		 Timestep: 73 (0.0072 -> 0.0073) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.85e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.66e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.36e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.5e+02
+		BulkEnergy: 1.5
+		CrackEnergy: 2.4
+		 Timestep: 74 (0.0073 -> 0.0074) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.85e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.02e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.5e+02
+		BulkEnergy: 1.5
+		CrackEnergy: 2.4
+		 Timestep: 75 (0.0074 -> 0.0075) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.84e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.65e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.01e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.6e+02
+		BulkEnergy: 1.5
+		CrackEnergy: 2.4
+		 Timestep: 76 (0.0075 -> 0.0076) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.84e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.06e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.01e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.6e+02
+		BulkEnergy: 1.6
+		CrackEnergy: 2.4
+		 Timestep: 77 (0.0076 -> 0.0077) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.83e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.17e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.09e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.09e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.7e+02
+		BulkEnergy: 1.6
+		CrackEnergy: 2.4
+		 Timestep: 78 (0.0077 -> 0.0078) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.83e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.17e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.12e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.01e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.7e+02
+		BulkEnergy: 1.6
+		CrackEnergy: 2.4
+		 Timestep: 79 (0.0078 -> 0.0079) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.82e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.18e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.15e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.52e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.8e+02
+		BulkEnergy: 1.7
+		CrackEnergy: 2.4
+		 Timestep: 80 (0.0079 -> 0.008) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.82e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.19e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.10e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.8e+02
+		BulkEnergy: 1.7
+		CrackEnergy: 2.4
+		 Timestep: 81 (0.008 -> 0.0081) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.81e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.20e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.22e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.34e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.9e+02
+		BulkEnergy: 1.7
+		CrackEnergy: 2.4
+		 Timestep: 82 (0.0081 -> 0.0082) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.81e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.41e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.88e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.77e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.9e+02
+		BulkEnergy: 1.8
+		CrackEnergy: 2.4
+		 Timestep: 83 (0.0082 -> 0.0083) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.80e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.11e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.00e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5e+02
+		BulkEnergy: 1.8
+		CrackEnergy: 2.3
+		 Timestep: 84 (0.0083 -> 0.0084) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.80e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.96e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.41e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.54e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5e+02
+		BulkEnergy: 1.8
+		CrackEnergy: 2.3
+		 Timestep: 85 (0.0084 -> 0.0085) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.79e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.29e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.77e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.52e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5e+02
+		BulkEnergy: 1.9
+		CrackEnergy: 2.3
+		 Timestep: 86 (0.0085 -> 0.0086) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.79e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.18e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.17e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.1e+02
+		BulkEnergy: 1.9
+		CrackEnergy: 2.3
+		 Timestep: 87 (0.0086 -> 0.0087) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.78e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.11e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.97e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.74e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.1e+02
+		BulkEnergy: 1.9
+		CrackEnergy: 2.3
+		 Timestep: 88 (0.0087 -> 0.0088) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.78e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.63e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.05e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.25e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.2e+02
+		BulkEnergy: 2
+		CrackEnergy: 2.3
+		 Timestep: 89 (0.0088 -> 0.0089) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.77e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.25e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.15e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.37e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.2e+02
+		BulkEnergy: 2
+		CrackEnergy: 2.3
+		 Timestep: 90 (0.0089 -> 0.009) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.77e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.99e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.27e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.34e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.2e+02
+		BulkEnergy: 2
+		CrackEnergy: 2.3
+		 Timestep: 91 (0.009 -> 0.0091) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.76e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.41e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.81e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.3e+02
+		BulkEnergy: 2
+		CrackEnergy: 2.3
+		 Timestep: 92 (0.0091 -> 0.0092) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.76e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.02e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.57e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.58e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.3e+02
+		BulkEnergy: 2.1
+		CrackEnergy: 2.3
+		 Timestep: 93 (0.0092 -> 0.0093) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.05e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.77e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.97e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.3e+02
+		BulkEnergy: 2.1
+		CrackEnergy: 2.3
+		 Timestep: 94 (0.0093 -> 0.0094) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.24e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.01e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.48e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.4e+02
+		BulkEnergy: 2.1
+		CrackEnergy: 2.3
+		 Timestep: 95 (0.0094 -> 0.0095) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.50e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.74e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.69e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.09e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.37e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.4e+02
+		BulkEnergy: 2.1
+		CrackEnergy: 2.2
+		 Timestep: 96 (0.0095 -> 0.0096) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.88e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.05e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.71e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.04e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.48e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.4e+02
+		BulkEnergy: 2.2
+		CrackEnergy: 2.2
+		 Timestep: 97 (0.0096 -> 0.0097) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.65e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.30e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.92e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.75e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.4e+02
+		BulkEnergy: 2.2
+		CrackEnergy: 2.2
+		 Timestep: 98 (0.0097 -> 0.0098) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.76e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.70e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.77e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.44e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.4e+02
+		BulkEnergy: 2.2
+		CrackEnergy: 2.2
+		 Timestep: 99 (0.0098 -> 0.0099) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.06e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.53e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.53e-03	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.36e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5.3e+02
+		BulkEnergy: 2.1
+		CrackEnergy: 2.2
+		 Timestep: 100 (0.0099 -> 0.01) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.21e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.09e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.97e-02	 LineSearch {4} 
+			 Newton step: 4	 Residual (rel.):   3.87e-02	 LineSearch {3} 
+			 Newton step: 5	 Residual (rel.):   3.76e-02	 LineSearch {2} 
+			 Newton step: 6	 Residual (rel.):   3.16e-02	 LineSearch {1} 
+			 Newton step: 7	 Residual (rel.):   7.52e-03	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   2.01e-05	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 5e+02
+		BulkEnergy: 2
+		CrackEnergy: 2.2
+		 Timestep: 101 (0.01 -> 0.01) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.28e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.47e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.24e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.64e-04	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.9e+02
+		BulkEnergy: 1.9
+		CrackEnergy: 2.2
+		 Timestep: 102 (0.01 -> 0.01) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.31e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.62e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.53e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.8e+02
+		BulkEnergy: 1.9
+		CrackEnergy: 2.1
+		 Timestep: 103 (0.01 -> 0.01) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.74e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.12e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.48e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.7e+02
+		BulkEnergy: 1.9
+		CrackEnergy: 2.1
+		 Timestep: 104 (0.01 -> 0.01) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.05e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.39e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.79e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.7e+02
+		BulkEnergy: 1.8
+		CrackEnergy: 2.1
+		 Timestep: 105 (0.01 -> 0.01) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.52e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.71e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.00e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.6e+02
+		BulkEnergy: 1.8
+		CrackEnergy: 2.1
+		 Timestep: 106 (0.01 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.96e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.86e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.31e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.5e+02
+		BulkEnergy: 1.8
+		CrackEnergy: 2.1
+		 Timestep: 107 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.15e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.01e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.33e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.4e+02
+		BulkEnergy: 1.7
+		CrackEnergy: 2.1
+		 Timestep: 108 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.23e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.42e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.30e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.2e+02
+		BulkEnergy: 1.6
+		CrackEnergy: 2.1
+		 Timestep: 109 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.61e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.58e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.62e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 4.1e+02
+		BulkEnergy: 1.5
+		CrackEnergy: 2.1
+		 Timestep: 110 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.19e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.05e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.13e-03	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.77e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 3.9e+02
+		BulkEnergy: 1.4
+		CrackEnergy: 2
+		 Timestep: 111 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.15e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.33e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.45e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.51e-03	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.47e-03	 LineSearch {3} 
+			 Newton step: 6	 Residual (rel.):   4.43e-03	 LineSearch {3} 
+			 Newton step: 7	 Residual (rel.):   4.40e-03	 LineSearch {3} 
+			 Newton step: 8	 Residual (rel.):   4.27e-03	 LineSearch {4} 
+			 Newton step: 9	 Residual (rel.):   4.16e-03	 LineSearch {4} 
+			 Newton step: 10	 Residual (rel.):   4.08e-03	 LineSearch {4} 
+			 Newton step: 11	 Residual (rel.):   4.03e-03	 LineSearch {4} 
+			 Newton step: 12	 Residual (rel.):   4.06e-03	 LineSearch {4} 
+			 Newton step: 13	 Residual (rel.):   4.17e-03	 LineSearch {4} 
+			 Newton step: 14	 Residual (rel.):   4.54e-03	 LineSearch {4} 
+			 Newton step: 15	 Residual (rel.):   6.06e-03	 LineSearch {4} 
+			 Newton step: 16	 Residual (rel.):   8.60e-02	 LineSearch {4} 
+			 Newton step: 17	 Residual (rel.):   3.02e-02	 LineSearch {0} 
+			 Newton step: 18	 Residual (rel.):   2.92e-02	 LineSearch {4} 
+			 Newton step: 19	 Residual (rel.):   2.83e-02	 LineSearch {4} 
+			 Newton step: 20	 Residual (rel.):   2.74e-02	 LineSearch {4} 
+			 Newton step: 21	 Residual (rel.):   2.66e-02	 LineSearch {4} 
+			 Newton step: 22	 Residual (rel.):   2.58e-02	 LineSearch {4} 
+			 Newton step: 23	 Residual (rel.):   2.50e-02	 LineSearch {4} 
+			 Newton step: 24	 Residual (rel.):   2.44e-02	 LineSearch {4} 
+			 Newton step: 25	 Residual (rel.):   2.39e-02	 LineSearch {4} 
+			 Newton step: 26	 Residual (rel.):   2.38e-02	 LineSearch {4} 
+			 Newton step: 27	 Residual (rel.):   2.41e-02	 LineSearch {4} 
+			 Newton step: 28	 Residual (rel.):   3.94e-02	 LineSearch {4} 
+			 Newton step: 29	 Residual (rel.):   7.73e-03	 LineSearch {0} 
+			 Newton step: 30	 Residual (rel.):   7.73e-03	 LineSearch {4} 
+			 Newton step: 31	 Residual (rel.):   8.12e-03	 LineSearch {4} 
+			 Newton step: 32	 Residual (rel.):   1.64e-02	 LineSearch {4} 
+			 Newton step: 33	 Residual (rel.):   1.32e-02	 LineSearch {0} 
+			 Newton step: 34	 Residual (rel.):   1.53e-02	 LineSearch {4} 
+			 Newton step: 35	 Residual (rel.):   5.31e-02	 LineSearch {4} 
+			 Newton step: 36	 Residual (rel.):   2.70e-03	 LineSearch {0} 
+			 Newton step: 37	 Residual (rel.):   6.53e-03	 LineSearch {4} 
+			 Newton step: 38	 Residual (rel.):   6.65e-02	 LineSearch {4} 
+			 Newton step: 39	 Residual (rel.):   3.90e-03	 LineSearch {0} 
+			 Newton step: 40	 Residual (rel.):   3.79e-03	 LineSearch {3} 
+			 Newton step: 41	 Residual (rel.):   3.74e-03	 LineSearch {3} 
+			 Newton step: 42	 Residual (rel.):   3.64e-03	 LineSearch {4} 
+			 Newton step: 43	 Residual (rel.):   3.58e-03	 LineSearch {4} 
+			 Newton step: 44	 Residual (rel.):   3.59e-03	 LineSearch {4} 
+			 Newton step: 45	 Residual (rel.):   3.68e-03	 LineSearch {4} 
+			 Newton step: 46	 Residual (rel.):   4.12e-03	 LineSearch {4} 
+			 Newton step: 47	 Residual (rel.):   7.18e-03	 LineSearch {4} 
+			 Newton step: 48	 Residual (rel.):   9.22e-02	 LineSearch {4} 
+			 Newton step: 49	 Residual (rel.):   4.11e-03	 LineSearch {0} 
+			 Newton step: 50	 Residual (rel.):   3.95e-03	 LineSearch {3} 
+			 Newton step: 51	 Residual (rel.):   3.82e-03	 LineSearch {3} 
+			 Newton step: 52	 Residual (rel.):   3.72e-03	 LineSearch {3} 
+			 Newton step: 53	 Residual (rel.):   3.69e-03	 LineSearch {3} 
+			 Newton step: 54	 Residual (rel.):   3.60e-03	 LineSearch {4} 
+			 Newton step: 55	 Residual (rel.):   3.55e-03	 LineSearch {4} 
+			 Newton step: 56	 Residual (rel.):   3.59e-03	 LineSearch {4} 
+			 Newton step: 57	 Residual (rel.):   3.75e-03	 LineSearch {4} 
+			 Newton step: 58	 Residual (rel.):   4.39e-03	 LineSearch {4} 
+			 Newton step: 59	 Residual (rel.):   8.88e-03	 LineSearch {4} 
+			 Newton step: 60	 Residual (rel.):   1.87e-02	 LineSearch {4} 
+			 Newton step: 61	 Residual (rel.):   1.05e-02	 LineSearch {0} 
+			 Newton step: 62	 Residual (rel.):   5.02e-01	 LineSearch {4} 
+			 Newton step: 63	 Residual (rel.):   1.95e-01	 LineSearch {0} 
+			 Newton step: 64	 Residual (rel.):   1.66e-01	 LineSearch {1} 
+			 Newton step: 65	 Residual (rel.):   1.62e-01	 LineSearch {4} 
+			 Newton step: 66	 Residual (rel.):   1.60e-01	 LineSearch {4} 
+			 Newton step: 67	 Residual (rel.):   1.60e-01	 LineSearch {4} 
+			 Newton step: 68	 Residual (rel.):   1.61e-01	 LineSearch {4} 
+			 Newton step: 69	 Residual (rel.):   1.61e-01	 LineSearch {4} 
+			 Newton step: 70	 Residual (rel.):   1.59e-01	 LineSearch {4} 
+			 Newton step: 71	 Residual (rel.):   1.54e-01	 LineSearch {4} 
+			 Newton step: 72	 Residual (rel.):   1.54e-01	 LineSearch {3} 
+			 Newton step: 73	 Residual (rel.):   1.47e-01	 LineSearch {3} 
+			 Newton step: 74	 Residual (rel.):   1.40e-01	 LineSearch {2} 
+			 Newton step: 75	 Residual (rel.):   1.29e-01	 LineSearch {0} 
+			 Newton step: 76	 Residual (rel.):   8.93e-03	 LineSearch {0} 
+			 Newton step: 77	 Residual (rel.):   2.49e-04	 LineSearch {0} 
+			 Newton step: 78	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.68
+		CrackEnergy: 2
+		 Timestep: 112 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.33e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.94e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.67
+		CrackEnergy: 2
+		 Timestep: 113 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.85e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.34e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.29e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.66
+		CrackEnergy: 2
+		 Timestep: 114 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.23e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.41e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.66
+		CrackEnergy: 2
+		 Timestep: 115 (0.011 -> 0.011) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.39e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.26e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.13e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 116 (0.011 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.45e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.44e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 117 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.52e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.37e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.5e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 118 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.45e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.41e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 119 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.64e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.19e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 120 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.70e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.72e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 121 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.45e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.81e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 122 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.81e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.55e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 123 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.86e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.14e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.65
+		CrackEnergy: 2
+		 Timestep: 124 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.92e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.14e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.66
+		CrackEnergy: 2
+		 Timestep: 125 (0.012 -> 0.012) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.97e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.14e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.66
+		CrackEnergy: 2
+		 Timestep: 126 (0.012 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.02e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.16e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.66
+		CrackEnergy: 2
+		 Timestep: 127 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.07e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.16e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.66
+		CrackEnergy: 2
+		 Timestep: 128 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.11e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.17e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.67
+		CrackEnergy: 2
+		 Timestep: 129 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.18e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.6e+02
+		BulkEnergy: 0.67
+		CrackEnergy: 2
+		 Timestep: 130 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.21e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.18e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.67
+		CrackEnergy: 2
+		 Timestep: 131 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.57e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.68
+		CrackEnergy: 2
+		 Timestep: 132 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.29e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.20e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.68
+		CrackEnergy: 2
+		 Timestep: 133 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.34e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.21e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.68
+		CrackEnergy: 2
+		 Timestep: 134 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.38e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.33e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.69
+		CrackEnergy: 2
+		 Timestep: 135 (0.013 -> 0.013) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.42e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.22e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.69
+		CrackEnergy: 2
+		 Timestep: 136 (0.013 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.46e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.23e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.69
+		CrackEnergy: 2
+		 Timestep: 137 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.50e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.24e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.7
+		CrackEnergy: 2
+		 Timestep: 138 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.54e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.24e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.7e+02
+		BulkEnergy: 0.7
+		CrackEnergy: 2
+		 Timestep: 139 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.57e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.25e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.71
+		CrackEnergy: 2
+		 Timestep: 140 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.61e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.30e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.71
+		CrackEnergy: 2
+		 Timestep: 141 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.65e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.27e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.71
+		CrackEnergy: 2
+		 Timestep: 142 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.68e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.57e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.72
+		CrackEnergy: 2
+		 Timestep: 143 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.72e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.29e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.72
+		CrackEnergy: 2
+		 Timestep: 144 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.29e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.73
+		CrackEnergy: 2
+		 Timestep: 145 (0.014 -> 0.014) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.79e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.30e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.73
+		CrackEnergy: 2
+		 Timestep: 146 (0.014 -> 0.015) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.82e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.31e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.8e+02
+		BulkEnergy: 0.74
+		CrackEnergy: 2
+		 Timestep: 147 (0.015 -> 0.015) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.86e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.32e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.9e+02
+		BulkEnergy: 0.74
+		CrackEnergy: 2
+		 Timestep: 148 (0.015 -> 0.015) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.89e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.33e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.9e+02
+		BulkEnergy: 0.75
+		CrackEnergy: 2
+		 Timestep: 149 (0.015 -> 0.015) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.92e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.34e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.9e+02
+		BulkEnergy: 0.75
+		CrackEnergy: 2
+		 Timestep: 150 (0.015 -> 0.015) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.75e-04
+			 Newton step: 0	 Residual (rel.):     1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.95e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.35e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-06	 LineSearch {0} 
+		         Precalculating functional values 
+		StressX: 2.9e+02
+		BulkEnergy: 0.76
+		CrackEnergy: 2
+	Computing Functionals:
+	StressX too large. Writing to file instead: 
+	Writing [./Mesh0/StressX_InstatPDEProblemContainer.00150.gpl]
+	BulkEnergy too large. Writing to file instead: 
+	Writing [./Mesh0/BulkEnergy_InstatPDEProblemContainer.00150.gpl]
+	CrackEnergy too large. Writing to file instead: 
+	Writing [./Mesh0/CrackEnergy_InstatPDEProblemContainer.00150.gpl]
