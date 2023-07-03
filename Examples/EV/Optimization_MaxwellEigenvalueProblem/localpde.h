@@ -529,13 +529,6 @@ public:
 		return control_block_component_;
 	}
 
-//	double GetDetDF() {
-//		return detDF_;
-//	}
-//	void SetDetDF(double detDF) {
-//		detDF_ = detDF;
-//	}
-
 protected:
 
 private:

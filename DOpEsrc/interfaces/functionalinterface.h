@@ -713,14 +713,6 @@ namespace DOpE
     return update_default; //no update
   }
 
-    //TODO: Not shure it should be in the functional interface
-    virtual double GetDetDF() const
-    {
-      //return 0; //no update
-      throw DOpEException("Not Implemented",
-			  "FunctionalInterface::GetDetDF");
-    }
-
     /**
      * This function tells what dealii::UpdateFlags are required by the functional to be used when initializing the
      * DOpEWrapper::FEFaceValues on a face.

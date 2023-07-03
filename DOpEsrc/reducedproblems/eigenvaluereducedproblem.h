@@ -33,7 +33,6 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
-#include <deal.II/lac/petsc_parallel_vector.h>
 #include <container/eigenvalueproblemcontainer.h>
 #include <interfaces/pdeinterface.h>
 #include <interfaces/functionalinterface.h>
@@ -56,7 +55,11 @@
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/sparse_direct.h>
 
+#if DEAL_II_VERSION_GTE(9,4,0)
+#include <deal.II/lac/petsc_vector.h>
+#else
 #include <deal.II/lac/petsc_parallel_vector.h>
+#endif
 
 #include <fstream>
 namespace DOpE {

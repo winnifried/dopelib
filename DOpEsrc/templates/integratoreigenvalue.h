@@ -39,8 +39,11 @@
 #include <container/facedatacontainer.h>
 #include <container/residualestimator.h>
 
+#if DEAL_II_VERSION_GTE(9,4,0)
+#include <deal.II/lac/petsc_vector.h>
+#else
 #include <deal.II/lac/petsc_parallel_vector.h>
-
+#endif
 
 namespace DOpE {
 /**
@@ -440,10 +443,18 @@ protected:
   inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
 private:
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <bool DH>
+#else
   template <template <int, int> class DH>
+#endif
   void
   InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+			    const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
                             const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
                             const unsigned int color,
                             const dealii::Function<dim> &function,
                             std::map<unsigned int, SCALAR> &boundary_values,
@@ -2282,23 +2293,21 @@ INTEGRATORDATACONT &Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
 
 /*******************************************************************************************/
 
-//template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-//          int dim>
-//double Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR,
-//                dim>::GetDetDF() const {
-// return pde.GetDetDF();
-//}
-//
-
-/*****************************************************************************************/
-
 template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
           int dim>
-template <template <int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <bool DH>
+#else
+  template <template <int, int> class DH>
+#endif
 void Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
     InterpolateBoundaryValues(
         const DOpEWrapper::Mapping<dim, DH> &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+#else
         const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+#endif
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
         const std::vector<bool> &comp_mask) const {

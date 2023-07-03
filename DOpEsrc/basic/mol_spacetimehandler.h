@@ -330,7 +330,7 @@ namespace DOpE
 	  static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),
 	  control_dofs_per_block_,true,control_block_component);
 #endif //dealii older than 9.2.0
-        
+
       }
 #else
       {
@@ -352,7 +352,7 @@ namespace DOpE
 #else
       DoFRenumbering::component_wise(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),state_block_component);
 #endif
-      
+
       state_hn_constraints_.clear();
       state_hn_constraints_.reinit (
         this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
@@ -378,7 +378,6 @@ namespace DOpE
       if (GetUserDefinedDoFConstraints() != NULL)
         GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(
           state_dof_handler_, state_dof_constraints_);
-
 
       std::vector<unsigned int> dirichlet_colors = DD_state.GetDirichletColors();
       for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
@@ -414,7 +413,7 @@ namespace DOpE
 	static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),
         state_dofs_per_block_,true, state_block_component);
 #endif //dealii older than 9.2.0
-     
+
       support_points_.clear();
       n_neighbour_to_vertex_.clear();
 
@@ -802,8 +801,8 @@ namespace DOpE
 #else
 	    new DOpEWrapper::SolutionTransfer<dealdim, VECTOR, DH> (state_dof_handler_);
 #endif
-	  
-          switch (ref_type)
+
+	    switch (ref_type)
         {
           case DOpEtypes::RefinementType::global:
           triangulation_.set_all_refine_flags();
@@ -829,7 +828,7 @@ namespace DOpE
           // stored in ref_container to an unsigned int keeping the "floor
           // rounding" in mind that is performed by type casting:
           GridRefinement::refine_and_coarsen_optimize(
-            triangulation_,
+	    triangulation_,
             ref_container.GetLocalErrorIndicators(),
             static_cast<unsigned int>(ref_container.GetConvergenceOrder() + 0.5));
             break;

@@ -175,12 +175,6 @@ public:
     }
   }
 
-  double GetDetDF(){
-	  std::cout << "HERE" << std::endl;
-  		return 0;
-  	}
-
-
   UpdateFlags
   GetUpdateFlags() const
   {

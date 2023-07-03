@@ -236,8 +236,8 @@ namespace DOpE
   template <typename PROBLEM, typename VECTOR>
   int ReducedGradientDescentAlgorithm_EigenvalueProblems<PROBLEM, VECTOR>::SolveIntern(ControlVector<VECTOR> &q,/*ControlVector<VECTOR> &q_previous,*/unsigned int iter, ControlVector<VECTOR> &dq, ControlVector<VECTOR> &gradient_transposed, unsigned int lineiter, ControlVector<VECTOR> &gradient, double cost,  std::stringstream &out , double res, double firstres, double global_tol)
   {
-
-
+    
+    return 0;
   }
 
 

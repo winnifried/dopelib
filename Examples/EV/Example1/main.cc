@@ -69,7 +69,11 @@
 
 #include <deal.II/lac/petsc_sparse_matrix.h>
 #include <deal.II/lac/petsc_full_matrix.h>
+#if DEAL_II_VERSION_GTE(9,4,0)
+#include <deal.II/lac/petsc_vector.h>
+#else
 #include <deal.II/lac/petsc_parallel_vector.h>
+#endif
 #include <deal.II/lac/petsc_precondition.h>
 
 
@@ -85,7 +89,11 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false
+#else
 #define DOFHANDLER DoFHandler
+#endif
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer

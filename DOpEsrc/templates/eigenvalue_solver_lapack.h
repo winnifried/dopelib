@@ -29,7 +29,11 @@
 #include <deal.II/lac/slepc_solver.h>
 
 #include <include/parameterreader.h>
+#if DEAL_II_VERSION_GTE(9,4,0)
+#include <deal.II/lac/petsc_vector.h>
+#else
 #include <deal.II/lac/petsc_parallel_vector.h>
+#endif
 
 #include <vector>
 #include <iostream>

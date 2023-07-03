@@ -32,11 +32,19 @@ using namespace dealii;
 using namespace DOpE;
 using namespace deformation_functions;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class FDC,
+  bool DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
+#endif
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 {
@@ -174,12 +182,6 @@ public:
     }
     }
   }
-
-  double GetDetDF(){
-	  std::cout << "HERE" << std::endl;
-  		return 0;
-  	}
-
 
   UpdateFlags
   GetUpdateFlags() const
