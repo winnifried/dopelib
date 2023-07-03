@@ -65,7 +65,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<dealdim> p1(0.5, 0.5, 0.5);
 
@@ -80,12 +80,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Point value in X";
   }

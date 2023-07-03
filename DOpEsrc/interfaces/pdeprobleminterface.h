@@ -121,7 +121,7 @@ namespace DOpE
      */
     virtual void
     WriteToFile(const VECTOR &v, std::string name, std::string outfile,
-                std::string dof_type, std::string filetype)
+                std::string dof_type, std::string filetype) override
     {
       if (dof_type != "state")
             throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFile");
@@ -132,7 +132,7 @@ namespace DOpE
     virtual void
     WriteToFileElementwise(const Vector<float> &v, std::string name,
                            std::string outfile, std::string dof_type,
-                           std::string filetype, int n_patches)
+                           std::string filetype, int n_patches) override
     {
       if (dof_type != "state")
             throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFileElementwise");
@@ -145,7 +145,7 @@ namespace DOpE
      * ReducedProblemInterface_Base
      */
     virtual void
-    WriteToFile(const ControlVector<VECTOR> &, std::string, std::string)
+    WriteToFile(const ControlVector<VECTOR> &, std::string, std::string) override
     {
       abort();
     }
@@ -161,7 +161,7 @@ namespace DOpE
      * there for further documentation of the method.
      */
     virtual const std::map<std::string, unsigned int> &
-    GetFunctionalPosition() const
+    GetFunctionalPosition() const override
     {
       return GetProblem()->GetFunctionalPosition();
     }

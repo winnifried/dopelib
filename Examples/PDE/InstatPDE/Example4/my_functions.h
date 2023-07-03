@@ -37,9 +37,9 @@ public:
 
   }
   virtual double
-  value(const Point<1> &p, const unsigned int component = 0) const;
+  value(const Point<1> &p, const unsigned int component = 0) const override;
   virtual void
-  vector_value(const Point<1> &p, Vector<double> &value) const;
+  vector_value(const Point<1> &p, Vector<double> &value) const override;
 
 private:
 

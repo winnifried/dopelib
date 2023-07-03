@@ -62,21 +62,21 @@ namespace DOpE
     void
     EvaluateLocalControlConstraints(
       const VECTOR & /*control*/,
-      VECTOR & /*constraints*/)
+      VECTOR & /*constraints*/) override
     {
       throw DOpEException("This should never be called!",
                           "NoConstraints::EvaluateLocalControlConstraints");
       abort();
     }
     void
-    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const
+    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const override
     {
       lb = -1.e+20;
       ub = 1.e+20;
     }
     void
     PostProcessConstraints(
-      ConstraintVector<VECTOR> & /*g*/) const
+      ConstraintVector<VECTOR> & /*g*/) const override
     {
     }
 

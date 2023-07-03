@@ -54,7 +54,7 @@ public:
   }
 
   double
-ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -73,18 +73,18 @@ ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "L1-Norm";
   }
@@ -125,7 +125,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/ ,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(0.125, 0.75);
 
@@ -140,12 +140,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "PointValue";
   }

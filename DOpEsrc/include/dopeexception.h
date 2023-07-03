@@ -89,7 +89,7 @@ namespace DOpE
     DOpEIterationException(std::string message, std::string thrower="unspecified throwing instance")
       : DOpEException(message,thrower)
     {}
-    virtual std::string GetName()
+    virtual std::string GetName() override
     {
       return "DOpEIterationException";
     }
@@ -106,7 +106,7 @@ namespace DOpE
     DOpENegativeCurvatureException(std::string message, std::string thrower="unspecified throwing instance")
       : DOpEException(message,thrower)
     {}
-    virtual std::string GetName()
+    virtual std::string GetName() override
     {
       return "DOpENegativeCurvatureException";
     }

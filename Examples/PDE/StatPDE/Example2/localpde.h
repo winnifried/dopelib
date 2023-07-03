@@ -56,7 +56,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const  unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     const unsigned int n_q_points = edc.GetNQPoints();
@@ -99,7 +99,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     const unsigned int n_q_points = edc.GetNQPoints();
@@ -136,7 +136,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     assert(this->problem_type_ == "state");
     const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
@@ -167,29 +167,29 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_default;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 1;
   }
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }

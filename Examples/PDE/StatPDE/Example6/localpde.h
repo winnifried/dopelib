@@ -56,7 +56,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
 
@@ -103,7 +103,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -137,7 +137,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     assert(this->problem_type_ == "state");
 
@@ -168,7 +168,7 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     if (this->problem_type_ == "state")
       return update_values | update_gradients | update_quadrature_points;
@@ -178,18 +178,18 @@ public:
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 1;
   }
 
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }

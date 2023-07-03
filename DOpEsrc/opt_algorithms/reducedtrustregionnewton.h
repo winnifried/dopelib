@@ -89,7 +89,7 @@ namespace DOpE
      *                    The actual tolerance is the maximum of this and the one specified in the param
      *                    file. Its default value is negative, so that it has no influence if not specified.
      */
-    virtual int Solve(ControlVector<VECTOR> &q,double global_tol=-1.);
+    virtual int Solve(ControlVector<VECTOR> &q,double global_tol=-1.) override;
 
     /**
      * This returns the natural norm of the newton residual. This means the norm of the gradient of the

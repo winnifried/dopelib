@@ -281,14 +281,14 @@ namespace DOpE
     inline unsigned int
     GetBoundaryIndicator() const;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesState() const;
+    GetFEFaceValuesState() const override;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesControl() const;
+    GetFEFaceValuesControl() const override;
 
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesState() const;
+    GetNbrFEFaceValuesState() const override;
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesControl() const;
+    GetNbrFEFaceValuesControl() const override;
 
   protected:
     /*
@@ -583,14 +583,14 @@ namespace DOpE
     inline Point<dim>
     GetCenter() const;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesState() const;
+    GetFEFaceValuesState() const override;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesControl() const;
+    GetFEFaceValuesControl() const override;
 
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesState() const;
+    GetNbrFEFaceValuesState() const override;
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesControl() const;
+    GetNbrFEFaceValuesControl() const override;
 
   private:
     inline unsigned int

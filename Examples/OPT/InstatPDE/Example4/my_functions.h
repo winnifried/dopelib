@@ -39,10 +39,10 @@ public:
 
   }
   virtual double
-  value(const Point<2> &p, const unsigned int component = 0) const;
+  value(const Point<2> &p, const unsigned int component = 0) const override;
 
   void
-  SetTime(double t) const
+  SetTime(double t) const override
   {
     mytime = t;
   }

@@ -93,7 +93,7 @@ namespace DOpE
     }
 
     std::string
-    GetName() const
+    GetName() const override
     {
       return "DWR-Estimator-with-Control";
     }
@@ -128,42 +128,42 @@ namespace DOpE
     ReInit();
 
     STH &
-    GetWeightSTH()
+    GetWeightSTH() override
     {
       return GetHigherOrderSTH();
     }
 
     const STH &
-    GetWeightSTH() const
+    GetWeightSTH() const override
     {
       return GetHigherOrderSTH();
     }
 
     IDC &
-    GetWeightIDC()
+    GetWeightIDC() override
     {
       return GetHigherOrderIDC();
     }
 
     const IDC &
-    GetWeightIDC() const
+    GetWeightIDC() const override
     {
       return GetHigherOrderIDC();
     }
 
     StateVector<VECTOR> &
-    GetPI_h_u()
+    GetPI_h_u() override
     {
       return *PI_h_u_;
     }
 
     StateVector<VECTOR> &
-    GetPI_h_z()
+    GetPI_h_z() override
     {
       return *PI_h_z_;
     }
     ControlVector<VECTOR> &
-    GetPI_h_q()
+    GetPI_h_q() override
     {
       return *PI_h_q_;
     }
@@ -174,7 +174,7 @@ namespace DOpE
      * dual residual.
      */
     void
-    PreparePI_h_u(const StateVector<VECTOR> &u)
+    PreparePI_h_u(const StateVector<VECTOR> &u) override
     {
       VECTOR u_high;
       u_high.reinit(GetPI_h_u().GetSpacialVector());
@@ -194,7 +194,7 @@ namespace DOpE
     }
 
     void
-    PreparePI_h_u(const VECTOR &u)
+    PreparePI_h_u(const VECTOR &u) 
     {
       VECTOR u_high;
       u_high.reinit(GetPI_h_u().GetSpacialVector());
@@ -217,7 +217,7 @@ namespace DOpE
      * primal residual.
      */
     void
-    PreparePI_h_z(const StateVector<VECTOR> &z)
+    PreparePI_h_z(const StateVector<VECTOR> &z) override
     {
       VECTOR z_high;
       z_high.reinit(GetPI_h_z().GetSpacialVector());
@@ -245,9 +245,9 @@ namespace DOpE
      */
     void
 #if dope_dimension > 0
-    PreparePI_h_q(const ControlVector<VECTOR> &q)
+    PreparePI_h_q(const ControlVector<VECTOR> &q) override
 #else
-    PreparePI_h_q(const ControlVector<VECTOR> &/*q*/)
+    PreparePI_h_q(const ControlVector<VECTOR> &/*q*/) override
 #endif
     {
 #if dope_dimension > 0
@@ -281,7 +281,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     virtual EDC &
-    GetElementWeight() const
+    GetElementWeight() const override
     {
       return GetHigherOrderIDC().GetElementDataContainer();
     }
@@ -290,7 +290,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     virtual FDC &
-    GetFaceWeight() const
+    GetFaceWeight() const override
     {
       return GetHigherOrderIDC().GetFaceDataContainer();
     }
@@ -299,7 +299,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     bool
-    NeedDual() const
+    NeedDual() const override
     {
       return true;
     }
@@ -308,7 +308,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     virtual DOpEtypes::WeightComputation
-    GetWeightComputation() const
+    GetWeightComputation() const override
     {
       return DOpEtypes::higher_order_interpolation;
     }
@@ -317,7 +317,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     virtual DOpEtypes::ResidualEvaluation
-    GetResidualEvaluation() const
+    GetResidualEvaluation() const override
     {
 //          return DOpEtypes::strong_residual;
       return res_eval_;

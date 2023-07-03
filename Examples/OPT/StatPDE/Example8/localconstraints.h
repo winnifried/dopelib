@@ -69,7 +69,7 @@ namespace DOpE
     void
     EvaluateLocalControlConstraints(
       const dealii::BlockVector<double> &control,
-      dealii::BlockVector<double> &constraints)
+      dealii::BlockVector<double> &constraints) override
     {
       assert(constraints.block(0).size() == 2*control.block(0).size());
 
@@ -82,7 +82,7 @@ namespace DOpE
         }
     }
     void
-    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const
+    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const override
     {
       lb = rho_min_;
       ub = rho_max_;
@@ -90,7 +90,7 @@ namespace DOpE
 
     double
     ElementValue(
-      const EDC<DH, VECTOR, dealdim> &edc)
+      const EDC<DH, VECTOR, dealdim> &edc) override
     {
       if (this->GetProblemType() == "global_constraints"
           && this->GetProblemTypeNum() == 0)
@@ -120,14 +120,14 @@ namespace DOpE
     void
     ElementValue_U(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
     {
     }
 
     void
     ElementValue_Q(
       const EDC<DH, VECTOR, dealdim> &edc,
-                   dealii::Vector<double> &local_vector, double scale)
+                   dealii::Vector<double> &local_vector, double scale) override
     {
       if (this->GetProblemType() == "global_constraint_gradient"
           && this->GetProblemTypeNum() == 0)
@@ -156,30 +156,30 @@ namespace DOpE
     void
     ElementValue_UU(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
     {
     }
     void
     ElementValue_QU(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
     {
     }
     void
     ElementValue_UQ(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
     {
     }
     void
     ElementValue_QQ(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
     {
     }
 
     std::string
-    GetType() const
+    GetType() const override
     {
       if ((this->GetProblemType() == "global_constraints"
            || this->GetProblemType() == "global_constraint_gradient")
@@ -191,7 +191,7 @@ namespace DOpE
           "LocalConstraints::GetType");
     }
     std::string
-    GetName() const
+    GetName() const override
     {
       if ((this->GetProblemType() == "global_constraints"
            || this->GetProblemType() == "global_constraint_gradient")
@@ -204,7 +204,7 @@ namespace DOpE
     }
 
     dealii::UpdateFlags
-    GetUpdateFlags() const
+    GetUpdateFlags() const override
     {
       return update_values | update_quadrature_points;
     }

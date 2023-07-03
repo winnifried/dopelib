@@ -82,7 +82,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, 2> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
 
@@ -246,7 +246,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, 2> &edc,
     dealii::FullMatrix<double> &local_matrix, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
 
@@ -499,7 +499,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, 2> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
@@ -508,7 +508,7 @@ public:
   BoundaryEquation(
     const FDC<DH, VECTOR, 2> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -567,7 +567,7 @@ public:
   BoundaryMatrix(
     const FDC<DH, VECTOR, 2> &fdc,
     dealii::FullMatrix<double> &local_matrix, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -672,36 +672,36 @@ public:
   void
   BoundaryRightHandSide(
     const FDC<DH, VECTOR, 2> &,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 3;
   }
 
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }

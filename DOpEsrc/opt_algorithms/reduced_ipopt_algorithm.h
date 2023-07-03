@@ -32,6 +32,7 @@
 //Make shure the unused variable warnings from ipopt don't bother us
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wsuggest-override"
 #include "IpIpoptApplication.hpp"
 #pragma GCC diagnostic pop
 #endif
@@ -102,7 +103,7 @@ namespace DOpE
      *                    The actual tolerance is the maximum of this and the one specified in the param
      *                    file. Its default value is negative, so that it has no influence if not specified.
      */
-    virtual int Solve(ControlVector<VECTOR> &q,double global_tol=-1.);
+    virtual int Solve(ControlVector<VECTOR> &q,double global_tol=-1.) override;
 
   protected:
 

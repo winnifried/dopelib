@@ -56,7 +56,7 @@ public:
 
   double
   ElementValue(
-    const EDC<DH, VECTOR, dealdim> &edc)
+    const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -93,7 +93,7 @@ public:
   void
   ElementValue_U(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -126,7 +126,7 @@ public:
   void
   ElementValue_Q(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -154,7 +154,7 @@ public:
   void
   ElementValue_UU(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -179,21 +179,21 @@ public:
   void
   ElementValue_QU(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   ElementValue_UQ(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   ElementValue_QQ(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -217,19 +217,19 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "cost functional";
   }

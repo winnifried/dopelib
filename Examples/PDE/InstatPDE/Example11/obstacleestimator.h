@@ -70,7 +70,7 @@ namespace DOpE
     }
 
     std::string
-    GetName() const
+    GetName() const override
     {
       return "Obstacle-Residual-Estimator";
     }
@@ -89,18 +89,18 @@ namespace DOpE
     ReInit();
 
     StateVector<VECTOR> &
-    GetPI_h_u()
+    GetPI_h_u() override
     {
       return *PI_h_u_;
     }
 
     StateVector<VECTOR> &
-    GetPI_h_z()
+    GetPI_h_z() override
     {
       return *PI_h_z_;
     }
     ControlVector<VECTOR> &
-    GetPI_h_q()
+    GetPI_h_q() override
     {
       throw DOpEException("There is no Control in PDE Problems!",
                           "ObstacleResidualErrorContainer::PreparePI_h_q");
@@ -112,7 +112,7 @@ namespace DOpE
      * dual residual.
      */
     void
-    PreparePI_h_u(const StateVector<VECTOR> & /*u*/)
+    PreparePI_h_u(const StateVector<VECTOR> & /*u*/) override
     {
       BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
                           GetPI_h_u().GetSpacialVector());
@@ -124,7 +124,7 @@ namespace DOpE
      * primal residual.
      */
     void
-    PreparePI_h_z(const StateVector<VECTOR> & /*z*/)
+    PreparePI_h_z(const StateVector<VECTOR> & /*z*/) override
     {
       BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
                           GetPI_h_z().GetSpacialVector());
@@ -135,7 +135,7 @@ namespace DOpE
      * control residual.
      */
     void
-    PreparePI_h_q(const ControlVector<VECTOR> & /*q*/)
+    PreparePI_h_q(const ControlVector<VECTOR> & /*q*/) override
     {
       throw DOpEException("There is no Control in PDE Problems!",
                           "HigherOrderDWRContainer::PreparePI_h_q");
@@ -146,7 +146,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     bool
-    NeedDual() const
+    NeedDual() const override
     {
       return false;
     }
@@ -155,7 +155,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      * Here we need a precomputation for the massmatrix and fully active set
      */
-    unsigned int NPrecomputedNodalValues()
+    unsigned int NPrecomputedNodalValues() override
     {
       return 1;
     }
@@ -164,7 +164,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     virtual DOpEtypes::WeightComputation
-    GetWeightComputation() const
+    GetWeightComputation() const override
     {
       return DOpEtypes::element_diameter;
     }
@@ -173,7 +173,7 @@ namespace DOpE
      * Implementation of virtual method from base class.
      */
     virtual DOpEtypes::ResidualEvaluation
-    GetResidualEvaluation() const
+    GetResidualEvaluation() const override
     {
       return DOpEtypes::strong_residual;
     }
@@ -195,12 +195,12 @@ namespace DOpE
     }
 
     void
-    InitFace(double h)
+    InitFace(double h) override
     {
       weight_ = h;
     }
     void
-    InitElement(double h)
+    InitElement(double h) override
     {
       weight_ = h * h;
     }

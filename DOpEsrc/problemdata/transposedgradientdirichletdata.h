@@ -76,7 +76,7 @@ namespace DOpE
     void value (const dealii::Point<dealdim>   &p,
                 const unsigned int  component,
                 const unsigned int  dof_number,
-                dealii::Vector<double> &local_vector) const
+                dealii::Vector<double> &local_vector) const override
     {
       dirichlet_data_.Data_QT(
         param_values_,

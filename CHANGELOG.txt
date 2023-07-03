@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+21.06.2023: Adjustments for deal 9.5.0 and fixed suggest override warnings
 12.05.2023: Fixe in matrix free CG solver in ReducedNewtonAlgorithm
 11.07.2022: Fixes in GMRES and CGLinearSolverWithMatrix. The Preconditioner is
 	    now only reinitialized once the matrix is recomputed.

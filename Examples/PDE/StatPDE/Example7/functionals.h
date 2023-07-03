@@ -64,7 +64,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(90, 0);
 
@@ -79,12 +79,12 @@ public:
     return u1;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "x-displacement_in_(90,0)";
   }
@@ -126,7 +126,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<dealdim> p1(100, 100);
 
@@ -142,12 +142,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "y-displacement_in_(100,100)";
   }
@@ -187,7 +187,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p1(0, 100);
 
@@ -203,12 +203,12 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "x-displacement_in_(0,100)";
   }
@@ -240,7 +240,7 @@ private:
 public:
 
   double
-    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -286,18 +286,18 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "yy-stress_in_(90,0)";
   }
@@ -326,14 +326,14 @@ class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<EDC, FDC,
 public:
 
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return false;
   }
 
   // compute y-displacement-integral
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -359,19 +359,19 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "y-displacement-integral_on_upper_boundary";
   }

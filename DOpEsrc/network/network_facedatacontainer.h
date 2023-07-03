@@ -286,14 +286,14 @@ namespace DOpE
       inline unsigned int
       GetBoundaryIndicator() const;
       inline const FEFaceValuesBase<dim> &
-      GetFEFaceValuesState() const;
+      GetFEFaceValuesState() const override;
       inline const FEFaceValuesBase<dim> &
-      GetFEFaceValuesControl() const;
+      GetFEFaceValuesControl() const override;
 
       inline const FEFaceValuesBase<dim> &
-      GetNbrFEFaceValuesState() const;
+      GetNbrFEFaceValuesState() const override;
       inline const FEFaceValuesBase<dim> &
-      GetNbrFEFaceValuesControl() const;
+      GetNbrFEFaceValuesControl() const override;
 
       /**
        * Writes the values of the flux values at the pipe boundary at the quadrature points

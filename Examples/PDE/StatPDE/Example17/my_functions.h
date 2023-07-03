@@ -31,13 +31,13 @@ class ExactSolution : public Function<dim>
 public : ExactSolution() : Function<dim> (dim + 1) {}
 
 virtual double value (const Point<dim> &p,
-		unsigned int component) const;
+		unsigned int component) const override;
 
 virtual void vector_value (const Point<dim> &p,
-		Vector<double>&values) const;
+		Vector<double>&values) const override;
 
 virtual Tensor<1, dim> gradient (const Point<dim> &p,
-		const unsigned int component) const;
+		const unsigned int component) const override;
 private:
    const double lambda = 0.3;
 };
@@ -117,10 +117,10 @@ class BoundaryValues : public DOpEWrapper::Function<dim>
    BoundaryValues () : DOpEWrapper::Function<dim>(dim + 1) {}
 
    virtual double value (const Point<dim> &p,
-		unsigned int component) const;
+		unsigned int component) const override;
 
    virtual void vector_value (const Point<dim> &p,
-		Vector<double> &values) const;
+		Vector<double> &values) const override;
 
    private:
     const double lambda = 0.3;

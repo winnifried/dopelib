@@ -65,11 +65,11 @@ namespace DOpE
 #else
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
 #endif
-      dealii::AffineConstraints<double> &constraint_matrix) const;
+      dealii::AffineConstraints<double> &constraint_matrix) const override;
 #else
     virtual void MakeStateDoFConstraints(
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
-      dealii::ConstraintMatrix &constraint_matrix) const;
+      dealii::ConstraintMatrix &constraint_matrix) const override;
 #endif
 
 #if DEAL_II_VERSION_GTE(9,1,1)
@@ -80,12 +80,12 @@ namespace DOpE
 #else
       const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
 #endif
-      dealii::AffineConstraints<double> & /*dof_constraints*/) const {}
+      dealii::AffineConstraints<double> & /*dof_constraints*/) const override {}
 #else
     virtual void
     MakeControlDoFConstraints(
       const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
-      dealii::ConstraintMatrix & /*dof_constraints*/) const {}
+      dealii::ConstraintMatrix & /*dof_constraints*/) const override {}
 #endif
   private:
 

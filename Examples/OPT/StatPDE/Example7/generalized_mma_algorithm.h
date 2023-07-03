@@ -98,7 +98,7 @@ namespace DOpE
      */
     static void declare_params(ParameterReader &param_reader);
 
-    void ReInit()
+    void ReInit() override
     {
       ReducedAlgorithm<PROBLEM,VECTOR>::ReInit();
       sub_problem_opt_alg_.ReInit();
@@ -111,7 +111,7 @@ namespace DOpE
      * algorithm with an application to multiple-load free material optimization',
      * SIAM J. Optim. 20(1) (2009)
      */
-    int Solve(ControlVector<VECTOR> &q, double global_tol =-1.);
+    int Solve(ControlVector<VECTOR> &q, double global_tol =-1.) override;
 
   protected:
     /**

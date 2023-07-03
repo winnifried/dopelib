@@ -31,7 +31,7 @@ class ExactSolution : public DOpEWrapper::Function<2>
 public:
 
   double
-  value(const dealii::Point<2> &p, const unsigned int /*component*/ = 0) const
+  value(const dealii::Point<2> &p, const unsigned int /*component*/ = 0) const override
   {
 //      Assert(component < this->n_components,
 //          ExcIndexRange (component, 0, this->n_components));
@@ -41,13 +41,13 @@ public:
 
   double
   laplacian(const dealii::Point<2> & /*p*/,
-            const unsigned int /*component*/ = 0) const
+            const unsigned int /*component*/ = 0) const override
   {
     return 4.;
   }
 
   void
-  vector_value(const dealii::Point<2> &p, dealii::Vector<double> &value) const
+  vector_value(const dealii::Point<2> &p, dealii::Vector<double> &value) const override
   {
     for (unsigned int c = 0; c < this->n_components; ++c)
       value(c) = ExactSolution::value(p, c);

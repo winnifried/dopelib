@@ -54,7 +54,7 @@ public:
 
   double
   BoundaryValue(
-    const FDC<DH, VECTOR, dealdim> &fdc)
+    const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -86,7 +86,7 @@ public:
   void
   BoundaryValue_U(
     const FDC<DH, VECTOR, dealdim> &fdc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -123,65 +123,65 @@ public:
   void
   BoundaryValue_Q(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
 
   void
   BoundaryValue_UU(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
 
   void
   BoundaryValue_QU(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
 
   void
   BoundaryValue_UQ(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
 
   void
   BoundaryValue_QQ(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
 
   void
   ElementValue_U(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
   void
   ElementValue_Q(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double/*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double/*scale*/) override
   {
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "cost functional";
   }

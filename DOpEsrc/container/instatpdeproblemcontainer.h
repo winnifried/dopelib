@@ -118,7 +118,7 @@ namespace DOpE
       PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>::ReInit(algo_type);
     }
 
-    std::string GetName() const
+    std::string GetName() const override
     {
       return "InstatPDEProblemContainer";
     }

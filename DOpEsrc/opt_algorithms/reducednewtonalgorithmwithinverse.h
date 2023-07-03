@@ -89,7 +89,7 @@ namespace DOpE
      *                    The actual tolerance is the maximum of this and the one specified in the param
      *                    file. Its default value is negative, so that it has no influence if not specified.
      */
-    virtual int Solve(ControlVector<VECTOR> &q,double global_tol=-1.);
+    virtual int Solve(ControlVector<VECTOR> &q,double global_tol=-1.) override;
 
   protected:
     /**
@@ -112,10 +112,10 @@ namespace DOpE
     int SolveReducedLinearSystem(const ControlVector<VECTOR> &q,
                                  const ControlVector<VECTOR> &gradient,
                                  const ControlVector<VECTOR> &gradient_transposed,
-                                 ControlVector<VECTOR> &dq);
+                                 ControlVector<VECTOR> &dq) override;
 
     double Residual(const ControlVector<VECTOR> &gradient,
-                    const ControlVector<VECTOR> & /*gradient_transposed*/)
+                    const ControlVector<VECTOR> & /*gradient_transposed*/) override
     {
       return  gradient*gradient;
     }

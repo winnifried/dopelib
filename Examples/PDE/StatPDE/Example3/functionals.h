@@ -70,7 +70,7 @@ public:
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &
     /*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     const dealii::Point<2> p1(2.0, 1.0);
 
@@ -91,12 +91,12 @@ public:
    * Describes the type of the functional.
    */
   std::string
-  GetType() const
+  GetType() const override
   {
     return "point";
   }
   std::string
-  GetName() const
+  GetName() const override
   {
     return "Velocity in X";
   }
@@ -126,7 +126,7 @@ class LocalBoundaryFluxFunctional : public FunctionalInterface<EDC, FDC, DH,
 {
 public:
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     const unsigned int color = fdc.GetBoundaryIndicator();
     //auto = FEValues
@@ -154,18 +154,18 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_normal_vectors;
   }
 
   std::string
-  GetType() const
+  GetType() const override
   {
     return "boundary";
   }
   std::string
-  GetName() const
+  GetName() const override
   {
     return "Flux";
   }

@@ -340,7 +340,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
-                         unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
+                         unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override
     {
        switch (type)
         {
@@ -368,7 +368,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
-                            unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
+                            unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override
     {
       switch (type)
       {
@@ -527,7 +527,7 @@ namespace DOpE
                  std::string name,
                  std::string outfile,
                  std::string dof_type,
-                 std::string filetype);
+                 std::string filetype) override;
 
     virtual void
     WriteToFileElementwise(const Vector<float> &v,
@@ -535,7 +535,7 @@ namespace DOpE
                            std::string outfile,
 			   std::string dof_type,
 			   std::string filetype,
-			   int n_patches);
+			   int n_patches) override;
 
   protected:
     //we need this here, because we know the type of the DoFHandler in use.

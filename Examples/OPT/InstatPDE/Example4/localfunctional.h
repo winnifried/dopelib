@@ -53,13 +53,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   double AlgebraicValue(
     const std::map<std::string, const dealii::Vector<double>*> &param_values,
-    const std::map<std::string, const VECTOR *> &/*domain_values*/)
+    const std::map<std::string, const VECTOR *> &/*domain_values*/) override
   {
     assert(this->GetProblemType() == "cost_functional");
     //Search the vector with the precomputed functional values
@@ -70,7 +70,7 @@ public:
 
   double
     ElementValue(
-      const EDC<DH, VECTOR, dealdim> &edc)
+      const EDC<DH, VECTOR, dealdim> &edc) override
   {
     if ( this->GetProblemType() == "cost_functional_pre" ||
          this->GetProblemType() == "cost_functional_pre_tangent" )
@@ -138,7 +138,7 @@ public:
   void
   ElementValue_U(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -164,7 +164,7 @@ public:
   void
   ElementValue_Q(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesControl();
@@ -205,7 +205,7 @@ public:
   void
   ElementValue_UU(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -234,21 +234,21 @@ public:
   void
   ElementValue_QU(
     const EDC<DH, VECTOR, dealdim> &,
-    dealii::Vector<double> &, double)
+    dealii::Vector<double> &, double) override
   {
   }
 
   void
   ElementValue_UQ(
     const EDC<DH, VECTOR, dealdim> &,
-    dealii::Vector<double> &, double)
+    dealii::Vector<double> &, double) override
   {
   }
 
   void
   ElementValue_QQ(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesControl();
@@ -276,13 +276,13 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     //More complicated selection to avoid implementing
     //unneeded derivatives
@@ -311,12 +311,12 @@ public:
   }
 
   std::string
-  GetName() const
+  GetName() const override
   {
     return "Cost-functional";
   }
 
-  unsigned int NeedPrecomputations() const
+  unsigned int NeedPrecomputations() const override
   {
     return 1;
   }

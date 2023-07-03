@@ -51,7 +51,7 @@ class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
 public:
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
@@ -66,7 +66,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
 
     Point<2> p1(0.15, 0.2);
@@ -90,14 +90,14 @@ public:
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Pressure_difference";
   }
@@ -145,13 +145,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -201,21 +201,21 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Drag";
   }
@@ -263,13 +263,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -320,21 +320,21 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "Lift";
   }

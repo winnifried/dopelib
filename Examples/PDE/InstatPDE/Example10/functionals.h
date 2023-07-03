@@ -70,13 +70,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -133,21 +133,21 @@ public:
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "boundary timelocal";
     // 1) point domain boundary face
     // 2) timelocal timedistributed
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "StressX";
   }
@@ -195,13 +195,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -239,25 +239,25 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "BulkEnergy";
   }
@@ -302,13 +302,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -334,25 +334,25 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients
            | update_normal_vectors;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "CrackEnergy";
   }

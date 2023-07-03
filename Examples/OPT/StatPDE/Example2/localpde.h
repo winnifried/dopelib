@@ -57,7 +57,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -121,7 +121,7 @@ public:
   ElementEquation_U(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -154,7 +154,7 @@ public:
   ElementEquation_UT(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -185,7 +185,7 @@ public:
   ElementEquation_UTT(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -216,7 +216,7 @@ public:
   ElementEquation_Q(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -264,7 +264,7 @@ public:
   ElementEquation_QT(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -315,7 +315,7 @@ public:
   ElementEquation_QTT(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -363,7 +363,7 @@ public:
   ElementEquation_UU(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "adjoint_hessian");
   }
@@ -371,7 +371,7 @@ public:
   ElementEquation_QU(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "adjoint_hessian");
   }
@@ -379,7 +379,7 @@ public:
   ElementEquation_UQ(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "hessian");
   }
@@ -387,14 +387,14 @@ public:
   ElementEquation_QQ(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "hessian");
   }
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
     {
       assert(this->problem_type_ == "state");
@@ -405,7 +405,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -438,7 +438,7 @@ public:
   void
   ControlElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     {
       assert(
@@ -456,7 +456,7 @@ public:
   void
   ControlElementMatrix(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    FullMatrix<double> &local_matrix, double scale)
+    FullMatrix<double> &local_matrix, double scale) override
   {
     assert(local_matrix.m() == local_matrix.n());
     for (unsigned int i = 0; i < local_matrix.m(); i++)
@@ -466,38 +466,38 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points;
   }
 
   unsigned int
-  GetControlNBlocks() const
+  GetControlNBlocks() const override
   {
     return 3;
   }
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 2;
   }
   std::vector<unsigned int> &
-  GetControlBlockComponent()
+  GetControlBlockComponent() override
   {
     return control_block_components_;
   }
   const std::vector<unsigned int> &
-  GetControlBlockComponent() const
+  GetControlBlockComponent() const override
   {
     return control_block_components_;
   }
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }

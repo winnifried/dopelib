@@ -45,7 +45,7 @@ namespace DOpE
                 const std::map<std::string, const VECTOR * > */*domain_values*/,
                 unsigned int /*color*/,
                 const dealii::Point<dealdim> &point,
-                const unsigned int component) const
+                const unsigned int component) const override
     {
       return data_.value(point,component);
     }
@@ -54,22 +54,22 @@ namespace DOpE
                   const std::map<std::string, const VECTOR * > */*domain_values*/,
                   unsigned int /*color*/,
                   const dealii::Point<dealdim> & /*point*/,
-                  const unsigned int /*component*/) const
+                  const unsigned int /*component*/) const override
     {
       return 0.;
     }
 
-    void SetTime(double time) const
+    void SetTime(double time) const override
     {
       data_.SetTime(time);
     }
 
-    unsigned int n_components() const
+    unsigned int n_components() const override
     {
       return data_.n_components;
     }
 
-    double InitialTime() const
+    double InitialTime() const override
     {
       return data_.InitialTime();
     }

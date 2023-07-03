@@ -62,13 +62,13 @@ public:
 	}
 
 	bool
-	NeedTime() const
+	NeedTime() const override
 	{
 		return true;
 	}
 
 	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
 	{
 		const auto &state_fe_values = edc.GetFEValuesState();
 		unsigned int n_q_points = edc.GetNQPoints();
@@ -104,24 +104,24 @@ public:
 	}
 
 	UpdateFlags
-	GetUpdateFlags() const
+	GetUpdateFlags() const override
 	{
 		return update_values | update_quadrature_points | update_gradients;
 	}
 
 	string
-	GetType() const
+	GetType() const override
 	{
 		return "domain timelocal";
 	}
 
-	bool HasFaces() const
+	bool HasFaces() const override
 	{
 		return false;
 	}
 
 	string
-	GetName() const
+	GetName() const override
 	{
 		return "TCV";
 	}
@@ -187,13 +187,13 @@ public:
 	}
 
 	bool
-	NeedTime() const
+	NeedTime() const override
 	{
 		return true;
 	}
 
 	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
 	{
 		const auto &state_fe_values = edc.GetFEValuesState();
 		unsigned int n_q_points = edc.GetNQPoints();
@@ -234,24 +234,24 @@ public:
 	}
 
 	UpdateFlags
-	GetUpdateFlags() const
+	GetUpdateFlags() const override
 	{
 		return update_values | update_quadrature_points | update_gradients;
 	}
 
 	string
-	GetType() const
+	GetType() const override
 	{
 		return "domain timelocal";
 	}
 
-	bool HasFaces() const
+	bool HasFaces() const override
 	{
 		return false;
 	}
 
 	string
-	GetName() const
+	GetName() const override
 	{
 		return "BulkEnergy";
 	}
@@ -300,13 +300,13 @@ public:
 	  alpha_eps_ = eps;
 	}
 	bool
-	NeedTime() const
+	NeedTime() const override
 	{
 		return true;
 	}
 
 	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
 	{
 		const auto &state_fe_values = edc.GetFEValuesState();
 		unsigned int n_q_points = edc.GetNQPoints();
@@ -342,24 +342,24 @@ public:
 	}
 
 	UpdateFlags
-	GetUpdateFlags() const
+	GetUpdateFlags() const override
 	{
 		return update_values | update_quadrature_points | update_gradients;
 	}
 
 	string
-	GetType() const
+	GetType() const override
 	{
 		return "domain timelocal";
 	}
 
-	bool HasFaces() const
+	bool HasFaces() const override
 	{
 		return false;
 	}
 
 	string
-	GetName() const
+	GetName() const override
 	{
 		return "CrackEnergy";
 	}
@@ -419,13 +419,13 @@ public:
 	}
 
 	bool
-	NeedTime() const
+	NeedTime() const override
 	{
 		return true;
 	}
 
 	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
 	{
 		const auto &state_fe_values = edc.GetFEValuesState();
 		unsigned int n_q_points = edc.GetNQPoints();
@@ -464,24 +464,24 @@ public:
 	}
 
 	UpdateFlags
-	GetUpdateFlags() const
+	GetUpdateFlags() const override
 	{
 		return update_values | update_quadrature_points | update_gradients;
 	}
 
 	string
-	GetType() const
+	GetType() const override
 	{
 		return "domain timelocal";
 	}
 
-	bool HasFaces() const
+	bool HasFaces() const override
 	{
 		return false;
 	}
 
 	string
-	GetName() const
+	GetName() const override
 	{
 		return "BulkEnergyMixed";
 	}	
@@ -515,7 +515,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(-1., 0.);
 
@@ -530,17 +530,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispXLeft";
   }
@@ -574,7 +574,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(1., 0.);
 
@@ -589,17 +589,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispXRight";
   }
@@ -641,7 +641,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(0., d_);
 
@@ -656,17 +656,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispXTop";
   }
@@ -711,7 +711,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(0., -1.*d_);
 
@@ -726,17 +726,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispXBottom";
   }
@@ -773,7 +773,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(-1., 0.);
 
@@ -788,17 +788,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispYLeft";
   }
@@ -832,7 +832,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(1., 0.);
 
@@ -847,17 +847,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispYRight";
   }
@@ -899,7 +899,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(0., d_);
 
@@ -914,17 +914,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispYTop";
   }
@@ -969,7 +969,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(0., -1.*d_);
 
@@ -984,17 +984,17 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
   string
-  GetType() const
+  GetType() const override
   {
     return "point timelocal";
   }
   string
-  GetName() const
+  GetName() const override
   {
     return "DispYBottom";
   }
@@ -1055,13 +1055,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -1143,24 +1143,24 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
      stringstream out;
     out<<"EnergyNorm-"<<ref_string_;
@@ -1223,13 +1223,13 @@ public:
     alpha_eps_ = eps;
   }
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -1311,24 +1311,24 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
      stringstream out;
     out<<"EnergyVarNorm-"<<ref_string_;
@@ -1390,13 +1390,13 @@ public:
     alpha_eps_ = eps;
   }
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -1457,24 +1457,24 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     stringstream out;
     out<<"WeightedL2Norm-"<<ref_string_;
@@ -1521,13 +1521,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -1555,24 +1555,24 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     stringstream out;
     out<<"L2Norm-"<<ref_string_;
@@ -1626,13 +1626,13 @@ public:
     alpha_eps_ = eps;
   }
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -1682,24 +1682,24 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     stringstream out;
     out<<"WeightedH1Norm-"<<ref_string_;
@@ -1744,13 +1744,13 @@ public:
   }
 
   bool
-  NeedTime() const
+  NeedTime() const override
   {
     return true;
   }
 
   double
-  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     const auto &state_fe_values = edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -1790,24 +1790,24 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points | update_gradients;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain timelocal";
   }
 
-  bool HasFaces() const
+  bool HasFaces() const override
   {
     return false;
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     stringstream out;
     out<<"H1Norm-"<<ref_string_;

@@ -73,7 +73,7 @@ public:
 
   double
   ElementValue(
-    const EDC<DH, VECTOR, dealdim> &edc)
+    const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -104,7 +104,7 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-    const std::map<std::string, const VECTOR *> &domain_values)
+    const std::map<std::string, const VECTOR *> &domain_values) override
   {
     double r = 0;
     //now we extract the solution u
@@ -136,7 +136,7 @@ public:
   void
   ElementValue_U(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
@@ -151,7 +151,7 @@ public:
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values,
-    VECTOR &rhs, double scale)
+    VECTOR &rhs, double scale) override
   {
     VECTOR rhs_tmp_0, rhs_tmp_1;
     //lets extract the solution u
@@ -201,14 +201,14 @@ public:
     const DOpEWrapper::DoFHandler<dealdim, DH> &,
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &,
-    const std::map<std::string, const VECTOR *> &, VECTOR &, double)
+    const std::map<std::string, const VECTOR *> &, VECTOR &, double) override
   {
   }
 
   void
   ElementValue_Q(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -232,7 +232,7 @@ public:
   void
   ElementValue_UU(
     const EDC<DH, VECTOR, dealdim> &, dealii::Vector<double> &,
-    double)
+    double) override
   {
   }
 
@@ -247,7 +247,7 @@ public:
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values,
-    VECTOR &rhs, double scale)
+    VECTOR &rhs, double scale) override
   {
     VECTOR rhs_tmp_0, rhs_tmp_1;
     typename std::map<std::string, const VECTOR *>::const_iterator it =
@@ -293,7 +293,7 @@ public:
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &/*domain_values*/,
-    VECTOR & /*rhs*/, double /*scale*/)
+    VECTOR & /*rhs*/, double /*scale*/) override
   {
 
   }
@@ -309,7 +309,7 @@ public:
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &/*domain_values*/,
-    VECTOR & /*rhs*/, double /*scale*/)
+    VECTOR & /*rhs*/, double /*scale*/) override
   {
 
   }
@@ -325,7 +325,7 @@ public:
 #endif
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &/*domain_values*/,
-    VECTOR & /*rhs*/, double /*scale*/)
+    VECTOR & /*rhs*/, double /*scale*/) override
   {
 
   }
@@ -333,21 +333,21 @@ public:
   void
   ElementValue_QU(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   ElementValue_UQ(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   ElementValue_QQ(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &local_vector, double scale)
+    dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -368,19 +368,19 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_quadrature_points;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "point domain";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "cost functional";
   }

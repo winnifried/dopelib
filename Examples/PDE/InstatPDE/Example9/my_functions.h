@@ -37,9 +37,9 @@ public:
 
   }
   virtual double
-  value(const Point<2> &p, const unsigned int component = 0) const;
+  value(const Point<2> &p, const unsigned int component = 0) const override;
   virtual void
-  vector_value(const Point<2> &p, Vector<double> &value) const;
+  vector_value(const Point<2> &p, Vector<double> &value) const override;
 
 private:
 
@@ -76,20 +76,20 @@ public:
   }
 
   double value (const Point<2>   &p,
-		const unsigned int /*component*/ = 0) const
+		const unsigned int /*component*/ = 0) const override
   {
     double y = p[1];
     return mytime*y;
   }
 
   void vector_value (const Point<2> &p,
-		     Vector<double>   &value) const
+		     Vector<double>   &value) const override
   {
     for (unsigned int c=0; c<this->n_components; ++c)
       value (c) = DirichletValues::value (p, c);
   }
 
-  void SetTime(double t) const
+  void SetTime(double t) const override
   {
     mytime=t;
   }

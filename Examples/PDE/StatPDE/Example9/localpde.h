@@ -59,7 +59,7 @@ public:
   void
     ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale,
-                  double /*scale_ico*/)
+                  double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -190,7 +190,7 @@ public:
   void
     ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
                 FullMatrix<double> &local_matrix, double scale,
-                double /*scale_ico*/)
+                double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -402,7 +402,7 @@ public:
 
   void
   ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+                       dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
     assert(this->problem_type_ == "state");
   }
@@ -411,7 +411,7 @@ public:
   void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
                    dealii::Vector<double> &local_vector, double scale,
-                   double /*scale_ico*/)
+                   double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -472,7 +472,7 @@ public:
   void
      BoundaryMatrix(const FDC<DH, VECTOR, dealdim> &fdc,
                  dealii::FullMatrix<double> &local_matrix, double scale,
-                 double /*scale_ico*/)
+                 double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -579,36 +579,36 @@ public:
 
   void
     BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+                        dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 3;
   }
 
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }

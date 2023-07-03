@@ -213,9 +213,9 @@ namespace DOpE
       inline Point<dim>
       GetCenter() const;
       inline const DOpEWrapper::FEValues<dim> &
-      GetFEValuesState() const;
+      GetFEValuesState() const override;
       inline const DOpEWrapper::FEValues<dim> &
-      GetFEValuesControl() const;
+      GetFEValuesControl() const override;
     private:
       /*
        * Helper Functions

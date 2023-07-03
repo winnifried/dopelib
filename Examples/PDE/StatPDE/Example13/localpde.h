@@ -57,7 +57,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -99,7 +99,7 @@ public:
   BoundaryEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -155,7 +155,7 @@ public:
   FaceEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     //The face equation contains the coupling of the element DOFs
     //with the DOFs from the same element induced by the face integrals
@@ -205,7 +205,7 @@ public:
   InterfaceEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     //The interface equation contains the coupling of the element DOFs
     //with the DOFs from the neigbouring element induced by the face integrals
@@ -257,7 +257,7 @@ public:
   BoundaryMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -301,7 +301,7 @@ public:
   FaceMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -349,7 +349,7 @@ public:
   InterfaceMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_dofs_per_element_nbr = fdc.GetNbrNDoFsPerElement();
@@ -398,7 +398,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double/*scale_ico*/)
+    double/*scale_ico*/) override
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -437,7 +437,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -445,58 +445,58 @@ public:
   void
   FaceRightHandSide(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
   BoundaryRightHandSide(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients
            | update_quadrature_points;
   }
 
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 1;
   }
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }
   bool
-  HasFaces() const
+  HasFaces() const override
   {
     return true;
   }
   bool
-  HasInterfaces() const
+  HasInterfaces() const override
   {
     return true;
   }
   template<typename ELEMENTITERATOR>
   bool
-  AtInterface(ELEMENTITERATOR &element, unsigned int face) const
+  AtInterface(ELEMENTITERATOR &element, unsigned int face) const 
   {
     if (element[0]->neighbor_index(face) != -1) //make shure its no boundary
       return true;

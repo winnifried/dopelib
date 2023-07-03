@@ -65,7 +65,7 @@ public:
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector, double scale,
-    double scale_ico)
+    double scale_ico) override
   {
     //Get the number of dofs, the number of quad points as
     //well as the finite element values on this element from the edc.
@@ -132,7 +132,7 @@ public:
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
     FullMatrix<double> &local_matrix, double scale,
-    double scale_ico)
+    double scale_ico) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -184,7 +184,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> &
-    /*edc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    /*edc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
 
   }
@@ -198,7 +198,7 @@ public:
   BoundaryEquation(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::Vector<double> &local_vector, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     //auto = FEValues
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -250,7 +250,7 @@ public:
   BoundaryMatrix(
     const FDC<DH, VECTOR, dealdim> &fdc,
     dealii::FullMatrix<double> &local_matrix, double scale,
-    double /*scale_ico*/)
+    double /*scale_ico*/) override
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     const unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -294,7 +294,7 @@ public:
   void
   BoundaryRightHandSide(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
@@ -302,7 +302,7 @@ public:
    * Returns the update flags the FEValues.
    */
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points;
   }
@@ -311,7 +311,7 @@ public:
    * Returns the update flags the FEFaceValues.
    */
   UpdateFlags
-  GetFaceUpdateFlags() const
+  GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points;
@@ -321,17 +321,17 @@ public:
    * Returns the number of blocks. We have two, namely velocity and pressure.
    */
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 2;
   }
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }

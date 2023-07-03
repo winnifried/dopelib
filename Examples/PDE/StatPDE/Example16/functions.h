@@ -47,7 +47,7 @@ namespace local
   public:
     Obstacle() : Function<2>(2){}
 
-    double value(const Point<2> &p, const unsigned int component = 0 ) const
+    double value(const Point<2> &p, const unsigned int component = 0 ) const override
     {
       //return 0.5;
       if( component ==0 )
