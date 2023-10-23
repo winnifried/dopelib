@@ -242,7 +242,7 @@ namespace DOpE
    	 KSPGetPC(ksp, &pc);
    	 PCSetType(pc, char_pctype_);
 
-   	  EPSSetProblemType(eps, EPS_GHEP);
+   	  EPSSetProblemType(eps, EPS_GHEP); // EPS_type is from type EPSProblemType
 	  EPSSetDimensions(eps,eigenvalues_.size(),PETSC_DECIDE,PETSC_DECIDE);
 
    	  EPSSolve(eps);
