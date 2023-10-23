@@ -88,13 +88,10 @@ public:
 
 		DF = deformation_tensor_(qgrads);
 		detDF = determinante_(DF);
-		// eigenwerte von Df bestimmen. Wenn
-		//hauptminor, determinante, wenn positiv, auch erster eintrag positiv?, trace
-//		std::cout << DF[0][0] << "," << DF[1][0] << ","<<DF[0][1] << ","<<DF[1][1] << std::endl;
-
-		if(detDF < epsilon_ ){
+	
+		/*if(detDF < epsilon_ ){
 					r += 10.e20;
-		} else{
+		} else{*/
 		    r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
 
@@ -102,9 +99,9 @@ public:
 					(scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
 
 
-			r += - beta_ *(std::log((detDF/*-epsilon_*/)))* state_fe_values.JxW(q_point);
+			r += - beta_ *(std::log((detDF-epsilon_)))* state_fe_values.JxW(q_point);
 
-     }
+    //}
   }
     return r;
   }
@@ -172,19 +169,19 @@ public:
 
         	detDFdq = determinante_DF_dq_(qgrads, grad_phi_v[i]);;
 
-        	if(detDF < epsilon_){
+        /*	if(detDF < epsilon_){
         	        		local_vector(i) += 0;
-        	        	} else{
+        	        	} else{*/
         	local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
         	        	              * state_fe_values.JxW(q_point);
 
             local_vector(i) += scale * alpha_
             		*(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
 
-            local_vector(i) += - scale* beta_ * (detDFdq * (1/(detDF/*-epsilon_*/)))*state_fe_values.JxW(q_point);
+            local_vector(i) += - scale* beta_ * (detDFdq * (1/(detDF-epsilon_)))*state_fe_values.JxW(q_point);
         	        	}
     }
-    }
+  //  }
   }
 
   UpdateFlags
