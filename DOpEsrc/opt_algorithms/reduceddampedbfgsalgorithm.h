@@ -459,7 +459,7 @@ namespace DOpE
 	  y = gradient_new;
 	  y.add(-1.,gradient);
 	  y_t = gradient_new_transposed;
-	  y_t.add(-1.,gradient_new_transposed);
+	  y_t.add(-1.,gradient_transposed);
 	  ApplyBFGSMatrix(B_y,y,y_t, iter-1, iter-1);
 	  
 	  //#################################################################
