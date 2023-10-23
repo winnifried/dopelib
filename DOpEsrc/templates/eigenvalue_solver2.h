@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef EIGENVALUE_SOLVER_TEST_H_
-#define EIGENVALUE_SOLVER_TEST_H_
+#ifndef EIGENVALUE_SOLVER2_H_
+#define EIGENVALUE_SOLVER2_H_
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/numerics/vector_tools.h>
@@ -51,11 +51,11 @@ namespace DOpE
 {
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
-  class EigenvalueSolver_test
+  class EigenvalueSolver2
   {
   public:
-	  EigenvalueSolver_test( INTEGRATOR &integrator, ParameterReader &param_reader);
-    ~EigenvalueSolver_test();
+	  EigenvalueSolver2( INTEGRATOR &integrator, ParameterReader &param_reader);
+    ~EigenvalueSolver2();
 
     static void declare_params(ParameterReader &param_reader);
 
@@ -77,7 +77,10 @@ namespace DOpE
 
   private:
     INTEGRATOR &integrator_;
-    MATRIX matrixK_, matrixM_;
+    
+    //TODO testen, ob extra precon_matrix benötigt wird. (Cast über Wrapper scheint problematisch, also erstmal nur kopieren)
+    MATRIX matrixK_, matrixM_,/*;
+    Mat */ matrixMprecon_;
 
     IndexSet eigenfunction_index_set;
     std::vector<PETScWrappers::MPI::Vector> eigenvectors_;
@@ -89,62 +92,73 @@ namespace DOpE
 
     int maxiter_;
     double target_eigenvalue_ , tol_;
+    bool first_iteration = true;
+    PetscScalar target_ ;
   };
 
   /**********************************Implementation*******************************************/
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
-  void EigenvalueSolver_test<INTEGRATOR,VECTOR , MATRIX>
+  void EigenvalueSolver2<INTEGRATOR,VECTOR , MATRIX>
   ::declare_params(ParameterReader &param_reader)
   {
 	  param_reader.SetSubsection("eigenvalue_solver parameters");
 	  param_reader.declare_entry("tol", "0.00001", Patterns::Double(0),"tolerance");
-	  param_reader.declare_entry("maxiter", "1000", Patterns::Integer(0),"max iterations");
 	  param_reader.declare_entry("target_eigenvalue", "0.001", Patterns::Double(0),"target eigenvalue");
 
   }
 
   /*******************************************************************************************/
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
-  EigenvalueSolver_test<INTEGRATOR,VECTOR, MATRIX>
-  ::EigenvalueSolver_test(INTEGRATOR &integrator, ParameterReader &param_reader)
+  EigenvalueSolver2<INTEGRATOR,VECTOR, MATRIX>
+  ::EigenvalueSolver2(INTEGRATOR &integrator, ParameterReader &param_reader)
     : integrator_(integrator)
   {
 	    param_reader.SetSubsection("eigenvalue_solver parameters");
 	    tol_ = param_reader.get_double ("tol");
-	    maxiter_ = param_reader.get_integer ("maxiter");
 	    target_eigenvalue_ = param_reader.get_double ("target_eigenvalue");
   }
 
   /*******************************************************************************************/
 
   template <typename INTEGRATOR, typename VECTOR,  typename MATRIX>
-  EigenvalueSolver_test<INTEGRATOR,VECTOR, MATRIX>
-  ::~EigenvalueSolver_test()
+  EigenvalueSolver2<INTEGRATOR,VECTOR, MATRIX>
+  ::~EigenvalueSolver2()
   {
   }
 
   /*******************************************************************************************/
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
   template<typename PROBLEM>
-  void EigenvalueSolver_test<INTEGRATOR, VECTOR, MATRIX>
+  void EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>
   ::ReInit(PROBLEM &pde)
   {
+
+
+
 	     matrixK_.clear();
 	     matrixK_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
 	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
 	     matrixM_.clear();
 	     matrixM_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
 	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
+
+	     matrixKprecon_.clear();
+	     matrixKprecon_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
+	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
+	     matrixMprecon_.clear();
+	     matrixMprecon_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
+	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
+	     		
+	     		
 	     eigenvectors_.clear();
-//	     eigenvectors_normalization_.clear();
 	     eigenvalues_.clear();
   }
 
   /*******************************************************************************************/
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
   template<typename PROBLEM>
-  bool EigenvalueSolver_test<INTEGRATOR, VECTOR, MATRIX>
+  bool EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>
   ::EigenvalueSolve(PROBLEM &pde,
 		  std::vector<double> &eigenvalues,
 		  std::vector<StateVector<VECTOR>> &eigenfunctions,
@@ -160,7 +174,11 @@ namespace DOpE
   	   this->ReInit(pde);
 	   integrator_.ComputeMatrix(pde,matrixK_);
 	   integrator_.ComputeMassMatrix(pde,matrixM_);
+	   
+	   integrator_.ComputeMassMatrix(pde,matrixMprecon_);
    }
+	   target_=target_eigenvalue_;
+
    eigenvectors_.clear();
 
    eigenvalues_.clear();
@@ -171,87 +189,61 @@ namespace DOpE
 	   eigenvectors_[i].reinit(eigenfunction_index_set, MPI_COMM_WORLD);
     }
    	  eigenvalues_.resize(eigenvalues.size());
-   	  int max_it = pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs();
+   	  int max_it = pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs()*pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs();
 
    	  EPS eps;
    	  EPSCreate(MPI_COMM_WORLD, &eps);
 
-   	  MatShift(matrixK_, 1e-11);
-   	  MatShift(matrixM_, 1e-11);
+   	  MatShift(matrixK_, 1e-12);
+   	  MatShift(matrixMprecon_, 1e-12);
 
-   	  EPSSetOperators(eps, matrixK_, matrixM_);
+   	  EPSSetOperators(eps, matrixK_, matrixMprecon_);
 
-//   	  EPSSetType(eps,EPSKRYLOVSCHUR);
+  	  EPSSetType(eps,EPSSUBSPACE);
+  	  EPSSetTarget(eps, target_);
+	  EPSSetWhichEigenpairs(eps, EPS_TARGET_MAGNITUDE);
+	  EPSSetTolerances(eps, tol_, max_it);
+	  EPSSetFromOptions(eps);
+
    	  ST st;
    	  EPSGetST(eps, &st);
    	  STSetType(st, STSINVERT);
-
+	  STSetShift(st,target_);
 
    	  KSP ksp;
    	  STGetKSP(st, &ksp);
-   	  KSPSetType(ksp, KSPPREONLY);
+   	  KSPSetType(ksp, KSPRICHARDSON);
 
-   	  PC pc;
-   	  KSPGetPC(ksp, &pc);
-   	  PCSetType(pc, PCLU);
+  	  KSPSetOperators(ksp,matrixK_, matrixK_);
+   	  KSPSetOperators(ksp,matrixM_, matrixMprecon_);
 
+  //Diverges without preconditioner
+   	 PC pc;
 
-//   	  PCFactorSetShiftType(pc,MAT_SHIFT_NONZERO);
-//   	  PCFactorSetShiftAmount(pc,1e-10);
+   	 KSPGetPC(ksp, &pc);
+   	 PCSetType(pc, PCCHOLESKY);
 
-
-   	  PetscScalar target = 0.1;
-   	  EPSSetTarget(eps, target);
-	  EPSSetWhichEigenpairs(eps, EPS_TARGET_MAGNITUDE);
-
-   	  EPSSetProblemType(eps, EPS_GNHEP);
-   	  EPSSetDimensions(eps,2,PETSC_DECIDE,PETSC_DECIDE);
+   	  EPSSetProblemType(eps, EPS_GHEP);
+	  EPSSetDimensions(eps,eigenvalues_.size(),PETSC_DECIDE,PETSC_DECIDE);
 
    	  EPSSolve(eps);
    	  PetscScalar eig;
-
-
-   	  EPSGetEigenpair(eps, 0 , &eig, nullptr, eigenvectors_[0], nullptr); //realteil und imaginärteil (imaginärteil nullptr)
-
-//
-//  /* 	SolverControl linear_solver_control(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
-//                                 1e-12, false, false);
-//   	 PETScWrappers::SolverCG linear_solver(linear_solver_control, MPI_COMM_WORLD);
-//
-//   	PETScWrappers::PreconditionNone preconditioner;
-//
-////   	PETScWrappers::PreconditionLU::AdditionalData data;
-//   	//data kann noch gesetzt werden, default einstellungen
-////   	 PETScWrappers::PreconditionLU preconditioner;
-//
-////
-////   	 PETScWrappers::PreconditionBoomerAMG::AdditionalData data;
-////   	 data.symmetric_operator = true;
-////   	 PETScWrappers::PreconditionBoomerAMG preconditioner(MPI_COMM_WORLD, data);
-//
-//
-//
-//  	 linear_solver.initialize(preconditioner);
-////
-//      dealii::SolverControl solver_control (/*maxiter_,*/max_it, tol_);
-//      SLEPcWrappers::SolverKrylovSchur eigensolver(solver_control, MPI_COMM_WORLD);
-//
-//      SLEPcWrappers::TransformationShift spectral_transformation(MPI_COMM_WORLD);
-//      spectral_transformation.set_solver(linear_solver);
-//      eigensolver.set_transformation(spectral_transformation);
-//
-
    	  	for(unsigned int i = 0; i<eigenvalues_.size(); i++){
+   	  	 EPSGetEigenpair(eps, i , &eig, nullptr, eigenvectors_[i], nullptr); //realteil und imaginärteil (imaginärteil nullptr)
     	  		eigenvalues[i] = eig;
     	    	eigenfunctions[i].GetSpacialVector() = eigenvectors_[i];
    	      }
 
+   	  MatShift(matrixK_, -1e-12);
+   	 MatShift(matrixMprecon_, -1e-12);
+   	  EPSDestroy(&eps);
+   	  
     return build_matrix;
   }
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
    template<typename PROBLEM>
-    void EigenvalueSolver_test<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &pde,  StateVector<VECTOR> &stateeigenfunction){
+    void EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &pde,  StateVector<VECTOR> &stateeigenfunction){
 
 	  state_for_normalization.clear();
 	  state_for_normalization.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
@@ -267,15 +259,12 @@ namespace DOpE
 	      state_for_normalization/= scalar_factor[0];
 	      stateeigenfunction.GetSpacialVector() = state_for_normalization;
 
-	   	 PetscScalar test[1];
-	   	VecDot(state_for_normalization,state_for_normalization,test);
-
   }
 
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
      template<typename PROBLEM>
-      void EigenvalueSolver_test<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorAdjoint(PROBLEM &pde,  StateVector<VECTOR> &adjointeigenfunction, StateVector<VECTOR> &stateeigenfunction, double value){
+      void EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorAdjoint(PROBLEM &pde,  StateVector<VECTOR> &adjointeigenfunction, StateVector<VECTOR> &stateeigenfunction, double value){
 
 	 state_for_normalization.clear();
   	 adjoint_for_normalization.clear();
@@ -297,18 +286,12 @@ namespace DOpE
  		 adjoint_for_normalization *= value;
  		adjointeigenfunction.GetSpacialVector() = adjoint_for_normalization;
 
-  PETScWrappers::MPI::Vector vecTest;
-  vecTest.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
-  MatMult(matrixM_,adjoint_for_normalization,vecTest);
-	PetscScalar test[1];
-  	VecDot(state_for_normalization,vecTest,test);
-
   }
 
 
   /*******************************************************************************************/
   template <typename INTEGRATOR,  typename VECTOR, typename MATRIX>
-  INTEGRATOR &EigenvalueSolver_test<INTEGRATOR, VECTOR, MATRIX>
+  INTEGRATOR &EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>
   ::GetIntegrator()
   {
     return integrator_;
