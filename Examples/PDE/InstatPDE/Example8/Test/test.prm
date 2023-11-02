@@ -18,13 +18,13 @@ end
 subsection newtonsolver parameters
   # maximal number of linesearch steps
   # For the modified instat_step Newton, do not set this number too high
-  set line_maxiter         = 4
+  set line_maxiter         = 8
 
   # reduction rate for the linesearch damping paramete
-  set linesearch_rho       = 0.5
+  set linesearch_rho       = 0.1
 
   # global tolerance for the newton iteration
-  set nonlinear_global_tol = 1.e-10
+  set nonlinear_global_tol = 4.e-6
 
   # maximal number of newton iterations
   set nonlinear_maxiter    = 500
