@@ -82,6 +82,7 @@
 #include "localfunctional.h"
 #include "deformation_functions.h"
 #include <basic/test_mol_spacetimehandler.h>
+#include "functionals.h"
 
 using namespace std;
 using namespace dealii;
@@ -189,6 +190,10 @@ GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);  //1. EW
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
+  
+    //Functional which returns acutal eigenvalue
+  LocalEigenvalueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> EVF;
+  P.AddFunctional(&EVF);
 
   std::vector<bool> comp_mask(3);
 
