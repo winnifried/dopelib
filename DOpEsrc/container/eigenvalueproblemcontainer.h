@@ -1754,7 +1754,7 @@ namespace DOpE
           //Prepare DoFHandlerPointer
           {
 
-            if (this->GetType() == "eigenvaluestate"irtschaf
+            if (this->GetType() == "eigenvaluestate"
             	|| this->GetType() == "eigenvalueadjoint"
 //                || this->GetType() == "adjoint_for_ee"
                 || this->GetType() == "functional_for_ee"
@@ -2013,12 +2013,12 @@ namespace DOpE
       {
         // state values in quadrature points
         return GetFunctional()->AlgebraicValue(param_values, domain_values, eigenvalue);
-      }
+    }
     else if (this->GetType() == "aux_functional")
       {
-        // state values in quadrature points
+//    	\\ this is changed to the classic AlgebraicValue. Function gets the eigenvalue
         return aux_functionals_[this->GetTypeNum()]->AlgebraicValue(
-                 param_values, domain_values);
+                 param_values, domain_values, eigenvalue);
       }
     else if (this->GetType() == "functional_for_ee")
       // TODO is this correct? Should not be needed.

@@ -635,6 +635,15 @@ namespace DOpE
 			  "FunctionalInterface::AlgebraicValue");
     }
 
+    virtual double
+      AlgebraicValue(
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
+      {
+        throw DOpEException("Not Implemented",
+  			  "FunctionalInterface::AlgebraicValueEigenvalue");
+      }
+
     /**
      * Implements the gradient of a functional that can be computed by the values in some given Vectors or BlockVectors
      */

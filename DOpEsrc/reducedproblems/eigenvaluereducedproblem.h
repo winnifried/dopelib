@@ -617,8 +617,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint").EigenvalueSolve(problem,zvals_, zvecs_,  true, build_adjoint_matrix_);
 
-//		std::cout << "state_eigenvalue = " << uvals_[eval_index_] << std:: endl;
-//		std::cout << "adjoint_eigenvalue = " << zvals_[eval_index_] << std:: endl;
+//
 
 		double normalization_factor = target_eigenvalue_ - uvals_[eval_index_];
 		 this->GetNonlinearSolver("eigenvalueadjoint").GetNormalizedVectorAdjoint(problem, zvecs_[eval_index_],uvecs_[eval_index_], normalization_factor);
@@ -700,14 +699,6 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		} else {
 			throw DOpEException("dopedim not implemented", "EigenvalueProblem::ComputeEigenvalueDerivative");
 		}
-//
-//		//Test Berechnung Eigenfrequenz von Cavity für Vergleich mit Ergebnissen Jacobo
-//		double c = 299792458;
-//		double mu_0 = 1.2566370621210*pow(10,-6);//4 * M_PI * pow(10, -7);
-//		double eps_0 = 1 / (mu_0 * pow(c, 2));
-////		double f = sqrt(uvals_[eval_index_]/( mu_0 * eps_0));///(2*M_PI);
-
-
 
 
 		DeleteUDD();
@@ -719,21 +710,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		this->GetOutputHandler()->Write(gradient, "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 		this->GetOutputHandler()->Write(gradient_transposed, "Gradient_Transposed" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
-		/*std::stringstream out;
-//		double f = 0;
-		for (unsigned int i = 0; i < uvals_.size() ; i++){
-			out<< "\t Actual eigenvalue at index " <<i<<" = " <<uvals_[i] <<"\n";
-//			f = sqrt(uvals_[i]/( mu_0 * eps_0 ))/(2*M_PI);
-//			out<< "\t Actual frequency at index " <<i<<" = " << f <<"\n";
-//			out<< "----------------------------------------------------- " <<"\n";
-		}
-		out<< "----------------------------------------------------- " <<"\n";
 
-		this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);*/
-
-		for (unsigned int i = 0; i < uvals_.size() ; i++){
-			std::cout << "actual eigenvalue at " << i << " = " << uvals_[i] << std::endl;	
-		}
 		}
 
 		/******************************************************/
@@ -913,16 +890,6 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		this->GetFunctionalValues()[0].push_back(ret);
 
-//		std::stringstream out;
-//		for (unsigned int i = 0; i < uvals_.size() ; i++){
-//					out<< "\t Actual eigenvalue at index " <<i<<" = " <<uvals_[i] <<"\n";
-//
-//		}
-//		out<< "----------------------------------------------------- " <<"\n";
-
-//		this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
-
-
 		return ret;
 
 		}
@@ -999,7 +966,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 //			          }
 //			        if (this->GetProblem()->GetFunctionalType().find("face")
 //			            != std::string::npos)
-//			          {
+//			          {1.
 //			            found = true;
 //			            ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
 //			          }
@@ -1027,7 +994,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			        this->GetFunctionalValues()[i + 1].push_back(ret);
 			        std::stringstream out;
 			        this->GetOutputHandler()->InitOut(out);
-			        out << this->GetProblem()->GetFunctionalName() << ": " << ret;
+			        out << this->GetProblem()->GetFunctionalName() <<" at index "<<eval_index_<< " = " << ret;
 			        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
 			      }
 
