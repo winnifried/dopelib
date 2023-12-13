@@ -79,6 +79,7 @@
 #include "localfunctional.h"
 #include "deformation_functions.h"
 #include <basic/test_mol_spacetimehandler.h>
+#include "functionals.h"
 
 using namespace std;
 using namespace dealii;
@@ -171,7 +172,7 @@ main(int argc, char **argv){
   		  Point<2>(M_PI/3,M_PI/2));   //1. EW ~4.0*/
 
 
-  triangulation.refine_global(4);
+  triangulation.refine_global(3);
 
 
   //------------- FE-System ---------------------------------------------
@@ -186,11 +187,17 @@ main(int argc, char **argv){
 
   COSTFUNCTIONAL LFunc(pr);
 
+
+
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
 
+  //Functional which returns acutal eigenvalue
+  LocalEigenvalueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> EVF;
+  P.AddFunctional(&EVF);
+  
   std::vector<bool> comp_mask(3);
 
    comp_mask[0] = true;

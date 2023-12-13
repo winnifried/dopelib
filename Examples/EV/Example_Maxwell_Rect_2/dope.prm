@@ -70,14 +70,14 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
- # set never_write_list        = Hessian;Tangent;
+  set never_write_list        =Adjoint;Residual;Hessian;Tangent;Adjoint;State;Update;Intermediate;Gradient
 
   # Sets the precision of the output numbers
-  set number_precision        = 5
+  set number_precision        = 3
 
   # Defines what strings should be printed, the higher the number the more
   # output
-  set printlevel              = 4 #20 #
+  set printlevel              = 4
 
   # Directory where the output goes to
   set results_dir             = Results/
@@ -92,6 +92,6 @@ subsection reducedDampedBFGSalgorithm parameters
  set linesearch_gamma = 0.1
 # set memory = 40
  set init_inverse_scale = 0.1 # identisch zu alpha und neq 0
- set compute_functionals_in_every_step = false 
+ set compute_functionals_in_every_step = true 
 end
 
