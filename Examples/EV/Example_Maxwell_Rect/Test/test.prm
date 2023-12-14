@@ -66,7 +66,7 @@ subsection output parameters
  # set never_write_list        = Adjoint;Residual;Hessian;Tangent;Adjoint;State;Update;Intermediate;Gradient
 
   # Sets the precision of the output numbers
-  set number_precision        = 5
+  set number_precision        = 2
 
   # Defines what strings should be printed, the higher the number the more
   # output

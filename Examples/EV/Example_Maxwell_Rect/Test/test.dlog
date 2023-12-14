@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.4
+Using dealii Version: 9.5
 
 	**************************************************
 	*        Starting Reduced DampedBFGS Algorithm       *
@@ -14,27 +14,27 @@ Using dealii Version: 9.4
 	**************************************************
 
 LOG: Allowing IterationCounter `OptBFGS_EigenvalueProblem' for filenames!
-	CostFunctional: 0.048945
-		 BFGS step: 0	 Residual (abs.): 1.7904
-		 BFGS step: 0	 Residual (rel.): 1.00000e+00
+	CostFunctional: 0.049
+		 BFGS step: 0	 Residual (abs.): 1.8
+		 BFGS step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 2.25547e-02
-		 BFGS step: 1	 Residual (rel.):   6.52781e-01	 LineSearch {3} 
-	CostFunctional: 3.80832e-03
-		 BFGS step: 2	 Residual (rel.):   2.52559e-01	 LineSearch {2} 
-	CostFunctional: 1.29175e-04
-		 BFGS step: 3	 Residual (rel.):   2.03071e-02	 LineSearch {1} 
-	CostFunctional: 1.19681e-04
-		 BFGS step: 4	 Residual (rel.):   1.61538e-02	 LineSearch {1} 
-	CostFunctional: 1.03374e-04
-		 BFGS step: 5	 Residual (rel.):   7.06642e-05	 LineSearch {0} 
-	CostFunctional: 1.03373e-04
-		 BFGS step: 6	 Residual (rel.):   2.44403e-07	 LineSearch {0} 
-	CostFunctional: 1.03373e-04
+	CostFunctional: 2.26e-02
+		 BFGS step: 1	 Residual (rel.):   6.53e-01	 LineSearch {3} 
+	CostFunctional: 3.81e-03
+		 BFGS step: 2	 Residual (rel.):   2.53e-01	 LineSearch {2} 
+	CostFunctional: 1.29e-04
+		 BFGS step: 3	 Residual (rel.):   2.03e-02	 LineSearch {1} 
+	CostFunctional: 1.20e-04
+		 BFGS step: 4	 Residual (rel.):   1.62e-02	 LineSearch {1} 
+	CostFunctional: 1.03e-04
+		 BFGS step: 5	 Residual (rel.):   7.07e-05	 LineSearch {0} 
+	CostFunctional: 1.03e-04
+		 BFGS step: 6	 Residual (rel.):   2.44e-07	 LineSearch {0} 
+	CostFunctional: 1.03e-04
 
 	**************************************************
 	*        Stopping Reduced BFGS Algorithm       *
 	*             after      6  Iterations           *
-	*             with rel. Residual   2.44403e-07          *
+	*             with rel. Residual    2.44e-07          *
 	**************************************************
 
