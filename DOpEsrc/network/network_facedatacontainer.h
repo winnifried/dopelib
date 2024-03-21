@@ -498,7 +498,7 @@ namespace DOpE
       Assert(this->NeedNeighbour(), ExcInternalError());
       Assert(
         element_[this->GetStateIndex()]->neighbor_index(this->GetFace()) != -1,
-        TriaAccessorExceptions::ExcCellNotUsed())
+        TriaAccessorExceptions::ExcCellNotUsed());
 
       if (element_[this->GetStateIndex()]->neighbor(this->GetFace())->has_children())
         {
