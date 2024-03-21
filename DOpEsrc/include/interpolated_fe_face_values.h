@@ -34,43 +34,43 @@
 DEAL_II_NAMESPACE_OPEN
 
 /**
- * This class provides an dealii::FEFaceValues type object, where the returned 
- * value and gradient values correspond to the interpolation 
+ * This class provides an dealii::FEFaceValues type object, where the returned
+ * value and gradient values correspond to the interpolation
  * of the shape functions of fe_from by the shape functions of fe_to
  */
 template <int dim, int spacedim = dim>
 class InterpolatedFEFaceValues
 {
-  public:
-   InterpolatedFEFaceValues(const FEValuesExtractors::Vector component_view,
-			    const Mapping<dim, spacedim>		&map,
-			    const FiniteElement<dim, spacedim>	&fe_from,
-			    const FiniteElement<dim, spacedim>	&fe_to,
-			    const Quadrature<dim-1>	        &quadrature,
-			    UpdateFlags				flags);
+public:
+  InterpolatedFEFaceValues(const FEValuesExtractors::Vector component_view,
+                           const Mapping<dim, spacedim>    &map,
+                           const FiniteElement<dim, spacedim>  &fe_from,
+                           const FiniteElement<dim, spacedim>  &fe_to,
+                           const Quadrature<dim-1>         &quadrature,
+                           UpdateFlags       flags);
 
-   // TODO fe_to is Raviart Thomas space for now and will have to be upgraded to 
-   // a more generalized one later.
+  // TODO fe_to is Raviart Thomas space for now and will have to be upgraded to
+  // a more generalized one later.
 
 
-   void reinit(const typename Triangulation<dim, spacedim>::cell_iterator &cell, const unsigned int face_no);
+  void reinit(const typename Triangulation<dim, spacedim>::cell_iterator &cell, const unsigned int face_no);
 
-   Tensor<1, spacedim> value(const unsigned int shape_function,
-			const unsigned int q_point) const;
+  Tensor<1, spacedim> value(const unsigned int shape_function,
+                            const unsigned int q_point) const;
 
-   Tensor<2, spacedim> gradient(const unsigned int shape_function,
-			const unsigned int q_point) const;
+  Tensor<2, spacedim> gradient(const unsigned int shape_function,
+                               const unsigned int q_point) const;
 
-  private:
-   const FEValuesExtractors::Vector 	selected_vector;
-   const Mapping<dim, spacedim>		&map_;			
-   const FiniteElement<dim, spacedim>	&fe_base;		// FE space from which we interpolate
-   const FiniteElement<dim, spacedim> 	&fe_interpolated;	// FE space to which we interpolate,
-								// This is RT for now.
-   const Quadrature<dim-1>		&quad;
-   UpdateFlags				update_flags;
-   std::vector<std::vector<Tensor<1, spacedim> > > interpolated_values;
-   std::vector<std::vector<Tensor<2, spacedim> > > interpolated_gradients;
+private:
+  const FEValuesExtractors::Vector   selected_vector;
+  const Mapping<dim, spacedim>   &map_;
+  const FiniteElement<dim, spacedim> &fe_base;   // FE space from which we interpolate
+  const FiniteElement<dim, spacedim>   &fe_interpolated; // FE space to which we interpolate,
+  // This is RT for now.
+  const Quadrature<dim-1>    &quad;
+  UpdateFlags        update_flags;
+  std::vector<std::vector<Tensor<1, spacedim> > > interpolated_values;
+  std::vector<std::vector<Tensor<2, spacedim> > > interpolated_gradients;
 };
 
 DEAL_II_NAMESPACE_CLOSE

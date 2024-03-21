@@ -36,7 +36,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -55,7 +55,7 @@ public:
   }
 
   double
-ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -89,7 +89,7 @@ ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   }
 
   void
-ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
                  dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -121,7 +121,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
   }
 
   void
-	       ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
                  dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
@@ -148,7 +148,7 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
   }
 
   void
-     ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -172,13 +172,13 @@ ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
   }
 
   void
-    ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+  ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                   dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }
 
   void
-   ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                   dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
   {
   }

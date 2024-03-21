@@ -133,7 +133,7 @@ main(int argc, char **argv)
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -177,7 +177,7 @@ main(int argc, char **argv)
   //Note that we give DOpEtypes::initial as the type of control.
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::VectorAction::initial);
-  
+
   NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);

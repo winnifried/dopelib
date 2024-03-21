@@ -347,7 +347,7 @@ namespace DOpE
       DeleteParamData(std::string name);
 
       inline void DeleteAllData();
-      
+
       /**
        * This function is used to calculate indicators based
        * on DWR-type data containes. This means it is
@@ -429,7 +429,7 @@ namespace DOpE
       typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> STH_;
       typedef MethodOfLines_StateSpaceTimeHandler<FESystem,DoFHandler,SparsityPattern,Vector<double>,1> PIPE_STH_;
 #endif
-      
+
 #if DEAL_II_VERSION_GTE(9,3,0)
       template<bool DH>
 #else
@@ -439,9 +439,9 @@ namespace DOpE
       InterpolateBoundaryValues(
         const DOpEWrapper::Mapping<dim, DH> &mapping,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+        const DOpEWrapper::DoFHandler<dim> *dof_handler,
 #else
-	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+        const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
 #endif
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
@@ -1374,12 +1374,13 @@ namespace DOpE
       param_data_.erase(it);
     }
 
-   /*******************************************************************************************/
+    /*******************************************************************************************/
 
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData() {
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData()
+    {
       param_data_.clear();
       domain_data_.clear();
     }
@@ -2016,17 +2017,17 @@ namespace DOpE
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
              int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-      template<bool DH>
+    template<bool DH>
 #else
-      template<template<int, int> class DH>
+    template<template<int, int> class DH>
 #endif
     void
     Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-	const DOpEWrapper::Mapping<dim, DH> &mapping,
+      const DOpEWrapper::Mapping<dim, DH> &mapping,
 #if DEAL_II_VERSION_GTE(9,3,0)
-	const DOpEWrapper::DoFHandler<dim> *dof_handler,
+      const DOpEWrapper::DoFHandler<dim> *dof_handler,
 #else
-	const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
 #endif
       const unsigned int color, const dealii::Function<dim> &function,
       std::map<unsigned int, SCALAR> &boundary_values,

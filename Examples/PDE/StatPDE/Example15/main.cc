@@ -106,32 +106,32 @@ using PRECONDITIONERSSOR =
 
 // Define problemcontainer for block and non block
 typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>,
-                            SimpleDirichletData<VECTORBLOCK, DIM>,
-                            SPARSITYPATTERNBLOCK,
-                            VECTORBLOCK,
-                            DIM>
-  OPBLOCK;
+        SimpleDirichletData<VECTORBLOCK, DIM>,
+        SPARSITYPATTERNBLOCK,
+        VECTORBLOCK,
+        DIM>
+        OPBLOCK;
 
 typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
-                            SimpleDirichletData<VECTOR, DIM>,
-                            SPARSITYPATTERN,
-                            VECTOR,
-                            DIM>
-  OP;
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR,
+        DIM>
+        OP;
 
 // Define integratordatacontainer for block and non block vectors
 typedef IntegratorDataContainer<DOFHANDLER,
-                                QUADRATURE,
-                                FACEQUADRATURE,
-                                VECTOR,
-                                DIM>
-  IDC;
+        QUADRATURE,
+        FACEQUADRATURE,
+        VECTOR,
+        DIM>
+        IDC;
 typedef IntegratorDataContainer<DOFHANDLER,
-                                QUADRATURE,
-                                FACEQUADRATURE,
-                                VECTORBLOCK,
-                                DIM>
-  IDCBLOCK;
+        QUADRATURE,
+        FACEQUADRATURE,
+        VECTORBLOCK,
+        DIM>
+        IDCBLOCK;
 
 // Define block and nonblock integrators
 typedef Integrator<IDCBLOCK, VECTORBLOCK, double, DIM> BLOCKINTEGRATOR;
@@ -140,20 +140,20 @@ typedef Integrator<IDC, VECTOR, double, DIM>           INTEGRATOR;
 // We set up three different linear solvers: Block and nonblock GMRES without
 // a preconditioner and an SSor preconditioned non-block GMRES
 typedef GMRESLinearSolverWithMatrix<PRECONDITIONERIDENTITYBLOCK,
-                                    SPARSITYPATTERNBLOCK,
-                                    MATRIXBLOCK,
-                                    VECTORBLOCK>
-  GMRESIDENTITYBLOCK;
+        SPARSITYPATTERNBLOCK,
+        MATRIXBLOCK,
+        VECTORBLOCK>
+        GMRESIDENTITYBLOCK;
 typedef GMRESLinearSolverWithMatrix<PRECONDITIONERIDENTITY,
-                                    SPARSITYPATTERN,
-                                    MATRIX,
-                                    VECTOR>
-  GMRESIDENTITY;
+        SPARSITYPATTERN,
+        MATRIX,
+        VECTOR>
+        GMRESIDENTITY;
 typedef GMRESLinearSolverWithMatrix<PRECONDITIONERSSOR,
-                                    SPARSITYPATTERN,
-                                    MATRIX,
-                                    VECTOR>
-  GMRESSSOR;
+        SPARSITYPATTERN,
+        MATRIX,
+        VECTOR>
+        GMRESSSOR;
 
 // Define three newtonsolver fitting the three linear solvers
 typedef Parallel::NewtonSolver<BLOCKINTEGRATOR, GMRESIDENTITYBLOCK, VECTORBLOCK> NLS1;
@@ -167,17 +167,17 @@ typedef StatPDEProblem<NLS3, INTEGRATOR, OP, VECTOR, DIM>                RP3;
 
 // Define the spacetimehandler for block and non block vectors
 typedef MethodOfLines_StateSpaceTimeHandler<FE,
-                                            DOFHANDLER,
-                                            SPARSITYPATTERNBLOCK,
-                                            VECTORBLOCK,
-                                            DIM>
-  STHBLOCK;
+        DOFHANDLER,
+        SPARSITYPATTERNBLOCK,
+        VECTORBLOCK,
+        DIM>
+        STHBLOCK;
 typedef MethodOfLines_StateSpaceTimeHandler<FE,
-                                            DOFHANDLER,
-                                            SPARSITYPATTERN,
-                                            VECTOR,
-                                            DIM>
-  STH;
+        DOFHANDLER,
+        SPARSITYPATTERN,
+        VECTOR,
+        DIM>
+        STH;
 
 int
 main(int argc, char **argv)
@@ -287,8 +287,8 @@ main(int argc, char **argv)
         catch (DOpEException &e)
           {
             std::cout << "Warning: During execution of `" +
-                           e.GetThrowingInstance() +
-                           "` the following Problem occurred!"
+                      e.GetThrowingInstance() +
+                      "` the following Problem occurred!"
                       << std::endl;
             std::cout << e.GetErrorMessage() << std::endl;
           }
@@ -296,7 +296,7 @@ main(int argc, char **argv)
           {
             // We extract the solution out of the statproblem..
             SolutionExtractor<RP1, VECTORBLOCK> a1(solver1);
-            const StateVector<VECTORBLOCK> &    gu1 = a1.GetU();
+            const StateVector<VECTORBLOCK>     &gu1 = a1.GetU();
             solution                                = gu1.GetSpacialVector();
             Vector<float> estimated_error_per_element(
               triangulation.n_active_cells());
@@ -305,15 +305,15 @@ main(int argc, char **argv)
 
             //..and estimate the error with the help of the KellyErrorEstimator
 #if DEAL_II_VERSION_GTE(9,1,1)
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
-            QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+              QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+              estimated_error_per_element, component_mask);
 #else
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
-	    QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+              QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+              estimated_error_per_element, component_mask);
 #endif
 
             // We choose a refinement strategy (here fixednumber) and
@@ -374,15 +374,15 @@ main(int argc, char **argv)
         catch (DOpEException &e)
           {
             std::cout << "Warning: During execution of `" +
-                           e.GetThrowingInstance() +
-                           "` the following Problem occurred!"
+                      e.GetThrowingInstance() +
+                      "` the following Problem occurred!"
                       << std::endl;
             std::cout << e.GetErrorMessage() << std::endl;
           }
         if (i != niter - 1)
           {
             SolutionExtractor<RP2, VECTOR> a1(solver2);
-            const StateVector<VECTOR> &    gu1 = a1.GetU();
+            const StateVector<VECTOR>     &gu1 = a1.GetU();
             solution                           = gu1.GetSpacialVector();
             Vector<float> estimated_error_per_element(
               triangulation.n_active_cells());
@@ -390,15 +390,15 @@ main(int argc, char **argv)
             std::vector<bool> component_mask(3, true);
 
 #if DEAL_II_VERSION_GTE(9,1,1)
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
-            QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+              QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+              estimated_error_per_element, component_mask);
 #else
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
-	    QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+              QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+              estimated_error_per_element, component_mask);
 #endif
             DOFH2.RefineSpace(
               RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
@@ -413,7 +413,7 @@ int
 main(int /*argc*/, char **/*argv*/)
 {
   std::cout<<"This example requires deal.II v. 9.0.0 or newer"<<std::endl;
-    abort();
+  abort();
 }
 #endif
 #else
@@ -421,7 +421,7 @@ int
 main(int /*argc*/, char **/*argv*/)
 {
   std::cout<<"This example requires DOpE with  Trilinos and MPI"<<std::endl;
-    abort();
+  abort();
 }
 #endif //Dopelib with trilinos
 #undef FDC

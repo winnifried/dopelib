@@ -93,7 +93,7 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-// Ggf. in cmake (CMAKELists.txt) die Dimension ebenfalls aendern 
+// Ggf. in cmake (CMAKELists.txt) die Dimension ebenfalls aendern
 // und neues Makefile erzeugen
 const static int DIM = 2;
 
@@ -118,9 +118,9 @@ typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
 SneddonMixedPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-         SimpleDirichletData<VECTOR, DIM>,
-         SPARSITYPATTERN,
-         VECTOR, DIM> OP_BASE;
+                SimpleDirichletData<VECTOR, DIM>,
+                SPARSITYPATTERN,
+                VECTOR, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, SneddonMixedPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
@@ -155,16 +155,16 @@ declare_params(ParameterReader &param_reader)
   param_reader.declare_entry("local_prerefine", "1", Patterns::Integer(0),
                              "How often should we refine the coarse grid locally near the crack?");
   param_reader.declare_entry("num_intervals", "1", Patterns::Integer(1),
-                               "How many quasi-timesteps?");
+                             "How many quasi-timesteps?");
   param_reader.declare_entry("interpolate_initial", "true", Patterns::Bool(),
-			     "How many quasi-timesteps?");
+                             "How many quasi-timesteps?");
   param_reader.declare_entry("niter", "1", Patterns::Integer(1),
                              "How many different mesh levels do you want a solution on?");
   param_reader.declare_entry("adjust_params_to_mesh", "false", Patterns::Bool(),
                              "Should the parameters (eps,phi^0) be adjusted during the iterations?");
   param_reader.declare_entry("ref_type", "1", Patterns::Integer(0),
                              "Which refinement type? (0 = global, 1 = geometric, 2 = adaptive)");
-  
+
 }
 
 /*********************************************************************************/
@@ -180,7 +180,7 @@ main(int argc, char **argv)
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -219,26 +219,26 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(triangulation, 40, -20, 20);
 
   for (int k = 0; k < local_prerefine; k++)
-  {
-  Triangulation<DIM>::active_cell_iterator
+    {
+      Triangulation<DIM>::active_cell_iterator
       cell = triangulation.begin_active(),
       endc = triangulation.end();
       for (; cell!=endc; ++cell)
-       {
-  
-        for (unsigned int vertex=0;vertex < GeometryInfo<DIM>::vertices_per_cell;++vertex)
-         {
-            Tensor<1,DIM> cell_vertex = (cell->vertex(vertex));
-            if (cell_vertex[0] <= 2.5 && cell_vertex[0] >= -2.5
-                    && cell_vertex[1] <= 1.25 && cell_vertex[1] >= -1.25)
+        {
+
+          for (unsigned int vertex=0; vertex < GeometryInfo<DIM>::vertices_per_cell; ++vertex)
             {
-              cell->set_refine_flag();
-              break;
+              Tensor<1,DIM> cell_vertex = (cell->vertex(vertex));
+              if (cell_vertex[0] <= 2.5 && cell_vertex[0] >= -2.5
+                  && cell_vertex[1] <= 1.25 && cell_vertex[1] >= -1.25)
+                {
+                  cell->set_refine_flag();
+                  break;
+                }
             }
-         }
         }
-  triangulation.execute_coarsening_and_refinement();
-  }
+      triangulation.execute_coarsening_and_refinement();
+    }
 
   triangulation.refine_global(prerefine);
 
@@ -248,10 +248,10 @@ main(int argc, char **argv)
   // Assigning finite elements
   // (1) = polynomial degree - please test (2) for u and phi
   // zweite Zahl: Anzahl der Komponenten
-  FE<DIM> state_fe(FE_Q<DIM>(2), 2, // vector-valued (here dim=2): displacements 
-		   FE_Q<DIM>(1), 1, // scalar-valued phase-field
-    		   FE_DGP<DIM>(1), 1, // scalar-valued pressure
-    		   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
+  FE<DIM> state_fe(FE_Q<DIM>(2), 2, // vector-valued (here dim=2): displacements
+                   FE_Q<DIM>(1), 1, // scalar-valued phase-field
+                   FE_DGP<DIM>(1), 1, // scalar-valued pressure
+                   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
 
   QUADRATURE quadrature_formula(4);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -292,7 +292,7 @@ main(int argc, char **argv)
   P.AddFunctional(&LFBM);
   P.AddFunctional(&LFC);
 
-   /*********************************************************************************/
+  /*********************************************************************************/
   // Prescribing boundary values
   // We have 3 components (2D displacements and scalar-valued phase-field)
   // 4 components with u(x), u(y), phi(x), p(x): pressure ist new component!
@@ -332,11 +332,11 @@ main(int argc, char **argv)
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&out);
   solver.RegisterExceptionHandler(&ex);
-  
+
   OBSTACLE_RESC resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
-  
+
   //**************************************************************************************************
- 
+
   std::vector<double> TCV_val(niter,0.);
   std::vector<double> LFB_val(niter,0.);
   std::vector<double> LFBM_val(niter,0.);
@@ -344,120 +344,121 @@ main(int argc, char **argv)
   std::vector<double> d_val(niter,0.);
   std::vector<double> eps_val(niter,0.);
   std::vector<bool> errors(niter,false);
- 
-  for(int i = 0; i < niter; i++)
-  {
-    try
-    {
-      //Before solving we have to reinitialize the stateproblem and outputhandler.
-      solver.ReInit();
-      out.ReInit();
-      
-      stringstream outp;
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "*  d = "<<meshsize<<" h = "<<meshsize*sqrt(2)<<"\t\t*\n";
-      outp << "**************************************************";
-      //We print this header with priority 1 and 1 empty line in front and after.
-      out.Write(outp, 1, 1, 1);
 
-      //We compute the value of the functionals. To this end, we have to solve
-      //the PDE at hand.
-      solver.ComputeReducedFunctionals();
-      if(ref_type == 2)
-      {
-	solver.ComputeRefinementIndicators(resc, LPDE);
-      }
-    }
-    catch (DOpEException &e)
+  for (int i = 0; i < niter; i++)
     {
-      std::cout
-	<< "Warning: During execution of `" + e.GetThrowingInstance()
-	+ "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-      errors[i] = true;
-    }
-    //Store Results
-    {
-      TCV_val[i] = solver.GetTimeFunctionalValue(TCV.GetName())[num_intervals];
-      LFB_val[i] = solver.GetTimeFunctionalValue(LFB.GetName())[num_intervals];
-      LFBM_val[i] = solver.GetTimeFunctionalValue(LFBM.GetName())[num_intervals];
-      LFC_val[i] = solver.GetTimeFunctionalValue(LFC.GetName())[num_intervals];
-      d_val[i] = meshsize;
-      eps_val[i] = eps;
-    }
-    //Refine and adjust
-    if( i != niter-1 )
-    {
-      if(ref_type == 0)
+      try
+        {
+          //Before solving we have to reinitialize the stateproblem and outputhandler.
+          solver.ReInit();
+          out.ReInit();
+
+          stringstream outp;
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "*  d = "<<meshsize<<" h = "<<meshsize *sqrt(2)<<"\t\t*\n";
+          outp << "**************************************************";
+          //We print this header with priority 1 and 1 empty line in front and after.
+          out.Write(outp, 1, 1, 1);
+
+          //We compute the value of the functionals. To this end, we have to solve
+          //the PDE at hand.
+          solver.ComputeReducedFunctionals();
+          if (ref_type == 2)
+            {
+              solver.ComputeRefinementIndicators(resc, LPDE);
+            }
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+          errors[i] = true;
+        }
+      //Store Results
       {
-	DOFH.RefineSpace();
+        TCV_val[i] = solver.GetTimeFunctionalValue(TCV.GetName())[num_intervals];
+        LFB_val[i] = solver.GetTimeFunctionalValue(LFB.GetName())[num_intervals];
+        LFBM_val[i] = solver.GetTimeFunctionalValue(LFBM.GetName())[num_intervals];
+        LFC_val[i] = solver.GetTimeFunctionalValue(LFC.GetName())[num_intervals];
+        d_val[i] = meshsize;
+        eps_val[i] = eps;
       }
-      else if (ref_type == 1)
-      {
-      SneddonGeometricVolumeRefinement<DIM> ref_cont;
-      DOFH.RefineSpace(ref_cont);
-      }
-      else if (ref_type == 2)
-      {
-	std::vector<dealii::Vector<float> > error_ind(resc.GetErrorIndicators());
-	DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));
-      }
-      else
-      {
-	std::cout<<"Unknown ref_type == "<<ref_type<<std::endl;
-	abort();
-      }
-      if(adjust_params_to_mesh)
-      {
-	meshsize *= 0.5;
-	eps *= 0.5;
-	LPDE.SetParams(meshsize,eps);
-	initial_data.SetParams(meshsize);
-	LFC.SetParams(eps);
-      }
-    }
-  }//Endof niter loop
-  { // Print final table 
+      //Refine and adjust
+      if ( i != niter-1 )
+        {
+          if (ref_type == 0)
+            {
+              DOFH.RefineSpace();
+            }
+          else if (ref_type == 1)
+            {
+              SneddonGeometricVolumeRefinement<DIM> ref_cont;
+              DOFH.RefineSpace(ref_cont);
+            }
+          else if (ref_type == 2)
+            {
+              std::vector<dealii::Vector<float> > error_ind(resc.GetErrorIndicators());
+              DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));
+            }
+          else
+            {
+              std::cout<<"Unknown ref_type == "<<ref_type<<std::endl;
+              abort();
+            }
+          if (adjust_params_to_mesh)
+            {
+              meshsize *= 0.5;
+              eps *= 0.5;
+              LPDE.SetParams(meshsize,eps);
+              initial_data.SetParams(meshsize);
+              LFC.SetParams(eps);
+            }
+        }
+    }//Endof niter loop
+  {
+    // Print final table
     pr.SetSubsection("Local PDE parameters");
-      double E = pr.get_double("Young_modulus");
-      double nu  = pr.get_double("Poisson_ratio");
-      bool comp_f = pr.get_bool("compressible_in_fracture");
-      
-      stringstream outp;
-      outp << "*******************************************************************************************************************************************************************************************************\n";
-      outp << "*******************************************************************************************************************************************************************************************************\n";
-      outp << "*  d_0 = "<<d_val[0]<<" h_0 = "<<d_val[0]*sqrt(2)<<" with ("<<local_prerefine<<") geometric prerefines\n";
-      outp << "* epsilon_0 = "<<eps_val[0]<<"\n";
-      outp << "* E = "<<E<<" nu = "<<nu<<"\n";
-      if(comp_f)
+    double E = pr.get_double("Young_modulus");
+    double nu  = pr.get_double("Poisson_ratio");
+    bool comp_f = pr.get_bool("compressible_in_fracture");
+
+    stringstream outp;
+    outp << "*******************************************************************************************************************************************************************************************************\n";
+    outp << "*******************************************************************************************************************************************************************************************************\n";
+    outp << "*  d_0 = "<<d_val[0]<<" h_0 = "<<d_val[0]*sqrt(2)<<" with ("<<local_prerefine<<") geometric prerefines\n";
+    outp << "* epsilon_0 = "<<eps_val[0]<<"\n";
+    outp << "* E = "<<E<<" nu = "<<nu<<"\n";
+    if (comp_f)
       {
-	outp << "* Compressible material in Fracture" <<std::endl;
+        outp << "* Compressible material in Fracture" <<std::endl;
       }
-      outp<<std::endl;
-      outp<<"Iter |       d      |      eps     |     TCV      |      LFBM    |      LFC     |"<<std::endl;
-      outp<<"-----+--------------+--------------+--------------+--------------+--------------+"<<std::endl;
-      for( int i = 0; i < niter ; i++)
+    outp<<std::endl;
+    outp<<"Iter |       d      |      eps     |     TCV      |      LFBM    |      LFC     |"<<std::endl;
+    outp<<"-----+--------------+--------------+--------------+--------------+--------------+"<<std::endl;
+    for ( int i = 0; i < niter ; i++)
       {
-	if(errors[i])
-	{
-	  outp<<i<<"    | Error in computation "<<std::endl; 
-	}
-	else
-	{
-	  outp<<i<<"    | ";
-	  outp<<std::setfill(' ') << std::setw(12)<<d_val[i]<<" | ";
-	  outp<<std::setfill(' ') << std::setw(12)<<eps_val[i]<<" | ";
-	  outp<<std::setfill(' ') << std::setw(12)<<TCV_val[i]<<" | ";
-	  outp<<std::setfill(' ') << std::setw(12)<<LFBM_val[i]<<" | ";
-	  outp<<std::setfill(' ') << std::setw(12)<<LFC_val[i]<<std::endl;
-	}
+        if (errors[i])
+          {
+            outp<<i<<"    | Error in computation "<<std::endl;
+          }
+        else
+          {
+            outp<<i<<"    | ";
+            outp<<std::setfill(' ') << std::setw(12)<<d_val[i]<<" | ";
+            outp<<std::setfill(' ') << std::setw(12)<<eps_val[i]<<" | ";
+            outp<<std::setfill(' ') << std::setw(12)<<TCV_val[i]<<" | ";
+            outp<<std::setfill(' ') << std::setw(12)<<LFBM_val[i]<<" | ";
+            outp<<std::setfill(' ') << std::setw(12)<<LFC_val[i]<<std::endl;
+          }
       }
-      out.Write(outp, 1, 1, 1);
-    }
+    out.Write(outp, 1, 1, 1);
+  }
 
   return 0;
 }

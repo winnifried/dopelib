@@ -112,9 +112,9 @@ main(int argc, char **argv)
    * costfunctional has a point-part as well as a distributed
    * part. To handle this, we use IntegratorMixedDimensions.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)

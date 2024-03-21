@@ -41,16 +41,16 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<bool DH, int dopedim, int dealdim = dopedim>
-    class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
+  class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
 #else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
   class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
 #endif
-    {
+  {
   public:
     PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
                      const std::vector<std::vector<bool> > &c_comps)
-  : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
+      : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
     {
       if (c_points_.size() != c_comps_.size())
         throw DOpEException("Number of Entries not matching!","PointConstraints::PointConstraints");
@@ -92,10 +92,10 @@ namespace DOpE
     const std::vector<Point<dealdim> > &c_points_;
     const std::vector<std::vector<bool> > &c_comps_;
   };
-  
+
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<bool DH, int dopedim, int dealdim>
-    void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+  void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dealdim> &dof_handler,
     dealii::AffineConstraints<double> &constraint_matrix) const
 
@@ -118,7 +118,7 @@ namespace DOpE
     for (unsigned int i = 0; i < c_points_.size(); i++)
       {
 #if DEAL_II_VERSION_GTE(9,2,0)
-	IndexSet selected_dofs(dof_handler.n_dofs());
+        IndexSet selected_dofs(dof_handler.n_dofs());
         dealii::ComponentMask components(c_comps_[i]);
         selected_dofs = DoFTools::extract_dofs(dof_handler.GetDEALDoFHandler(),components);
 #else

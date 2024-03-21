@@ -204,12 +204,12 @@ namespace DOpE
       m = 0.;
       this->GetProblem().ElementTimeMatrix(edc, m);
       local_matrix.add(
-        1.0 , m);
+        1.0, m);
 
       m = 0.;
       this->GetProblem().ElementTimeMatrixExplicit(edc, m);
       local_matrix.add(
-        1.0 , m);
+        1.0, m);
     }
 
     /******************************************************/

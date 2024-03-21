@@ -108,9 +108,9 @@ main(int argc, char **argv)
    * and control int the dirichlet boundary values of the state.
    * The state solves the laplacian.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -150,7 +150,7 @@ main(int argc, char **argv)
   COSTFUNCTIONAL LFunc;
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
-  
+
   NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
 
@@ -197,10 +197,10 @@ main(int argc, char **argv)
 
       if (i != niter - 1)
         {
-	  BoundaryRefinement<DIM> ref_cont;
+          BoundaryRefinement<DIM> ref_cont;
           DOFH.RefineSpace(ref_cont);
           Alg.ReInit();
-	  q.GetSpacialVector() = qinit;
+          q.GetSpacialVector() = qinit;
         }
     }
   return 0;

@@ -195,427 +195,427 @@ void ConstraintVector<VECTOR>::ReSizeGlobal(unsigned int ndofs)
 namespace DOpE
 {
 
-template <typename VECTOR>
-void
-ConstraintVector<VECTOR>::ReSizeLocalSpace ()
+  template <typename VECTOR>
+  void
+  ConstraintVector<VECTOR>::ReSizeLocalSpace ()
   {
     if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
       {
         if (accessor_ >= 0)
           {
             if (local_control_constraint_[accessor_] == NULL)
-            local_control_constraint_[accessor_] = new VECTOR ();
-          if (local_control_constraint_[accessor_]->size () != GetSpaceTimeHandler ()->GetConstraintNDoFs ("local"))
-            GetSpaceTimeHandler ()->ReinitVector (
-              *local_control_constraint_[accessor_],
-              DOpEtypes::VectorType::local_constraint);
+              local_control_constraint_[accessor_] = new VECTOR ();
+            if (local_control_constraint_[accessor_]->size () != GetSpaceTimeHandler ()->GetConstraintNDoFs ("local"))
+              GetSpaceTimeHandler ()->ReinitVector (
+                *local_control_constraint_[accessor_],
+                DOpEtypes::VectorType::local_constraint);
           }
         else
           {
-          throw DOpEException ("Something is very wrong today!",
-                               "ConstraintVector<VECTOR>::ReSizeLocalSpace");
+            throw DOpEException ("Something is very wrong today!",
+                                 "ConstraintVector<VECTOR>::ReSizeLocalSpace");
           }
       }
     else
       {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-                            "ConstraintVector<dealii::BlockVector<double> >::ReSizeSpace");
+        throw DOpEException (
+          "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
+          "ConstraintVector<dealii::BlockVector<double> >::ReSizeSpace");
       }
   }
 
-/******************************************************/
+  /******************************************************/
 
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::operator=(double value)
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          local_control_constraint_[i]->operator=(value);
-        }
-      if (global_constraint_.size() > 0)
-        global_constraint_ = value;
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::opterator=");
-    }
-}
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::operator=(double value)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            local_control_constraint_[i]->operator=(value);
+          }
+        if (global_constraint_.size() > 0)
+          global_constraint_ = value;
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::opterator=");
+      }
+  }
 
-/******************************************************/
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::operator=(const ConstraintVector &dq)
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      if (dq.local_control_constraint_.size() != local_control_constraint_.size())
-        {
-          if (dq.local_control_constraint_.size() > local_control_constraint_.size())
-            {
-              unsigned int s = local_control_constraint_.size();
-              local_control_constraint_.resize(dq.local_control_constraint_.size(),NULL);
-              for (unsigned int i = s; i < local_control_constraint_.size(); i++)
-                {
-                  assert(local_control_constraint_[i] == NULL);
-                  local_control_constraint_[i] = new VECTOR;
-                }
-            }
-          else
-            {
-              for (unsigned int i = local_control_constraint_.size()-1; i >=dq.local_control_constraint_.size(); i--)
-                {
-                  assert(local_control_constraint_[i] != NULL);
-                  delete local_control_constraint_[i];
-                  local_control_constraint_[i] = NULL;
-                  local_control_constraint_.pop_back();
-                }
-              assert(local_control_constraint_.size() == dq.local_control_constraint_.size());
-            }
-        }
+  /******************************************************/
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::operator=(const ConstraintVector &dq)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        if (dq.local_control_constraint_.size() != local_control_constraint_.size())
+          {
+            if (dq.local_control_constraint_.size() > local_control_constraint_.size())
+              {
+                unsigned int s = local_control_constraint_.size();
+                local_control_constraint_.resize(dq.local_control_constraint_.size(),NULL);
+                for (unsigned int i = s; i < local_control_constraint_.size(); i++)
+                  {
+                    assert(local_control_constraint_[i] == NULL);
+                    local_control_constraint_[i] = new VECTOR;
+                  }
+              }
+            else
+              {
+                for (unsigned int i = local_control_constraint_.size()-1; i >=dq.local_control_constraint_.size(); i--)
+                  {
+                    assert(local_control_constraint_[i] != NULL);
+                    delete local_control_constraint_[i];
+                    local_control_constraint_[i] = NULL;
+                    local_control_constraint_.pop_back();
+                  }
+                assert(local_control_constraint_.size() == dq.local_control_constraint_.size());
+              }
+          }
 
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          assert(dq.local_control_constraint_[i] != NULL);
-          local_control_constraint_[i]->operator=(*(dq.local_control_constraint_[i]));
-        }
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            assert(dq.local_control_constraint_[i] != NULL);
+            local_control_constraint_[i]->operator=(*(dq.local_control_constraint_[i]));
+          }
 
-      global_constraint_ = dq.global_constraint_;
+        global_constraint_ = dq.global_constraint_;
 
-      accessor_ = 0;
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator=");
-    }
-}
+        accessor_ = 0;
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator=");
+      }
+  }
 
-/******************************************************/
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::operator+=(const ConstraintVector &dq)
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          assert(dq.local_control_constraint_[i] != NULL);
-          local_control_constraint_[i]->operator+=(*(dq.local_control_constraint_[i]));
-        }
-      if (global_constraint_.size() > 0)
-        global_constraint_ += dq.global_constraint_;
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator+=");
-    }
-}
+  /******************************************************/
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::operator+=(const ConstraintVector &dq)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            assert(dq.local_control_constraint_[i] != NULL);
+            local_control_constraint_[i]->operator+=(*(dq.local_control_constraint_[i]));
+          }
+        if (global_constraint_.size() > 0)
+          global_constraint_ += dq.global_constraint_;
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator+=");
+      }
+  }
 
-/******************************************************/
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::operator*=(double a)
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          local_control_constraint_[i]->operator*=(a);
-        }
-      if (global_constraint_.size() > 0)
-        global_constraint_ *= a;
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator*=");
-    }
-}
+  /******************************************************/
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::operator*=(double a)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            local_control_constraint_[i]->operator*=(a);
+          }
+        if (global_constraint_.size() > 0)
+          global_constraint_ *= a;
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator*=");
+      }
+  }
 
-/******************************************************/
-template<typename VECTOR>
-double ConstraintVector<VECTOR>::operator*(const ConstraintVector &dq) const
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
+  /******************************************************/
+  template<typename VECTOR>
+  double ConstraintVector<VECTOR>::operator*(const ConstraintVector &dq) const
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
 
-      double ret = 0.;
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          assert(dq.local_control_constraint_[i] != NULL);
-          ret += local_control_constraint_[i]->operator*(*(dq.local_control_constraint_[i]));
-        }
-      if (global_constraint_.size() > 0)
-        ret += global_constraint_ * dq.global_constraint_;
-      return ret;
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator*");
-    }
-}
+        double ret = 0.;
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            assert(dq.local_control_constraint_[i] != NULL);
+            ret += local_control_constraint_[i]->operator*(*(dq.local_control_constraint_[i]));
+          }
+        if (global_constraint_.size() > 0)
+          ret += global_constraint_ * dq.global_constraint_;
+        return ret;
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator*");
+      }
+  }
 
-/******************************************************/
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::add(double s, const ConstraintVector &dq)
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
+  /******************************************************/
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::add(double s, const ConstraintVector &dq)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
 
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          assert(dq.local_control_constraint_[i] != NULL);
-          local_control_constraint_[i]->add(s,*(dq.local_control_constraint_[i]));
-        }
-      if (global_constraint_.size() > 0)
-        global_constraint_.add(s,dq.global_constraint_);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::add");
-    }
-}
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            assert(dq.local_control_constraint_[i] != NULL);
+            local_control_constraint_[i]->add(s,*(dq.local_control_constraint_[i]));
+          }
+        if (global_constraint_.size() > 0)
+          global_constraint_.add(s,dq.global_constraint_);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::add");
+      }
+  }
 
-/******************************************************/
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::equ(double s, const ConstraintVector &dq)
-{
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
+  /******************************************************/
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::equ(double s, const ConstraintVector &dq)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.local_control_constraint_.size() == local_control_constraint_.size());
 
-      for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-        {
-          assert(local_control_constraint_[i] != NULL);
-          assert(dq.local_control_constraint_[i] != NULL);
-          local_control_constraint_[i]->equ(s,*(dq.local_control_constraint_[i]));
-        }
-      if (global_constraint_.size() > 0)
-        global_constraint_.equ(s,dq.global_constraint_);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::equ");
-    }
-}
+        for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+          {
+            assert(local_control_constraint_[i] != NULL);
+            assert(dq.local_control_constraint_[i] != NULL);
+            local_control_constraint_[i]->equ(s,*(dq.local_control_constraint_[i]));
+          }
+        if (global_constraint_.size() > 0)
+          global_constraint_.equ(s,dq.global_constraint_);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::equ");
+      }
+  }
 
-/******************************************************/
+  /******************************************************/
 
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::PrintInfos(std::stringstream &out)
-{
-  if (local_control_constraint_.size() ==1)
-    {
-      out<<"\t"<<local_control_constraint_[0]->size()+global_constraint_.size()<<std::endl;
-    }
-  else
-    {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-        {
-          out<<"\tNumber of Timepoints: "<<local_control_constraint_.size()<<std::endl;
-          unsigned int min_dofs =0;
-          unsigned int max_dofs =0;
-          unsigned int total_dofs =0;
-          unsigned int this_size=0;
-          for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-            {
-              this_size = local_control_constraint_[i]->size();
-              total_dofs += this_size;
-              if (i==0)
-                min_dofs = this_size;
-              else
-                min_dofs = std::min(min_dofs,this_size);
-              max_dofs = std::max(max_dofs,this_size);
-            }
-          out<<"\tTotal   DoFs: "<<total_dofs+global_constraint_.size()<<std::endl;
-          out<<"\tMinimal DoFs: "<<min_dofs+global_constraint_.size()<<std::endl;
-          out<<"\tMaximal DoFs: "<<max_dofs+global_constraint_.size()<<std::endl;
-        }
-      else
-        {
-          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::PrintInfos");
-        }
-    }
-}
+  template<typename VECTOR>
+  void ConstraintVector<VECTOR>::PrintInfos(std::stringstream &out)
+  {
+    if (local_control_constraint_.size() ==1)
+      {
+        out<<"\t"<<local_control_constraint_[0]->size()+global_constraint_.size()<<std::endl;
+      }
+    else
+      {
+        if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+          {
+            out<<"\tNumber of Timepoints: "<<local_control_constraint_.size()<<std::endl;
+            unsigned int min_dofs =0;
+            unsigned int max_dofs =0;
+            unsigned int total_dofs =0;
+            unsigned int this_size=0;
+            for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+              {
+                this_size = local_control_constraint_[i]->size();
+                total_dofs += this_size;
+                if (i==0)
+                  min_dofs = this_size;
+                else
+                  min_dofs = std::min(min_dofs,this_size);
+                max_dofs = std::max(max_dofs,this_size);
+              }
+            out<<"\tTotal   DoFs: "<<total_dofs+global_constraint_.size()<<std::endl;
+            out<<"\tMinimal DoFs: "<<min_dofs+global_constraint_.size()<<std::endl;
+            out<<"\tMaximal DoFs: "<<max_dofs+global_constraint_.size()<<std::endl;
+          }
+        else
+          {
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::PrintInfos");
+          }
+      }
+  }
 
-/******************************************************/
+  /******************************************************/
 
-template<typename VECTOR>
-double ConstraintVector<VECTOR>::Norm(std::string name,std::string restriction) const
-{
-  double ret = 0.;
-  if (name == "infty")
-    {
-      if ( restriction == "all")
-        {
-          for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-            {
-              const VECTOR &tmp = *(local_control_constraint_[i]);
-              for ( unsigned int j = 0; j < tmp.size(); j++)
-                {
-                  ret = std::max(ret,std::fabs(tmp(j)));
-                }
-            }
-          for (unsigned int i = 0; i< global_constraint_.size(); i++)
-            {
-              ret = std::max(std::fabs(global_constraint_(i)),ret);
-            }
-        }
-      else if (restriction == "positive")
-        {
-          for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-            {
-              const VECTOR &tmp = *(local_control_constraint_[i]);
-              for ( unsigned int j = 0; j < tmp.size(); j++)
-                {
-                  ret = std::max(ret,std::max(0.,tmp(j)));
-                }
-            }
-          for (unsigned int i = 0; i< global_constraint_.size(); i++)
-            {
-              ret = std::max(std::max(0.,global_constraint_(i)),ret);
-            }
-        }
-      else
-        {
-          throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
-        }
-    }
-  else if (name == "l1")
-    {
-      if ( restriction == "all")
-        {
-          for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-            {
-              const VECTOR &tmp = *(local_control_constraint_[i]);
-              for ( unsigned int j = 0; j < tmp.size(); j++)
-                {
-                  ret += std::fabs(tmp(j));
-                }
-            }
-          for (unsigned int i = 0; i< global_constraint_.size(); i++)
-            {
-              ret += std::fabs(global_constraint_(i));
-            }
-        }
-      else if (restriction == "positive")
-        {
-          for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-            {
-              const VECTOR &tmp = *(local_control_constraint_[i]);
-              for ( unsigned int j = 0; j < tmp.size(); j++)
-                {
-                  ret += std::max(0.,tmp(j));
-                }
-            }
-          for (unsigned int i = 0; i< global_constraint_.size(); i++)
-            {
-              ret += std::max(0.,global_constraint_(i));
-            }
-        }
-      else
-        {
-          throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
-        }
-    }
-  else
-    {
-      throw DOpEException("Unknown type: " + name,"ConstraintVector<VECTOR>::Norm");
-    }
-  return ret;
-}
+  template<typename VECTOR>
+  double ConstraintVector<VECTOR>::Norm(std::string name,std::string restriction) const
+  {
+    double ret = 0.;
+    if (name == "infty")
+      {
+        if ( restriction == "all")
+          {
+            for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+              {
+                const VECTOR &tmp = *(local_control_constraint_[i]);
+                for ( unsigned int j = 0; j < tmp.size(); j++)
+                  {
+                    ret = std::max(ret,std::fabs(tmp(j)));
+                  }
+              }
+            for (unsigned int i = 0; i< global_constraint_.size(); i++)
+              {
+                ret = std::max(std::fabs(global_constraint_(i)),ret);
+              }
+          }
+        else if (restriction == "positive")
+          {
+            for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+              {
+                const VECTOR &tmp = *(local_control_constraint_[i]);
+                for ( unsigned int j = 0; j < tmp.size(); j++)
+                  {
+                    ret = std::max(ret,std::max(0.,tmp(j)));
+                  }
+              }
+            for (unsigned int i = 0; i< global_constraint_.size(); i++)
+              {
+                ret = std::max(std::max(0.,global_constraint_(i)),ret);
+              }
+          }
+        else
+          {
+            throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
+          }
+      }
+    else if (name == "l1")
+      {
+        if ( restriction == "all")
+          {
+            for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+              {
+                const VECTOR &tmp = *(local_control_constraint_[i]);
+                for ( unsigned int j = 0; j < tmp.size(); j++)
+                  {
+                    ret += std::fabs(tmp(j));
+                  }
+              }
+            for (unsigned int i = 0; i< global_constraint_.size(); i++)
+              {
+                ret += std::fabs(global_constraint_(i));
+              }
+          }
+        else if (restriction == "positive")
+          {
+            for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+              {
+                const VECTOR &tmp = *(local_control_constraint_[i]);
+                for ( unsigned int j = 0; j < tmp.size(); j++)
+                  {
+                    ret += std::max(0.,tmp(j));
+                  }
+              }
+            for (unsigned int i = 0; i< global_constraint_.size(); i++)
+              {
+                ret += std::max(0.,global_constraint_(i));
+              }
+          }
+        else
+          {
+            throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
+          }
+      }
+    else
+      {
+        throw DOpEException("Unknown type: " + name,"ConstraintVector<VECTOR>::Norm");
+      }
+    return ret;
+  }
 
-template<typename VECTOR>
-bool ConstraintVector<VECTOR>::IsFeasible() const
-{
-  for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-    {
-      const VECTOR &tmp = *(local_control_constraint_[i]);
-      for ( unsigned int j = 0; j < tmp.size(); j++)
-        {
-          if (tmp(j) > 0.)
-            return false;
-        }
-    }
-  for (unsigned int i = 0; i< global_constraint_.size(); i++)
-    {
-      if (global_constraint_(i) > 0.)
-        return false;
-    }
-  return true;
-}
+  template<typename VECTOR>
+  bool ConstraintVector<VECTOR>::IsFeasible() const
+  {
+    for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+      {
+        const VECTOR &tmp = *(local_control_constraint_[i]);
+        for ( unsigned int j = 0; j < tmp.size(); j++)
+          {
+            if (tmp(j) > 0.)
+              return false;
+          }
+      }
+    for (unsigned int i = 0; i< global_constraint_.size(); i++)
+      {
+        if (global_constraint_(i) > 0.)
+          return false;
+      }
+    return true;
+  }
 
-template<typename VECTOR>
-bool ConstraintVector<VECTOR>::IsEpsilonFeasible(double eps) const
-{
-  for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-    {
-      const VECTOR &tmp = *(local_control_constraint_[i]);
-      for ( unsigned int j = 0; j < tmp.size(); j++)
-        {
-          if (tmp(j) > eps)
-            return false;
-        }
-    }
-  for (unsigned int i = 0; i< global_constraint_.size(); i++)
-    {
-      if (global_constraint_(i) > eps)
-        return false;
-    }
-  return true;
-}
+  template<typename VECTOR>
+  bool ConstraintVector<VECTOR>::IsEpsilonFeasible(double eps) const
+  {
+    for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+      {
+        const VECTOR &tmp = *(local_control_constraint_[i]);
+        for ( unsigned int j = 0; j < tmp.size(); j++)
+          {
+            if (tmp(j) > eps)
+              return false;
+          }
+      }
+    for (unsigned int i = 0; i< global_constraint_.size(); i++)
+      {
+        if (global_constraint_(i) > eps)
+          return false;
+      }
+    return true;
+  }
 
-template<typename VECTOR>
-bool ConstraintVector<VECTOR>::IsLargerThan(double eps) const
-{
-  for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-    {
-      const VECTOR &tmp = *(local_control_constraint_[i]);
-      for ( unsigned int j = 0; j < tmp.size(); j++)
-        {
-          if (tmp(j) <= eps)
-            return false;
-        }
-    }
-  for (unsigned int i = 0; i< global_constraint_.size(); i++)
-    {
-      if (global_constraint_(i) <= eps)
-        return false;
-    }
-  return true;
-}
+  template<typename VECTOR>
+  bool ConstraintVector<VECTOR>::IsLargerThan(double eps) const
+  {
+    for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+      {
+        const VECTOR &tmp = *(local_control_constraint_[i]);
+        for ( unsigned int j = 0; j < tmp.size(); j++)
+          {
+            if (tmp(j) <= eps)
+              return false;
+          }
+      }
+    for (unsigned int i = 0; i< global_constraint_.size(); i++)
+      {
+        if (global_constraint_(i) <= eps)
+          return false;
+      }
+    return true;
+  }
 
-template<typename VECTOR>
-double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR> &g) const
-{
-  double ret =0.;
-  assert(g.local_control_constraint_.size() == local_control_constraint_.size());
+  template<typename VECTOR>
+  double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR> &g) const
+  {
+    double ret =0.;
+    assert(g.local_control_constraint_.size() == local_control_constraint_.size());
 
-  for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
-    {
+    for (unsigned int i = 0; i < local_control_constraint_.size(); i++)
+      {
 
-      const VECTOR &tmp = *(local_control_constraint_[i]);
-      const VECTOR &tmp2 = *(g.local_control_constraint_[i]);
-      assert(tmp2.size() == tmp.size());
-      for ( unsigned int j = 0; j < tmp.size(); j++)
-        {
-          ret += fabs(tmp2[j]*tmp[j]);
-        }
-    }
-  assert(global_constraint_.size() == g.global_constraint_.size());
-  for (unsigned int i = 0; i< global_constraint_.size(); i++)
-    {
-      ret += fabs(global_constraint_[i]*g.global_constraint_[i]);
-    }
-  return ret;
-}
+        const VECTOR &tmp = *(local_control_constraint_[i]);
+        const VECTOR &tmp2 = *(g.local_control_constraint_[i]);
+        assert(tmp2.size() == tmp.size());
+        for ( unsigned int j = 0; j < tmp.size(); j++)
+          {
+            ret += fabs(tmp2[j]*tmp[j]);
+          }
+      }
+    assert(global_constraint_.size() == g.global_constraint_.size());
+    for (unsigned int i = 0; i< global_constraint_.size(); i++)
+      {
+        ret += fabs(global_constraint_[i]*g.global_constraint_[i]);
+      }
+    return ret;
+  }
 
 }
 

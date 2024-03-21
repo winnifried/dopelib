@@ -490,14 +490,14 @@ namespace DOpE
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::declare_params(
                        ParameterReader &param_reader)
-{
+  {
     NONLINEARSOLVER::declare_params(param_reader);
   }
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   template<typename INTEGRATORDATACONT>
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
@@ -511,9 +511,9 @@ namespace DOpE
                                                                     param_reader), dz_(OP->GetSpaceTimeHandler(), state_behavior,
                                                                         param_reader), z_for_ee_(OP->GetSpaceTimeHandler(),
                                                                             state_behavior, param_reader), integrator_(idc), control_integrator_(
-                         idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-                         integrator_, param_reader), nonlinear_gradient_solver_(
-                         control_integrator_, param_reader)
+                           idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+                           integrator_, param_reader), nonlinear_gradient_solver_(
+                           control_integrator_, param_reader)
 
   {
     //ReducedProblems should be ReInited
@@ -543,9 +543,9 @@ namespace DOpE
                                                                     param_reader), dz_(OP->GetSpaceTimeHandler(), state_behavior,
                                                                         param_reader), z_for_ee_(OP->GetSpaceTimeHandler(),
                                                                             state_behavior, param_reader), integrator_(s_idc), control_integrator_(
-                         c_idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-                         integrator_, param_reader), nonlinear_gradient_solver_(
-                         control_integrator_, param_reader)
+                           c_idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+                           integrator_, param_reader), nonlinear_gradient_solver_(
+                           control_integrator_, param_reader)
 
   {
     //ReducedProblems should be ReInited
@@ -570,8 +570,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   NONLINEARSOLVER &
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetNonlinearSolver(
@@ -596,8 +596,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   CONTROLNONLINEARSOLVER &
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetControlNonlinearSolver()
@@ -618,11 +618,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-                     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit() 
+                     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
   {
     ReducedProblemInterface<PROBLEM, VECTOR>::ReInit();
 
@@ -650,8 +650,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedState(
@@ -791,8 +791,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   bool
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedConstraints(
@@ -952,8 +952,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetControlBoxConstraints(
@@ -966,8 +966,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedAdjoint(
@@ -1043,8 +1043,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeDualForErrorEstimation(
@@ -1123,8 +1123,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradient(
@@ -1308,8 +1308,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   double
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedCostFunctional(
@@ -1463,8 +1463,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedFunctionals(
@@ -1588,8 +1588,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   template<class DWRC,class PDE>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
@@ -1686,8 +1686,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedHessianVector(
@@ -1960,8 +1960,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradientOfGlobalConstraints(
@@ -2027,8 +2027,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
        AllocateAuxiliaryParams(std::string name,
@@ -2054,8 +2054,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   std::map<std::string,dealii::Vector<double> >::iterator
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
@@ -2068,8 +2068,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dopedim, int dealdim>
+           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dopedim, int dealdim>
   void StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
        CalculatePreFunctional(std::string name,
@@ -2080,12 +2080,12 @@ namespace DOpE
     //Checking input
     if (name != "aux_functional" && name != "cost_functional")
       {
-        throw DOpEException("Only valid with name `aux_functional` or `cost_functional` but not: "+name ,
+        throw DOpEException("Only valid with name `aux_functional` or `cost_functional` but not: "+name,
                             "StatReducedProblem::CalculatePreFunctional");
       }
     if (postfix == "" || postfix == " ")
       {
-        throw DOpEException("Postfix needs to be a non-empty string" ,
+        throw DOpEException("Postfix needs to be a non-empty string",
                             "StatReducedProblem::CalculatePreFunctional");
       }
     //Create problem name

@@ -119,7 +119,7 @@ namespace DOpE
   /***********************************************************/
 
   SpaceTimeLocalRefinement::SpaceTimeLocalRefinement (const std::vector <dealii::Vector<float> > &indicators,
-                                    DOpEtypes::RefinementType ref_type)
+                                                      DOpEtypes::RefinementType ref_type)
     : RefinementContainer (ref_type),
       indicators_ (indicators)
   {
@@ -221,12 +221,12 @@ namespace DOpE
     return convergence_order_;
   }
 
-    /***********************************************************/
+  /***********************************************************/
   /****Implementation of SpaceTimeRefineOptimized**************/
   /***********************************************************/
 
   SpaceTimeRefineOptimized::SpaceTimeRefineOptimized (const std::vector< dealii::Vector<float> > &indicators,
-                                    double convergence_order)
+                                                      double convergence_order)
     : SpaceTimeLocalRefinement (indicators, DOpEtypes::RefinementType::optimized),
       convergence_order_ (convergence_order)
   {

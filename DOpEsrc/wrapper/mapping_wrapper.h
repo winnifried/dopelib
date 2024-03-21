@@ -48,7 +48,7 @@ namespace DOpEWrapper
    * @template hp               true for hp, false for non hp dofhandler
    */
   template<int dim, bool hp>
-    class Mapping 
+  class Mapping
   {
   private:
     Mapping()
@@ -73,7 +73,7 @@ namespace DOpEWrapper
 #if ! DEAL_II_VERSION_GTE(9,4,0)
                             , use_mapping_q_on_all_elements
 #endif
-                            )
+                           )
     {
       (void)use_mapping_q_on_all_elements;
     }
@@ -193,7 +193,7 @@ namespace DOpEWrapper
 #if ! DEAL_II_VERSION_GTE(9,4,0)
                             , use_mapping_q_on_all_elements
 #endif
-                            )
+                           )
     {
       (void)use_mapping_q_on_all_elements;
     }

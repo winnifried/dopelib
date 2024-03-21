@@ -39,117 +39,117 @@ namespace DOpE
    * needed in the integrator when InterpolatedFEValues are used.
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
-   template<bool DH, typename QUADRATURE, typename FACEQUADRATURE,
+  template<bool DH, typename QUADRATURE, typename FACEQUADRATURE,
 #else
-   template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
+  template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
 #endif
-	    typename VECTOR, int dim>
-   class InterpolatedIntegratorDataContainer : public IntegratorDataContainer<DH, QUADRATURE, FACEQUADRATURE, VECTOR, dim>
-   {
-      public:
-      InterpolatedIntegratorDataContainer(
-		const FEValuesExtractors::Vector selected_component,
-		const Mapping<dim> 		&map,
-		const FiniteElement<dim>	&fe_interpolate,
-		const QUADRATURE &quad, const FACEQUADRATURE &face_quad) :
-		IntegratorDataContainer<DH, QUADRATURE, FACEQUADRATURE, VECTOR, dim>
-		(quad,  face_quad),
-		selected_component_(selected_component), map_(map), fe_interpolate_(fe_interpolate), interp_edc_(NULL), interp_fdc_(NULL)
-      {
-      }
+           typename VECTOR, int dim>
+  class InterpolatedIntegratorDataContainer : public IntegratorDataContainer<DH, QUADRATURE, FACEQUADRATURE, VECTOR, dim>
+  {
+  public:
+    InterpolatedIntegratorDataContainer(
+      const FEValuesExtractors::Vector selected_component,
+      const Mapping<dim>    &map,
+      const FiniteElement<dim>  &fe_interpolate,
+      const QUADRATURE &quad, const FACEQUADRATURE &face_quad) :
+      IntegratorDataContainer<DH, QUADRATURE, FACEQUADRATURE, VECTOR, dim>
+      (quad,  face_quad),
+      selected_component_(selected_component), map_(map), fe_interpolate_(fe_interpolate), interp_edc_(NULL), interp_fdc_(NULL)
+    {
+    }
 
-     ~InterpolatedIntegratorDataContainer()
-     {
-       if (interp_fdc_ != NULL)
-       {
-	 delete interp_fdc_;
-	 interp_fdc_ = NULL;
-       }
-       if (interp_edc_ != NULL)
-       {
-	 delete interp_edc_;
-	 interp_edc_ = NULL;
-       }
-     }
+    ~InterpolatedIntegratorDataContainer()
+    {
+      if (interp_fdc_ != NULL)
+        {
+          delete interp_fdc_;
+          interp_fdc_ = NULL;
+        }
+      if (interp_edc_ != NULL)
+        {
+          delete interp_edc_;
+          interp_edc_ = NULL;
+        }
+    }
 
     /**
       * Initializes the ElementDataContainer. See the documentation there.
      */
-     template<typename STH>
-     void
-     InitializeEDC(const QUADRATURE &quad, UpdateFlags update_flags,
-		   STH &sth,
+    template<typename STH>
+    void
+    InitializeEDC(const QUADRATURE &quad, UpdateFlags update_flags,
+                  STH &sth,
 #if DEAL_II_VERSION_GTE(9,3,0)
-		   const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
+                  const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
 #else
-		   const std::vector<typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator> &element,
+                  const std::vector<typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator> &element,
 #endif
-		   const std::map<std::string, const Vector<double>*> &param_values,
-		   const std::map<std::string, const VECTOR*> &domain_values,
-		   bool need_vertices)
-     {
-       if (interp_edc_ != NULL)
-	 delete interp_edc_;
+                  const std::map<std::string, const Vector<double>*> &param_values,
+                  const std::map<std::string, const VECTOR *> &domain_values,
+                  bool need_vertices)
+    {
+      if (interp_edc_ != NULL)
+        delete interp_edc_;
 
-       interp_edc_ = new InterpolatedElementDataContainer<DH, VECTOR, dim>(selected_component_,
-									   map_, 
-									   fe_interpolate_,
-									   quad, 
-									   update_flags,
-									   sth,
-									   element,
-									   param_values,
-									   domain_values,
-									   need_vertices);
-     }
-     
-     /**
-      * Initializes the ElementDataContainer. See the documentation there.
-      * This one uses the previously given quadrature.
-      */
-     template<typename STH>
-     void
-     InitializeEDC(UpdateFlags update_flags, STH &sth,
-#if DEAL_II_VERSION_GTE(9,3,0)
-		   const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
-#else
-		   const std::vector<typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
-#endif
-		   const std::map<std::string, const Vector<double>*> &param_values,
-		   const std::map<std::string, const VECTOR *> &domain_values,
-		   bool need_vertices)
-     {
-       InitializeEDC(this->GetQuad(), update_flags, sth, element, param_values,
-		     domain_values, need_vertices);
-     }
+      interp_edc_ = new InterpolatedElementDataContainer<DH, VECTOR, dim>(selected_component_,
+          map_,
+          fe_interpolate_,
+          quad,
+          update_flags,
+          sth,
+          element,
+          param_values,
+          domain_values,
+          need_vertices);
+    }
 
-         /**
-     * Initializes the FaceDataContainer. See the documentation there.
+    /**
+     * Initializes the ElementDataContainer. See the documentation there.
+     * This one uses the previously given quadrature.
      */
+    template<typename STH>
+    void
+    InitializeEDC(UpdateFlags update_flags, STH &sth,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                  const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
+#else
+                  const std::vector<typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator> &element,
+#endif
+                  const std::map<std::string, const Vector<double>*> &param_values,
+                  const std::map<std::string, const VECTOR *> &domain_values,
+                  bool need_vertices)
+    {
+      InitializeEDC(this->GetQuad(), update_flags, sth, element, param_values,
+                    domain_values, need_vertices);
+    }
+
+    /**
+    * Initializes the FaceDataContainer. See the documentation there.
+    */
     template<typename STH>
     void
     InitializeFDC(const FACEQUADRATURE &fquad, UpdateFlags update_flags,
                   STH &sth,
                   const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
 #else
-		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
 #endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
                   bool need_interfaces = false)
     {
       if (interp_fdc_ != NULL)
-	 delete interp_fdc_;
+        delete interp_fdc_;
       interp_fdc_ = new InterpolatedFaceDataContainer<DH, VECTOR, dim>(selected_component_,
-								       map_, 
-								       fe_interpolate_,
-								       fquad,
-								       update_flags, sth,
-								       element, param_values,
-								       domain_values,
-								       need_interfaces);
+          map_,
+          fe_interpolate_,
+          fquad,
+          update_flags, sth,
+          element, param_values,
+          domain_values,
+          need_interfaces);
     }
 
     /**
@@ -161,9 +161,9 @@ namespace DOpE
     InitializeFDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
 #else
-		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
 #endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
@@ -173,34 +173,34 @@ namespace DOpE
                     domain_values, need_interfaces);
     }
 
-     
-     InterpolatedElementDataContainer<DH, VECTOR, dim> &
-     GetElementDataContainer() const
-     {
-       if (interp_edc_ != NULL)
-         return *interp_edc_;
-       else
-         throw DOpEException("Pointer has to be initialized.",
-			     "IntegratorDataContainer::GetElementDataContainer");
-     }
-     InterpolatedFaceDataContainer<DH, VECTOR, dim> &
-     GetFaceDataContainer() const
-     {
-       if (interp_fdc_ != NULL)
-         return *interp_fdc_;
-       else
-         throw DOpEException("Pointer has to be initialized.",
-			     "IntegratorDataContainer::GetFaceDataContainer");
-     }
-     
-   private:
-     const FEValuesExtractors::Vector selected_component_;
-     const Mapping<dim>		&map_;
-     const FiniteElement<dim>	&fe_interpolate_;
-     InterpolatedElementDataContainer<DH, VECTOR, dim> *interp_edc_;
-     InterpolatedFaceDataContainer<DH, VECTOR, dim> *interp_fdc_;
-     
-   };
+
+    InterpolatedElementDataContainer<DH, VECTOR, dim> &
+    GetElementDataContainer() const
+    {
+      if (interp_edc_ != NULL)
+        return *interp_edc_;
+      else
+        throw DOpEException("Pointer has to be initialized.",
+                            "IntegratorDataContainer::GetElementDataContainer");
+    }
+    InterpolatedFaceDataContainer<DH, VECTOR, dim> &
+    GetFaceDataContainer() const
+    {
+      if (interp_fdc_ != NULL)
+        return *interp_fdc_;
+      else
+        throw DOpEException("Pointer has to be initialized.",
+                            "IntegratorDataContainer::GetFaceDataContainer");
+    }
+
+  private:
+    const FEValuesExtractors::Vector selected_component_;
+    const Mapping<dim>   &map_;
+    const FiniteElement<dim> &fe_interpolate_;
+    InterpolatedElementDataContainer<DH, VECTOR, dim> *interp_edc_;
+    InterpolatedFaceDataContainer<DH, VECTOR, dim> *interp_fdc_;
+
+  };
 }
 
 #endif

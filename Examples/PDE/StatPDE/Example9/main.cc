@@ -92,7 +92,7 @@ main(int argc, char **argv)
    * in a different header file, a simplified compressible SVTK solid.
    * We use the Q2^c-Q1^c element for discretization of Stokes.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";

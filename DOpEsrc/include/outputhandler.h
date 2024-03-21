@@ -318,7 +318,7 @@ namespace DOpE
     bool disallow_all_;
     bool parallel_;
     unsigned int rank_;
-    
+
     std::vector<std::string> never_write_list;
     std::vector<std::string> ignore_iterations;
 

@@ -73,7 +73,7 @@ namespace DOpEHelper
   template <>
   inline void
   write<dealii::TrilinosWrappers::MPI::BlockVector>(const dealii::TrilinosWrappers::MPI::BlockVector &v,
-                                                    std::ostream &                                    stream)
+                                                    std::ostream                                     &stream)
   {
     (void)v;
     (void)stream;

@@ -140,7 +140,7 @@ main(int argc, char **argv)
    * the optimization problem we add a quadratic
    * regularization term to the cost functional.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -323,11 +323,11 @@ main(int argc, char **argv)
 #else
           KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
             estimated_error_per_element, component_mask);
 #endif
-	  RefineFixedNumber ref_cont(estimated_error_per_element,0.3,0.0);
-	  DOFH.RefineSpace(ref_cont);
+          RefineFixedNumber ref_cont(estimated_error_per_element,0.3,0.0);
+          DOFH.RefineSpace(ref_cont);
         }
     }
 

@@ -100,9 +100,9 @@ main(int argc, char **argv)
    * This example implements the topology optimization of an MBB-Beam given in
    * OPT/StatPDE/Example6 using the SIMP method and uses SNOPT for the optimization.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   std::string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -157,10 +157,10 @@ main(int argc, char **argv)
   c_comps[0][1] = true; //Only the y-displacement is fixed.
 
   DOpE::PointConstraints<DOFHANDLER, 2, 2> constraints_mkr(c_points, c_comps);
-  
+
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> DOFH(
     triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
-  
+
   DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 
   LocalConstraint<EDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC;

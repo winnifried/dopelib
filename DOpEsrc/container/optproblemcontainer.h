@@ -75,9 +75,9 @@ namespace DOpE
 {
   //Predeclaration necessary
   template<typename VECTOR>
-    class DOpEOutputHandler;
+  class DOpEOutputHandler;
   template<typename VECTOR>
-    class DOpEExceptionHandler;
+  class DOpEExceptionHandler;
   /////////////////////////////
 
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -102,44 +102,44 @@ namespace DOpE
    * @tparam DH                     False for normal, true for hp-dofhandler
    */
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim,
-    template<int, int> class FE = dealii::FESystem,
-    bool DH = false>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim,
+           template<int, int> class FE = dealii::FESystem,
+           bool DH = false>
 #else
-    /**
-     * Container class for all stationary Optimization problems.
-     * This class collects all problem depended data needed to
-     * calculate the solution to the optimization problem
-     *
-     * @tparam FUNCTIONAL_INTERFACE   A generic interface to arbitrary functionals to be evaluated.
-     * @tparam FUNCTIONAL             The cost functional, see FunctionalInterface for details.
-     * @tparam PDE                    The description of the PDE, see PDEInterface for details.
-     * @tparam DD                     The description of the Dirichlet data, see
-     *                                DirichletDataInterface for details.
-     * @tparam CONSTRAINTS            The description of, possible, additional constraints for the
-     *                                optimization problem, see ConstraintInterface for details.
-     * @tparam SPARSITYPATTERN        The sparsity pattern to be used in the stiffness matrix.
-     * @tparam VECTOR                 The vector type in which the coordinate vector of the
-     *                                solution is to be stored.
-     * @tparam dopedim                The dimension of the domain in which the control is considered.
-     * @tparam dealdim                The dimension of the domain in which the PDE is considered.
-     * @tparam FE                     The finite element under consideration.
-     * @tparam DH                     The spatial DoFHandler to be used when evaluating the
-     *                                weak form.
-     */
-    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim,
-    template<int, int> class FE = dealii::FESystem,
-    template<int, int> class DH = dealii::DoFHandler>
+  /**
+   * Container class for all stationary Optimization problems.
+   * This class collects all problem depended data needed to
+   * calculate the solution to the optimization problem
+   *
+   * @tparam FUNCTIONAL_INTERFACE   A generic interface to arbitrary functionals to be evaluated.
+   * @tparam FUNCTIONAL             The cost functional, see FunctionalInterface for details.
+   * @tparam PDE                    The description of the PDE, see PDEInterface for details.
+   * @tparam DD                     The description of the Dirichlet data, see
+   *                                DirichletDataInterface for details.
+   * @tparam CONSTRAINTS            The description of, possible, additional constraints for the
+   *                                optimization problem, see ConstraintInterface for details.
+   * @tparam SPARSITYPATTERN        The sparsity pattern to be used in the stiffness matrix.
+   * @tparam VECTOR                 The vector type in which the coordinate vector of the
+   *                                solution is to be stored.
+   * @tparam dopedim                The dimension of the domain in which the control is considered.
+   * @tparam dealdim                The dimension of the domain in which the PDE is considered.
+   * @tparam FE                     The finite element under consideration.
+   * @tparam DH                     The spatial DoFHandler to be used when evaluating the
+   *                                weak form.
+   */
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim,
+           template<int, int> class FE = dealii::FESystem,
+           template<int, int> class DH = dealii::DoFHandler>
 #endif
-    class OptProblemContainer : public ProblemContainerInternal<PDE>
-    {
-    public:
+  class OptProblemContainer : public ProblemContainerInternal<PDE>
+  {
+  public:
     OptProblemContainer(FUNCTIONAL &functional, PDE &pde,
                         CONSTRAINTS &constraints,
-			SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
+                        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
 
     /******************************************************/
 
@@ -159,18 +159,18 @@ namespace DOpE
      */
     StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
-    GetStateProblem()
+                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+                        GetStateProblem()
     {
       if (state_problem_ == NULL)
-      {
-	state_problem_ = new StateProblem<
-	OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-	CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-	DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-	  *this, this->GetPDE());
-      }
+        {
+          state_problem_ = new StateProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
+        }
       return *state_problem_;
     }
 
@@ -184,13 +184,13 @@ namespace DOpE
     GetTangentProblem()
     {
       if (tangent_problem_ == NULL)
-      {
-	tangent_problem_ = new TangentProblem<
-	OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-	CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-	DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-	  *this, this->GetPDE());
-      }
+        {
+          tangent_problem_ = new TangentProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
+        }
       return *tangent_problem_;
     }
     /**
@@ -203,13 +203,13 @@ namespace DOpE
     GetAdjointProblem()
     {
       if (adjoint_problem_ == NULL)
-      {
-	adjoint_problem_ = new AdjointProblem<
-	OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-	CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-	DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-	  *this, this->GetPDE());
-      }
+        {
+          adjoint_problem_ = new AdjointProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
+        }
       return *adjoint_problem_;
     }
     /**
@@ -222,13 +222,13 @@ namespace DOpE
     GetAdjoint_HessianProblem()
     {
       if (adjoint_hessian_problem_ == NULL)
-      {
-	adjoint_hessian_problem_ = new Adjoint_HessianProblem<
-	OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-	CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-	DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-	  *this, this->GetPDE());
-      }
+        {
+          adjoint_hessian_problem_ = new Adjoint_HessianProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
+        }
       return *adjoint_hessian_problem_;
     }
 
@@ -242,13 +242,13 @@ namespace DOpE
     GetAdjoint_For_EEProblem()
     {
       if (adjoint_for_ee_problem_ == NULL)
-      {
-	adjoint_for_ee_problem_ = new OPT_Adjoint_For_EEProblem<
-	OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-	CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-	DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-	  *this, this->GetPDE());
-      }
+        {
+          adjoint_for_ee_problem_ = new OPT_Adjoint_For_EEProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
+        }
       return *adjoint_for_ee_problem_;
     }
 
@@ -256,7 +256,7 @@ namespace DOpE
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>&
+    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH> &
     GetBaseProblem()
     {
       return *this;
@@ -817,11 +817,11 @@ namespace DOpE
       aux_functionals_.push_back(F);
       if (functional_position_.find(F->GetName())
           != functional_position_.end())
-      {
-	throw DOpEException(
-	  "You cant add two functionals with the same name.",
-	  "OPTProblemContainer::AddFunctional");
-      }
+        {
+          throw DOpEException(
+            "You cant add two functionals with the same name.",
+            "OPTProblemContainer::AddFunctional");
+        }
       functional_position_[F->GetName()] = aux_functionals_.size();
       //remember! At functional_values_[0] we store always the cost functional!
     }
@@ -841,34 +841,34 @@ namespace DOpE
     SetFunctionalForErrorEstimation(std::string functional_name)
     {
       if (GetFunctional()->GetName() == functional_name)
-      {
-	functional_for_ee_is_cost_ = true;
-	functional_for_ee_num_ = dealii::numbers::invalid_unsigned_int;
-      }
+        {
+          functional_for_ee_is_cost_ = true;
+          functional_for_ee_num_ = dealii::numbers::invalid_unsigned_int;
+        }
       else
-      {
-	functional_for_ee_is_cost_ = false;
-	bool found = false;
-	//we go through all aux functionals.
-	for (unsigned int i = 0; i < this->GetNFunctionals(); i++)
-	{
-	  if (aux_functionals_[i]->GetName() == functional_name)
-	  {
-	    //if the names match, we have found our functional.
-	    found = true;
-	    functional_for_ee_num_ = i;
-	  }
-	}
-	//If we have not found a functional with the given name,
-	//we throw an error.
-	if (!found)
-	{
-	  throw DOpEException(
-	    "Can't find functional " + functional_name
-	    + " in aux_functionals_",
-	    "Optproblem::SetFunctionalForErrorEstimation");
-	}
-      }
+        {
+          functional_for_ee_is_cost_ = false;
+          bool found = false;
+          //we go through all aux functionals.
+          for (unsigned int i = 0; i < this->GetNFunctionals(); i++)
+            {
+              if (aux_functionals_[i]->GetName() == functional_name)
+                {
+                  //if the names match, we have found our functional.
+                  found = true;
+                  functional_for_ee_num_ = i;
+                }
+            }
+          //If we have not found a functional with the given name,
+          //we throw an error.
+          if (!found)
+            {
+              throw DOpEException(
+                "Can't find functional " + functional_name
+                + " in aux_functionals_",
+                "Optproblem::SetFunctionalForErrorEstimation");
+            }
+        }
     }
 
     /******************************************************/
@@ -1053,10 +1053,10 @@ namespace DOpE
       typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
         auxiliary_constraints_.find(name);
       if (it == auxiliary_constraints_.end())
-      {
-	throw DOpEException("Could not find data" + name,
-			    "OptProblemContainer::GetAuxiliaryConstraint");
-      }
+        {
+          throw DOpEException("Could not find data" + name,
+                              "OptProblemContainer::GetAuxiliaryConstraint");
+        }
       return it->second;
     }
     /*****************************************************************/
@@ -1074,45 +1074,45 @@ namespace DOpE
     {
       {
         typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-	auxiliary_controls_.begin();
+          auxiliary_controls_.begin();
         for (; it != auxiliary_controls_.end(); it++)
-	{
-	  if (dopedim == dealdim)
-	  {
-	    integrator.AddDomainData(it->first,
-				     &(it->second->GetSpacialVector()));
-	  }
-	  else if (dopedim == 0)
-	  {
-	    integrator.AddParamData(it->first,
-				    &(it->second->GetSpacialVectorCopy()));
-	  }
-	  else
-	  {
-	    throw DOpEException("dopedim not implemented",
-				"OptProblemContainer::AddAuxiliaryToIntegrator");
-	  }
-	}
+          {
+            if (dopedim == dealdim)
+              {
+                integrator.AddDomainData(it->first,
+                                         &(it->second->GetSpacialVector()));
+              }
+            else if (dopedim == 0)
+              {
+                integrator.AddParamData(it->first,
+                                        &(it->second->GetSpacialVectorCopy()));
+              }
+            else
+              {
+                throw DOpEException("dopedim not implemented",
+                                    "OptProblemContainer::AddAuxiliaryToIntegrator");
+              }
+          }
       }
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
-	auxiliary_state_.begin();
+          auxiliary_state_.begin();
         for (; it != auxiliary_state_.end(); it++)
-	{
-	  integrator.AddDomainData(it->first,
-				   &(it->second->GetSpacialVector()));
-	}
+          {
+            integrator.AddDomainData(it->first,
+                                     &(it->second->GetSpacialVector()));
+          }
       }
       {
         typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
-	auxiliary_constraints_.begin();
+          auxiliary_constraints_.begin();
         for (; it != auxiliary_constraints_.end(); it++)
-	{
-	  integrator.AddDomainData(it->first + "_local",
-				   &(it->second->GetSpacialVector("local")));
-	  integrator.AddParamData(it->first + "_global",
-				  &(it->second->GetGlobalConstraints()));
-	}
+          {
+            integrator.AddDomainData(it->first + "_local",
+                                     &(it->second->GetSpacialVector("local")));
+            integrator.AddParamData(it->first + "_global",
+                                    &(it->second->GetGlobalConstraints()));
+          }
       }
     }
 
@@ -1135,12 +1135,12 @@ namespace DOpE
     {
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
-	auxiliary_state_.find("state");
+          auxiliary_state_.find("state");
         if (it != auxiliary_state_.end())
-	{
-	  integrator.AddDomainData("state_i+1",
-				   &(it->second->GetNextSpacialVector()));
-	}
+          {
+            integrator.AddDomainData("state_i+1",
+                                     &(it->second->GetNextSpacialVector()));
+          }
       }
     }
     /*****************************************************************/
@@ -1162,12 +1162,12 @@ namespace DOpE
     {
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
-	auxiliary_state_.find("state");
+          auxiliary_state_.find("state");
         if (it != auxiliary_state_.end())
-	{
-	  integrator.AddDomainData("state_i-1",
-				   &(it->second->GetPreviousSpacialVector()));
-	}
+          {
+            integrator.AddDomainData("state_i-1",
+                                     &(it->second->GetPreviousSpacialVector()));
+          }
       }
     }
 
@@ -1190,11 +1190,11 @@ namespace DOpE
     {
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
-	auxiliary_state_.find("state");
+          auxiliary_state_.find("state");
         if (it != auxiliary_state_.end())
-	{
-	  integrator.DeleteDomainData("state_i+1");
-	}
+          {
+            integrator.DeleteDomainData("state_i+1");
+          }
       }
     }
     /*****************************************************************/
@@ -1216,11 +1216,11 @@ namespace DOpE
     {
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
-	auxiliary_state_.find("state");
+          auxiliary_state_.find("state");
         if (it != auxiliary_state_.end())
-	{
-	  integrator.DeleteDomainData("state_i-1");
-	}
+          {
+            integrator.DeleteDomainData("state_i-1");
+          }
       }
     }
 
@@ -1240,41 +1240,41 @@ namespace DOpE
     {
       {
         typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-	auxiliary_controls_.begin();
+          auxiliary_controls_.begin();
         for (; it != auxiliary_controls_.end(); it++)
-	{
-	  if (dopedim == dealdim)
-	  {
-	    integrator.DeleteDomainData(it->first);
-	  }
-	  else if (dopedim == 0)
-	  {
-	    integrator.DeleteParamData(it->first);
-	    it->second->UnLockCopy();
-	  }
-	  else
-	  {
-	    throw DOpEException("dopedim not implemented",
-				"OptProblemContainer::AddAuxiliaryToIntegrator");
-	  }
-	}
+          {
+            if (dopedim == dealdim)
+              {
+                integrator.DeleteDomainData(it->first);
+              }
+            else if (dopedim == 0)
+              {
+                integrator.DeleteParamData(it->first);
+                it->second->UnLockCopy();
+              }
+            else
+              {
+                throw DOpEException("dopedim not implemented",
+                                    "OptProblemContainer::AddAuxiliaryToIntegrator");
+              }
+          }
       }
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
-	auxiliary_state_.begin();
+          auxiliary_state_.begin();
         for (; it != auxiliary_state_.end(); it++)
-	{
-	  integrator.DeleteDomainData(it->first);
-	}
+          {
+            integrator.DeleteDomainData(it->first);
+          }
       }
       {
         typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
-	auxiliary_constraints_.begin();
+          auxiliary_constraints_.begin();
         for (; it != auxiliary_constraints_.end(); it++)
-	{
-	  integrator.DeleteDomainData(it->first + "_local");
-	  integrator.DeleteParamData(it->first + "_global");
-	}
+          {
+            integrator.DeleteDomainData(it->first + "_local");
+            integrator.DeleteParamData(it->first + "_global");
+          }
       }
     }
 
@@ -1341,7 +1341,7 @@ namespace DOpE
     }
 
 
-    protected:
+  protected:
     FUNCTIONAL *
     GetFunctional();
     const FUNCTIONAL *
@@ -1362,12 +1362,12 @@ namespace DOpE
                    std::string name)
     {
       typename std::map<std::string, const VECTOR *>::const_iterator it =
-      values.find(name);
+        values.find(name);
       if (it == values.end())
-      {
-	throw DOpEException("Did not find " + name,
-			    "OptProblemContainer::GetBlockVector");
-      }
+        {
+          throw DOpEException("Did not find " + name,
+                              "OptProblemContainer::GetBlockVector");
+        }
       return it->second;
     }
     const dealii::Vector<double> *
@@ -1375,17 +1375,17 @@ namespace DOpE
               std::string name)
     {
       typename std::map<std::string, const Vector<double>*>::const_iterator it =
-      values.find(name);
+        values.find(name);
       if (it == values.end())
-      {
-	throw DOpEException("Did not find " + name,
-			    "OptProblemContainer::GetVector");
-      }
+        {
+          throw DOpEException("Did not find " + name,
+                              "OptProblemContainer::GetVector");
+        }
       return it->second;
     }
 
     /******************************************************/
-    private:
+  private:
     DOpEExceptionHandler<VECTOR> *ExceptionHandler_;
     DOpEOutputHandler<VECTOR> *OutputHandler_;
     std::string algo_type_;
@@ -1398,7 +1398,7 @@ namespace DOpE
     FUNCTIONAL *functional_;
     CONSTRAINTS *constraints_;
     SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> *STH_;
-    
+
     std::vector<unsigned int> control_dirichlet_colors_;
     std::vector<unsigned int> control_transposed_dirichlet_colors_;
     std::vector<std::vector<bool> > control_dirichlet_comps_;
@@ -1430,64 +1430,64 @@ namespace DOpE
 
     StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * state_problem_;
+                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * state_problem_;
     TangentProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * tangent_problem_;
+                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * tangent_problem_;
     AdjointProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_problem_;
+                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_problem_;
     Adjoint_HessianProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_hessian_problem_;
+                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_hessian_problem_;
     OPT_Adjoint_For_EEProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_for_ee_problem_;
+                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_for_ee_problem_;
 
     friend class StateProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class TangentProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class AdjointProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class Adjoint_HessianProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class OPT_Adjoint_For_EEProblem<
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
-    };
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+  };
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::OptProblemContainer(
-      FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
-      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
-    ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
-      &constraints), STH_(&STH), state_problem_(NULL),
-    tangent_problem_(NULL),  adjoint_problem_(NULL),
-    adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::OptProblemContainer(
+                        FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
+                        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
+                        ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
+                          &constraints), STH_(&STH), state_problem_(NULL),
+                        tangent_problem_(NULL),  adjoint_problem_(NULL),
+                        adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
@@ -1507,1126 +1507,1126 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~OptProblemContainer()
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~OptProblemContainer()
   {
     if (zero_dirichlet_values_ != NULL)
-    {
-      delete zero_dirichlet_values_;
-    }
+      {
+        delete zero_dirichlet_values_;
+      }
 
     for (unsigned int i = 0;
          i < transposed_control_gradient_dirichlet_values_.size(); i++)
-    {
-      if (transposed_control_gradient_dirichlet_values_[i] != NULL)
-	delete transposed_control_gradient_dirichlet_values_[i];
-    }
+      {
+        if (transposed_control_gradient_dirichlet_values_[i] != NULL)
+          delete transposed_control_gradient_dirichlet_values_[i];
+      }
     for (unsigned int i = 0;
          i < transposed_control_hessian_dirichlet_values_.size(); i++)
-    {
-      if (transposed_control_hessian_dirichlet_values_[i] != NULL)
-	delete transposed_control_hessian_dirichlet_values_[i];
-    }
+      {
+        if (transposed_control_hessian_dirichlet_values_[i] != NULL)
+          delete transposed_control_hessian_dirichlet_values_[i];
+      }
     for (unsigned int i = 0; i < primal_dirichlet_values_.size(); i++)
-    {
-      if (primal_dirichlet_values_[i] != NULL)
-	delete primal_dirichlet_values_[i];
-    }
+      {
+        if (primal_dirichlet_values_[i] != NULL)
+          delete primal_dirichlet_values_[i];
+      }
     for (unsigned int i = 0; i < tangent_dirichlet_values_.size(); i++)
-    {
-      if (tangent_dirichlet_values_[i] != NULL)
-	delete tangent_dirichlet_values_[i];
-    }
+      {
+        if (tangent_dirichlet_values_[i] != NULL)
+          delete tangent_dirichlet_values_[i];
+      }
     if (state_problem_ != NULL)
-    {
-      delete state_problem_;
-    }
+      {
+        delete state_problem_;
+      }
     if (tangent_problem_ != NULL)
-    {
-      delete tangent_problem_;
-    }
+      {
+        delete tangent_problem_;
+      }
     if (adjoint_problem_ != NULL)
-    {
-      delete adjoint_problem_;
-    }
+      {
+        delete adjoint_problem_;
+      }
     if (adjoint_hessian_problem_ != NULL)
-    {
-      delete adjoint_hessian_problem_;
-    }
+      {
+        delete adjoint_hessian_problem_;
+      }
     if (adjoint_for_ee_problem_ != NULL)
-    {
-      delete adjoint_for_ee_problem_;
-    }
+      {
+        delete adjoint_for_ee_problem_;
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ReInit(
-      std::string algo_type)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ReInit(
+                        std::string algo_type)
   {
     if (state_problem_ != NULL)
-    {
-      delete state_problem_;
-      state_problem_ = NULL;
-    }
+      {
+        delete state_problem_;
+        state_problem_ = NULL;
+      }
     if (tangent_problem_ != NULL)
-    {
-      delete tangent_problem_;
-      tangent_problem_ = NULL;
-    }
+      {
+        delete tangent_problem_;
+        tangent_problem_ = NULL;
+      }
     if (adjoint_problem_ != NULL)
-    {
-      delete adjoint_problem_;
-      adjoint_problem_ = NULL;
-    }
+      {
+        delete adjoint_problem_;
+        adjoint_problem_ = NULL;
+      }
     if (adjoint_hessian_problem_ != NULL)
-    {
-      delete adjoint_hessian_problem_;
-      adjoint_hessian_problem_ = NULL;
-    }
+      {
+        delete adjoint_hessian_problem_;
+        adjoint_hessian_problem_ = NULL;
+      }
     if (adjoint_for_ee_problem_ != NULL)
-    {
-      delete adjoint_for_ee_problem_;
-      adjoint_for_ee_problem_ = NULL;
-    }
+      {
+        delete adjoint_for_ee_problem_;
+        adjoint_for_ee_problem_ = NULL;
+      }
 
     if (algo_type_ != algo_type && algo_type_ != "")
-    {
-      throw DOpEException("Conflicting Algorithms!",
-			  "OptProblemContainer::ReInit");
-    }
+      {
+        throw DOpEException("Conflicting Algorithms!",
+                            "OptProblemContainer::ReInit");
+      }
     else
-    {
-      algo_type_ = algo_type;
-      this->SetTypeInternal("");
+      {
+        algo_type_ = algo_type;
+        this->SetTypeInternal("");
 
-      if (algo_type_ == "reduced")
-      {
-	GetSpaceTimeHandler()->ReInit(this->GetPDE().GetControlNBlocks(),
-				      this->GetPDE().GetControlBlockComponent(),
-				      DirichletDescriptor(control_dirichlet_colors_,control_dirichlet_comps_),
-				      this->GetPDE().GetStateNBlocks(),
-				      this->GetPDE().GetStateBlockComponent(),
-				      DirichletDescriptor(dirichlet_colors_,dirichlet_comps_));
+        if (algo_type_ == "reduced")
+          {
+            GetSpaceTimeHandler()->ReInit(this->GetPDE().GetControlNBlocks(),
+                                          this->GetPDE().GetControlBlockComponent(),
+                                          DirichletDescriptor(control_dirichlet_colors_,control_dirichlet_comps_),
+                                          this->GetPDE().GetStateNBlocks(),
+                                          this->GetPDE().GetStateBlockComponent(),
+                                          DirichletDescriptor(dirichlet_colors_,dirichlet_comps_));
+          }
+        else
+          {
+            throw DOpEException("Unknown Algorithm " + algo_type_,
+                                "OptProblemContainer::ReInit");
+          }
       }
-      else
-      {
-	throw DOpEException("Unknown Algorithm " + algo_type_,
-			    "OptProblemContainer::ReInit");
-      }
-    }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetType(
-      std::string type, unsigned int num)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetType(
+                        std::string type, unsigned int num)
   {
     if (this->GetType() != type || this->GetTypeNum() != num)
-    {
-      this->SetTypeNumInternal(num);
-      this->SetTypeInternal(type);
-      this->GetPDE().SetProblemType(type,num);
-      if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
-	aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
-      this->GetConstraints()->SetProblemType(type, num);
-      functional_->SetProblemType(type, num);
+      {
+        this->SetTypeNumInternal(num);
+        this->SetTypeInternal(type);
+        this->GetPDE().SetProblemType(type,num);
+        if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
+          aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
+        this->GetConstraints()->SetProblemType(type, num);
+        functional_->SetProblemType(type, num);
 
 #if dope_dimension > 0
-      if (dealdim == dopedim)
-      {
-	//Prepare DoFHandlerPointer
+        if (dealdim == dopedim)
+          {
+            //Prepare DoFHandlerPointer
 
-	{
-	  if (this->GetType() == "state" || this->GetType() == "adjoint"
-	      || this->GetType() == "adjoint_for_ee" || this->GetType() == "cost_functional"
-	      || this->GetType() == "cost_functional_pre"
-	      || this->GetType() == "cost_functional_pre_tangent"
-	      || this->GetType() == "aux_functional" || this->GetType() == "functional_for_ee"
-	      || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian"
-	      || this->GetType() == "error_evaluation"
-	      || this->GetType().find("constraints") != std::string::npos)
-	  {
-	    GetSpaceTimeHandler()->SetDoFHandlerOrdering(1,0);
-	  }
-	  else if (this->GetType() == "gradient"||this->GetType() == "hessian"||this->GetType() == "hessian_inverse" || this->GetType() == "global_constraint_gradient"|| this->GetType() == "global_constraint_hessian")
-	  {
-	    GetSpaceTimeHandler()->SetDoFHandlerOrdering(0,1);
-	  }
-	  else
-	  {
-	    throw DOpEException("problem_type_ : "+this->GetType()+" not implemented!", "OptProblemContainer::SetType");
-	  }
-	}
-      }
-      else
-      {
-	throw DOpEException("dopedim not implemented", "OptProblemContainer::SetType");
-      }
+            {
+              if (this->GetType() == "state" || this->GetType() == "adjoint"
+                  || this->GetType() == "adjoint_for_ee" || this->GetType() == "cost_functional"
+                  || this->GetType() == "cost_functional_pre"
+                  || this->GetType() == "cost_functional_pre_tangent"
+                  || this->GetType() == "aux_functional" || this->GetType() == "functional_for_ee"
+                  || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian"
+                  || this->GetType() == "error_evaluation"
+                  || this->GetType().find("constraints") != std::string::npos)
+                {
+                  GetSpaceTimeHandler()->SetDoFHandlerOrdering(1,0);
+                }
+              else if (this->GetType() == "gradient"||this->GetType() == "hessian"||this->GetType() == "hessian_inverse" || this->GetType() == "global_constraint_gradient"|| this->GetType() == "global_constraint_hessian")
+                {
+                  GetSpaceTimeHandler()->SetDoFHandlerOrdering(0,1);
+                }
+              else
+                {
+                  throw DOpEException("problem_type_ : "+this->GetType()+" not implemented!", "OptProblemContainer::SetType");
+                }
+            }
+          }
+        else
+          {
+            throw DOpEException("dopedim not implemented", "OptProblemContainer::SetType");
+          }
 #else
-      //dopedim ==0
-      {
-	//Prepare DoFHandlerPointer
-	{
+        //dopedim ==0
+        {
+          //Prepare DoFHandlerPointer
+          {
 
-	  if (this->GetType() == "state" || this->GetType() == "adjoint"
-	      || this->GetType() == "adjoint_for_ee"
-	      || this->GetType() == "functional_for_ee"
-	      || this->GetType() == "cost_functional"
-	      || this->GetType() == "cost_functional_pre"
-	      || this->GetType() == "cost_functional_pre_tangent"
-	      || this->GetType() == "aux_functional"
-	      || this->GetType() == "tangent"
-	      || this->GetType() == "error_evaluation"
-	      || this->GetType() == "adjoint_hessian")
-	  {
-	    GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
-	  }
-	  else if (this->GetType() == "gradient"
-		   || this->GetType() == "hessian_inverse"
-		   || this->GetType() == "hessian")
-	  {
-	    GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
-	  }
-	  else
-	  {
-	    throw DOpEException(
-	      "problem_type_ : " + this->GetType() + " not implemented!",
-	      "OptProblemContainer::SetType");
-	  }
-	}
-      }
+            if (this->GetType() == "state" || this->GetType() == "adjoint"
+                || this->GetType() == "adjoint_for_ee"
+                || this->GetType() == "functional_for_ee"
+                || this->GetType() == "cost_functional"
+                || this->GetType() == "cost_functional_pre"
+                || this->GetType() == "cost_functional_pre_tangent"
+                || this->GetType() == "aux_functional"
+                || this->GetType() == "tangent"
+                || this->GetType() == "error_evaluation"
+                || this->GetType() == "adjoint_hessian")
+              {
+                GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
+              }
+            else if (this->GetType() == "gradient"
+                     || this->GetType() == "hessian_inverse"
+                     || this->GetType() == "hessian")
+              {
+                GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
+              }
+            else
+              {
+                throw DOpEException(
+                  "problem_type_ : " + this->GetType() + " not implemented!",
+                  "OptProblemContainer::SetType");
+              }
+          }
+        }
 #endif
-    }
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    double
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementFunctional(
-      const DATACONTAINER &edc)
+  template<typename DATACONTAINER>
+  double
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementFunctional(
+                        const DATACONTAINER &edc)
   {
 
     if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
-    {
-      // state values in quadrature points
-      return GetFunctional()->ElementValue(edc);
-    }
+      {
+        // state values in quadrature points
+        return GetFunctional()->ElementValue(edc);
+      }
     else if (this->GetType() == "aux_functional")
-    {
-      // state values in quadrature points
-      return aux_functionals_[this->GetTypeNum()]->ElementValue(edc);
-    }
+      {
+        // state values in quadrature points
+        return aux_functionals_[this->GetTypeNum()]->ElementValue(edc);
+      }
     else if (this->GetType() == "functional_for_ee")
-    {
-      // TODO is this correct? Should not be needed.
-      return aux_functionals_[functional_for_ee_num_]->ElementValue(edc);
-    }
+      {
+        // TODO is this correct? Should not be needed.
+        return aux_functionals_[functional_for_ee_num_]->ElementValue(edc);
+      }
     else if (this->GetType().find("constraints") != std::string::npos)
-    {
-      return GetConstraints()->ElementValue(edc);
-    }
+      {
+        return GetConstraints()->ElementValue(edc);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementFunctional");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementFunctional");
+      }
   }
 
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    double
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointFunctional(
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values)
+  double
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointFunctional(
+                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                        const std::map<std::string, const VECTOR *> &domain_values)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
-    {
-      // state values in quadrature points
-      return GetFunctional()->PointValue(
-	this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	domain_values);
+      {
+        // state values in quadrature points
+        return GetFunctional()->PointValue(
+                 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                 domain_values);
 
-    } //endif cost_functional
+      } //endif cost_functional
     else if (this->GetType() == "aux_functional")
-    {
-      // state values in quadrature points
-      return aux_functionals_[this->GetTypeNum()]->PointValue(
-	this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	domain_values);
+      {
+        // state values in quadrature points
+        return aux_functionals_[this->GetTypeNum()]->PointValue(
+                 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                 domain_values);
 
-    } //endif aux_functional
+      } //endif aux_functional
     else if (this->GetType() == "functional_for_ee")
-    {
-      // TODO is this correct? Should not be needed.
-      return aux_functionals_[functional_for_ee_num_]->PointValue(
-	this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	domain_values);
-    } //endif functional_for_ee
+      {
+        // TODO is this correct? Should not be needed.
+        return aux_functionals_[functional_for_ee_num_]->PointValue(
+                 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                 domain_values);
+      } //endif functional_for_ee
     else if (this->GetType().find("constraints") != std::string::npos)
-    {
-      return GetConstraints()->PointValue(
-	this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	domain_values);
+      {
+        return GetConstraints()->PointValue(
+                 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                 domain_values);
 
-    } //endif constraints
+      } //endif constraints
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::PointFunctional");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::PointFunctional");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    double
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryFunctional(
-      const FACEDATACONTAINER &fdc)
+  template<typename FACEDATACONTAINER>
+  double
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryFunctional(
+                        const FACEDATACONTAINER &fdc)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
-    {
-      // state values in quadrature points
-      return GetFunctional()->BoundaryValue(fdc);
-    }
+      {
+        // state values in quadrature points
+        return GetFunctional()->BoundaryValue(fdc);
+      }
     else if (this->GetType() == "aux_functional")
-    {
-      // state values in quadrature points
-      return aux_functionals_[this->GetTypeNum()]->BoundaryValue(fdc);
-    }
+      {
+        // state values in quadrature points
+        return aux_functionals_[this->GetTypeNum()]->BoundaryValue(fdc);
+      }
     else if (this->GetType() == "functional_for_ee")
       // TODO is this correct? Should not be needed.
-    {
-      return aux_functionals_[functional_for_ee_num_]->BoundaryValue(fdc);
-    }
+      {
+        return aux_functionals_[functional_for_ee_num_]->BoundaryValue(fdc);
+      }
     else if (this->GetType().find("constraints") != std::string::npos)
-    {
-      return GetConstraints()->BoundaryValue(fdc);
-    }
+      {
+        return GetConstraints()->BoundaryValue(fdc);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::BoundaryFunctional");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::BoundaryFunctional");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    double
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceFunctional(
-      const FACEDATACONTAINER &fdc)
+  template<typename FACEDATACONTAINER>
+  double
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceFunctional(
+                        const FACEDATACONTAINER &fdc)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
-    {
-      // state values in quadrature points
-      return GetFunctional()->FaceValue(fdc);
-    }
+      {
+        // state values in quadrature points
+        return GetFunctional()->FaceValue(fdc);
+      }
     else if (this->GetType() == "aux_functional")
-    {
-      // state values in quadrature points
-      return aux_functionals_[this->GetTypeNum()]->FaceValue(fdc);
-    }
+      {
+        // state values in quadrature points
+        return aux_functionals_[this->GetTypeNum()]->FaceValue(fdc);
+      }
     else if (this->GetType() == "functional_for_ee")
       // TODO is this correct? Should not be needed.
-    {
-      return aux_functionals_[functional_for_ee_num_]->FaceValue(fdc);
-    }
+      {
+        return aux_functionals_[functional_for_ee_num_]->FaceValue(fdc);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::FaceFunctional");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::FaceFunctional");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    double
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values)
+  double
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
+                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                        const std::map<std::string, const VECTOR *> &domain_values)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
-    {
-      // state values in quadrature points
-      return GetFunctional()->AlgebraicValue(param_values, domain_values);
-    }
+      {
+        // state values in quadrature points
+        return GetFunctional()->AlgebraicValue(param_values, domain_values);
+      }
     else if (this->GetType() == "aux_functional")
-    {
-      // state values in quadrature points
-      return aux_functionals_[this->GetTypeNum()]->AlgebraicValue(
-	param_values, domain_values);
-    }
+      {
+        // state values in quadrature points
+        return aux_functionals_[this->GetTypeNum()]->AlgebraicValue(
+                 param_values, domain_values);
+      }
     else if (this->GetType() == "functional_for_ee")
       // TODO is this correct? Should not be needed.
-    {
-      return aux_functionals_[functional_for_ee_num_]->AlgebraicValue(
-	param_values, domain_values);
-    }
+      {
+        return aux_functionals_[functional_for_ee_num_]->AlgebraicValue(
+                 param_values, domain_values);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::AlgebraicFunctional");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::AlgebraicFunctional");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
-      const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-      double scale, double /*scale_ico*/)
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
+                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                        double scale, double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      // control values in quadrature points
-      this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
-    }
+      {
+        // control values in quadrature points
+        this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementEquation");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementEquation");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicResidual(
-      VECTOR &residual,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicResidual(
+                        VECTOR &residual,
+                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                        const std::map<std::string, const VECTOR *> &domain_values)
   {
     if (this->GetType() == "gradient")
-    {
-      // state values in quadrature points
-      return GetFunctional()->AlgebraicGradient_Q(residual, param_values,
-						  domain_values);
-    }
+      {
+        // state values in quadrature points
+        return GetFunctional()->AlgebraicGradient_Q(residual, param_values,
+                                                    domain_values);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::AlgebraicFunctional");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::AlgebraicFunctional");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
-      const DATACONTAINER & /*edc*/, dealii::Vector<double> &/*local_vector*/,
-      double /*scale*/)
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
+                        const DATACONTAINER & /*edc*/, dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/)
   {
 
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeEquation");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeEquation");
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeEquation");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeEquation");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
-      const DATACONTAINER & /*edc*/, dealii::Vector<double> &/*local_vector*/,
-      double /*scale*/)
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
+                        const DATACONTAINER & /*edc*/, dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/)
   {
 
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeEquationExplicit");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeEquationExplicit");
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeEquationExplicit");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeEquationExplicit");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
-      const FACEDATACONTAINER &fdc,
-      dealii::Vector<double> &local_vector, double scale,
-      double /*scale_ico*/)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
+                        const FACEDATACONTAINER &fdc,
+                        dealii::Vector<double> &local_vector, double scale,
+                        double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-    {
-      // control values in quadrature points
-      this->GetPDE().ControlBoundaryEquation(fdc, local_vector, scale*c_interval_length_);
-    }
+      {
+        // control values in quadrature points
+        this->GetPDE().ControlBoundaryEquation(fdc, local_vector, scale*c_interval_length_);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementBoundaryEquation");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementBoundaryEquation");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
-      const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-      double scale)
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
+                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                        double scale)
   {
     if (this->GetType() == "gradient")
-    {
-      if (GetSpaceTimeHandler()->GetControlActionType()
-	  == DOpEtypes::VectorAction::initial && initial_)
       {
-	this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
+        if (GetSpaceTimeHandler()->GetControlActionType()
+            == DOpEtypes::VectorAction::initial && initial_)
+          {
+            this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
+          }
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::ElementRhs");
+                  }
+              }
+          }
+        scale *= -1;
+        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_, scale*interval_length_);
       }
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
-      {
-	if (GetFunctional()->GetType().find("domain") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::ElementRhs");
-	  }
-	}
-      }
-      scale *= -1;
-      this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_, scale*interval_length_);
-    }
     else if (this->GetType() == "hessian")
-    {
-      if (GetSpaceTimeHandler()->GetControlActionType()
-	  == DOpEtypes::VectorAction::initial && initial_)
       {
-	this->GetPDE().Init_ElementRhs_QTT(edc, local_vector, scale);
-	this->GetPDE().Init_ElementRhs_QQ(edc, local_vector, scale);
-      }
-      if (GetFunctional()->NeedTime())
-      {
-	if (GetFunctional()->GetType().find("domain") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->ElementValue_QQ(edc, local_vector, scale*interval_length_);
-	    GetFunctional()->ElementValue_UQ(edc, local_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->ElementValue_QQ(edc, local_vector, scale);
-	    GetFunctional()->ElementValue_UQ(edc, local_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::ElementRhs");
-	  }
-	}
-      }
+        if (GetSpaceTimeHandler()->GetControlActionType()
+            == DOpEtypes::VectorAction::initial && initial_)
+          {
+            this->GetPDE().Init_ElementRhs_QTT(edc, local_vector, scale);
+            this->GetPDE().Init_ElementRhs_QQ(edc, local_vector, scale);
+          }
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->ElementValue_QQ(edc, local_vector, scale*interval_length_);
+                    GetFunctional()->ElementValue_UQ(edc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->ElementValue_QQ(edc, local_vector, scale);
+                    GetFunctional()->ElementValue_UQ(edc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::ElementRhs");
+                  }
+              }
+          }
 
-      scale *= -1;
-      this->GetPDE().ElementEquation_QTT(edc, local_vector, scale*interval_length_, scale*interval_length_);
-      this->GetPDE().ElementEquation_UQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
-      this->GetPDE().ElementEquation_QQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
-    }
+        scale *= -1;
+        this->GetPDE().ElementEquation_QTT(edc, local_vector, scale*interval_length_, scale*interval_length_);
+        this->GetPDE().ElementEquation_UQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
+        this->GetPDE().ElementEquation_QQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
+      }
     else if (this->GetType() == "global_constraint_gradient")
-    {
-      assert(interval_length_==1.);
-      GetConstraints()->ElementValue_Q(edc, local_vector, scale);
-    }
+      {
+        assert(interval_length_==1.);
+        GetConstraints()->ElementValue_Q(edc, local_vector, scale);
+      }
     else if (this->GetType() == "global_constraint_hessian")
-    {
-      assert(interval_length_==1.);
-      GetConstraints()->ElementValue_QQ(edc, local_vector, scale);
-    }
+      {
+        assert(interval_length_==1.);
+        GetConstraints()->ElementValue_QQ(edc, local_vector, scale);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementRhs");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementRhs");
+      }
 
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointRhs(
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs_vector, double scale)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointRhs(
+                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                        const std::map<std::string, const VECTOR *> &domain_values,
+                        VECTOR &rhs_vector, double scale)
   {
     if (this->GetType() == "gradient")
-    {
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
       {
-	if (GetFunctional()->GetType().find("point") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->PointValue_Q(
-	      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	      domain_values, rhs_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->PointValue_Q(
-	      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	      domain_values, rhs_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::PointRhs");
-	  }
-	}
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("point") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->PointValue_Q(
+                      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                      domain_values, rhs_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->PointValue_Q(
+                      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                      domain_values, rhs_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::PointRhs");
+                  }
+              }
+          }
       }
-    }
     else if (this->GetType() == "hessian")
-    {
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
       {
-	if (GetFunctional()->GetType().find("point") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->PointValue_QQ(
-	      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	      domain_values, rhs_vector, scale*interval_length_);
-	    GetFunctional()->PointValue_UQ(
-	      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	      domain_values, rhs_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->PointValue_QQ(
-	      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	      domain_values, rhs_vector, scale);
-	    GetFunctional()->PointValue_UQ(
-	      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-	      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-	      domain_values, rhs_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::PointRhs");
-	  }
-	}
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("point") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->PointValue_QQ(
+                      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                      domain_values, rhs_vector, scale*interval_length_);
+                    GetFunctional()->PointValue_UQ(
+                      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                      domain_values, rhs_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->PointValue_QQ(
+                      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                      domain_values, rhs_vector, scale);
+                    GetFunctional()->PointValue_UQ(
+                      this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+                      this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+                      domain_values, rhs_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::PointRhs");
+                  }
+              }
+          }
       }
-    }
     else
-    {
-      throw DOpEException("Not implemented", "OptProblem::PointRhs");
-    }
+      {
+        throw DOpEException("Not implemented", "OptProblem::PointRhs");
+      }
 
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceRhs(
-      const FACEDATACONTAINER &fdc,
-      dealii::Vector<double> &local_vector, double scale)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceRhs(
+                        const FACEDATACONTAINER &fdc,
+                        dealii::Vector<double> &local_vector, double scale)
   {
     if (this->GetType() == "gradient")
-    {
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
       {
-	if (GetFunctional()->GetType().find("face") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->FaceValue_Q(fdc, local_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->FaceValue_Q(fdc, local_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::FaceRhs");
-	  }
-	}
-      }
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("face") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->FaceValue_Q(fdc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->FaceValue_Q(fdc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::FaceRhs");
+                  }
+              }
+          }
 
-      scale *= -1;
-      this->GetPDE().FaceEquation_Q(fdc, local_vector, scale*interval_length_, scale*interval_length_);
-    }
+        scale *= -1;
+        this->GetPDE().FaceEquation_Q(fdc, local_vector, scale*interval_length_, scale*interval_length_);
+      }
     else if (this->GetType() == "hessian")
-    {
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
       {
-	if (GetFunctional()->GetType().find("face") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->FaceValue_QQ(fdc, local_vector, scale*interval_length_);
-	    GetFunctional()->FaceValue_UQ(fdc, local_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->FaceValue_QQ(fdc, local_vector, scale);
-	    GetFunctional()->FaceValue_UQ(fdc, local_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::FaceRhs");
-	  }
-	}
-      }
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("face") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->FaceValue_QQ(fdc, local_vector, scale*interval_length_);
+                    GetFunctional()->FaceValue_UQ(fdc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->FaceValue_QQ(fdc, local_vector, scale);
+                    GetFunctional()->FaceValue_UQ(fdc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::FaceRhs");
+                  }
+              }
+          }
 
-      scale *= -1;
-      this->GetPDE().FaceEquation_QTT(fdc, local_vector, scale*interval_length_, scale*interval_length_);
-      this->GetPDE().FaceEquation_UQ(fdc, local_vector, scale*interval_length_, scale*interval_length_);
-      this->GetPDE().FaceEquation_QQ(fdc, local_vector, scale*interval_length_, scale*interval_length_);
-    }
+        scale *= -1;
+        this->GetPDE().FaceEquation_QTT(fdc, local_vector, scale*interval_length_, scale*interval_length_);
+        this->GetPDE().FaceEquation_UQ(fdc, local_vector, scale*interval_length_, scale*interval_length_);
+        this->GetPDE().FaceEquation_QQ(fdc, local_vector, scale*interval_length_, scale*interval_length_);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::FaceRhs");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::FaceRhs");
+      }
 
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryRhs(
-      const FACEDATACONTAINER &fdc,
-      dealii::Vector<double> &local_vector, double scale)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryRhs(
+                        const FACEDATACONTAINER &fdc,
+                        dealii::Vector<double> &local_vector, double scale)
   {
     if (this->GetType() == "gradient")
-    {
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
       {
-	if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::BoundaryRhs");
-	  }
-	}
-      }
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::BoundaryRhs");
+                  }
+              }
+          }
 
-      scale *= -1;
-      this->GetPDE().BoundaryEquation_Q(fdc, local_vector, scale*interval_length_,
-					scale*interval_length_);
-    }
+        scale *= -1;
+        this->GetPDE().BoundaryEquation_Q(fdc, local_vector, scale*interval_length_,
+                                          scale*interval_length_);
+      }
     else if (this->GetType() == "hessian")
-    {
-      // state values in quadrature points
-      if (GetFunctional()->NeedTime())
       {
-	if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-	{
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	  {
-	    GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale*interval_length_);
-	    GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale*interval_length_);
-	  }
-	  else
-	  {
-	    GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale);
-	    GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale);
-	  }
-	  if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	  {
-	    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				"OptProblemContainer::BoundaryRhs");
-	  }
-	}
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale*interval_length_);
+                    GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale);
+                    GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::BoundaryRhs");
+                  }
+              }
+          }
+
+        scale *= -1;
+        this->GetPDE().BoundaryEquation_QTT(fdc, local_vector, scale*interval_length_,
+                                            scale*interval_length_);
+        this->GetPDE().BoundaryEquation_UQ(fdc, local_vector, scale*interval_length_,
+                                           scale*interval_length_);
+        this->GetPDE().BoundaryEquation_QQ(fdc, local_vector, scale*interval_length_,
+                                           scale*interval_length_);
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::BoundaryRhs");
       }
 
-      scale *= -1;
-      this->GetPDE().BoundaryEquation_QTT(fdc, local_vector, scale*interval_length_,
-					  scale*interval_length_);
-      this->GetPDE().BoundaryEquation_UQ(fdc, local_vector, scale*interval_length_,
-					 scale*interval_length_);
-      this->GetPDE().BoundaryEquation_QQ(fdc, local_vector, scale*interval_length_,
-					 scale*interval_length_);
-    }
+  }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+#if DEAL_II_VERSION_GTE(9,3,0)
+           bool DH>
+#else
+           template<int, int> class DH>
+#endif
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
+                        const DATACONTAINER &edc,
+                        dealii::FullMatrix<double> &local_entry_matrix, double scale,
+                        double /*scale_ico*/)
+  {
+
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+      {
+        // control values in quadrature points
+        this->GetPDE().ControlElementMatrix(edc, local_entry_matrix, scale*c_interval_length_);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::BoundaryRhs");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementMatrix");
+      }
 
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
-      const DATACONTAINER &edc,
-      dealii::FullMatrix<double> &local_entry_matrix, double scale,
-      double /*scale_ico*/)
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
+                        const DATACONTAINER & /*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
   {
-
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      // control values in quadrature points
-      this->GetPDE().ControlElementMatrix(edc, local_entry_matrix, scale*c_interval_length_);
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeMatrix");
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementMatrix");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeMatrix");
+      }
 
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
-      const DATACONTAINER & /*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
+                        const DATACONTAINER &/*edc*/,
+                        dealii::FullMatrix<double> &/*local_entry_matrix*/)
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeMatrix");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeMatrixExplicit");
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeMatrix");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementTimeMatrixExplicit");
+      }
 
+  }
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+#if DEAL_II_VERSION_GTE(9,3,0)
+           bool DH>
+#else
+           template<int, int> class DH>
+#endif
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
+                        const FACEDATACONTAINER & /*fdc*/,
+                        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+                        double /*scale_ico*/)
+  {
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+      {
+        //Ok, in type gradient and hessian not needed
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::FaceEquation");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
-      const DATACONTAINER &/*edc*/,
-      dealii::FullMatrix<double> &/*local_entry_matrix*/)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
+                        const FACEDATACONTAINER & /*fdc*/,
+                        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+                        double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeMatrixExplicit");
-    }
+      {
+        //Ok, in type gradient and hessian not needed
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementTimeMatrixExplicit");
-    }
-
-  }
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-#if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
-#else
-    template<int, int> class DH>
-#endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
-      const FACEDATACONTAINER & /*fdc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-      double /*scale_ico*/)
-  {
-    if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian"))
-    {
-      //Ok, in type gradient and hessian not needed
-    }
-    else
-    {
-      throw DOpEException("Not implemented",
-                          "OptProblemContainer::FaceEquation");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::InterfaceEquation");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
-      const FACEDATACONTAINER & /*fdc*/,
-      dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-      double /*scale_ico*/)
-  {
-    if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian"))
-    {
-      //Ok, in type gradient and hessian not needed
-    }
-    else
-    {
-      throw DOpEException("Not implemented",
-                          "OptProblemContainer::InterfaceEquation");
-    }
-  }
-
-  /******************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-#if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
-#else
-    template<int, int> class DH>
-#endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceMatrix(
-      const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
-      double /*scale*/, double /*scale_ico*/)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceMatrix(
+                        const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
+                        double /*scale*/, double /*scale_ico*/)
   {
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
@@ -2636,375 +2636,375 @@ namespace DOpE
 //        else
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      //Ok, in type gradient and hessian not needed
-    }
+      {
+        //Ok, in type gradient and hessian not needed
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-                          "OptProblemContainer::NewtonFaceMatrix");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::NewtonFaceMatrix");
+      }
 
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceMatrix(
-      const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
-      double /*scale*/, double /*scale_ico*/)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceMatrix(
+                        const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
+                        double /*scale*/, double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      //Ok, in type gradient and hessian not needed
-    }
+      {
+        //Ok, in type gradient and hessian not needed
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-                          "OptProblemContainer::NewtonInterfaceMatrix");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::NewtonInterfaceMatrix");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename FACEDATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
-      const FACEDATACONTAINER &fdc, FullMatrix<double> &local_matrix,
-      double scale, double /*scale_ico*/)
+  template<typename FACEDATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
+                        const FACEDATACONTAINER &fdc, FullMatrix<double> &local_matrix,
+                        double scale, double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-    {
-      // control values in quadrature points
-      this->GetPDE().ControlBoundaryMatrix(fdc, local_matrix, scale*c_interval_length_);
-    }
+      {
+        // control values in quadrature points
+        this->GetPDE().ControlBoundaryMatrix(fdc, local_matrix, scale*c_interval_length_);
+      }
     else
-    {
-      throw DOpEException("Not implemented",
-			  "OptProblemContainer::ElementBoundaryMatrix");
-    }
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementBoundaryMatrix");
+      }
 
   }
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeLocalControlConstraints(
-      VECTOR &constraints,
-      const std::map<std::string, const dealii::Vector<double>*> &/*values*/,
-      const std::map<std::string, const VECTOR *> &block_values)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeLocalControlConstraints(
+                        VECTOR &constraints,
+                        const std::map<std::string, const dealii::Vector<double>*> &/*values*/,
+                        const std::map<std::string, const VECTOR *> &block_values)
   {
     if (this->GetType() == "constraints")
-    {
-      if (this->GetSpaceTimeHandler()->GetNLocalConstraints() != 0)
       {
-	const VECTOR &control = *GetBlockVector(block_values, "control");
-	this->GetConstraints()->EvaluateLocalControlConstraints(control,
-								constraints);
+        if (this->GetSpaceTimeHandler()->GetNLocalConstraints() != 0)
+          {
+            const VECTOR &control = *GetBlockVector(block_values, "control");
+            this->GetConstraints()->EvaluateLocalControlConstraints(control,
+                                                                    constraints);
+          }
       }
-    }
     else
-    {
-      throw DOpEException("Wrong problem type" + this->GetType(),
-			  "OptProblemContainer::ComputeLocalConstraints");
-    }
+      {
+        throw DOpEException("Wrong problem type" + this->GetType(),
+                            "OptProblemContainer::ComputeLocalConstraints");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    std::string
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
+  std::string
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "hessian_inverse"))
-    {
-      return "control";
-    }
+      {
+        return "control";
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDoFType");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFType");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const FE<dealdim, dealdim> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
+  const FE<dealdim, dealdim> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
+      {
 #if dope_dimension > 0
-      if (dopedim == dealdim)
-	return this->GetSpaceTimeHandler()->GetFESystem("control");
-      else
-	throw DOpEException("Non matching dimensions!","OptProblemContainer::GetFESystem");
+        if (dopedim == dealdim)
+          return this->GetSpaceTimeHandler()->GetFESystem("control");
+        else
+          throw DOpEException("Non matching dimensions!","OptProblemContainer::GetFESystem");
 #else
-      return this->GetSpaceTimeHandler()->GetFESystem("state");
+        return this->GetSpaceTimeHandler()->GetFESystem("state");
 #endif
-    }
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetFESystem");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetFESystem");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    UpdateFlags
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetUpdateFlags() const
+  UpdateFlags
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetUpdateFlags() const
   {
 
     UpdateFlags r;
     if (this->GetType().find("aux_functional") != std::string::npos)
-    {
-      r = aux_functionals_[this->GetTypeNum()]->GetUpdateFlags();
-    }
-    else if (this->GetType().find("functional") != std::string::npos)
-    {
-      r = this->GetFunctional()->GetUpdateFlags();
-    }
-    else if (this->GetType().find("constraints") != std::string::npos)
-    {
-      r = this->GetConstraints()->GetUpdateFlags();
-    }
-    else if (this->GetType() == "functional_for_ee")
-    {
-      r = aux_functionals_[functional_for_ee_num_]->GetUpdateFlags();
-    }
-    else
-    {
-      r = this->GetPDE().GetUpdateFlags();
-      if ((this->GetType() == "hessian")
-	  || (this->GetType() == "gradient"))
       {
-	r = r | this->GetFunctional()->GetUpdateFlags();
+        r = aux_functionals_[this->GetTypeNum()]->GetUpdateFlags();
       }
-    }
+    else if (this->GetType().find("functional") != std::string::npos)
+      {
+        r = this->GetFunctional()->GetUpdateFlags();
+      }
+    else if (this->GetType().find("constraints") != std::string::npos)
+      {
+        r = this->GetConstraints()->GetUpdateFlags();
+      }
+    else if (this->GetType() == "functional_for_ee")
+      {
+        r = aux_functionals_[functional_for_ee_num_]->GetUpdateFlags();
+      }
+    else
+      {
+        r = this->GetPDE().GetUpdateFlags();
+        if ((this->GetType() == "hessian")
+            || (this->GetType() == "gradient"))
+          {
+            r = r | this->GetFunctional()->GetUpdateFlags();
+          }
+      }
     return r | update_JxW_values;
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    UpdateFlags
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFaceUpdateFlags() const
+  UpdateFlags
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFaceUpdateFlags() const
   {
     UpdateFlags r;
     if (this->GetType().find("aux_functional") != std::string::npos)
-    {
-      r = aux_functionals_[this->GetTypeNum()]->GetFaceUpdateFlags();
-    }
-    else if (this->GetType().find("functional") != std::string::npos)
-    {
-      r = this->GetFunctional()->GetFaceUpdateFlags();
-    }
-    else if (this->GetType().find("constraints") != std::string::npos)
-    {
-      r = this->GetConstraints()->GetFaceUpdateFlags();
-    }
-    else if (this->GetType() == "functional_for_ee")
-    {
-      r = aux_functionals_[functional_for_ee_num_]->GetUpdateFlags();
-    }
-    else
-    {
-      r = this->GetPDE().GetFaceUpdateFlags();
-      if (this->GetType() == "gradient"
-	  || (this->GetType() == "hessian"))
       {
-	r = r | this->GetFunctional()->GetFaceUpdateFlags();
+        r = aux_functionals_[this->GetTypeNum()]->GetFaceUpdateFlags();
       }
-    }
+    else if (this->GetType().find("functional") != std::string::npos)
+      {
+        r = this->GetFunctional()->GetFaceUpdateFlags();
+      }
+    else if (this->GetType().find("constraints") != std::string::npos)
+      {
+        r = this->GetConstraints()->GetFaceUpdateFlags();
+      }
+    else if (this->GetType() == "functional_for_ee")
+      {
+        r = aux_functionals_[functional_for_ee_num_]->GetUpdateFlags();
+      }
+    else
+      {
+        r = this->GetPDE().GetFaceUpdateFlags();
+        if (this->GetType() == "gradient"
+            || (this->GetType() == "hessian"))
+          {
+            r = r | this->GetFunctional()->GetFaceUpdateFlags();
+          }
+      }
     return r | update_JxW_values;
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    std::string
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalType() const
+  std::string
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalType() const
   {
     if (this->GetType() == "aux_functional")
-    {
-      return aux_functionals_[this->GetTypeNum()]->GetType();
-    }
+      {
+        return aux_functionals_[this->GetTypeNum()]->GetType();
+      }
     else if (this->GetType() == "functional_for_ee")
-    {
-      return aux_functionals_[functional_for_ee_num_]->GetType();
-    }
+      {
+        return aux_functionals_[functional_for_ee_num_]->GetType();
+      }
     return GetFunctional()->GetType();
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    std::string
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalName() const
+  std::string
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalName() const
   {
     if (this->GetType() == "aux_functional")
-    {
-      return aux_functionals_[this->GetTypeNum()]->GetName();
-    }
+      {
+        return aux_functionals_[this->GetTypeNum()]->GetName();
+      }
     else if (this->GetType() == "functional_for_ee")
-    {
-      return aux_functionals_[functional_for_ee_num_]->GetName();
-    }
+      {
+        return aux_functionals_[functional_for_ee_num_]->GetName();
+      }
     return GetFunctional()->GetName();
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    std::string
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetConstraintType() const
+  std::string
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetConstraintType() const
   {
     return GetConstraints()->GetType();
   }
 
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    unsigned int
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
+  unsigned int
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
   {
     if (this->GetType() == "aux_functional")
-    {
-      return aux_functionals_[this->GetTypeNum()]->NeedPrecomputations();
-    }
+      {
+        return aux_functionals_[this->GetTypeNum()]->NeedPrecomputations();
+      }
     else if (this->GetType() == "functional_for_ee")
-    {
-      return aux_functionals_[functional_for_ee_num_]->NeedPrecomputations();
-    }
+      {
+        return aux_functionals_[functional_for_ee_num_]->NeedPrecomputations();
+      }
     return GetFunctional()->NeedPrecomputations();
   }
 
 
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
   {
     return GetFunctional()->NeedFinalValue();
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetTime(double time,
-								unsigned int time_dof_number,
-								const TimeIterator &interval, bool initial)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetTime(double time,
+                          unsigned int time_dof_number,
+                          const TimeIterator &interval, bool initial)
   {
     GetSpaceTimeHandler()->SetInterval(interval,time_dof_number);
     initial_ = initial;
@@ -3012,13 +3012,13 @@ namespace DOpE
     interval_length_ = GetSpaceTimeHandler()->GetStepSize();
 
     if (GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial || GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary )
-    {
-      c_interval_length_ = 1.;
-    }
+      {
+        c_interval_length_ = 1.;
+      }
     else
-    {
-      c_interval_length_ = GetSpaceTimeHandler()->GetStepSize();
-    }
+      {
+        c_interval_length_ = GetSpaceTimeHandler()->GetStepSize();
+      }
 
     {
       //Zeit an Dirichlet Werte uebermitteln
@@ -3046,25 +3046,25 @@ namespace DOpE
       typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
         auxiliary_controls_.begin();
       for (; it != auxiliary_controls_.end(); it++)
-      {
-	it->second->SetTimeDoFNumber(time_dof_number);
-      }
+        {
+          it->second->SetTimeDoFNumber(time_dof_number);
+        }
     }
     {
       typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
         auxiliary_state_.begin();
       for (; it != auxiliary_state_.end(); it++)
-      {
-	it->second->SetTimeDoFNumber(time_dof_number, interval);
-      }
+        {
+          it->second->SetTimeDoFNumber(time_dof_number, interval);
+        }
     }
     {
       typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
         auxiliary_constraints_.begin();
       for (; it != auxiliary_constraints_.end(); it++)
-      {
-	it->second->SetTimeDoFNumber(time_dof_number);
-      }
+        {
+          it->second->SetTimeDoFNumber(time_dof_number);
+        }
     }
 
   }
@@ -3072,78 +3072,78 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
 #if  dope_dimension > 0
-      SPARSITYPATTERN &sparsity
+                        SPARSITYPATTERN &sparsity
 #else
-      SPARSITYPATTERN &/*sparsity*/
+                        SPARSITYPATTERN &/*sparsity*/
 #endif
-      ) const
+                      ) const
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
+      {
 #if  dope_dimension > 0
-      this->GetSpaceTimeHandler()->ComputeControlSparsityPattern(sparsity);
+        this->GetSpaceTimeHandler()->ComputeControlSparsityPattern(sparsity);
 #else
-      throw DOpEException("Wrong dimension",
-			  "OptProblemContainer::ComputeSparsityPattern");
+        throw DOpEException("Wrong dimension",
+                            "OptProblemContainer::ComputeSparsityPattern");
 #endif
-    }
+      }
     else
-    {
-      throw DOpEException("Unknown type " + this->GetType(),
-			  "OptProblemContainer::ComputeSparsityPattern");
-    }
+      {
+        throw DOpEException("Unknown type " + this->GetType(),
+                            "OptProblemContainer::ComputeSparsityPattern");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PostProcessConstraints(
-      ConstraintVector<VECTOR> &g) const
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PostProcessConstraints(
+                        ConstraintVector<VECTOR> &g) const
   {
     return this->GetConstraints()->PostProcessConstraints(g);
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryControl(
-      const ControlVector<VECTOR> *c, std::string name)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryControl(
+                        const ControlVector<VECTOR> *c, std::string name)
   {
     if (auxiliary_controls_.find(name) != auxiliary_controls_.end())
-    {
-      throw DOpEException(
-	"Adding multiple Data with name " + name + " is prohibited!",
-	"OptProblemContainer::AddAuxiliaryControl");
-    }
+      {
+        throw DOpEException(
+          "Adding multiple Data with name " + name + " is prohibited!",
+          "OptProblemContainer::AddAuxiliaryControl");
+      }
     auxiliary_controls_.insert(
       std::pair<std::string, const ControlVector<VECTOR>*>(name, c));
   }
@@ -3151,200 +3151,200 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryState(
-      const StateVector<VECTOR> *c, std::string name)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryState(
+                        const StateVector<VECTOR> *c, std::string name)
   {
     if (auxiliary_state_.find(name) != auxiliary_state_.end())
-    {
-      throw DOpEException(
-	"Adding multiple Data with name " + name + " is prohibited!",
-	"OptProblemContainer::AddAuxiliaryState");
-    }
+      {
+        throw DOpEException(
+          "Adding multiple Data with name " + name + " is prohibited!",
+          "OptProblemContainer::AddAuxiliaryState");
+      }
     auxiliary_state_.insert(
       std::pair<std::string, const StateVector<VECTOR>*>(name, c));
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryConstraint(
-      const ConstraintVector<VECTOR> *c, std::string name)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryConstraint(
+                        const ConstraintVector<VECTOR> *c, std::string name)
   {
     if (auxiliary_constraints_.find(name) != auxiliary_constraints_.end())
-    {
-      throw DOpEException(
-	"Adding multiple Data with name " + name + " is prohibited!",
-	"OptProblemContainer::AddAuxiliaryConstraint");
-    }
+      {
+        throw DOpEException(
+          "Adding multiple Data with name " + name + " is prohibited!",
+          "OptProblemContainer::AddAuxiliaryConstraint");
+      }
     auxiliary_constraints_.insert(
       std::pair<std::string, const ConstraintVector<VECTOR>*>(name, c));
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const ControlVector<VECTOR> *
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryControl(
-      std::string name) const
+  const ControlVector<VECTOR> *
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryControl(
+                        std::string name) const
   {
     typename std::map<std::string, const ControlVector<VECTOR> *>::const_iterator it =
       auxiliary_controls_.find(name);
     if (it == auxiliary_controls_.end())
-    {
-      throw DOpEException("Could not find Data with name " + name,
-			  "OptProblemContainer::GetAuxiliaryControl");
-    }
+      {
+        throw DOpEException("Could not find Data with name " + name,
+                            "OptProblemContainer::GetAuxiliaryControl");
+      }
     return it->second;
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const StateVector<VECTOR> *
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryState(
-      std::string name) const
+  const StateVector<VECTOR> *
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryState(
+                        std::string name) const
   {
     typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
       auxiliary_state_.find(name);
     if (it == auxiliary_state_.end())
-    {
-      throw DOpEException("Could not find Data with name " + name,
-			  "OptProblemContainer::GetAuxiliaryState");
-    }
+      {
+        throw DOpEException("Could not find Data with name " + name,
+                            "OptProblemContainer::GetAuxiliaryState");
+      }
     return it->second;
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryControl(
-      std::string name)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryControl(
+                        std::string name)
   {
     typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
       auxiliary_controls_.find(name);
     if (it == auxiliary_controls_.end())
-    {
-      throw DOpEException(
-	"Deleting Data " + name + " is impossible! Data not found",
-	"OptProblemContainer::DeleteAuxiliaryControl");
-    }
+      {
+        throw DOpEException(
+          "Deleting Data " + name + " is impossible! Data not found",
+          "OptProblemContainer::DeleteAuxiliaryControl");
+      }
     auxiliary_controls_.erase(it);
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryState(
-      std::string name)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryState(
+                        std::string name)
   {
     typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
       auxiliary_state_.find(name);
     if (it == auxiliary_state_.end())
-    {
-      throw DOpEException(
-	"Deleting Data " + name + " is impossible! Data not found",
-	"OptProblemContainer::DeleteAuxiliaryState");
-    }
+      {
+        throw DOpEException(
+          "Deleting Data " + name + " is impossible! Data not found",
+          "OptProblemContainer::DeleteAuxiliaryState");
+      }
     auxiliary_state_.erase(it);
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryConstraint(
-      std::string name)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryConstraint(
+                        std::string name)
   {
     typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
       auxiliary_constraints_.find(name);
     if (it == auxiliary_constraints_.end())
-    {
-      throw DOpEException(
-	"Deleting Data " + name + " is impossible! Data not found",
-	"OptProblemContainer::DeleteAuxiliaryConstraint");
-    }
+      {
+        throw DOpEException(
+          "Deleting Data " + name + " is impossible! Data not found",
+          "OptProblemContainer::DeleteAuxiliaryConstraint");
+      }
     auxiliary_constraints_.erase(it);
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    FUNCTIONAL *
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional()
+  FUNCTIONAL *
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional()
   {
     if (this->GetType() == "aux_functional"
         || this->GetType() == "functional_for_ee")
-    {
-      //This may no longer happen!
-      abort();
-      //    return aux_functionals_[this->GetTypeNum()];
-    }
+      {
+        //This may no longer happen!
+        abort();
+        //    return aux_functionals_[this->GetTypeNum()];
+      }
     return functional_;
 
   }
@@ -3352,265 +3352,265 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const FUNCTIONAL *
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional() const
+  const FUNCTIONAL *
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional() const
   {
     if (this->GetType() == "aux_functional"
         || this->GetType() == "functional_for_ee")
-    {
-      //This may no longer happen!
-      abort();
-      //       return aux_functionals_[this->GetTypeNum()];
-    }
+      {
+        //This may no longer happen!
+        abort();
+        //       return aux_functionals_[this->GetTypeNum()];
+      }
     return functional_;
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasFaces() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasFaces() const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
-    {
-      return aux_functionals_[this->GetTypeNum()]->HasFaces();
-    }
+      {
+        return aux_functionals_[this->GetTypeNum()]->HasFaces();
+      }
     else if (this->GetType().find("functional") != std::string::npos)
-    {
-      return this->GetFunctional()->HasFaces();
-    }
+      {
+        return this->GetFunctional()->HasFaces();
+      }
     else if (this->GetType().find("constraint") != std::string::npos)
-    {
-      return this->GetConstraints()->HasFaces();
-    }
+      {
+        return this->GetConstraints()->HasFaces();
+      }
     else
-    {
-      if ((this->GetType() == "gradient"))
       {
-	return this->GetPDE().HasFaces();
+        if ((this->GetType() == "gradient"))
+          {
+            return this->GetPDE().HasFaces();
+          }
+        else if ((this->GetType() == "hessian"))
+          {
+            return this->GetPDE().HasFaces() || this->GetFunctional()->HasFaces();
+          }
+        else
+          {
+            throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                                "OptProblemContainer::HasFaces");
+          }
       }
-      else if ((this->GetType() == "hessian"))
-      {
-	return this->GetPDE().HasFaces() || this->GetFunctional()->HasFaces();
-      }
-      else
-      {
-	throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-			    "OptProblemContainer::HasFaces");
-      }
-    }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasPoints() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasPoints() const
   {
     if (this->GetType().find("constraint") != std::string::npos
         || (this->GetType() == "functional")
         || this->GetType() == "aux_functional")
-    {
-      // We dont need PointRhs in this cases.
-      return false;
-    }
+      {
+        // We dont need PointRhs in this cases.
+        return false;
+      }
     else if ((this->GetType() == "hessian"))
-    {
-      return this->GetFunctional()->HasPoints();
-    }
+      {
+        return this->GetFunctional()->HasPoints();
+      }
     else if (this->GetType() == "gradient")
-    {
-      return this->GetFunctional()->HasPoints();
-    }
+      {
+        return this->GetFunctional()->HasPoints();
+      }
     else
-    {
-      throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-			  "OptProblem::HasPoints");
-    }
+      {
+        throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                            "OptProblem::HasPoints");
+      }
   }
 //    }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasInterfaces() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasInterfaces() const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
-    {
-      return aux_functionals_[this->GetTypeNum()]->HasInterfaces();
-    }
+      {
+        return aux_functionals_[this->GetTypeNum()]->HasInterfaces();
+      }
     else if (this->GetType().find("functional") != std::string::npos)
-    {
-      return this->GetFunctional()->HasInterfaces();
-    }
+      {
+        return this->GetFunctional()->HasInterfaces();
+      }
     else if (this->GetType().find("constraint") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else
-    {
-      if ((this->GetType() == "gradient")
-	  || (this->GetType() == "hessian"))
       {
-	return this->GetPDE().HasInterfaces();
+        if ((this->GetType() == "gradient")
+            || (this->GetType() == "hessian"))
+          {
+            return this->GetPDE().HasInterfaces();
+          }
+        else if (this->GetType() == "error_evaluation" )
+          {
+            return true;//Always true for jumps over edges
+          }
+        else
+          {
+            throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                                "OptProblemContainer::HasInterfaces");
+          }
       }
-      else if (this->GetType() == "error_evaluation" )
-      {
-	return true;//Always true for jumps over edges
-      }
-      else
-      {
-	throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-			    "OptProblemContainer::HasInterfaces");
-      }
-    }
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasVertices() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasVertices() const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else if (this->GetType().find("functional") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else if (this->GetType().find("constraint") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else if ((this->GetType() == "gradient")
-	     || (this->GetType() == "hessian") || (this->GetType() == "error_evaluation"))
-    {
-      return this->GetPDE().HasVertices();
-    }
+             || (this->GetType() == "hessian") || (this->GetType() == "error_evaluation"))
+      {
+        return this->GetPDE().HasVertices();
+      }
     else
-    {
-      throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-			  "OptProblemContainer::HasVertices");
-    }
+      {
+        throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                            "OptProblemContainer::HasVertices");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename ELEMENTITERATOR>
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
+  template<typename ELEMENTITERATOR>
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else if (this->GetType().find("functional") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else if (this->GetType().find("constraint") != std::string::npos)
-    {
-      return false;
-    }
+      {
+        return false;
+      }
     else
-    {
-      if ((this->GetType() == "gradient")
-	  || (this->GetType() == "hessian"))
       {
-	return this->GetPDE().AtInterface(element,face);
+        if ((this->GetType() == "gradient")
+            || (this->GetType() == "hessian"))
+          {
+            return this->GetPDE().AtInterface(element,face);
+          }
+        else
+          {
+            throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                                "OptProblemContainer::HasFaces");
+          }
       }
-      else
-      {
-	throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-			    "OptProblemContainer::HasFaces");
-      }
-    }
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlDirichletBoundaryColors(
-      unsigned int color, const std::vector<bool> &comp_mask,
-      const DOpEWrapper::Function<dealdim> *values)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlDirichletBoundaryColors(
+                        unsigned int color, const std::vector<bool> &comp_mask,
+                        const DOpEWrapper::Function<dealdim> *values)
   {
     assert(values);
 
     unsigned int comp = control_dirichlet_colors_.size();
     for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
-    {
-      if (control_dirichlet_colors_[i] == color)
       {
-	comp = i;
-	break;
+        if (control_dirichlet_colors_[i] == color)
+          {
+            comp = i;
+            break;
+          }
       }
-    }
     if (comp != control_dirichlet_colors_.size())
-    {
-      std::stringstream s;
-      s << "ControlDirichletColor" << color << " has multiple occurences !";
-      throw DOpEException(s.str(),
-			  "OptProblemContainer::SetControlDirichletBoundary");
-    }
+      {
+        std::stringstream s;
+        s << "ControlDirichletColor" << color << " has multiple occurences !";
+        throw DOpEException(s.str(),
+                            "OptProblemContainer::SetControlDirichletBoundary");
+      }
     control_dirichlet_colors_.push_back(color);
     control_dirichlet_comps_.push_back(comp_mask);
     control_dirichlet_values_.push_back(values);
@@ -3619,38 +3619,38 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetDirichletBoundaryColors(
-      unsigned int color, const std::vector<bool> &comp_mask,
-      const DD *values)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetDirichletBoundaryColors(
+                        unsigned int color, const std::vector<bool> &comp_mask,
+                        const DD *values)
   {
     assert(values);
     assert(values->n_components() == comp_mask.size());
 
     unsigned int comp = dirichlet_colors_.size();
     for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
-    {
-      if (dirichlet_colors_[i] == color)
       {
-	comp = i;
-	break;
+        if (dirichlet_colors_[i] == color)
+          {
+            comp = i;
+            break;
+          }
       }
-    }
     if (comp != dirichlet_colors_.size())
-    {
-      std::stringstream s;
-      s << "DirichletColor" << color << " has multiple occurrences !";
-      throw DOpEException(s.str(),
-			  "OptProblemContainer::SetDirichletBoundary");
-    }
+      {
+        std::stringstream s;
+        s << "DirichletColor" << color << " has multiple occurrences !";
+        throw DOpEException(s.str(),
+                            "OptProblemContainer::SetDirichletBoundary");
+      }
     dirichlet_colors_.push_back(color);
     dirichlet_comps_.push_back(comp_mask);
     PrimalDirichletData<DD, VECTOR, dealdim> *data =
@@ -3661,369 +3661,369 @@ namespace DOpE
     tangent_dirichlet_values_.push_back(tdata);
 
     if (values->NeedsControl())
-    {
-      control_transposed_dirichlet_colors_.push_back(color);
-      TransposedGradientDirichletData<DD, VECTOR, dealdim> *gdata =
-	new TransposedGradientDirichletData<DD, VECTOR, dealdim>(
+      {
+        control_transposed_dirichlet_colors_.push_back(color);
+        TransposedGradientDirichletData<DD, VECTOR, dealdim> *gdata =
+          new TransposedGradientDirichletData<DD, VECTOR, dealdim>(
           *values);
-      transposed_control_gradient_dirichlet_values_.push_back(gdata);
-      TransposedHessianDirichletData<DD, VECTOR, dealdim> *hdata =
-	new TransposedHessianDirichletData<DD, VECTOR, dealdim>(
+        transposed_control_gradient_dirichlet_values_.push_back(gdata);
+        TransposedHessianDirichletData<DD, VECTOR, dealdim> *hdata =
+          new TransposedHessianDirichletData<DD, VECTOR, dealdim>(
           *values);
-      transposed_control_hessian_dirichlet_values_.push_back(hdata);
-    }
+        transposed_control_hessian_dirichlet_values_.push_back(hdata);
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<unsigned int> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
+  const std::vector<unsigned int> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
-      return control_dirichlet_colors_;
-    }
+      {
+        return control_dirichlet_colors_;
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDirichletColors");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDirichletColors");
+      }
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<unsigned int> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletColors() const
+  const std::vector<unsigned int> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletColors() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-    {
-      return control_transposed_dirichlet_colors_;
-    }
+      {
+        return control_transposed_dirichlet_colors_;
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetTransposedDirichletColors");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetTransposedDirichletColors");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<bool> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
-      unsigned int color) const
+  const std::vector<bool> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
+                        unsigned int color) const
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
-    {
-      unsigned int comp = control_dirichlet_colors_.size();
-      for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
       {
-	if (control_dirichlet_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
+        unsigned int comp = control_dirichlet_colors_.size();
+        for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
+          {
+            if (control_dirichlet_colors_[i] == color)
+              {
+                comp = i;
+                break;
+              }
+          }
+        if (comp == control_dirichlet_colors_.size())
+          {
+            std::stringstream s;
+            s << "ControlDirichletColor" << color << " has not been found !";
+            throw DOpEException(s.str(),
+                                "OptProblemContainer::GetDirichletCompMask");
+          }
+        return control_dirichlet_comps_[comp];
       }
-      if (comp == control_dirichlet_colors_.size())
-      {
-	std::stringstream s;
-	s << "ControlDirichletColor" << color << " has not been found !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::GetDirichletCompMask");
-      }
-      return control_dirichlet_comps_[comp];
-    }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDirichletCompMask");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDirichletCompMask");
+      }
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<bool> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
-      unsigned int color) const
+  const std::vector<bool> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
+                        unsigned int color) const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-    {
-      unsigned int comp = dirichlet_colors_.size();
-      for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
       {
-	if (dirichlet_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
+        unsigned int comp = dirichlet_colors_.size();
+        for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
+          {
+            if (dirichlet_colors_[i] == color)
+              {
+                comp = i;
+                break;
+              }
+          }
+        if (comp == dirichlet_colors_.size())
+          {
+            std::stringstream s;
+            s << "DirichletColor" << color << " has not been found !";
+            throw DOpEException(s.str(),
+                                "OptProblemContainer::GetDirichletCompMask");
+          }
+        return dirichlet_comps_[comp];
       }
-      if (comp == dirichlet_colors_.size())
-      {
-	std::stringstream s;
-	s << "DirichletColor" << color << " has not been found !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::GetDirichletCompMask");
-      }
-      return dirichlet_comps_[comp];
-    }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetTransposedDirichletCompMask");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetTransposedDirichletCompMask");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const Function<dealdim> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletValues(
-      unsigned int color,
-      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-      const std::map<std::string, const VECTOR *> &/*domain_values*/) const
+  const Function<dealdim> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletValues(
+                        unsigned int color,
+                        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+                        const std::map<std::string, const VECTOR *> &/*domain_values*/) const
   {
 
     unsigned int col = dirichlet_colors_.size();
     if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
-    {
-      col = control_dirichlet_colors_.size();
-      for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
       {
-	if (control_dirichlet_colors_[i] == color)
-	{
-	  col = i;
-	  break;
-	}
+        col = control_dirichlet_colors_.size();
+        for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
+          {
+            if (control_dirichlet_colors_[i] == color)
+              {
+                col = i;
+                break;
+              }
+          }
+        if (col == control_dirichlet_colors_.size())
+          {
+            std::stringstream s;
+            s << "ControlDirichletColor" << color << " has not been found !";
+            throw DOpEException(s.str(),
+                                "OptProblemContainer::GetDirichletValues");
+          }
       }
-      if (col == control_dirichlet_colors_.size())
-      {
-	std::stringstream s;
-	s << "ControlDirichletColor" << color << " has not been found !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::GetDirichletValues");
-      }
-    }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDirichletValues");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDirichletValues");
+      }
 
     if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
-    {
-      return *(control_dirichlet_values_[col]);
-    }
+      {
+        return *(control_dirichlet_values_[col]);
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDirichletValues");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDirichletValues");
+      }
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const TransposedDirichletDataInterface<dealdim> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletValues(
-      unsigned int color,
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values) const
+  const TransposedDirichletDataInterface<dealdim> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletValues(
+                        unsigned int color,
+                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                        const std::map<std::string, const VECTOR *> &domain_values) const
   {
     unsigned int col = control_transposed_dirichlet_colors_.size();
     if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
-    {
-      for (unsigned int i = 0;
-	   i < control_transposed_dirichlet_colors_.size(); ++i)
       {
-	if (control_transposed_dirichlet_colors_[i] == color)
-	{
-	  col = i;
-	  break;
-	}
+        for (unsigned int i = 0;
+             i < control_transposed_dirichlet_colors_.size(); ++i)
+          {
+            if (control_transposed_dirichlet_colors_[i] == color)
+              {
+                col = i;
+                break;
+              }
+          }
+        if (col == control_transposed_dirichlet_colors_.size())
+          {
+            std::stringstream s;
+            s << "TransposedControlDirichletColor" << color
+              << " has not been found !";
+            throw DOpEException(s.str(),
+                                "OptProblemContainer::GetTransposedDirichletValues");
+          }
       }
-      if (col == control_transposed_dirichlet_colors_.size())
-      {
-	std::stringstream s;
-	s << "TransposedControlDirichletColor" << color
-	  << " has not been found !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::GetTransposedDirichletValues");
-      }
-    }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetTransposedDirichletValues");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetTransposedDirichletValues");
+      }
 
     if (this->GetType() == "gradient")
-    {
-      transposed_control_gradient_dirichlet_values_[col]->ReInit(param_values,
-								 domain_values, color);
-      return *(transposed_control_gradient_dirichlet_values_[col]);
-    }
+      {
+        transposed_control_gradient_dirichlet_values_[col]->ReInit(param_values,
+                                                                   domain_values, color);
+        return *(transposed_control_gradient_dirichlet_values_[col]);
+      }
     else if (this->GetType() == "hessian")
-    {
-      transposed_control_hessian_dirichlet_values_[col]->ReInit(param_values,
-								domain_values, color);
-      return *(transposed_control_hessian_dirichlet_values_[col]);
-    }
+      {
+        transposed_control_hessian_dirichlet_values_[col]->ReInit(param_values,
+                                                                  domain_values, color);
+        return *(transposed_control_hessian_dirichlet_values_[col]);
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetTransposedDirichletValues");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetTransposedDirichletValues");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<unsigned int> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
+  const std::vector<unsigned int> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
   {
     if (this->GetType() == "gradient" || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
-      return control_boundary_equation_colors_;
-    }
+      {
+        return control_boundary_equation_colors_;
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetBoundaryEquationColors");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetBoundaryEquationColors");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlBoundaryEquationColors(
-      unsigned int color)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlBoundaryEquationColors(
+                        unsigned int color)
   {
     {
       //Control Boundary Equation colors are simply inserted
       unsigned int comp = control_boundary_equation_colors_.size();
       for (unsigned int i = 0; i < control_boundary_equation_colors_.size();
            ++i)
-      {
-	if (control_boundary_equation_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
-      }
+        {
+          if (control_boundary_equation_colors_[i] == color)
+            {
+              comp = i;
+              break;
+            }
+        }
       if (comp != control_boundary_equation_colors_.size())
-      {
-	std::stringstream s;
-	s << "Boundary Equation Color" << color
-	  << " has multiple occurences !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::SetControlBoundaryEquationColors");
-      }
+        {
+          std::stringstream s;
+          s << "Boundary Equation Color" << color
+            << " has multiple occurences !";
+          throw DOpEException(s.str(),
+                              "OptProblemContainer::SetControlBoundaryEquationColors");
+        }
       control_boundary_equation_colors_.push_back(color);
     }
   }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryEquationColors(
-      unsigned int color)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryEquationColors(
+                        unsigned int color)
   {
     {
       //State Boundary Equation colors are simply inserted
       unsigned int comp = state_boundary_equation_colors_.size();
       for (unsigned int i = 0; i < state_boundary_equation_colors_.size();
            ++i)
-      {
-	if (state_boundary_equation_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
-      }
+        {
+          if (state_boundary_equation_colors_[i] == color)
+            {
+              comp = i;
+              break;
+            }
+        }
       if (comp != state_boundary_equation_colors_.size())
-      {
-	std::stringstream s;
-	s << "Boundary Equation Color" << color
-	  << " has multiple occurences !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::SetBoundaryEquationColors");
-      }
+        {
+          std::stringstream s;
+          s << "Boundary Equation Color" << color
+            << " has multiple occurences !";
+          throw DOpEException(s.str(),
+                              "OptProblemContainer::SetBoundaryEquationColors");
+        }
       state_boundary_equation_colors_.push_back(color);
     }
     {
@@ -4031,88 +4031,88 @@ namespace DOpE
       unsigned int comp = adjoint_boundary_equation_colors_.size();
       for (unsigned int i = 0; i < adjoint_boundary_equation_colors_.size();
            ++i)
-      {
-	if (adjoint_boundary_equation_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
-      }
+        {
+          if (adjoint_boundary_equation_colors_[i] == color)
+            {
+              comp = i;
+              break;
+            }
+        }
       if (comp != adjoint_boundary_equation_colors_.size())
-      {
-	//Seems this color is already added, however it might have been a functional color
-	//so we don't  do anything.
-      }
+        {
+          //Seems this color is already added, however it might have been a functional color
+          //so we don't  do anything.
+        }
       else
-      {
-	adjoint_boundary_equation_colors_.push_back(color);
-      }
+        {
+          adjoint_boundary_equation_colors_.push_back(color);
+        }
     }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<unsigned int> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
+  const std::vector<unsigned int> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
   {
     if (this->GetType() == "cost_functional"
         || this->GetType() == "cost_functional_pre"
         || this->GetType() == "cost_functional_pre_tangent"
         || this->GetType() == "aux_functional"
         || this->GetType() == "functional_for_ee") //fixme: what about error_evaluation?
-    {
-      return boundary_functional_colors_;
-    }
+      {
+        return boundary_functional_colors_;
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetBoundaryFunctionalColors");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetBoundaryFunctionalColors");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryFunctionalColors(
-      unsigned int color)
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryFunctionalColors(
+                        unsigned int color)
   {
     {
       //Boundary Functional colors are simply inserted
       unsigned int comp = boundary_functional_colors_.size();
       for (unsigned int i = 0; i < boundary_functional_colors_.size(); ++i)
-      {
-	if (boundary_functional_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
-      }
+        {
+          if (boundary_functional_colors_[i] == color)
+            {
+              comp = i;
+              break;
+            }
+        }
       if (comp != boundary_functional_colors_.size())
-      {
-	std::stringstream s;
-	s << "Boundary Functional Color" << color
-	  << " has multiple occurences !";
-	throw DOpEException(s.str(),
-			    "OptProblemContainer::SetBoundaryFunctionalColors");
-      }
+        {
+          std::stringstream s;
+          s << "Boundary Functional Color" << color
+            << " has multiple occurences !";
+          throw DOpEException(s.str(),
+                              "OptProblemContainer::SetBoundaryFunctionalColors");
+        }
       boundary_functional_colors_.push_back(color);
     }
     {
@@ -4120,38 +4120,38 @@ namespace DOpE
       unsigned int comp = adjoint_boundary_equation_colors_.size();
       for (unsigned int i = 0; i < adjoint_boundary_equation_colors_.size();
            ++i)
-      {
-	if (adjoint_boundary_equation_colors_[i] == color)
-	{
-	  comp = i;
-	  break;
-	}
-      }
+        {
+          if (adjoint_boundary_equation_colors_[i] == color)
+            {
+              comp = i;
+              break;
+            }
+        }
       if (comp != adjoint_boundary_equation_colors_.size())
-      {
-	//Seems this color is already added, however it might have been a equation color
-	//so we don't  do anything.
-      }
+        {
+          //Seems this color is already added, however it might have been a equation color
+          //so we don't  do anything.
+        }
       else
-      {
-	adjoint_boundary_equation_colors_.push_back(color);
-      }
+        {
+          adjoint_boundary_equation_colors_.push_back(color);
+        }
     }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    unsigned int
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetControlNBlocks() const
+  unsigned int
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetControlNBlocks() const
   {
     return this->GetPDE().GetControlNBlocks();
   }
@@ -4159,16 +4159,16 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    unsigned int
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetStateNBlocks() const
+  unsigned int
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetStateNBlocks() const
   {
     return this->GetPDE().GetStateNBlocks();
   }
@@ -4176,170 +4176,170 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    unsigned int
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetNBlocks() const
+  unsigned int
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetNBlocks() const
   {
     if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee")
         || (this->GetType() == "adjoint") || (this->GetType() == "tangent")
         || (this->GetType() == "adjoint_hessian"))
-    {
-      return this->GetStateNBlocks();
-    }
+      {
+        return this->GetStateNBlocks();
+      }
     else if ((this->GetType() == "gradient")
              || (this->GetType() == "hessian"))
-    {
-      return this->GetControlNBlocks();
-    }
+      {
+        return this->GetControlNBlocks();
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetNBlocks");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetNBlocks");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    const std::vector<unsigned int> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const
+  const std::vector<unsigned int> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const
   {
     if ((this->GetType() == "state") || (this->GetType() == "adjoint")
         || (this->GetType() == "adjoint_for_ee")
         || (this->GetType() == "tangent")
         || (this->GetType() == "adjoint_hessian"))
-    {
-      return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
-    }
+      {
+        return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
+      }
     else if ((this->GetType() == "gradient")
              || (this->GetType() == "hessian"))
-    {
-      return GetSpaceTimeHandler()->GetControlDoFsPerBlock();
-    }
+      {
+        return GetSpaceTimeHandler()->GetControlDoFsPerBlock();
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDoFsPerBlock");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFsPerBlock");
+      }
   }
 
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
 
 #if DEAL_II_VERSION_GTE(9,1,1)
-    const dealii::AffineConstraints<double> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
+  const dealii::AffineConstraints<double> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
-      return GetSpaceTimeHandler()->GetControlDoFConstraints();
-    }
+      {
+        return GetSpaceTimeHandler()->GetControlDoFConstraints();
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDoFConstraints");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
   }
 #else
   const dealii::ConstraintMatrix &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
-      return GetSpaceTimeHandler()->GetControlDoFConstraints();
-    }
+      {
+        return GetSpaceTimeHandler()->GetControlDoFConstraints();
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDoFConstraints");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
   }
 #endif
   /******************************************************/
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
 
 #if DEAL_II_VERSION_GTE(9,1,1)
-    const dealii::AffineConstraints<double> &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
+  const dealii::AffineConstraints<double> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
-      return GetSpaceTimeHandler()->GetControlHNConstraints();
-    }
+      {
+        return GetSpaceTimeHandler()->GetControlHNConstraints();
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDoFConstraints");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
   }
 #else
   const dealii::ConstraintMatrix &
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
   {
     if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))
-    {
-      return GetSpaceTimeHandler()->GetControlHNConstraints();
-    }
+      {
+        return GetSpaceTimeHandler()->GetControlHNConstraints();
+      }
     else
-    {
-      throw DOpEException("Unknown Type:" + this->GetType(),
-			  "OptProblemContainer::GetDoFConstraints");
-    }
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
   }
 #endif
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::NeedTimeFunctional() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::NeedTimeFunctional() const
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre"))
@@ -4356,16 +4356,16 @@ namespace DOpE
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasControlInDirichletData() const
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasControlInDirichletData() const
   {
     return (!control_transposed_dirichlet_colors_.empty());
   }

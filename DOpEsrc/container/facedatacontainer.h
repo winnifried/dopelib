@@ -52,7 +52,7 @@ namespace DOpE
 #else
   template<template<int, int> class DH, typename VECTOR, int dim>
 #endif
-    class FaceDataContainer : public fdcinternal::FaceDataContainerInternal<
+  class FaceDataContainer : public fdcinternal::FaceDataContainerInternal<
     VECTOR, dim>
   {
   public:
@@ -75,9 +75,9 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    class FaceDataContainer<false, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
+  class FaceDataContainer<false, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
 #else
-    class FaceDataContainer<dealii::DoFHandler, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
+  class FaceDataContainer<dealii::DoFHandler, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
 #endif
   {
 
@@ -113,17 +113,17 @@ namespace DOpE
 #endif
                       dopedim, dealdim> &sth,
 #if DEAL_II_VERSION_GTE(9,3,0)
-		      const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                      const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
 #else
-		      const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+                      const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> &element,
 #endif
                       const std::map<std::string, const Vector<double>*> &param_values,
                       const std::map<std::string, const VECTOR *> &domain_values,
                       bool need_neighbour) :
       fdcinternal::FaceDataContainerInternal<VECTOR, dim>(param_values, domain_values, need_neighbour), element_(element), state_fe_values_(
-                                                            sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                                                            update_flags), control_fe_values_(sth.GetMapping(),
-                                                                (sth.GetFESystem("control")), quad, update_flags)
+        sth.GetMapping(), (sth.GetFESystem("state")), quad,
+        update_flags), control_fe_values_(sth.GetMapping(),
+                                          (sth.GetFESystem("control")), quad, update_flags)
     {
       state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
@@ -170,9 +170,9 @@ namespace DOpE
 #endif
                       VECTOR, dim> &sth,
 #if DEAL_II_VERSION_GTE(9,3,0)
-		      const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                      const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element,
 #else
-		      const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+                      const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> &element,
 #endif
                       const std::map<std::string, const Vector<double>*> &param_values,
                       const std::map<std::string, const VECTOR *> &domain_values,
@@ -338,9 +338,9 @@ namespace DOpE
     unsigned int control_index_;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> & element_;
+    const std::vector<typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator> &element_;
 #else
-    const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> & element_;
+    const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator> &element_;
 #endif
     DOpEWrapper::FEFaceValues<dim> state_fe_values_;
     DOpEWrapper::FEFaceValues<dim> control_fe_values_;
@@ -367,9 +367,9 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    class FaceDataContainer<true, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
+  class FaceDataContainer<true, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
 #else
-    class FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
+  class FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<VECTOR, dim>
 #endif
   {
 
@@ -635,9 +635,9 @@ namespace DOpE
     unsigned int control_index_;
     const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-      typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element_;
+    typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element_;
 #else
-      typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element_;
+    typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element_;
 #endif
 
     DOpEWrapper::HpFEFaceValues<dim> state_hp_fe_values_;
@@ -674,9 +674,9 @@ namespace DOpE
 #endif
     bool sanity_check(const
 #if DEAL_II_VERSION_GTE(9,3,0)
-		      typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator &element_,
+                      typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator &element_,
 #else
-		      typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator &element_,
+                      typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator &element_,
 #endif
                       unsigned int face,
                       unsigned int subface)
@@ -694,9 +694,9 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
     template<>
     bool sanity_check<1>(const
-			 typename DOpEWrapper::DoFHandler<1>::active_cell_iterator &,
-			 unsigned int,
-			 unsigned int)
+                         typename DOpEWrapper::DoFHandler<1>::active_cell_iterator &,
+                         unsigned int,
+                         unsigned int)
     {
       return  true;
     }
@@ -726,10 +726,10 @@ namespace DOpE
   template<typename VECTOR, int dim>
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    FaceDataContainer<false, VECTOR, dim>::ReInit(
+  FaceDataContainer<false, VECTOR, dim>::ReInit(
     unsigned int face_no)
 #else
-    FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
     unsigned int face_no)
 #endif
   {
@@ -795,11 +795,11 @@ namespace DOpE
         // some sanity checks: Check, that the face and subface match and that the neighbour child
         // is not more refined.
 #if DEAL_II_VERSION_GTE(9,3,0)
-	Assert((sanity_check<dim>(element_[this->GetStateIndex()],
-				  this->GetFace(),
-				  this->GetSubFace()) == true), ExcInternalError());
+        Assert((sanity_check<dim>(element_[this->GetStateIndex()],
+                                  this->GetFace(),
+                                  this->GetSubFace()) == true), ExcInternalError());
 #else
-	Assert((sanity_check<dim, dealii::DoFHandler>(element_[this->GetStateIndex()],
+        Assert((sanity_check<dim, dealii::DoFHandler>(element_[this->GetStateIndex()],
                                                       this->GetFace(),
                                                       this->GetSubFace()) == true), ExcInternalError());
 #endif

@@ -35,7 +35,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -212,79 +212,79 @@ public:
     const EDC<DH, VECTOR, dealdim> &edc_w,
     double &sum, double scale) override
   {
-    if(this->GetTime() > 0.)
-    {
-      unsigned int n_q_points = edc.GetNQPoints();
-      const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-	edc.GetFEValuesState();
-
-      fvalues_.resize(n_q_points);
-      
-      PI_h_z_.resize(n_q_points);
-      lap_u_.resize(n_q_points);
-      uvalues_.resize(n_q_points);
-      uold_values_.resize(n_q_points);
-      edc.GetLaplaciansState("state", lap_u_);
-      edc.GetValuesState("state", uvalues_);
-      edc.GetValuesState("last_time_state", uold_values_);
-      edc_w.GetValuesState("weight_for_primal_residual", PI_h_z_);
-      
-      const FEValuesExtractors::Scalar velocities(0);
-      
-      //make sure the binding of the function has worked
-      assert(this->ResidualModifier);
-      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    if (this->GetTime() > 0.)
       {
-        fvalues_[q_point] = 0.;
-        double res;
-        res = fvalues_[q_point] + lap_u_[q_point] + (uvalues_[q_point]-uold_values_[q_point])/this->GetTimeStepSize();
-	
-        //Modify the residual as required by the error estimator
-        this->ResidualModifier(res);
-	
-        sum += scale * (res * PI_h_z_[q_point])
-	  * state_fe_values.JxW(q_point);
+        unsigned int n_q_points = edc.GetNQPoints();
+        const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+          edc.GetFEValuesState();
+
+        fvalues_.resize(n_q_points);
+
+        PI_h_z_.resize(n_q_points);
+        lap_u_.resize(n_q_points);
+        uvalues_.resize(n_q_points);
+        uold_values_.resize(n_q_points);
+        edc.GetLaplaciansState("state", lap_u_);
+        edc.GetValuesState("state", uvalues_);
+        edc.GetValuesState("last_time_state", uold_values_);
+        edc_w.GetValuesState("weight_for_primal_residual", PI_h_z_);
+
+        const FEValuesExtractors::Scalar velocities(0);
+
+        //make sure the binding of the function has worked
+        assert(this->ResidualModifier);
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            fvalues_[q_point] = 0.;
+            double res;
+            res = fvalues_[q_point] + lap_u_[q_point] + (uvalues_[q_point]-uold_values_[q_point])/this->GetTimeStepSize();
+
+            //Modify the residual as required by the error estimator
+            this->ResidualModifier(res);
+
+            sum += scale * (res * PI_h_z_[q_point])
+                   * state_fe_values.JxW(q_point);
+          }
       }
-    }
   }
-    void
+  void
   StrongFaceResidual(
     const FDC<DH, VECTOR, dealdim> &fdc,
     const FDC<DH, VECTOR, dealdim> &fdc_w,
     double &sum, double scale) override
   {
-    if(this->GetTime() > 0.)
-    {
-      unsigned int n_q_points = fdc.GetNQPoints();
-      ugrads_.resize(n_q_points, Tensor<1, dealdim>());
-      ugrads_nbr_.resize(n_q_points, Tensor<1, dealdim>());
-      PI_h_z_.resize(n_q_points);
-      
-      fdc.GetFaceGradsState("state", ugrads_);
-      fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
-      fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
-      vector<double> jump(n_q_points);
-      for (unsigned int q = 0; q < n_q_points; q++)
+    if (this->GetTime() > 0.)
       {
-        jump[q] = (ugrads_nbr_[q][0] - ugrads_[q][0])
-	  * fdc.GetFEFaceValuesState().normal_vector(q)[0]
-	  + (ugrads_nbr_[q][1] - ugrads_[q][1])
-	  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
+        unsigned int n_q_points = fdc.GetNQPoints();
+        ugrads_.resize(n_q_points, Tensor<1, dealdim>());
+        ugrads_nbr_.resize(n_q_points, Tensor<1, dealdim>());
+        PI_h_z_.resize(n_q_points);
+
+        fdc.GetFaceGradsState("state", ugrads_);
+        fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
+        fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
+        vector<double> jump(n_q_points);
+        for (unsigned int q = 0; q < n_q_points; q++)
+          {
+            jump[q] = (ugrads_nbr_[q][0] - ugrads_[q][0])
+                      * fdc.GetFEFaceValuesState().normal_vector(q)[0]
+                      + (ugrads_nbr_[q][1] - ugrads_[q][1])
+                      * fdc.GetFEFaceValuesState().normal_vector(q)[1];
+          }
+        //make sure the binding of the function has worked
+        assert(this->ResidualModifier);
+
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            //Modify the residual as required by the error estimator
+            double res;
+            res = jump[q_point];
+            this->ResidualModifier(res);
+
+            sum += scale * (res * PI_h_z_[q_point])
+                   * fdc.GetFEFaceValuesState().JxW(q_point);
+          }
       }
-      //make sure the binding of the function has worked
-      assert(this->ResidualModifier);
-      
-      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-      {
-        //Modify the residual as required by the error estimator
-        double res;
-        res = jump[q_point];
-        this->ResidualModifier(res);
-	
-        sum += scale * (res * PI_h_z_[q_point])
-	  * fdc.GetFEFaceValuesState().JxW(q_point);
-      }
-    }
   }
 
   void
@@ -295,7 +295,7 @@ public:
   {
     sum = 0;
   }
-    
+
   UpdateFlags
   GetUpdateFlags() const override
   {

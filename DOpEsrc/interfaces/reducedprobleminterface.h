@@ -211,11 +211,11 @@ namespace DOpE
       unsigned int pos = it->second;
 
       if (GetFunctionalValues()[pos].size() == 0)
-      {
-	throw DOpEException(
-	  "Apparently the Functional in question was never evaluated!",
-	  "ReducedProblemInterface_Base::GetTimeFunctionalValue");
-      }
+        {
+          throw DOpEException(
+            "Apparently the Functional in question was never evaluated!",
+            "ReducedProblemInterface_Base::GetTimeFunctionalValue");
+        }
       else
         {
           return GetFunctionalValues()[pos];
@@ -243,15 +243,15 @@ namespace DOpE
       user_domain_data_.insert(
         std::pair<std::string, const VECTOR *>(name, new_data));
     }
-   /**
-     * The user can add his own Domain Data (for example the coefficient
-     * vector of a finite element function). The user has to make sure
-     * that the vector new_data has the appropriate length. This data
-     * is the accessible in the integrator routines.
-     *
-     * @param name      The unique identifier for the data-vector.
-     * @param new_data  The vector one wishes to add.
-     */
+    /**
+      * The user can add his own Domain Data (for example the coefficient
+      * vector of a finite element function). The user has to make sure
+      * that the vector new_data has the appropriate length. This data
+      * is the accessible in the integrator routines.
+      *
+      * @param name      The unique identifier for the data-vector.
+      * @param new_data  The vector one wishes to add.
+      */
     void AddUserTimeDomainData(std::string name,const SpaceTimeVector<VECTOR> *new_data)
     {
       if (user_time_domain_data_.find(name) != user_time_domain_data_.end())

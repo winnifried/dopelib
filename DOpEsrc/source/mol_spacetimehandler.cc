@@ -26,9 +26,9 @@
 namespace DOpE
 {
 #if DEAL_II_VERSION_GTE(9,3,0)
-   /**
-   * Implementation of virtual function in SpaceTimeHandler
-   */
+  /**
+  * Implementation of virtual function in SpaceTimeHandler
+  */
   template <>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
@@ -77,9 +77,9 @@ namespace DOpE
     sparsity.copy_from (csp);
   }
 #else
-   /**
-   * Implementation of virtual function in SpaceTimeHandler
-   */
+  /**
+  * Implementation of virtual function in SpaceTimeHandler
+  */
   template <>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
@@ -127,12 +127,12 @@ namespace DOpE
     this->GetControlDoFConstraints ().condense (csp);
     sparsity.copy_from (csp);
   }
-#endif  
+#endif
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-   /**
-   * Implementation of virtual function in SpaceTimeHandler
-   */
+  /**
+  * Implementation of virtual function in SpaceTimeHandler
+  */
   template <>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection, true,
@@ -239,7 +239,7 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
 #else
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
 #endif
        dealii::BlockSparsityPattern, dealii::BlockVector<double>,
        dope_dimension, deal_II_dimension>::ResetTriangulation (const dealii::Triangulation<
@@ -271,7 +271,7 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, false,
 #else
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem, dealii::DoFHandler,
 #endif
        dealii::SparsityPattern, dealii::Vector<double>, dope_dimension,
        deal_II_dimension>::ResetTriangulation (const dealii::Triangulation<
@@ -297,7 +297,7 @@ namespace DOpE
       delete state_mesh_transfer_;
     state_mesh_transfer_ = NULL;
   }
-  
+
 #if DEAL_II_VERSION_GTE(9,3,0)
   template <>
   void
@@ -380,26 +380,26 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-						    false,
-						    dealii::BlockSparsityPattern,
+                                                    false,
+                                                    dealii::BlockSparsityPattern,
                                                     dealii::BlockVector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
                                                     false,
-						    dealii::SparsityPattern,
+                                                    dealii::SparsityPattern,
                                                     dealii::Vector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-						    true,
-						    dealii::BlockSparsityPattern,
+                                                    true,
+                                                    dealii::BlockSparsityPattern,
                                                     dealii::BlockVector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
                                                     true,
-						    dealii::SparsityPattern,
+                                                    dealii::SparsityPattern,
                                                     dealii::Vector<double>,
                                                     dope_dimension,
                                                     deal_II_dimension>;

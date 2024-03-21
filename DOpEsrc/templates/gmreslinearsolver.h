@@ -132,7 +132,7 @@ namespace DOpE
   template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   GMRESLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::~GMRESLinearSolverWithMatrix()
   {
-    if(precondition_ != NULL)
+    if (precondition_ != NULL)
       delete precondition_;
   }
 
@@ -145,7 +145,7 @@ namespace DOpE
     matrix_.clear();
     pde.ComputeSparsityPattern(sparsity_pattern_);
     matrix_.reinit(sparsity_pattern_);
-    if(precondition_ != NULL)
+    if (precondition_ != NULL)
       delete precondition_;
     precondition_ = new PRECONDITIONER;
   }
@@ -163,7 +163,7 @@ namespace DOpE
     if (force_matrix_build)
       {
         integr.ComputeMatrix (pde,matrix_);
-	precondition_->initialize(matrix_);
+        precondition_->initialize(matrix_);
       }
 
 

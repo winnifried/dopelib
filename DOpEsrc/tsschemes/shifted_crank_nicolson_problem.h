@@ -109,7 +109,7 @@ namespace DOpE
           // The remaining parts; e.g. for fluid problems: laplace, convection, etc.:
           // Multiplication by 1/2 + k due to CN discretization
 
-          this->GetProblem().ElementEquation(dc, tmp, damped_cn_theta * scale , scale);
+          this->GetProblem().ElementEquation(dc, tmp, damped_cn_theta * scale, scale);
           local_vector += tmp;
 
           tmp = 0.0;

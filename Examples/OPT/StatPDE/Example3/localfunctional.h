@@ -36,7 +36,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -118,7 +118,7 @@ public:
                                * state_fe_face_values.normal_vector(q_point)
                                * state_fe_face_values.JxW(q_point);
           }
-	functional_value_J = drag_lift_value[0];
+        functional_value_J = drag_lift_value[0];
       }
 
     // Regularization term for the cost functional
