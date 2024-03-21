@@ -124,7 +124,7 @@ typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
 typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
 
-typedef Newtonsolver_Eigenvalueproblems<INTEGRATOR,VECTOR,EIGENVALUE ,MATRIX, SPARSITYPATTERN, LINEARSOLVER> NS;
+typedef Newtonsolver_Eigenvalueproblems<INTEGRATOR,VECTOR,EIGENVALUE,MATRIX, SPARSITYPATTERN, LINEARSOLVER> NS;
 typedef EigenvalueSolver2<INTEGRATOR,VECTOR, MATRIX> EVS;
 typedef EigenvalueReducedProblem<NS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
@@ -135,7 +135,8 @@ typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 
 int
 
-main(int argc, char **argv){
+main(int argc, char **argv)
+{
   std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv,1);
 
@@ -164,17 +165,17 @@ main(int argc, char **argv){
 
 //------------READ MESH--------------------
   GridIn<DIM> grid_in;
-    grid_in.attach_triangulation(triangulation);
+  grid_in.attach_triangulation(triangulation);
 
-    std::ifstream input_file("cavity_gmesh.msh");
-    grid_in.read_msh(input_file);
+  std::ifstream input_file("cavity_gmesh.msh");
+  grid_in.read_msh(input_file);
 
-    triangulation.refine_global(0);
+  triangulation.refine_global(0);
 
 
   //------------- FE-System ---------------------------------------------
-   FE<DIM> control_fe(FE_Q<DIM>(1), 2);
-   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
+  FE<DIM> control_fe(FE_Q<DIM>(1), 2);
+  FESystem<DIM> state_fe(FE_Q<DIM>(1), 1, FE_Nedelec<DIM>(0),1);
   QUADRATURE quadrature_formula(8);
   FACEQUADRATURE face_quadrature_formula(8);
   IDC idc(quadrature_formula, face_quadrature_formula);
@@ -191,27 +192,27 @@ main(int argc, char **argv){
 
 //
 //  //TEST CONTROL BOUNDARY
-   std::vector<bool> comp_mask_c(2);
-   comp_mask_c[0] = true;
-   comp_mask_c[1] = true;
- DOpEWrapper::ZeroFunction<CDIM> zf_c(2);
+  std::vector<bool> comp_mask_c(2);
+  comp_mask_c[0] = true;
+  comp_mask_c[1] = true;
+  DOpEWrapper::ZeroFunction<CDIM> zf_c(2);
 
 
- P.SetControlDirichletBoundaryColors(14, comp_mask_c, &zf_c);
- P.SetControlDirichletBoundaryColors(15, comp_mask_c, &zf_c);
- P.SetControlDirichletBoundaryColors(18, comp_mask_c, &zf_c);
+  P.SetControlDirichletBoundaryColors(14, comp_mask_c, &zf_c);
+  P.SetControlDirichletBoundaryColors(15, comp_mask_c, &zf_c);
+  P.SetControlDirichletBoundaryColors(18, comp_mask_c, &zf_c);
 
- std::vector<bool> comp_mask(3);
+  std::vector<bool> comp_mask(3);
 
-   comp_mask[0] = true;
-   DOpEWrapper::ZeroFunction<DIM> zf(3);
-   SimpleDirichletData<VECTOR, DIM> DD1(zf);
+  comp_mask[0] = true;
+  DOpEWrapper::ZeroFunction<DIM> zf(3);
+  SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
 //TODO in  mol space time handler angepasst für NedelecRB
-   P.SetDirichletBoundaryColors(14, comp_mask, &DD1);
-   P.SetDirichletBoundaryColors(15, comp_mask, &DD1);
-   P.SetDirichletBoundaryColors(16, comp_mask, &DD1);
-   P.SetDirichletBoundaryColors(18, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(14, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(15, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(16, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(18, comp_mask, &DD1);
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc, 2);
   RNA Alg(&P, &solver, pr);
@@ -232,24 +233,24 @@ main(int argc, char **argv){
 
 
 
-      try
-        {
-    	  solver.ReInit();
-    	  Alg.ReInit();
-    	  Alg.Solve(q);
-        }
-      catch (DOpEException &e)
-        {
-          std::cout
-              << "Warning: During execution of `" + e.GetThrowingInstance()
-              + "` the following Problem occurred!" << std::endl;
-          std::cout << e.GetErrorMessage() << std::endl;
-        }
+  try
+    {
+      solver.ReInit();
+      Alg.ReInit();
+      Alg.Solve(q);
+    }
+  catch (DOpEException &e)
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
-std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-      std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::minutes>(end - begin).count() << "[min]" << std::endl;
-      std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
+  std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::minutes>(end - begin).count() << "[min]" << std::endl;
+  std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
   return 0;
 }
 

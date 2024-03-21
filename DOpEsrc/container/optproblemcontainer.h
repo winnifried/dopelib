@@ -455,8 +455,8 @@ namespace DOpE
     template<typename DATACONTAINER>
     void
     ElementTimeEquation(const DATACONTAINER &edc,
-                    dealii::Vector<double> &local_vector, double scale,
-                    double scale_ico);
+                        dealii::Vector<double> &local_vector, double scale,
+                        double scale_ico);
 
     /******************************************************/
 
@@ -546,26 +546,26 @@ namespace DOpE
 
 
     template<typename DATACONTAINER>
-      void
-      ElementMassMatrix(const DATACONTAINER &dc,
-                        dealii::FullMatrix<double> &local_entry_matrix);
+    void
+    ElementMassMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix);
 
     template<typename DATACONTAINER>
-      void
-      ElementMassMatrix(const DATACONTAINER &dc,
-                    dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-                    double scale_ico = 1.);
+    void
+    ElementMassMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+                      double scale_ico = 1.);
 
     template<typename DATACONTAINER>
-       void
-       ElementTimeMatrix(const DATACONTAINER &dc,
-                         dealii::FullMatrix<double> &local_entry_matrix);
+    void
+    ElementTimeMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix);
 
-     template<typename DATACONTAINER>
-       void
-       ElementTimeMatrix(const DATACONTAINER &dc,
-                     dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-                     double scale_ico = 1.);
+    template<typename DATACONTAINER>
+    void
+    ElementTimeMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+                      double scale_ico = 1.);
     /******************************************************/
 
     /**
@@ -2046,35 +2046,35 @@ namespace DOpE
 
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
-                          const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                          double scale)
-    {
-	  if ((this->GetType() == "gradient")
-	         || (this->GetType() == "hessian") )
-	       {
-	         // control values in quadrature point
-	         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
-	       }
-	  	  else
-        {
-          throw DOpEException("Not implemented",
-                              "OptProblemContainer::ElementEquation");
-        }
-    }
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
+                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                        double scale)
+  {
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian") )
+      {
+        // control values in quadrature point
+        this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementEquation");
+      }
+  }
 
 
-    /******************************************************/
+  /******************************************************/
 
 
 
@@ -2623,12 +2623,12 @@ namespace DOpE
 
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
@@ -2642,7 +2642,7 @@ namespace DOpE
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian") )
       {
-              throw DOpEException("Not implemented",
+        throw DOpEException("Not implemented",
                             "OptProblemContainer::ElementMassMatrix");
       }
     else
@@ -2655,44 +2655,44 @@ namespace DOpE
 
   /********************************************************/
 
-    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
-                          const DATACONTAINER &edc, FullMatrix<double> &local_entry_matrix)
-    {
-      if ((this->GetType() == "gradient")
-          || (this->GetType() == "hessian"))
-        {
-          throw DOpEException("Not implemented",
-                              "OptProblemContainer::ElementMassMatrix");
-        }
-      else
-        {
-          throw DOpEException("Not implemented",
-                              "OptProblemContainer::ElementMassMatrix");
-        }
+  template<typename DATACONTAINER>
+  void
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
+                        const DATACONTAINER &edc, FullMatrix<double> &local_entry_matrix)
+  {
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementMassMatrix");
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementMassMatrix");
+      }
 
-    }
+  }
 
   /******************************************************/
 
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
 #if DEAL_II_VERSION_GTE(9,3,0)
-    bool DH>
+           bool DH>
 #else
-    template<int, int> class DH>
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
@@ -2706,7 +2706,7 @@ namespace DOpE
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
       {
-              throw DOpEException("Not implemented",
+        throw DOpEException("Not implemented",
                             "OptProblemContainer::ElementTimeMatrix");
       }
     else
@@ -2720,7 +2720,7 @@ namespace DOpE
 
 
 
-/********************************************************/
+  /********************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,

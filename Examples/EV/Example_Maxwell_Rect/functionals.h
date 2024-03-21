@@ -36,7 +36,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalEigenvalueFunctional : public FunctionalInterface<EDC, FDC, DH,
+class LocalEigenvalueFunctional : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -49,14 +49,14 @@ class LocalEigenvalueFunctional : public FunctionalInterface<EDC, FDC, DH,
 #endif
 {
 public:
-	LocalEigenvalueFunctional()
+  LocalEigenvalueFunctional()
   {
   }
 
 
   double
-AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-        const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
+  AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+                 const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
   {
 //    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
 //      edc.GetFEValuesState();

@@ -91,11 +91,11 @@ namespace DOpE
 
     template<typename EDC>
     void Init_ElementMassEquation(const EDC &edc,
-                              dealii::Vector<double> &local_vector, double scale,
-                              double scale_ico)
+                                  dealii::Vector<double> &local_vector, double scale,
+                                  double scale_ico)
     {
       pde_.Init_ElementMassEquation(edc, local_vector, scale,
-                                scale_ico);
+                                    scale_ico);
     }
 
     /**
@@ -140,10 +140,10 @@ namespace DOpE
                   != std::string::npos)
                 {
                   opt_problem_.GetFunctional()->PointValue_U(
-		    opt_problem_.GetSpaceTimeHandler()->GetControlDoFHandler(),
-		    opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(),
-		    param_values, domain_values,
-		    rhs_vector, scale);
+                    opt_problem_.GetSpaceTimeHandler()->GetControlDoFHandler(),
+                    opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(),
+                    param_values, domain_values,
+                    rhs_vector, scale);
                 }
             }
         }
@@ -182,7 +182,7 @@ namespace DOpE
     inline void
     ElementMassEquation(const EDC &edc,
                         dealii::Vector<double> &local_vector, double scale,
-	                    double scale_ico);
+                        double scale_ico);
     template<typename EDC>
     inline void
     ElementTimeEquation(const EDC &edc,
@@ -233,8 +233,8 @@ namespace DOpE
     template<typename EDC>
     inline void
     ElementMassMatrix(const EDC &edc,
-            dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-            double scale_ico = 1.);
+                      dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+                      double scale_ico = 1.);
 
     /**
     * Functions providing the required information for the integrator.
@@ -539,9 +539,9 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementEquation(const EDC &edc,
-                                       dealii::Vector<double> &local_vector, double scale,
-                                       double scale_ico)
+                           dim>::ElementEquation(const EDC &edc,
+                                                 dealii::Vector<double> &local_vector, double scale,
+                                                 double scale_ico)
   {
     pde_.ElementEquation_U(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
 
@@ -550,17 +550,17 @@ namespace DOpE
 
   /******************************************************/
 
-    template<typename OPTPROBLEM, typename PDE, typename DD,
-             typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename EDC>
-    void
-    EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                   dim>::ElementMassEquation(const EDC &edc,
-                                             dealii::Vector<double> &local_vector, double scale, double scale_ico)
-    {
-    	pde_.ElementMassEquation_U(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  template<typename EDC>
+  void
+  EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+                           dim>::ElementMassEquation(const EDC &edc,
+                                                     dealii::Vector<double> &local_vector, double scale, double scale_ico)
+  {
+    pde_.ElementMassEquation_U(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
 
-    }
+  }
 
   /******************************************************/
 
@@ -569,8 +569,8 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementTimeEquation(const EDC &edc,
-                                           dealii::Vector<double> &local_vector, double scale)
+                           dim>::ElementTimeEquation(const EDC &edc,
+                                                     dealii::Vector<double> &local_vector, double scale)
   {
     pde_.ElementTimeEquation_U(edc, local_vector, scale);
   }
@@ -582,8 +582,8 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementTimeEquationExplicit(const EDC &edc,
-                                                   dealii::Vector<double> &local_vector, double scale)
+                           dim>::ElementTimeEquationExplicit(const EDC &edc,
+                                                             dealii::Vector<double> &local_vector, double scale)
   {
     pde_.ElementTimeEquationExplicit_U(edc, local_vector,
                                        scale);
@@ -596,8 +596,8 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::FaceEquation(const FDC &fdc,
-                                    dealii::Vector<double> &local_vector, double scale, double scale_ico)
+                           dim>::FaceEquation(const FDC &fdc,
+                                              dealii::Vector<double> &local_vector, double scale, double scale_ico)
   {
     pde_.FaceEquation_U(fdc, local_vector, scale*interval_length_, scale_ico*interval_length_);
   }
@@ -609,8 +609,8 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::InterfaceEquation(const FDC &fdc,
-                                         dealii::Vector<double> &local_vector, double scale, double scale_ico)
+                           dim>::InterfaceEquation(const FDC &fdc,
+                                                   dealii::Vector<double> &local_vector, double scale, double scale_ico)
   {
     pde_.InterfaceEquation_U(fdc,  local_vector, scale*interval_length_, scale_ico*interval_length_);
   }
@@ -621,8 +621,8 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::BoundaryEquation(const FDC &fdc,
-                                        dealii::Vector<double> &local_vector, double scale, double scale_ico)
+                           dim>::BoundaryEquation(const FDC &fdc,
+                                                  dealii::Vector<double> &local_vector, double scale, double scale_ico)
   {
     pde_.BoundaryEquation_U(fdc, local_vector, scale*interval_length_, scale_ico*interval_length_);
   }
@@ -634,8 +634,8 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementRhs(const EDC &edc,
-                                  dealii::Vector<double> &local_vector, double scale)
+                           dim>::ElementRhs(const EDC &edc,
+                                            dealii::Vector<double> &local_vector, double scale)
   {
     //values of the derivative of the functional for error estimation
 
@@ -706,8 +706,8 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::FaceRhs(const FDC &fdc,
-                               dealii::Vector<double> &local_vector, double scale)
+                           dim>::FaceRhs(const FDC &fdc,
+                                         dealii::Vector<double> &local_vector, double scale)
   {
     //values of the derivative of the functional for error estimation
     if (opt_problem_.GetFunctional()->NeedTime())
@@ -739,8 +739,8 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::BoundaryRhs(const FDC &fdc,
-                                   dealii::Vector<double> &local_vector, double scale)
+                           dim>::BoundaryRhs(const FDC &fdc,
+                                             dealii::Vector<double> &local_vector, double scale)
   {
     //values of the derivative of the functional for error estimation
     if (opt_problem_.GetFunctional()->NeedTime())
@@ -771,11 +771,11 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementMatrix(const EDC &edc,
-                                     dealii::FullMatrix<double> &local_entry_matrix, double scale,
-                                     double scale_ico)
+                           dim>::ElementMatrix(const EDC &edc,
+                                               dealii::FullMatrix<double> &local_entry_matrix, double scale,
+                                               double scale_ico)
   {
-     pde_.ElementMatrix_T(edc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
+    pde_.ElementMatrix_T(edc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
   }
 
   /******************************************************/
@@ -785,11 +785,11 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementMassMatrix(const EDC &edc,
-                         dealii::FullMatrix<double> &local_entry_matrix, double scale,
-                         double scale_ico)
+                           dim>::ElementMassMatrix(const EDC &edc,
+                                                   dealii::FullMatrix<double> &local_entry_matrix, double scale,
+                                                   double scale_ico)
   {
-	  pde_.ElementMassMatrix_T(edc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
+    pde_.ElementMassMatrix_T(edc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
   }
 
   /******************************************************/
@@ -799,8 +799,8 @@ namespace DOpE
   template<typename EDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::ElementTimeMatrixExplicit(const EDC &edc,
-                                                 dealii::FullMatrix<double> &local_entry_matrix)
+                           dim>::ElementTimeMatrixExplicit(const EDC &edc,
+                                                           dealii::FullMatrix<double> &local_entry_matrix)
   {
     pde_.ElementTimeMatrixExplicit_T(edc, local_entry_matrix);
   }
@@ -812,9 +812,9 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::FaceMatrix(const FDC &fdc,
-                                  FullMatrix<double> &local_entry_matrix, double scale,
-                                  double scale_ico)
+                           dim>::FaceMatrix(const FDC &fdc,
+                                            FullMatrix<double> &local_entry_matrix, double scale,
+                                            double scale_ico)
   {
     pde_.FaceMatrix_T(fdc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
   }
@@ -826,9 +826,9 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::InterfaceMatrix(const FDC &fdc,
-                                       FullMatrix<double> &local_entry_matrix, double scale,
-                                       double scale_ico)
+                           dim>::InterfaceMatrix(const FDC &fdc,
+                                                 FullMatrix<double> &local_entry_matrix, double scale,
+                                                 double scale_ico)
   {
     pde_.InterfaceMatrix_T(fdc,  local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
   }
@@ -840,9 +840,9 @@ namespace DOpE
   template<typename FDC>
   void
   EigenvalueAdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-                 dim>::BoundaryMatrix(const FDC &fdc,
-                                      FullMatrix<double> &local_matrix, double scale,
-                                      double scale_ico)
+                           dim>::BoundaryMatrix(const FDC &fdc,
+                                                FullMatrix<double> &local_matrix, double scale,
+                                                double scale_ico)
   {
     pde_.BoundaryMatrix_T(fdc, local_matrix, scale*interval_length_, scale_ico*interval_length_);
   }

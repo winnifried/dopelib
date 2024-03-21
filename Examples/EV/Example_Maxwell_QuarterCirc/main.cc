@@ -127,7 +127,7 @@ typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
 typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
 
-typedef Newtonsolver_Eigenvalueproblems<INTEGRATOR,VECTOR,EIGENVALUE ,MATRIX, SPARSITYPATTERN, LINEARSOLVER> NS;
+typedef Newtonsolver_Eigenvalueproblems<INTEGRATOR,VECTOR,EIGENVALUE,MATRIX, SPARSITYPATTERN, LINEARSOLVER> NS;
 typedef EigenvalueSolver2<INTEGRATOR,VECTOR, MATRIX> EVS;
 typedef EigenvalueReducedProblem<NS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
@@ -138,7 +138,8 @@ typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 
 int
 
-main(int argc, char **argv){
+main(int argc, char **argv)
+{
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv,1);
 
 
@@ -168,15 +169,15 @@ main(int argc, char **argv){
 
 
 
-GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);  //1. EW ~1.0
+  GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);  //1. EW ~1.0
 
 
   triangulation.refine_global(4);
 
 
   //------------- FE-System ---------------------------------------------
-   FE<DIM> control_fe(FE_Q<DIM>(1), 2);
-   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
+  FE<DIM> control_fe(FE_Q<DIM>(1), 2);
+  FESystem<DIM> state_fe(FE_Q<DIM>(1), 1, FE_Nedelec<DIM>(0),1);
 
   QUADRATURE quadrature_formula(8);
   FACEQUADRATURE face_quadrature_formula(8);
@@ -190,29 +191,29 @@ GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);  //1. EW
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
-  
-    //Functional which returns acutal eigenvalue
+
+  //Functional which returns acutal eigenvalue
   LocalEigenvalueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> EVF;
   P.AddFunctional(&EVF);
 
   std::vector<bool> comp_mask(3);
 
-   comp_mask[0] = true;
-   DOpEWrapper::ZeroFunction<DIM> zf(3);
-   SimpleDirichletData<VECTOR, DIM> DD1(zf);
+  comp_mask[0] = true;
+  DOpEWrapper::ZeroFunction<DIM> zf(3);
+  SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
 //TODO in  mol space time handler angepasst für NedelecRB
-   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
-   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
-   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
- /*  //TEST CONTROL BOUNDARY
-     std::vector<bool> comp_mask_c(2);
-     comp_mask_c[0] = true;
-     comp_mask_c[1] = true;
-   DOpEWrapper::ZeroFunction<CDIM> zf_c(2);
-   P.SetControlDirichletBoundaryColors(1, comp_mask_c, &zf_c);*/
+  /*  //TEST CONTROL BOUNDARY
+      std::vector<bool> comp_mask_c(2);
+      comp_mask_c[0] = true;
+      comp_mask_c[1] = true;
+    DOpEWrapper::ZeroFunction<CDIM> zf_c(2);
+    P.SetControlDirichletBoundaryColors(1, comp_mask_c, &zf_c);*/
 
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc, 2);
@@ -234,19 +235,19 @@ GridGenerator::quarter_hyper_ball(triangulation, Point<2>(0, 0), M_PI);  //1. EW
   ControlVector<VECTOR> dq(q);
 
 
-      try
-        {
-    	  solver.ReInit();
-    	  Alg.ReInit();
-            Alg.Solve(q);
-        }
-      catch (DOpEException &e)
-        {
-          std::cout
-              << "Warning: During execution of `" + e.GetThrowingInstance()
-              + "` the following Problem occurred!" << std::endl;
-          std::cout << e.GetErrorMessage() << std::endl;
-        }
+  try
+    {
+      solver.ReInit();
+      Alg.ReInit();
+      Alg.Solve(q);
+    }
+  catch (DOpEException &e)
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
 
   return 0;

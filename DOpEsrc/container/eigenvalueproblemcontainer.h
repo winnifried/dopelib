@@ -136,8 +136,8 @@ namespace DOpE
   {
   public:
     EigenvalueProblemContainer(FUNCTIONAL &functional, PDE &pde,
-                        CONSTRAINTS &constraints,
-                        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
+                               CONSTRAINTS &constraints,
+                               SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH);
 
     /******************************************************/
 
@@ -157,27 +157,27 @@ namespace DOpE
      */
 
     EigenvalueStateProblem<
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
-                           GetEigenvalueStateProblem()
-       {
-         if (eigenvaluestate_problem_ == NULL)
-           {
-        	 eigenvaluestate_problem_ = new EigenvalueStateProblem<
-        			 EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-             DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-               *this, this->GetPDE());
-           }
-         return *eigenvaluestate_problem_;
-       }
+    EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                               CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                               PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+                               GetEigenvalueStateProblem()
+    {
+      if (eigenvaluestate_problem_ == NULL)
+        {
+          eigenvaluestate_problem_ = new EigenvalueStateProblem<
+          EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
+        }
+      return *eigenvaluestate_problem_;
+    }
 
 //    /** TODO for eigenvalue
 //     * Returns a description of the Tangent PDE
 //     */
 //    TangentProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
 //    GetTangentProblem()
@@ -185,7 +185,7 @@ namespace DOpE
 //      if (tangent_problem_ == NULL)
 //        {
 //          tangent_problem_ = new TangentProblem<
-//        		  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//              EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 //          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 //            *this, this->GetPDE());
@@ -197,28 +197,28 @@ namespace DOpE
      * Returns a description of the Adjoint PDE for error estimation
      */
     EigenvalueAdjointProblem<
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
-        GetEigenvalueAdjointProblem()
+    EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+    GetEigenvalueAdjointProblem()
+    {
+      if (eigenvalueadjoint_problem_ == NULL)
         {
-          if (eigenvalueadjoint_problem_ == NULL)
-            {
-        	  eigenvalueadjoint_problem_ = new EigenvalueAdjointProblem<
-        	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-              CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-              DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-                *this, this->GetPDE());
-            }
-          return *eigenvalueadjoint_problem_;
+          eigenvalueadjoint_problem_ = new EigenvalueAdjointProblem<
+          EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+            *this, this->GetPDE());
         }
+      return *eigenvalueadjoint_problem_;
+    }
 
 
 //    /**
 //     * Returns a description of the Adjoint for Hessian PDE for error estimation
 //     */
 //    Adjoint_HessianProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
 //    GetAdjoint_HessianProblem()
@@ -226,7 +226,7 @@ namespace DOpE
 //      if (adjoint_hessian_problem_ == NULL)
 //        {
 //          adjoint_hessian_problem_ = new Adjoint_HessianProblem<
-//        		  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//              EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 //          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 //            *this, this->GetPDE());
@@ -238,7 +238,7 @@ namespace DOpE
 //     * Returns a description of the Adjoint PDE for error estimation
 //     */
 //    OPT_Adjoint_For_EEProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
 //    GetAdjoint_For_EEProblem()
@@ -246,7 +246,7 @@ namespace DOpE
 //      if (adjoint_for_ee_problem_ == NULL)
 //        {
 //          adjoint_for_ee_problem_ = new OPT_Adjoint_For_EEProblem<
-//        		  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//              EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
 //          DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
 //            *this, this->GetPDE());
@@ -258,7 +258,7 @@ namespace DOpE
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>&
+    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH> &
     GetBaseProblem()
     {
       return *this;
@@ -451,8 +451,8 @@ namespace DOpE
     template<typename DATACONTAINER>
     void
     ElementTimeEquation(const DATACONTAINER &edc,
-                    dealii::Vector<double> &local_vector, double scale,
-                    double scale_ico);
+                        dealii::Vector<double> &local_vector, double scale,
+                        double scale_ico);
 
     /******************************************************/
 
@@ -487,10 +487,10 @@ namespace DOpE
     void
     ElementRhs(const DATACONTAINER &dc,
                dealii::Vector<double> &local_vector, double scale = 1.);
-   template<typename DATACONTAINER>
-       void
-       ElementRhs(const DATACONTAINER &dc,
-                  dealii::Vector<double> &local_vector, double scale = 1., double eigenvalue = 1.);
+    template<typename DATACONTAINER>
+    void
+    ElementRhs(const DATACONTAINER &dc,
+               dealii::Vector<double> &local_vector, double scale = 1., double eigenvalue = 1.);
 
     /******************************************************/
 
@@ -545,26 +545,26 @@ namespace DOpE
 
 
     template<typename DATACONTAINER>
-      void
-      ElementMassMatrix(const DATACONTAINER &dc,
-                        dealii::FullMatrix<double> &local_entry_matrix);
+    void
+    ElementMassMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix);
 
     template<typename DATACONTAINER>
-      void
-      ElementMassMatrix(const DATACONTAINER &dc,
-                    dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-                    double scale_ico = 1.);
+    void
+    ElementMassMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+                      double scale_ico = 1.);
 
     template<typename DATACONTAINER>
-       void
-       ElementTimeMatrix(const DATACONTAINER &dc,
-                         dealii::FullMatrix<double> &local_entry_matrix);
+    void
+    ElementTimeMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix);
 
-     template<typename DATACONTAINER>
-       void
-       ElementTimeMatrix(const DATACONTAINER &dc,
-                     dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-                     double scale_ico = 1.);
+    template<typename DATACONTAINER>
+    void
+    ElementTimeMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+                      double scale_ico = 1.);
     /******************************************************/
 
     /**
@@ -1011,7 +1011,7 @@ namespace DOpE
     }
 
     /**************************************************    friend class EigenvalueAdjointProblem<
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+    EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;****/
 
@@ -1367,7 +1367,7 @@ namespace DOpE
                       &dirichlet_comps_);
     }
 
-   /******************************************************/
+    /******************************************************/
 
 
   protected:
@@ -1459,46 +1459,46 @@ namespace DOpE
     bool initial_; //Do we solve the problem at initial time?
 
     EigenvalueStateProblem<
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvaluestate_problem_;
+    EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                               CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                               PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvaluestate_problem_;
     EigenvalueAdjointProblem<
     EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                         CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvalueadjoint_problem_;
+                               CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                               PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * eigenvalueadjoint_problem_;
 //    TangentProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * tangent_problem_;
 
 //    Adjoint_HessianProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_hessian_problem_;
 //
 //    OPT_Adjoint_For_EEProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_for_ee_problem_;
 
     friend class EigenvalueStateProblem<
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class EigenvalueAdjointProblem<
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     //    friend class TangentProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
 //    friend class Adjoint_HessianProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
 //    friend class OPT_Adjoint_For_EEProblem<
-//	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
 //      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
 //      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
   };
@@ -1510,24 +1510,24 @@ namespace DOpE
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
            bool DH>
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-			     SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::EigenvalueProblemContainer(
-			       FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
-			       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
-			       ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
-				 &constraints), STH_(&STH), eigenvaluestate_problem_(NULL),eigenvalueadjoint_problem_(NULL)
-			       /*,eigenvaluetangent_problem_(NULL),eigenvalueadjoint_hessian_problem_(NULL),  adjoint_for_ee_problem_(NULL)*/
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::EigenvalueProblemContainer(
+                               FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
+                               SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
+                               ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
+                                 &constraints), STH_(&STH), eigenvaluestate_problem_(NULL),eigenvalueadjoint_problem_(NULL)
+                               /*,eigenvaluetangent_problem_(NULL),eigenvalueadjoint_hessian_problem_(NULL),  adjoint_for_ee_problem_(NULL)*/
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
            template<int, int> class DH>
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-			     SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::EigenvalueProblemContainer(
-			       FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
-			       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
-			       ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
-				 &constraints), STH_(&STH), eigenvaluestate_problem_(NULL),eigenvalueadjoint_problem_(NULL)
-			       /*,eigenvaluetangent_problem_(NULL),eigenvalueadjoint_hessian_problem_(NULL),  adjoint_for_ee_problem_(NULL)*/
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::EigenvalueProblemContainer(
+                               FUNCTIONAL &functional, PDE &pde, CONSTRAINTS &constraints,
+                               SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
+                               ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
+                                 &constraints), STH_(&STH), eigenvaluestate_problem_(NULL),eigenvalueadjoint_problem_(NULL)
+                               /*,eigenvaluetangent_problem_(NULL),eigenvalueadjoint_hessian_problem_(NULL),  adjoint_for_ee_problem_(NULL)*/
 #endif
   {
     ExceptionHandler_ = NULL;
@@ -1553,14 +1553,14 @@ namespace DOpE
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
            bool DH>
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-			     SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~EigenvalueProblemContainer()
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~EigenvalueProblemContainer()
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
            template<int, int> class DH>
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~EigenvalueProblemContainer()
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::~EigenvalueProblemContainer()
 #endif
   {
     if (zero_dirichlet_values_ != NULL)
@@ -1622,19 +1622,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ReInit(
-                        std::string algo_type)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ReInit(
+                               std::string algo_type)
   {
     if (eigenvaluestate_problem_ != NULL)
       {
@@ -1693,19 +1693,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetType(
-                        std::string type, unsigned int num)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetType(
+                               std::string type, unsigned int num)
   {
     if (this->GetType() != type || this->GetTypeNum() != num)
       {
@@ -1728,7 +1728,7 @@ namespace DOpE
                   || this->GetType() == "cost_functional_pre"
                   //|| this->GetType() == "cost_functional_pre_tangent"
                   || this->GetType() == "aux_functional" || this->GetType() == "functional_for_ee"
-                 /* || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian"*/
+                  /* || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian"*/
                   || this->GetType() == "error_evaluation"
                   || this->GetType().find("constraints") != std::string::npos)
                 {
@@ -1755,7 +1755,7 @@ namespace DOpE
           {
 
             if (this->GetType() == "eigenvaluestate"
-            	|| this->GetType() == "eigenvalueadjoint"
+                || this->GetType() == "eigenvalueadjoint"
 //                || this->GetType() == "adjoint_for_ee"
                 || this->GetType() == "functional_for_ee"
                 || this->GetType() == "cost_functional"
@@ -1765,14 +1765,14 @@ namespace DOpE
 //                || this->GetType() == "tangent"
                 || this->GetType() == "error_evaluation"
 //                || this->GetType() == "adjoint_hessian"
-                		)
+               )
               {
                 GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
               }
             else if (this->GetType() == "eigenvaluegradient"
 //                     || this->GetType() == "hessian_inverse"
 //                     || this->GetType() == "eigenvaluehessian"
-                     )
+                    )
               {
                 GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
               }
@@ -1792,30 +1792,30 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   double
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementFunctional(
-                        const DATACONTAINER &edc)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementFunctional(
+                               const DATACONTAINER &edc)
   {
 
-	if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre")
-	        || (this->GetType() == "cost_functional_pre_tangent"))
-	      {
-	        // state values in quadrature points
-	        return GetFunctional()->ElementValue(edc);
-	      }else
     if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
+      {
+        // state values in quadrature points
+        return GetFunctional()->ElementValue(edc);
+      }
+    else if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre")
+             || (this->GetType() == "cost_functional_pre_tangent"))
       {
         // state values in quadrature points
         return GetFunctional()->ElementValue(edc);
@@ -1844,20 +1844,20 @@ namespace DOpE
   /******************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   double
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointFunctional(
-                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointFunctional(
+                               const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                               const std::map<std::string, const VECTOR *> &domain_values)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
@@ -1905,20 +1905,20 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   double
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryFunctional(
-                        const FACEDATACONTAINER &fdc)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryFunctional(
+                               const FACEDATACONTAINER &fdc)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
@@ -1951,20 +1951,20 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   double
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceFunctional(
-                        const FACEDATACONTAINER &fdc)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceFunctional(
+                               const FACEDATACONTAINER &fdc)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
@@ -1993,30 +1993,30 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   double
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
-                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values, double eigenvalue)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicFunctional(
+                               const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                               const std::map<std::string, const VECTOR *> &domain_values, double eigenvalue)
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
       {
         // state values in quadrature points
         return GetFunctional()->AlgebraicValue(param_values, domain_values, eigenvalue);
-    }
+      }
     else if (this->GetType() == "aux_functional")
       {
-//    	\\ this is changed to the classic AlgebraicValue. Function gets the eigenvalue
+//      \\ this is changed to the classic AlgebraicValue. Function gets the eigenvalue
         return aux_functionals_[this->GetTypeNum()]->AlgebraicValue(
                  param_values, domain_values, eigenvalue);
       }
@@ -2037,21 +2037,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
-                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                        double scale, double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
+                               const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                               double scale, double /*scale_ico*/)
   {
     if (this->GetType() == "eigenvaluegradient")
       {
@@ -2069,83 +2069,83 @@ namespace DOpE
   /******************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-    template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
-    template<typename DATACONTAINER>
-    void
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
-                          const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                          double scale)
-    {
-	  if (this->GetType() == "eigenvaluegradient")
-	       {
-	         // control values in quadrature point
-	         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
-	       }
-	  	  else
-        {
-          throw DOpEException("Not implemented",
-                              "EigenvalueProblemContainer::ElementEquation");
-        }
-    }
+  template<typename DATACONTAINER>
+  void
+  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
+                               const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                               double scale)
+  {
+    if (this->GetType() == "eigenvaluegradient")
+      {
+        // control values in quadrature point
+        this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "EigenvalueProblemContainer::ElementEquation");
+      }
+  }
 
 
-    /******************************************************/
+  /******************************************************/
 
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicResidual(
-                        VECTOR &residual,
-                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AlgebraicResidual(
+                               VECTOR &residual,
+                               const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                               const std::map<std::string, const VECTOR *> &domain_values)
   {
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::AlgebraicFunctional");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::AlgebraicFunctional");
   }
 
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
-                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                        double scale)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
+                               const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                               double scale)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementTimeEquation");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementTimeEquation");
 
   }
 
@@ -2155,51 +2155,51 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
-                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                        double scale)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
+                               const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                               double scale)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementTimeEquationExplicit");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementTimeEquationExplicit");
   }
 
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
-                        const FACEDATACONTAINER &/*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                        double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
+                               const FACEDATACONTAINER &/*fdc*/,
+                               dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+                               double /*scale_ico*/)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementBoundaryEquation");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementBoundaryEquation");
 
   }
 
@@ -2207,71 +2207,72 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
-   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-   template<int, int> class DH>
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
-   void
-   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
-                         const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                         double scale, double eigenvalue)
-   {
+  void
+  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
+                               const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                               double scale, double eigenvalue)
+  {
 
- 	    if (this->GetType() == "eigenvaluegradient")
- 	      {
+    if (this->GetType() == "eigenvaluegradient")
+      {
 
- 	        if (GetFunctional()->NeedTime())
- 	          {
- 	            if (GetFunctional()->GetType().find("domain") != std::string::npos)
- 	              {
- 	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
- 	              }
- 	          }
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+              {
+                GetFunctional()->ElementValue_Q(edc, local_vector, scale);
+              }
+          }
 
- 	       this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_ , eigenvalue);
- 	       scale *= -1;
+        this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_, eigenvalue);
+        scale *= -1;
 
- 	      this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_,scale*interval_length_);
-// 	       this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_);
- 	     scale *= -1;
+        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_,scale*interval_length_);
+//         this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_);
+        scale *= -1;
 
- 	   }else
- 		        {
- 		          throw DOpEException("Not implemented",
- 		                              "EigenvalueProblemContainer::ElementRhs");
- 		        }
-   }
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "EigenvalueProblemContainer::ElementRhs");
+      }
+  }
 
 
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointRhs(
-                        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/,
-                        VECTOR &/*rhs_vector*/, double /*scale*/)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PointRhs(
+                               const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+                               const std::map<std::string, const VECTOR *> &/*domain_values*/,
+                               VECTOR &/*rhs_vector*/, double /*scale*/)
   {
 
-        throw DOpEException("Not implemented", "EigenvalueProblemContainer::PointRhs");
+    throw DOpEException("Not implemented", "EigenvalueProblemContainer::PointRhs");
 
   }
 
@@ -2279,25 +2280,25 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceRhs(
-                        const FACEDATACONTAINER &/*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceRhs(
+                               const FACEDATACONTAINER &/*fdc*/,
+                               dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::FaceRhs");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::FaceRhs");
 
 
   }
@@ -2306,25 +2307,25 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryRhs(
-                        const FACEDATACONTAINER &/*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryRhs(
+                               const FACEDATACONTAINER &/*fdc*/,
+                               dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::BoundaryRhs");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::BoundaryRhs");
 
 
   }
@@ -2333,22 +2334,22 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
-                        const DATACONTAINER &edc,
-                        dealii::FullMatrix<double> &local_entry_matrix, double scale,
-                        double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
+                               const DATACONTAINER &edc,
+                               dealii::FullMatrix<double> &local_entry_matrix, double scale,
+                               double /*scale_ico*/)
   {
 
     if ( /*|| (this->GetType() == "hessian")||*/ this->GetType() == "eigenvaluegradient")
@@ -2369,25 +2370,25 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
-                        const DATACONTAINER &/*edc*/,
-                        dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
-                        double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
+                               const DATACONTAINER &/*edc*/,
+                               dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
+                               double /*scale_ico*/)
   {
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementMassMatrix");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementMassMatrix");
 
   }
 
@@ -2395,126 +2396,126 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
-#else
-    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-    template<int, int> class DH>
-#endif
-  template<typename DATACONTAINER>
-    void
-	EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
-                          const DATACONTAINER &/*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
-    {
-
-          throw DOpEException("Not implemented",
-                              "EigenvalueProblemContainer::ElementMassMatrix");
-
-    }
-
-  /******************************************************/
-
-
-#if DEAL_II_VERSION_GTE(9,3,0)
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
-                        const DATACONTAINER &/*edc*/,
-                        dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
-                        double /*scale_ico*/)
-  {
-              throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementTimeMatrix");
-
-  }
-
-
-
-
-/********************************************************/
-
-#if DEAL_II_VERSION_GTE(9,3,0)
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
-#else
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
-#endif
-  template<typename DATACONTAINER>
-  void
-  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
-                        const DATACONTAINER &/*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
+                               const DATACONTAINER &/*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementTimeMatrix");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementMassMatrix");
 
   }
 
   /******************************************************/
 
+
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename DATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
-                        const DATACONTAINER &/*edc*/,
-                        dealii::FullMatrix<double> &/*local_entry_matrix*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
+                               const DATACONTAINER &/*edc*/,
+                               dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
+                               double /*scale_ico*/)
+  {
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementTimeMatrix");
+
+  }
+
+
+
+
+  /********************************************************/
+
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
+#else
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
+#endif
+  template<typename DATACONTAINER>
+  void
+  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
+                               const DATACONTAINER &/*edc*/, FullMatrix<double> &/*local_entry_matrix*/)
   {
 
-        throw DOpEException("Not implemented",
-                            "EigenvalueProblemContainer::ElementTimeMatrixExplicit");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementTimeMatrix");
+
+  }
+
+  /******************************************************/
+
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
+#else
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
+#endif
+  template<typename DATACONTAINER>
+  void
+  EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
+                               const DATACONTAINER &/*edc*/,
+                               dealii::FullMatrix<double> &/*local_entry_matrix*/)
+  {
+
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::ElementTimeMatrixExplicit");
 
   }
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
-                        const FACEDATACONTAINER & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                        double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
+                               const FACEDATACONTAINER & /*fdc*/,
+                               dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+                               double /*scale_ico*/)
   {
     {
       throw DOpEException("Not implemented",
@@ -2526,22 +2527,22 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
-                        const FACEDATACONTAINER & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
-                        double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
+                               const FACEDATACONTAINER & /*fdc*/,
+                               dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+                               double /*scale_ico*/)
   {
     {
       throw DOpEException("Not implemented",
@@ -2553,25 +2554,25 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceMatrix(
-                        const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
-                        double /*scale*/, double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceMatrix(
+                               const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
+                               double /*scale*/, double /*scale_ico*/)
   {
 
-      throw DOpEException("Not implemented",
-                          "EigenvalueProblemContainer::NewtonFaceMatrix");
+    throw DOpEException("Not implemented",
+                        "EigenvalueProblemContainer::NewtonFaceMatrix");
 
   }
 
@@ -2579,21 +2580,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceMatrix(
-                        const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
-                        double /*scale*/, double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceMatrix(
+                               const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
+                               double /*scale*/, double /*scale_ico*/)
   {
     {
       throw DOpEException("Not implemented",
@@ -2605,21 +2606,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename FACEDATACONTAINER>
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
-                        const FACEDATACONTAINER &fdc, FullMatrix<double> &local_matrix,
-                        double scale, double /*scale_ico*/)
+                             CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
+                               const FACEDATACONTAINER &fdc, FullMatrix<double> &local_matrix,
+                               double scale, double /*scale_ico*/)
   {
     if ((this->GetType() == "gradient") /*|| (this->GetType() == "hessian")*/)
       {
@@ -2636,21 +2637,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeLocalControlConstraints(
-                        VECTOR &constraints,
-                        const std::map<std::string, const dealii::Vector<double>*> &/*values*/,
-                        const std::map<std::string, const VECTOR *> &block_values)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeLocalControlConstraints(
+                               VECTOR &constraints,
+                               const std::map<std::string, const dealii::Vector<double>*> &/*values*/,
+                               const std::map<std::string, const VECTOR *> &block_values)
   {
     if (this->GetType() == "constraints")
       {
@@ -2672,18 +2673,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   std::string
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
   {
     if ((this->GetType() == "eigenvaluegradient")/*|| this->GetType() == "eigenvaluehessian"*/)
       {
@@ -2700,18 +2701,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const FE<dealdim, dealdim> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
   {
     if (/*(this->GetType() == "global_constraint_gradient")||*/ (this->GetType() == "eigenvaluegradient"))/*|| this->GetType() == "eigenvaluehessian")*/
       {
@@ -2735,18 +2736,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   UpdateFlags
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetUpdateFlags() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetUpdateFlags() const
   {
 
     UpdateFlags r;
@@ -2781,18 +2782,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   UpdateFlags
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFaceUpdateFlags() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFaceUpdateFlags() const
   {
     UpdateFlags r;
     if (this->GetType().find("aux_functional") != std::string::npos)
@@ -2826,18 +2827,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   std::string
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalType() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalType() const
   {
     if (this->GetType() == "aux_functional")
       {
@@ -2854,18 +2855,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   std::string
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalName() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctionalName() const
   {
     if (this->GetType() == "aux_functional")
       {
@@ -2882,18 +2883,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   std::string
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetConstraintType() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetConstraintType() const
   {
     return GetConstraints()->GetType();
   }
@@ -2901,18 +2902,18 @@ namespace DOpE
   /******************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   unsigned int
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
   {
     if (this->GetType() == "aux_functional")
       {
@@ -2929,18 +2930,18 @@ namespace DOpE
   /******************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
   {
     return GetFunctional()->NeedFinalValue();
   }
@@ -2948,20 +2949,20 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetTime(double time,
-                          unsigned int time_dof_number,
-                          const TimeIterator &interval, bool initial)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetTime(double time,
+                                 unsigned int time_dof_number,
+                                 const TimeIterator &interval, bool initial)
   {
     GetSpaceTimeHandler()->SetInterval(interval,time_dof_number);
     initial_ = initial;
@@ -3032,24 +3033,24 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
 #if  dope_dimension > 0
-			SPARSITYPATTERN &sparsity
+                               SPARSITYPATTERN &sparsity
 #else
-			SPARSITYPATTERN &/*sparsity*/
+                               SPARSITYPATTERN &/*sparsity*/
 #endif
-			) const
+                             ) const
   {
     if ( this->GetType() == "eigenvaluegradient"/* || this->GetType() == "eigenvaluehessian"*/)
       {
@@ -3071,19 +3072,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PostProcessConstraints(
-                        ConstraintVector<VECTOR> &g) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::PostProcessConstraints(
+                               ConstraintVector<VECTOR> &g) const
   {
     return this->GetConstraints()->PostProcessConstraints(g);
   }
@@ -3091,19 +3092,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryControl(
-                        const ControlVector<VECTOR> *c, std::string name)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryControl(
+                               const ControlVector<VECTOR> *c, std::string name)
   {
     if (auxiliary_controls_.find(name) != auxiliary_controls_.end())
       {
@@ -3119,19 +3120,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryState(
-                        const StateVector<VECTOR> *c, std::string name)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryState(
+                               const StateVector<VECTOR> *c, std::string name)
   {
     if (auxiliary_state_.find(name) != auxiliary_state_.end())
       {
@@ -3146,19 +3147,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryConstraint(
-                        const ConstraintVector<VECTOR> *c, std::string name)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AddAuxiliaryConstraint(
+                               const ConstraintVector<VECTOR> *c, std::string name)
   {
     if (auxiliary_constraints_.find(name) != auxiliary_constraints_.end())
       {
@@ -3173,19 +3174,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const ControlVector<VECTOR> *
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryControl(
-                        std::string name) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryControl(
+                               std::string name) const
   {
     typename std::map<std::string, const ControlVector<VECTOR> *>::const_iterator it =
       auxiliary_controls_.find(name);
@@ -3201,19 +3202,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const StateVector<VECTOR> *
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryState(
-                        std::string name) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetAuxiliaryState(
+                               std::string name) const
   {
     typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
       auxiliary_state_.find(name);
@@ -3229,19 +3230,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryControl(
-                        std::string name)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryControl(
+                               std::string name)
   {
     typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
       auxiliary_controls_.find(name);
@@ -3258,19 +3259,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryState(
-                        std::string name)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryState(
+                               std::string name)
   {
     typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
       auxiliary_state_.find(name);
@@ -3287,19 +3288,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryConstraint(
-                        std::string name)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::DeleteAuxiliaryConstraint(
+                               std::string name)
   {
     typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
       auxiliary_constraints_.find(name);
@@ -3316,18 +3317,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   FUNCTIONAL *
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional()
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional()
   {
     if (this->GetType() == "aux_functional"
         || this->GetType() == "functional_for_ee")
@@ -3344,18 +3345,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const FUNCTIONAL *
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFunctional() const
   {
     if (this->GetType() == "aux_functional"
         || this->GetType() == "functional_for_ee")
@@ -3371,18 +3372,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasFaces() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasFaces() const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -3418,18 +3419,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasPoints() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasPoints() const
   {
     if (this->GetType().find("constraint") != std::string::npos
         || (this->GetType() == "functional")
@@ -3458,18 +3459,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasInterfaces() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasInterfaces() const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -3489,10 +3490,10 @@ namespace DOpE
           {
             return this->GetPDE().HasInterfaces();
           }
-	else if (this->GetType() == "error_evaluation" )
-	{
-	  return true;//Always true for jumps over edges
-	}
+        else if (this->GetType() == "error_evaluation" )
+          {
+            return true;//Always true for jumps over edges
+          }
         else
           {
             throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
@@ -3504,9 +3505,9 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
@@ -3515,7 +3516,7 @@ namespace DOpE
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasVertices() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasVertices() const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -3530,14 +3531,14 @@ namespace DOpE
         return false;
       }
     else if ((this->GetType() == "gradient")
-	     || (this->GetType() == "error_evaluation")|| (this->GetType() == "eigenvaluegradient")/*|| this->GetType() == "eigenvaluehessian"*/)
-    {
-      return this->GetPDE().HasVertices();
-    }
+             || (this->GetType() == "error_evaluation")|| (this->GetType() == "eigenvaluegradient")/*|| this->GetType() == "eigenvaluehessian"*/)
+      {
+        return this->GetPDE().HasVertices();
+      }
     else
-    {
-      throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-			  "EigenvalueProblemContainer::HasVertices");
+      {
+        throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                            "EigenvalueProblemContainer::HasVertices");
       }
   }
 
@@ -3545,19 +3546,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   template<typename ELEMENTITERATOR>
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AtInterface(ELEMENTITERATOR &element, unsigned int face) const
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -3588,20 +3589,20 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlDirichletBoundaryColors(
-                        unsigned int color, const std::vector<bool> &comp_mask,
-                        const DOpEWrapper::Function<dealdim> *values)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlDirichletBoundaryColors(
+                               unsigned int color, const std::vector<bool> &comp_mask,
+                               const DOpEWrapper::Function<dealdim> *values)
   {
     assert(values);
 
@@ -3630,20 +3631,20 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetDirichletBoundaryColors(
-                        unsigned int color, const std::vector<bool> &comp_mask,
-                        const DD *values)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetDirichletBoundaryColors(
+                               unsigned int color, const std::vector<bool> &comp_mask,
+                               const DD *values)
   {
     assert(values);
     assert(values->n_components() == comp_mask.size());
@@ -3694,21 +3695,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<unsigned int> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
   {
     if /*((this->GetType() == "hessian")||*/ (this->GetType() == "eigenvaluegradient")
-        /*|| (this->GetType() == "global_constraint_gradient"))*/
+      /*|| (this->GetType() == "global_constraint_gradient"))*/
       {
         return control_dirichlet_colors_;
       }
@@ -3722,18 +3723,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<unsigned int> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletColors() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletColors() const
   {
     if (this->GetType() == "eigenvaluegradient") /*|| (this->GetType() == "hessian")*/
       {
@@ -3750,22 +3751,22 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<bool> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
-                        unsigned int color) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
+                               unsigned int color) const
   {
     if (this->GetType() == "eigenvaluegradient")
-       /* || (this->GetType() == "hessian")*/
+      /* || (this->GetType() == "hessian")*/
       {
         unsigned int comp = control_dirichlet_colors_.size();
         for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
@@ -3795,19 +3796,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<bool> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
-                        unsigned int color) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
+                               unsigned int color) const
   {
     if (this->GetType() == "eigenvaluegradient") /*|| (this->GetType() == "hessian")*/
       {
@@ -3840,21 +3841,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const Function<dealdim> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletValues(
-                        unsigned int color,
-                        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletValues(
+                               unsigned int color,
+                               const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+                               const std::map<std::string, const VECTOR *> &/*domain_values*/) const
   {
 
     unsigned int col = dirichlet_colors_.size();
@@ -3897,21 +3898,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const TransposedDirichletDataInterface<dealdim> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletValues(
-                        unsigned int color,
-                        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &domain_values) const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletValues(
+                               unsigned int color,
+                               const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                               const std::map<std::string, const VECTOR *> &domain_values) const
   {
     unsigned int col = control_transposed_dirichlet_colors_.size();
     if (this->GetType() == "eigenvaluegradient")/* || (this->GetType() == "hessian")*/
@@ -3946,12 +3947,12 @@ namespace DOpE
                                                                    domain_values, color);
         return *(transposed_control_gradient_dirichlet_values_[col]);
       }
-   /* else if (this->GetType() == "hessian")
-      {
-        transposed_control_hessian_dirichlet_values_[col]->ReInit(param_values,
-                                                                  domain_values, color);
-        return *(transposed_control_hessian_dirichlet_values_[col]);
-      }*/
+    /* else if (this->GetType() == "hessian")
+       {
+         transposed_control_hessian_dirichlet_values_[col]->ReInit(param_values,
+                                                                   domain_values, color);
+         return *(transposed_control_hessian_dirichlet_values_[col]);
+       }*/
     else
       {
         throw DOpEException("Unknown Type:" + this->GetType(),
@@ -3963,18 +3964,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<unsigned int> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
   {
     if (this->GetType() == "eigenvaluegradient")/* || (this->GetType() == "hessian") || (this->GetType() == "eigenvaluehessian"))
         || (this->GetType() == "global_constraint_gradient"))*/
@@ -3992,19 +3993,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlBoundaryEquationColors(
-                        unsigned int color)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlBoundaryEquationColors(
+                               unsigned int color)
   {
     {
       //Control Boundary Equation colors are simply inserted
@@ -4033,19 +4034,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryEquationColors(
-                        unsigned int color)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryEquationColors(
+                               unsigned int color)
   {
     {
       //State Boundary Equation colors are simply inserted
@@ -4097,18 +4098,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<unsigned int> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
   {
     if (this->GetType() == "cost_functional"
         || this->GetType() == "cost_functional_pre"
@@ -4129,19 +4130,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   void
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryFunctionalColors(
-                        unsigned int color)
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetBoundaryFunctionalColors(
+                               unsigned int color)
   {
     {
       //Boundary Functional colors are simply inserted
@@ -4192,18 +4193,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   unsigned int
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetControlNBlocks() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetControlNBlocks() const
   {
     return this->GetPDE().GetControlNBlocks();
   }
@@ -4212,18 +4213,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   unsigned int
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetStateNBlocks() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetStateNBlocks() const
   {
     return this->GetPDE().GetStateNBlocks();
   }
@@ -4232,21 +4233,21 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   unsigned int
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetNBlocks() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetNBlocks() const
   {
     if ((this->GetType() == "eigenvaluestate")/*||(this->GetType() == "adjoint_for_ee")*/
-    	||(this->GetType() == "eigenvalueadjoint")
+        ||(this->GetType() == "eigenvalueadjoint")
         /* ||(this->GetType() == "eigenvaluetangent")
         || (this->GetType() == "eigenvalueadjoint_hessian")*/)
       {
@@ -4254,7 +4255,7 @@ namespace DOpE
       }
     else if (this->GetType() == "eigenvaluegradient")
 
-           /*  || (this->GetType() == "eigenvaluehessian")*/
+      /*  || (this->GetType() == "eigenvaluehessian")*/
       {
         return this->GetControlNBlocks();
       }
@@ -4269,28 +4270,28 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   const std::vector<unsigned int> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const
   {
     if ((this->GetType() == "eigenvaluestate")
-    		||(this->GetType() == "eigenvalueadjoint")
+        ||(this->GetType() == "eigenvalueadjoint")
         //|| (this->GetType() == "adjoint_for_ee")
-		/*|| (this->GetType() == "eigenvaluetangent")*/ /*|| (this->GetType() == "eigenvalue_adjointhessian")*/)
+        /*|| (this->GetType() == "eigenvaluetangent")*/ /*|| (this->GetType() == "eigenvalue_adjointhessian")*/)
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       }
     else if (this->GetType() == "eigenvaluegradient")
-             /*|| (this->GetType() == "eigenvalue_hessian")*/
+      /*|| (this->GetType() == "eigenvalue_hessian")*/
       {
         return GetSpaceTimeHandler()->GetControlDoFsPerBlock();
       }
@@ -4305,22 +4306,22 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
 #if DEAL_II_VERSION_GTE(9,1,1)
   const dealii::AffineConstraints<double> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
   {
     if (this->GetType() == "eigenvaluegradient")/*|| (this->GetType() == "eigenvaluehessian")*/
-       /* || (this->GetType() == "global_constraint_gradient"))*/
+      /* || (this->GetType() == "global_constraint_gradient"))*/
       {
         return GetSpaceTimeHandler()->GetControlDoFConstraints();
       }
@@ -4333,7 +4334,7 @@ namespace DOpE
 #else
   const dealii::ConstraintMatrix &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
   {
     if (this->GetType() == "eigenvaluegradient") /*|| (this->GetType() == "eigenvaluehessian")
         || (this->GetType() == "global_constraint_gradient"))*/
@@ -4352,19 +4353,19 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
 #if DEAL_II_VERSION_GTE(9,1,1)
   const dealii::AffineConstraints<double> &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
   {
     if (this->GetType() == "eigenvaluegradient") /*|| (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))*/
@@ -4380,7 +4381,7 @@ namespace DOpE
 #else
   const dealii::ConstraintMatrix &
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
   {
     if (this->GetType() == "eigenvaluegradient") /*|| (this->GetType() == "hessian")
         || (this->GetType() == "global_constraint_gradient"))*/
@@ -4398,18 +4399,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::NeedTimeFunctional() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::NeedTimeFunctional() const
   {
     if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre"))
@@ -4427,18 +4428,18 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  bool DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           bool DH>
 #else
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
 #endif
   bool
   EigenvalueProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasControlInDirichletData() const
+                             SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasControlInDirichletData() const
   {
     return (!control_transposed_dirichlet_colors_.empty());
   }

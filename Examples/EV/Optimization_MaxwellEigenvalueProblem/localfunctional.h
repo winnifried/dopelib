@@ -55,7 +55,7 @@ public:
   ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-    edc.GetFEValuesState();
+      edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
 
     qvalues_.resize(n_q_points, Vector<double>(2));
@@ -71,47 +71,51 @@ public:
 
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-    	DF.clear();
-    	qgrads.clear();
-		qgrads[0][0] = qgrads_[q_point][0][0];
-		qgrads[1][1] = qgrads_[q_point][1][1];
-		qgrads[1][0] = qgrads_[q_point][1][0];
-		qgrads[0][1] = qgrads_[q_point][0][1];
+        DF.clear();
+        qgrads.clear();
+        qgrads[0][0] = qgrads_[q_point][0][0];
+        qgrads[1][1] = qgrads_[q_point][1][1];
+        qgrads[1][0] = qgrads_[q_point][1][0];
+        qgrads[0][1] = qgrads_[q_point][0][1];
 
-		DF = deformation_tensor_(qgrads);
-		detDF = determinante_(DF);
+        DF = deformation_tensor_(qgrads);
+        detDF = determinante_(DF);
 
-		if(detDF < epsilon_){
-					r = 10.e20;
-				} else{
-		    r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
-             * state_fe_values.JxW(q_point);
+        if (detDF < epsilon_)
+          {
+            r = 10.e20;
+          }
+        else
+          {
+            r += 0.5 * alpha_* (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
+                 * state_fe_values.JxW(q_point);
 
-			r += 0.5 * alpha_  *
-					(scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
+            r += 0.5 * alpha_  *
+                 (scalar_product(qgrads[0],qgrads[0])+scalar_product(qgrads[1],qgrads[1])) * state_fe_values.JxW(q_point);
 
 
-			r += - beta_ *(std::log((detDF)))* state_fe_values.JxW(q_point);
+            r += - beta_ *(std::log((detDF)))* state_fe_values.JxW(q_point);
 
-     }}
+          }
+      }
     return r;
   }
 
   double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                         const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
-   {
-     assert(this->GetProblemType() == "cost_functional");
+                        const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
+  {
+    assert(this->GetProblemType() == "cost_functional");
 
-     return 0.5*(eigenvalue- target_eigenvalue_)*(eigenvalue - target_eigenvalue_);
+    return 0.5*(eigenvalue- target_eigenvalue_)*(eigenvalue - target_eigenvalue_);
 
-   }
+  }
 
   double AlgebraicValue_U(const EDC<DH, VECTOR, dealdim> &edc,
-          dealii::Vector<double> &local_vector, double scale, double eigenvalue)
-   {
+                          dealii::Vector<double> &local_vector, double scale, double eigenvalue)
+  {
 
-     return eigenvalue - target_eigenvalue_; //TODO Rueckgabe Void
-   }
+    return eigenvalue - target_eigenvalue_; //TODO Rueckgabe Void
+  }
 
   void
   ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
@@ -136,43 +140,46 @@ public:
     double detDFdq;
     double detDFINVdq;
 
-	vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
-	vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
-	const FEValuesExtractors::Vector dv(0);
+    vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
+    vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);
+    const FEValuesExtractors::Vector dv(0);
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-    {
-    	DF.clear();
-    	qgrads.clear();
+      {
+        DF.clear();
+        qgrads.clear();
 
-    	qgrads[0][0] = qgrads_[q_point][0][0];
-    	qgrads[1][1] = qgrads_[q_point][1][1];
-    	qgrads[1][0] = qgrads_[q_point][1][0];
-    	qgrads[0][1] = qgrads_[q_point][0][1];
+        qgrads[0][0] = qgrads_[q_point][0][0];
+        qgrads[1][1] = qgrads_[q_point][1][1];
+        qgrads[1][0] = qgrads_[q_point][1][0];
+        qgrads[0][1] = qgrads_[q_point][0][1];
 
 
-    	DF = deformation_tensor_(qgrads);
-    	detDF = determinante_(DF);
+        DF = deformation_tensor_(qgrads);
+        detDF = determinante_(DF);
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-        	phi_q[i]=  control_fe_values[dv].value(i,q_point);
-        	grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
+            phi_q[i]=  control_fe_values[dv].value(i,q_point);
+            grad_phi_v[i]=control_fe_values[dv].gradient(i,q_point);
 
-        	detDFdq = determinante_DF_dq_(qgrads, grad_phi_v[i]);;
+            detDFdq = determinante_DF_dq_(qgrads, grad_phi_v[i]);;
 
-        	if(detDF < epsilon_){
-        	        		local_vector(i) += 0;
-        	        	} else{
-        	local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
-        	        	              * state_fe_values.JxW(q_point);
+            if (detDF < epsilon_)
+              {
+                local_vector(i) += 0;
+              }
+            else
+              {
+                local_vector(i) +=  scale * alpha_ *(qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
+                                    * state_fe_values.JxW(q_point);
 
-            local_vector(i) += scale * alpha_
-            		*(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
+                local_vector(i) += scale * alpha_
+                                   *(scalar_product(grad_phi_v[i][0],qgrads[0])+scalar_product(grad_phi_v[i][1],qgrads[1])) * state_fe_values.JxW(q_point);
 
-            local_vector(i) += - scale* beta_ * (detDFdq * (1/detDF))*state_fe_values.JxW(q_point);
-        	        	}
-    }
-    }
+                local_vector(i) += - scale* beta_ * (detDFdq * (1/detDF))*state_fe_values.JxW(q_point);
+              }
+          }
+      }
   }
 
   UpdateFlags

@@ -150,9 +150,9 @@ namespace DOpE
 
     virtual void
     ElementMassEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-			dealii::Vector<double> &/*local_vector*/,
-			double /*scale*/,
-			double /*scale_ico*/)
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ElementMassEquation");
     }
@@ -160,8 +160,8 @@ namespace DOpE
 
     virtual void
     ElementMassEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-			  dealii::Vector<double> &/*local_vector*/,
-			  double /*scale*/, double /*scale_ico*/)
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/, double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ElementMassEquation_U");
     }
@@ -832,9 +832,9 @@ namespace DOpE
 
     virtual void
     ElementMassMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/,
-            double /*scale*/,
-            double /*scale_ico*/)
+                      dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                      double /*scale*/,
+                      double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ElementMassMatrix");
     }
@@ -937,28 +937,28 @@ namespace DOpE
     }
 
     /******************************************************/
- 
+
     virtual void
-    ElementMassMatrix_T(const EDC<DH, VECTOR, dealdim> & edc,
-			dealii::FullMatrix<double> &local_entry_matrix,
-			double scale,
-			double scale_ico)
+    ElementMassMatrix_T(const EDC<DH, VECTOR, dealdim> &edc,
+                        dealii::FullMatrix<double> &local_entry_matrix,
+                        double scale,
+                        double scale_ico)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
       tmp_mat = 0.;
-      
+
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
       ElementMassMatrix(edc, tmp_mat, scale, scale_ico);
       unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-      
+
       for (unsigned int i = 0; i < n_dofs_per_element; i++)
-      {
-	for (unsigned int j = 0; j < n_dofs_per_element; j++)
-	{
-	  local_entry_matrix(j, i) += tmp_mat(i, j);
-	}
-      }
+        {
+          for (unsigned int j = 0; j < n_dofs_per_element; j++)
+            {
+              local_entry_matrix(j, i) += tmp_mat(i, j);
+            }
+        }
     }
 
 
@@ -1759,45 +1759,45 @@ namespace DOpE
 
     virtual void
     Init_ElementMassEquation(const EDC<DH, VECTOR, dealdim> &edc,
-			     dealii::Vector<double> &local_vector,
-			     double scale,
-			     double /*scale_ico*/)
+                             dealii::Vector<double> &local_vector,
+                             double scale,
+                             double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-	edc.GetFEValuesState();
+        edc.GetFEValuesState();
       unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
       unsigned int n_q_points = edc.GetNQPoints();
       std::vector<dealii::Vector<double> > uvalues;
       uvalues.resize(n_q_points,
-		     dealii::Vector<double>(this->GetStateNComponents()));
+                     dealii::Vector<double>(this->GetStateNComponents()));
       edc.GetValuesState("last_newton_solution", uvalues);
-      
+
       dealii::Vector<double> f_values(
-	dealii::Vector<double>(this->GetStateNComponents()));
-      
+        dealii::Vector<double>(this->GetStateNComponents()));
+
       for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-      {
-	for (unsigned int i = 0; i < n_dofs_per_element; i++)
-	{
-	  for (unsigned int comp = 0; comp < this->GetStateNComponents();
-	       comp++)
-	  {
-	    local_vector(i) += scale
-	      * (state_fe_values.shape_value_component(i, q_point, comp)
-		 * uvalues[q_point](comp))
-	      * state_fe_values.JxW(q_point);
-	  }
-	}
-      } //endfor q_point
+        {
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
+            {
+              for (unsigned int comp = 0; comp < this->GetStateNComponents();
+                   comp++)
+                {
+                  local_vector(i) += scale
+                                     * (state_fe_values.shape_value_component(i, q_point, comp)
+                                        * uvalues[q_point](comp))
+                                     * state_fe_values.JxW(q_point);
+                }
+            }
+        } //endfor q_point
     }
 
-    
+
     virtual void
     Init_ElementRhs_Q(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
-      
+
     }
     virtual void
     Init_ElementRhs_QT(
@@ -1855,11 +1855,11 @@ namespace DOpE
         }
     }
 
-   virtual void
+    virtual void
     Init_ElementMassMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                       dealii::FullMatrix<double> &local_entry_matrix,
-                       double scale,
-                       double /*scale_ico*/)
+                           dealii::FullMatrix<double> &local_entry_matrix,
+                           double scale,
+                           double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> &state_fe_values =
         edc.GetFEValuesState();
