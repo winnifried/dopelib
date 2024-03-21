@@ -106,7 +106,7 @@ namespace DOpE
     /**
      * An enum describing the action of the vector.
      *
-     * stationary     the vector is not time dependent but can be accessed at 
+     * stationary     the vector is not time dependent but can be accessed at
      *                every time point
      * initial        the vector acts in the initial conditions
      * nonstationary  the vector is timedependent
@@ -182,7 +182,7 @@ namespace DOpE
         out<<"Code given is "<< t<<std::endl;
         throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
       }
-    }
+      }
   }
 
   template <>

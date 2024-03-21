@@ -34,10 +34,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
+class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -108,10 +108,10 @@ public:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, DH,
+class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -151,7 +151,7 @@ public:
   }
 
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
+  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -225,10 +225,10 @@ public:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalLift : public FunctionalInterface<EDC, FDC, DH,
+class LocalBoundaryFunctionalLift : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -269,7 +269,7 @@ public:
   }
 
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
+  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

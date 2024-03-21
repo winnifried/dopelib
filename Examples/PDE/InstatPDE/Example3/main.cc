@@ -152,7 +152,7 @@ int
 main(int argc, char **argv)
 {
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-    
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -201,7 +201,7 @@ main(int argc, char **argv)
   triangulation.refine_global(5);
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times);
-  
+
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPF);

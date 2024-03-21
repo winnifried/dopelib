@@ -104,13 +104,13 @@ namespace DOpE
   class InstatOptProblemContainer : public OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
     SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>
 #endif
-    {
-    public:
+  {
+  public:
     InstatOptProblemContainer(FUNCTIONAL &functional,PDE &pde,CONSTRAINTS &constraints,
                               SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,dealdim> &STH)
       : OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>(
-        functional,pde,constraints,STH), ts_state_problem_(NULL), ts_adjoint_problem_(NULL),
-      ts_tangent_problem_(NULL), ts_adjoint_hessian_problem_(NULL)
+          functional,pde,constraints,STH), ts_state_problem_(NULL), ts_adjoint_problem_(NULL),
+        ts_tangent_problem_(NULL), ts_adjoint_hessian_problem_(NULL)
     {
     }
 
@@ -171,8 +171,8 @@ namespace DOpE
      */
     PRIMALTSPROBLEM<StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
-                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
+    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
@@ -180,7 +180,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
           SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetStateProblem());
+                                                SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetStateProblem());
         }
       return *ts_state_problem_;
     }
@@ -202,7 +202,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
           SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjointProblem());
+                                                SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjointProblem());
         }
       return *ts_adjoint_problem_;
     }
@@ -222,7 +222,7 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
           SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetTangentProblem());
+                                                SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetTangentProblem());
         }
       return *ts_tangent_problem_;
     }
@@ -244,11 +244,11 @@ namespace DOpE
           OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
           SPARSITYPATTERN, VECTOR, dealdim, FE>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-                                                    SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjoint_HessianProblem());
+                                                SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjoint_HessianProblem());
         }
       return *ts_adjoint_hessian_problem_;
     }
-    
+
   private:
     PRIMALTSPROBLEM<StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,

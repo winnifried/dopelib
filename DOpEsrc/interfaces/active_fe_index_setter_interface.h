@@ -45,24 +45,24 @@ namespace DOpE
     ~ActiveFEIndexSetterInterface() {}
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-   /**
-     * Gets an iterator to a element and sets an active FE index
-     * on this element for the state variable. This function is
-     * used after the first grid generation.
-     *
-     */
+    /**
+      * Gets an iterator to a element and sets an active FE index
+      * on this element for the state variable. This function is
+      * used after the first grid generation.
+      *
+      */
     virtual void
     SetActiveFEIndexState(
       typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
     {
     }
-#else  
-   /**
-     * Gets an iterator to a element and sets an active FE index
-     * on this element for the state variable. This function is
-     * used after the first grid generation.
-     *
-     */
+#else
+    /**
+      * Gets an iterator to a element and sets an active FE index
+      * on this element for the state variable. This function is
+      * used after the first grid generation.
+      *
+      */
     virtual void
     SetActiveFEIndexState(
       typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &) const
@@ -77,27 +77,27 @@ namespace DOpE
       typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
     {
     }
-#endif 
+#endif
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-   /**
-     * Gets an iterator to a element and sets an active FE index
-     * on this element for the control variable. This function is
-     * used after the first grid generation.
-     *
-     */
+    /**
+      * Gets an iterator to a element and sets an active FE index
+      * on this element for the control variable. This function is
+      * used after the first grid generation.
+      *
+      */
     virtual void
     SetActiveFEIndexControl(
       typename dealii::DoFHandler<dopedim>::active_cell_iterator &) const
     {
     }
 #else
-   /**
-     * Gets an iterator to a element and sets an active FE index
-     * on this element for the control variable. This function is
-     * used after the first grid generation.
-     *
-     */
+    /**
+      * Gets an iterator to a element and sets an active FE index
+      * on this element for the control variable. This function is
+      * used after the first grid generation.
+      *
+      */
     virtual void
     SetActiveFEIndexControl(
       typename dealii::hp::DoFHandler<dopedim>::active_cell_iterator &) const

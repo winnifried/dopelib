@@ -169,14 +169,14 @@ namespace DOpE
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::declare_params(
                                  ParameterReader &param_reader)
-  {
+    {
       BASE_::declare_params(param_reader);
     }
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-    int dopedim, int dealdim>
+             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+             int dopedim, int dealdim>
     template<typename INTEGRATORDATACONT>
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::Network_StatReducedProblem(
@@ -216,8 +216,8 @@ namespace DOpE
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-    int dopedim, int dealdim>
+             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+             int dopedim, int dealdim>
     void
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::WriteToFile(
@@ -245,7 +245,7 @@ namespace DOpE
               assert(pos != std::string::npos);
               pos += name.length();
               tmp.insert(pos,tmp2.str());
-  
+
               auto &data_out =
                 this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
               data_out.attach_dof_handler(
@@ -310,8 +310,8 @@ namespace DOpE
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-    int dopedim, int dealdim>
+             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+             int dopedim, int dealdim>
     void
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::WriteToFile(

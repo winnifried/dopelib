@@ -32,19 +32,19 @@ namespace DOpE
    */
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<bool DH, int dim>
-    class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
+  class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
 #else
   template<template<int, int> class DH, int dim>
-    class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
-#endif    
+  class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
+#endif
   {
   public:
     PeriodicityConstraints() :
 #if DEAL_II_VERSION_GTE(9,3,0)
-    UserDefinedDoFConstraints<false, dim>()
+      UserDefinedDoFConstraints<false, dim>()
 #else
-    UserDefinedDoFConstraints<DH, dim>()
-#endif    
+      UserDefinedDoFConstraints<DH, dim>()
+#endif
     {
     }
     static void
@@ -93,11 +93,11 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<bool DH, int dim>
-    void
-    PeriodicityConstraints<DH, dim>::declare_params(
+  void
+  PeriodicityConstraints<DH, dim>::declare_params(
 #else
   template<template<int, int> class DH, int dim>
-    void
+  void
   PeriodicityConstraints<DH, dim>::declare_params(
 #endif
     ParameterReader &param_reader)
@@ -114,24 +114,24 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<bool DH, int dim>
   void
-    PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+  PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
 #else
   template<template<int, int> class DH, int dim>
   void
-    PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+  PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::DoFHandler<dim> &dof_handler,
+    const DOpEWrapper::DoFHandler<dim> &dof_handler,
 #else
-      const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+    const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
 #endif
-    dealii::AffineConstraints<double> &constraint_matrix) const 
+    dealii::AffineConstraints<double> &constraint_matrix) const
 #else
   template<template<int, int> class DH, int dim>
   void
   PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
-    dealii::ConstraintMatrix &constraint_matrix) const 
+    dealii::ConstraintMatrix &constraint_matrix) const
 #endif
   {
     /* Does not work on locally refined grids. We can only couple

@@ -179,7 +179,7 @@ main(int argc, char **argv)
    * In this example we solve the one dimensional heat equation.
    * It shows how DopE handels 1d equations.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -229,7 +229,7 @@ main(int argc, char **argv)
   triangulation.refine_global(4);
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times);
-  
+
   OP1 P1(LPDE, DOFH);
   OP2 P2(LPDE, DOFH);
   OP3 P3(LPDE, DOFH);

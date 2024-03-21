@@ -37,7 +37,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template <template <template <int, int> class DH, typename VECTOR, int dealdim>
           class EDC,
@@ -57,7 +57,7 @@ public:
   void
   ElementEquation(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &        local_vector,
+    dealii::Vector<double>         &local_vector,
     double                          scale,
     double /*scale_ico*/) override
   {
@@ -104,7 +104,7 @@ public:
   void
   ElementMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
-    FullMatrix<double> &            local_matrix,
+    FullMatrix<double>             &local_matrix,
     double                          scale,
     double /*scale_ico*/) override
   {
@@ -140,7 +140,7 @@ public:
   void
   ElementRightHandSide(
     const EDC<DH, VECTOR, dealdim> &edc,
-    dealii::Vector<double> &        local_vector,
+    dealii::Vector<double>         &local_vector,
     double                          scale) override
   {
     assert(this->problem_type_ == "state");

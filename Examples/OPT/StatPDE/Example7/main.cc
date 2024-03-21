@@ -112,7 +112,7 @@ main(int argc, char **argv)
    * Lagrangian approach for the subproblems following M. Stingl.
    */
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -184,7 +184,7 @@ main(int argc, char **argv)
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, constraints,
                                            DOpEtypes::stationary);
-  
+
   LocalConstraintAccessor CA;
   LocalConstraint<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC(CA);
 

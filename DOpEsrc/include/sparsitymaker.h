@@ -115,9 +115,9 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim> &dof_handler,
+    ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim> &dof_handler,
 #else
-      ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+    ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
 #endif
                             dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
                             const dealii::AffineConstraints<double> &hanging_node_constraints,
@@ -125,7 +125,7 @@ namespace DOpE
                             const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
 
     virtual void
-    ComputeSparsityPattern (			      
+    ComputeSparsityPattern (
 #if DEAL_II_VERSION_GTE(9,3,0)
       const DOpEWrapper::DoFHandler<dim> &dof_handler,
 #else
@@ -168,9 +168,9 @@ namespace DOpE
 #endif
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SparsityMaker<dim>::ComputeSparsityPattern(
+  SparsityMaker<dim>::ComputeSparsityPattern(
 #else
-    SparsityMaker<DH, dim>::ComputeSparsityPattern(
+  SparsityMaker<DH, dim>::ComputeSparsityPattern(
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
     const DOpEWrapper::DoFHandler<dim> &dof_handler,
@@ -214,9 +214,9 @@ namespace DOpE
 #endif
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SparsityMaker<dim>::ComputeSparsityPattern(
+  SparsityMaker<dim>::ComputeSparsityPattern(
 #else
-    SparsityMaker<DH, dim>::ComputeSparsityPattern(
+  SparsityMaker<DH, dim>::ComputeSparsityPattern(
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
     const DOpEWrapper::DoFHandler<dim> &dof_handler,
@@ -267,9 +267,9 @@ namespace DOpE
 #endif
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SparsityMaker<dim>::ComputeSparsityPattern (
+  SparsityMaker<dim>::ComputeSparsityPattern (
 #else
-    SparsityMaker<DH, dim>::ComputeSparsityPattern (
+  SparsityMaker<DH, dim>::ComputeSparsityPattern (
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
     const DOpEWrapper::DoFHandler<dim> &dof_handler,
@@ -332,9 +332,9 @@ namespace DOpE
 #endif
   void
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SparsityMaker<dim>::ComputeSparsityPattern (
+  SparsityMaker<dim>::ComputeSparsityPattern (
 #else
-    SparsityMaker<DH, dim>::ComputeSparsityPattern (
+  SparsityMaker<DH, dim>::ComputeSparsityPattern (
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
     const DOpEWrapper::DoFHandler<dim> &dof_handler,

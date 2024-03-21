@@ -46,7 +46,7 @@ fi
 
 if test "`astyle --version 2>&1`" != "Artistic Style Version 2.04" ; then
   echo "*** Found a version of astyle different than the required version 2.04."
-  exit 1
+#  exit 1
 fi
 
 

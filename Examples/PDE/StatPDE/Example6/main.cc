@@ -130,7 +130,7 @@ main(int argc, char **argv)
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -243,15 +243,15 @@ main(int argc, char **argv)
 
             //..and estimate the error with the help of the KellyErrorEstimator
 #if DEAL_II_VERSION_GTE(9,1,1)
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
-            QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+              QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+              estimated_error_per_element, component_mask);
 #else
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
-	    QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+              QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+              estimated_error_per_element, component_mask);
 #endif
             //We choose a refinement strategy (here fixednumber) and
             //refine the spatial esh accordingly.
@@ -324,15 +324,15 @@ main(int argc, char **argv)
             std::vector<bool> component_mask(3, true);
 
 #if DEAL_II_VERSION_GTE(9,1,1)
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
-            QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+              QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+              estimated_error_per_element, component_mask);
 #else
-          KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
-	    QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_element, component_mask);
+            KellyErrorEstimator<DIM>::estimate(
+              static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+              QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+              estimated_error_per_element, component_mask);
 #endif
             DOFH2.RefineSpace(
               RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));

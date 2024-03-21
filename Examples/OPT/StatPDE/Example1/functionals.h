@@ -36,7 +36,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
+class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -54,7 +54,7 @@ public:
   }
 
   double
-ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -101,7 +101,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -118,13 +118,13 @@ public:
   double
   PointValue(
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const DOpEWrapper::DoFHandler<dopedim> & /*control_dof_handler*/ ,
+    const DOpEWrapper::DoFHandler<dopedim> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
 #else
-    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/ ,
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
     const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
-    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/ ,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
     const std::map<std::string, const VECTOR *> &domain_values) override
   {
     Point<2> p(0.125, 0.75);

@@ -48,8 +48,8 @@ namespace DOpE
   /**
    * This class represents the SpaceTimevector.
    *
-   * @tparam <VECTOR>     Class summarizing all storage and access capabilities of the 
-   *                      control-vectors, state-vectors, ... 
+   * @tparam <VECTOR>     Class summarizing all storage and access capabilities of the
+   *                      control-vectors, state-vectors, ...
    *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    */
   template<typename VECTOR>
@@ -60,10 +60,10 @@ namespace DOpE
     //uses the information of ref about size and so on. Is this correct?
     SpaceTimeVector(const SpaceTimeVector<VECTOR> &ref);
     SpaceTimeVector(const SpaceTimeHandlerBase<VECTOR> *STH,
-		    DOpEtypes::VectorStorageType behavior,
-		    DOpEtypes::VectorType type,
-		    DOpEtypes::VectorAction action_,
-		    ParameterReader &param_reader);
+                    DOpEtypes::VectorStorageType behavior,
+                    DOpEtypes::VectorType type,
+                    DOpEtypes::VectorAction action_,
+                    ParameterReader &param_reader);
     ~SpaceTimeVector();
 
     /**
@@ -98,19 +98,19 @@ namespace DOpE
      * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber
      */
     const VECTOR &GetSpacialVector() const;
-     /**
-     * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber, transfered to the DoFs at a different time point!
-     * This locks the vector, so UnlockCopy needs to be called to free the memory!
-     */
+    /**
+    * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber, transfered to the DoFs at a different time point!
+    * This locks the vector, so UnlockCopy needs to be called to free the memory!
+    */
     const VECTOR &GetSpacialVectorWithTemporalTransfer(unsigned int from_time_dof, unsigned int to_time_dof) const;
-     /**
-     * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber, transfered to the DoFs at a different time point!
-     * This locks the vector, so UnlockCopy needs to be called to free the memory!
-     */
+    /**
+    * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber, transfered to the DoFs at a different time point!
+    * This locks the vector, so UnlockCopy needs to be called to free the memory!
+    */
     const VECTOR &GetPreviousSpacialVectorWithTemporalTransfer(unsigned int from_time_dof, unsigned int to_time_dof) const;
-   /**
-     * Analog to GetSpacialVector, but the next timepoint in natural time direction
-     */
+    /**
+      * Analog to GetSpacialVector, but the next timepoint in natural time direction
+      */
     VECTOR &GetNextSpacialVector();
     /**
      * Analog to GetSpacialVector, but the next timepoint in natural time direction
@@ -295,7 +295,7 @@ namespace DOpE
      */
     void ReInit();
 
-  private:    
+  private:
     struct SpatialVectorInfos
     {
       int size_;
@@ -422,7 +422,7 @@ namespace DOpE
       {
         if (accessor_ >= 0)
           {
-	    assert(stvector_.size() > (unsigned int) accessor_);
+            assert(stvector_.size() > (unsigned int) accessor_);
             bool existed = true;
             if (stvector_[accessor_] == NULL)
               {
@@ -455,10 +455,10 @@ namespace DOpE
 
                 GetSpaceTimeHandler ()->ReinitVector (*stvector_[accessor_],
                                                       vector_type_,
-						      time_point);
+                                                      time_point);
                 if (existed)
                   GetSpaceTimeHandler ()->SpatialMeshTransfer (vector_type_,
-                    local_stvector_, *(stvector_[accessor_]), time_point);
+                                                               local_stvector_, *(stvector_[accessor_]), time_point);
               }
           }
         else
@@ -467,7 +467,7 @@ namespace DOpE
             if (local_stvector_.size () != ndofs)
               GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                     vector_type_,
-						    time_point);
+                                                    time_point);
           }
       }
     else
@@ -501,14 +501,14 @@ namespace DOpE
                   GetSpaceTimeHandler ()->ReinitVector (
                     *local_vectors_[global_to_local_[accessor_]],
                     vector_type_,
-		    time_point);
+                    time_point);
               }
             else
               {
                 if (local_stvector_.size () != ndofs)
                   GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                         vector_type_,
-							time_point);
+                                                        time_point);
               }
           }
         else
@@ -552,12 +552,12 @@ namespace DOpE
 
                 GetSpaceTimeHandler ()->ReinitVector (*stvector_[accessor_],
                                                       vector_type_,
-						      time_point);
+                                                      time_point);
 
                 if (existed)
                   GetSpaceTimeHandler ()->SpatialMeshTransfer (vector_type_,
-                    local_stvector_, *(stvector_[accessor_]),
-		    time_point);
+                                                               local_stvector_, *(stvector_[accessor_]),
+                                                               time_point);
               }
           }
         else
@@ -566,7 +566,7 @@ namespace DOpE
             if (local_stvector_.size () != ndofs)
               GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                     vector_type_,
-						    time_point);
+                                                    time_point);
           }
       }
     else
@@ -583,14 +583,14 @@ namespace DOpE
                   GetSpaceTimeHandler ()->ReinitVector (
                     *local_vectors_[global_to_local_[accessor_]],
                     vector_type_,
-		    time_point);
+                    time_point);
               }
             else
               {
                 if (local_stvector_.size () != ndofs)
                   GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                         vector_type_,
-							time_point);
+                                                        time_point);
               }
           }
         else

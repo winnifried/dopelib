@@ -41,7 +41,7 @@ namespace DOpE
    *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    */
   template<typename VECTOR>
-    class ControlVector : public SpaceTimeVector<VECTOR>
+  class ControlVector : public SpaceTimeVector<VECTOR>
   {
   public:
     //TODO: Currently we only consider one fixed control
@@ -52,25 +52,31 @@ namespace DOpE
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
     ControlVector(const ControlVector<VECTOR> &ref)  : SpaceTimeVector<VECTOR>(ref)
-    {  
+    {
     }
     ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH,
-		  DOpEtypes::VectorStorageType behavior,
-		  ParameterReader &param_reader) : SpaceTimeVector<VECTOR>(STH,
-									   behavior,
-									   DOpEtypes::VectorType::control,
-									   STH->GetControlActionType(),
-									   param_reader)
+                  DOpEtypes::VectorStorageType behavior,
+                  ParameterReader &param_reader) : SpaceTimeVector<VECTOR>(STH,
+                        behavior,
+                        DOpEtypes::VectorType::control,
+                        STH->GetControlActionType(),
+                        param_reader)
     {
     }
     ~ControlVector()
-    {      
+    {
     }
 
-    void operator=(double a) { SpaceTimeVector<VECTOR>::operator=(a); }
+    void operator=(double a)
+    {
+      SpaceTimeVector<VECTOR>::operator=(a);
+    }
 
     //Explicit declarations of methods used from SpaceTimeVector
-    void operator=(const ControlVector<VECTOR> &dq) { SpaceTimeVector<VECTOR>::operator=(dq); }
+    void operator=(const ControlVector<VECTOR> &dq)
+    {
+      SpaceTimeVector<VECTOR>::operator=(dq);
+    }
   };
 
 }

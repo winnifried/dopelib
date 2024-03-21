@@ -28,7 +28,7 @@
 
 namespace DOpE
 {
- 
+
   /**************************************************************************/
   /**
    * This class implements the missing pieces of DWRDataContainer for
@@ -40,8 +40,8 @@ namespace DOpE
   {
   public:
     ObstacleResidualErrorContainer(STH &sth, DOpEtypes::VectorStorageType state_behavior,
-                             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
-                               DOpEtypes::EETerms::mixed) :
+                                   ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
+                                     DOpEtypes::EETerms::mixed) :
       ResidualErrorContainer<VECTOR>(ee_terms), sth_(sth), PI_h_u_(NULL), PI_h_z_(
         NULL)
     {
@@ -220,9 +220,9 @@ namespace DOpE
 #endif
     void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
+    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
 #else
-      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
 #endif
                         VECTOR &vals)
     {
@@ -231,7 +231,7 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
                                Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
 #else
-      ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+                               ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
 #endif
     }
 

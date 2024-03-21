@@ -134,7 +134,7 @@ declare_params(ParameterReader &param_reader)
   param_reader.declare_entry("prerefine", "5", Patterns::Integer(1),
                              "How often should we refine the coarse grid?");
   param_reader.declare_entry("num_intervals", "75", Patterns::Integer(1),
-                               "How many quasi-timesteps?");
+                             "How many quasi-timesteps?");
 }
 
 /*********************************************************************************/
@@ -149,9 +149,9 @@ main(int argc, char **argv)
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
-  
+
   if (argc == 2)
     {
       paramfile = argv[1];
@@ -194,9 +194,9 @@ main(int argc, char **argv)
   // Assigning finite elements
   // (1) = polynomial degree - please test (2) for u and phi
   // zweite Zahl: Anzahl der Komponenten
-  FE<DIM> state_fe(FE_Q<DIM>(2), 2, // vector-valued (here dim=2): displacements 
-		   FE_Q<DIM>(1), 1, // scalar-valued phase-field
-    		   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
+  FE<DIM> state_fe(FE_Q<DIM>(2), 2, // vector-valued (here dim=2): displacements
+                   FE_Q<DIM>(1), 1, // scalar-valued phase-field
+                   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
 
   QUADRATURE quadrature_formula(3);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -244,7 +244,7 @@ main(int argc, char **argv)
   // 4 components with u(x), u(y), phi(x), tau(x)
   std::vector<bool> comp_mask(4);
   comp_mask[2] = false; // phase-field component (always hom. Neumann data)
-   
+
   // Fixed boundaries
   DOpEWrapper::ZeroFunction<DIM> zf(4);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);

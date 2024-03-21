@@ -132,7 +132,7 @@ namespace DOpE
     void ComputeReducedFunctionals() override;
 
     /******************************************************/
-    
+
     /**
      * This function computes the solution for the dual variable
      * for error estimation.
@@ -143,10 +143,10 @@ namespace DOpE
      * @param weight_comp  A flag deciding how the weights should be calculated
      */
     void
-      ComputeDualForErrorEstimation(DOpEtypes::WeightComputation)
+    ComputeDualForErrorEstimation(DOpEtypes::WeightComputation)
     {
       throw DOpEException("ExcNotImplemented",
-			  "InstatPDEProblem::ComputeDualForErrorEstimation");
+                          "InstatPDEProblem::ComputeDualForErrorEstimation");
     }
 
 
@@ -170,8 +170,8 @@ namespace DOpE
      */
     template<class DWRC, class PDE>
     void
-      ComputeRefinementIndicators(DWRC &dwrc, PDE &pde);
- 
+    ComputeRefinementIndicators(DWRC &dwrc, PDE &pde);
+
     /******************************************************/
 
     /**
@@ -224,7 +224,7 @@ namespace DOpE
     {
       return z_for_ee_;
     }
-    
+
     NONLINEARSOLVER &GetNonlinearSolver(std::string type);
     INTEGRATOR &GetIntegrator()
     {
@@ -287,7 +287,7 @@ namespace DOpE
      * user Data to the Integrator.
      */
     void
-      AddUDD(unsigned int dof_number, const TimeIterator &interval)
+    AddUDD(unsigned int dof_number, const TimeIterator &interval)
     {
       for (auto it = this->GetUserDomainData().begin();
            it != this->GetUserDomainData().end(); it++)
@@ -297,17 +297,17 @@ namespace DOpE
       for (auto it = this->GetUserTimeDomainData().begin();
            it != this->GetUserTimeDomainData().end(); it++)
         {
-	  it->second->SetTimeDoFNumber(dof_number,interval);
+          it->second->SetTimeDoFNumber(dof_number,interval);
           this->GetIntegrator().AddDomainData(it->first, &(it->second->GetSpacialVector()));
         }
     }
-    
+
     /**
      * Helper function to prevent code duplicity. Deletes the user defined
      * user Data from the Integrator.
      */
     void
-      DeleteUDD()
+    DeleteUDD()
     {
       for (auto it = this->GetUserDomainData().begin();
            it != this->GetUserDomainData().end(); it++)
@@ -372,7 +372,7 @@ namespace DOpE
     bool project_initial_data_ = false;
 
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
-      INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
+             INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
   };
 
   /*************************************************************************/
@@ -393,13 +393,13 @@ namespace DOpE
     param_reader.SetSubsection("output parameters");
     param_reader.declare_entry("number of patches", "0",
                                Patterns::Integer(0));
-    
+
   }
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dealdim>
+           typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dealdim>
   template<typename INTEGRATORDATACONT>
   InstatPDEProblem<NONLINEARSOLVER,
                    INTEGRATOR, PROBLEM, VECTOR, dealdim>::InstatPDEProblem(
@@ -436,8 +436,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-  int dealdim>
+           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+           int dealdim>
   NONLINEARSOLVER &InstatPDEProblem<NONLINEARSOLVER,
                   INTEGRATOR, PROBLEM, VECTOR, dealdim>::GetNonlinearSolver(std::string type)
   {
@@ -456,8 +456,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-  int dealdim>
+           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+           int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ReInit()
   {
@@ -483,8 +483,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-  int dealdim>
+           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+           int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ComputeReducedState()
   {
@@ -509,8 +509,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-  int dealdim>
+           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+           int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ComputeReducedFunctionals()
   {
@@ -575,292 +575,292 @@ namespace DOpE
   }
 
   /******************************************************/
- 
+
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-    typename VECTOR, int dealdim>
-    template<class DWRC, class PDE>
-    void
-    InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
-													 DWRC &dwrc, PDE &pde)
-    {
-      //Attach the ResidualModifier to the PDE.
-      pde.ResidualModifier = boost::bind<void>(
-					       boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
-      pde.VectorResidualModifier = boost::bind<void>(
-						     boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
-      
-      VECTOR u_old;
-      
-      const std::vector<double> times =
-	this->GetProblem()->GetSpaceTimeHandler()->GetTimes();
-      const unsigned int
-	n_dofs_per_interval =
-	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+           typename VECTOR, int dealdim>
+  template<class DWRC, class PDE>
+  void
+  InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
+    DWRC &dwrc, PDE &pde)
+  {
+    //Attach the ResidualModifier to the PDE.
+    pde.ResidualModifier = boost::bind<void>(
+                             boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
+    pde.VectorResidualModifier = boost::bind<void>(
+                                   boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
 
-      //Not implemented for more than 2 dofs per interval.
-      assert(n_dofs_per_interval ==2);
-      //If we need the dual solution, compute it
-      if (dwrc.NeedDual())
-	this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
+    VECTOR u_old;
 
-      std::vector<unsigned int> local_to_global(n_dofs_per_interval);    
-      
-      this->GetOutputHandler()->SetIterationNumber(0, "Time");
+    const std::vector<double> times =
+      this->GetProblem()->GetSpaceTimeHandler()->GetTimes();
+    const unsigned int
+    n_dofs_per_interval =
+      this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
 
-      
-      //first we reinit the dwrdatacontainer
-      dwrc.ReInit();
+    //Not implemented for more than 2 dofs per interval.
+    assert(n_dofs_per_interval ==2);
+    //If we need the dual solution, compute it
+    if (dwrc.NeedDual())
+      this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
 
-      unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
-      std::vector<StateVector<VECTOR>* > aux_nodal_values;
-      if ( need_precomputed_nodal_values != 0 )
+    std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+
+    this->GetOutputHandler()->SetIterationNumber(0, "Time");
+
+
+    //first we reinit the dwrdatacontainer
+    dwrc.ReInit();
+
+    unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+    std::vector<StateVector<VECTOR>* > aux_nodal_values;
+    if ( need_precomputed_nodal_values != 0 )
       {
-	aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
-	for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
-	{
-	  aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
-	}
-      }	
-      for (TimeIterator it =
-	     this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
-	     != this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
-	{
-	  it.get_time_dof_indices(local_to_global);
-	  this->GetProblem()->SetTime(times[local_to_global[0]], local_to_global[0], it);
-	  if ( it == this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval())
-	  {
-	    //On First intervall, also calculate errors at initial time!
-	    this->GetProblem()->SetTime(times[local_to_global[0]], local_to_global[0], it);
-	    dwrc.SetTime(local_to_global[0]);
-	    this->GetOutputHandler()->SetIterationNumber(local_to_global[0],"Time");
-	    
-	    //some output
-	    this->GetOutputHandler()->Write("Computing Error Indicators:",
-					    4 + this->GetBasePriority());
-	    
-	    this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-	    
-	    //add the primal and (if needed) dual solution to the integrator
-	    this->GetIntegrator().AddDomainData("state",
-						&(GetU().GetSpacialVector()));
-	    if (dwrc.NeedDual())
-	      this->GetIntegrator().AddDomainData("adjoint_for_ee",
-						  &(GetZForEE().GetSpacialVector()));
-	    
-	    AddUDD(local_to_global[0], it);
-	  
-	    //Check if some nodal values need to be precomputed, e.g., active set indicators
-	    // for the obstacle problem
-	    
-	    if ( need_precomputed_nodal_values != 0 )
-	    {
-	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
-	      {
-		assert(aux_nodal_values[i] != NULL);
-		aux_nodal_values[i]->SetTimeDoFNumber(local_to_global[0], it);
-		{
-		  //some output
-		  std::stringstream tmp;
-		  tmp << "Precomputation "<<i;
-		  this->GetOutputHandler()->Write(tmp.str(),
-						  4 + this->GetBasePriority());
-		}
-		
-		
-		//Calculate
-		this->SetProblemType("aux_error",i);
-		auto &problem = this->GetProblem()->GetErrorPrecomputations();
-		
-		this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
-		
-		//Distribute for hanging nodes
-		problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
-		//output (in vtk files)
-		this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
-						"Aux_Error_Indicators_"+i,"state");
-		std::stringstream tmp;
-		tmp << "aux_error_"<<i;
-		this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
-		
-	      }
-	    }
-	  
-	    this->SetProblemType("error_evaluation");
-	  
-	    //prepare the weights...
-	    dwrc.PrepareWeights(GetU(), GetZForEE());
-	    
-	    //now we finally compute the refinement indicators
-	    this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
-							      dwrc);
-	    
-	    // release the lock on the refinement indicators (see dwrcontainer.h)
-	    dwrc.ReleaseLock();
-	    
-	    const double step_error = dwrc.GetStepError();
-	    
-	    // clear the data
-	    dwrc.ClearWeightData();
-	    this->GetIntegrator().DeleteDomainData("state");
-	    if (dwrc.NeedDual())
-	      this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
-	    DeleteUDD();
-	    this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-	  
-	    //Cleaning auxiliary nodal variables
-	    if ( need_precomputed_nodal_values != 0 )
-	    {
-	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
-	      {
-		std::stringstream tmp;
-		tmp << "aux_error_"<<i;
-		this->GetIntegrator().DeleteDomainData(tmp.str());
-	      }
-	    }
-	  
-	    std::stringstream out;
-	    this->GetOutputHandler()->InitOut(out);
-	    out << "Error estimate using " << dwrc.GetName();
-	    if (dwrc.NeedDual())
-	      out << " for the " << this->GetProblem()->GetFunctionalName();
-	    out << " at time "<< times[local_to_global[0]];
-	    out << ": " << step_error;
-	    this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-	    this->GetOutputHandler()->WriteElementwise(dwrc.GetStepErrorIndicators(),
-						       "Error_Indicators" + this->GetPostIndex(),
-						       this->GetProblem()->GetDoFType());
-	  }//End first intervall
-	  
-	  GetU().SetTimeDoFNumber(local_to_global[0], it);
-	  u_old = GetU().GetSpacialVector();
-	  //Transfer to current mesh if needed!
-	  this->GetProblem()->GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[0], local_to_global[1]);
-	  
-	  this->GetIntegrator().AddDomainData("last_time_state",&u_old);
-	  
-	  this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
-	  GetU().SetTimeDoFNumber(local_to_global[1], it);
-	  this->GetOutputHandler()->SetIterationNumber(local_to_global[1], "Time");
-          //dwrc.ReInit(); // ReInit should be outside of the time loop
-	  dwrc.SetTime(local_to_global[1]);
-	  
-	  //some output
-	  this->GetOutputHandler()->Write("Computing Error Indicators:",
-					  4 + this->GetBasePriority());
-	  
-	  this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-	  
-	  //add the primal and (if needed) dual solution to the integrator
-	  this->GetIntegrator().AddDomainData("state",
-					      &(GetU().GetSpacialVector()));
-	  if (dwrc.NeedDual())
-	    this->GetIntegrator().AddDomainData("adjoint_for_ee",
-	    &(GetZForEE().GetSpacialVector()));
-	  AddUDD(local_to_global[1], it);
-	  
-	  //Check if some nodal values need to be precomputed, e.g., active set indicators
-	  // for the obstacle problem
-
-	  if ( need_precomputed_nodal_values != 0 )
-	    {
-	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
-		{
-		  assert(aux_nodal_values[i] != NULL);
-		  aux_nodal_values[i]->SetTimeDoFNumber(local_to_global[1], it);
-		  {
-		    //some output
-		    std::stringstream tmp;
-		    tmp << "Precomputation "<<i;
-		    this->GetOutputHandler()->Write(tmp.str(),
-						    4 + this->GetBasePriority());
-		  }
-		  
-		  
-		  //Calculate
-		  this->SetProblemType("aux_error",i);
-		  auto &problem = this->GetProblem()->GetErrorPrecomputations();
-		  
-		  this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
-		  
-		  //Distribute for hanging nodes
-		  problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
-		  //output (in vtk files)
-		  this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
-						  "Aux_Error_Indicators_"+i,"state");
-		  std::stringstream tmp;
-		  tmp << "aux_error_"<<i;
-		  this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
-		  
-		}
-	    }
-	  
-	  this->SetProblemType("error_evaluation");
-	  
-	  //prepare the weights...
-	  dwrc.PrepareWeights(GetU(), GetZForEE());
-	  
-	  //now we finally compute the refinement indicators
-	  this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
-							    dwrc);
-	  
-	  // release the lock on the refinement indicators (see dwrcontainer.h)
-	  dwrc.ReleaseLock();
-	  
-	  const double step_error = dwrc.GetStepError();
-	  
-	  // clear the data
-	  dwrc.ClearWeightData();
-	  this->GetIntegrator().DeleteDomainData("state");
-	   if (dwrc.NeedDual())
-	     this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
-	  DeleteUDD();
-	  this->GetProblem()->DeleteAuxiliaryFromIntegrator(
-							    this->GetIntegrator());
-	  this->GetIntegrator().DeleteDomainData("last_time_state");
-	  
-	  
-	  //Cleaning auxiliary nodal variables
-	  if ( need_precomputed_nodal_values != 0 )
-	    {
-	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
-		{
-		  std::stringstream tmp;
-		  tmp << "aux_error_"<<i;
-		  this->GetIntegrator().DeleteDomainData(tmp.str());
-		}
-	    }
-	  
-	  std::stringstream out;
-	  this->GetOutputHandler()->InitOut(out);
-	  out << "Error estimate using " << dwrc.GetName();
-	  	if (dwrc.NeedDual())
-		  out << " for the " << this->GetProblem()->GetFunctionalName();
-		out << " at time "<< times[local_to_global[1]];
-		out << ": " << step_error;
-	  this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-	  this->GetOutputHandler()->WriteElementwise(dwrc.GetStepErrorIndicators( ),
-						     "Error_Indicators" + this->GetPostIndex(),
-						     this->GetProblem()->GetDoFType());
-	  
-	}//End of time loop
-      //Cleaning auxiliary nodal variables
-      if ( need_precomputed_nodal_values != 0 )
-      {
-	for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
-	{
-	  delete aux_nodal_values[i];
-	  aux_nodal_values[i] = NULL;
-	}
+        aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
+        for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+          {
+            aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+          }
       }
-      
-    }
+    for (TimeIterator it =
+           this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
+         != this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
+      {
+        it.get_time_dof_indices(local_to_global);
+        this->GetProblem()->SetTime(times[local_to_global[0]], local_to_global[0], it);
+        if ( it == this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval())
+          {
+            //On First intervall, also calculate errors at initial time!
+            this->GetProblem()->SetTime(times[local_to_global[0]], local_to_global[0], it);
+            dwrc.SetTime(local_to_global[0]);
+            this->GetOutputHandler()->SetIterationNumber(local_to_global[0],"Time");
+
+            //some output
+            this->GetOutputHandler()->Write("Computing Error Indicators:",
+                                            4 + this->GetBasePriority());
+
+            this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+            //add the primal and (if needed) dual solution to the integrator
+            this->GetIntegrator().AddDomainData("state",
+                                                &(GetU().GetSpacialVector()));
+            if (dwrc.NeedDual())
+              this->GetIntegrator().AddDomainData("adjoint_for_ee",
+                                                  &(GetZForEE().GetSpacialVector()));
+
+            AddUDD(local_to_global[0], it);
+
+            //Check if some nodal values need to be precomputed, e.g., active set indicators
+            // for the obstacle problem
+
+            if ( need_precomputed_nodal_values != 0 )
+              {
+                for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+                  {
+                    assert(aux_nodal_values[i] != NULL);
+                    aux_nodal_values[i]->SetTimeDoFNumber(local_to_global[0], it);
+                    {
+                      //some output
+                      std::stringstream tmp;
+                      tmp << "Precomputation "<<i;
+                      this->GetOutputHandler()->Write(tmp.str(),
+                                                      4 + this->GetBasePriority());
+                    }
+
+
+                    //Calculate
+                    this->SetProblemType("aux_error",i);
+                    auto &problem = this->GetProblem()->GetErrorPrecomputations();
+
+                    this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
+
+                    //Distribute for hanging nodes
+                    problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
+                    //output (in vtk files)
+                    this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
+                                                    "Aux_Error_Indicators_"+i,"state");
+                    std::stringstream tmp;
+                    tmp << "aux_error_"<<i;
+                    this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
+
+                  }
+              }
+
+            this->SetProblemType("error_evaluation");
+
+            //prepare the weights...
+            dwrc.PrepareWeights(GetU(), GetZForEE());
+
+            //now we finally compute the refinement indicators
+            this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
+                                                              dwrc);
+
+            // release the lock on the refinement indicators (see dwrcontainer.h)
+            dwrc.ReleaseLock();
+
+            const double step_error = dwrc.GetStepError();
+
+            // clear the data
+            dwrc.ClearWeightData();
+            this->GetIntegrator().DeleteDomainData("state");
+            if (dwrc.NeedDual())
+              this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+            DeleteUDD();
+            this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+            //Cleaning auxiliary nodal variables
+            if ( need_precomputed_nodal_values != 0 )
+              {
+                for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+                  {
+                    std::stringstream tmp;
+                    tmp << "aux_error_"<<i;
+                    this->GetIntegrator().DeleteDomainData(tmp.str());
+                  }
+              }
+
+            std::stringstream out;
+            this->GetOutputHandler()->InitOut(out);
+            out << "Error estimate using " << dwrc.GetName();
+            if (dwrc.NeedDual())
+              out << " for the " << this->GetProblem()->GetFunctionalName();
+            out << " at time "<< times[local_to_global[0]];
+            out << ": " << step_error;
+            this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+            this->GetOutputHandler()->WriteElementwise(dwrc.GetStepErrorIndicators(),
+                                                       "Error_Indicators" + this->GetPostIndex(),
+                                                       this->GetProblem()->GetDoFType());
+          }//End first intervall
+
+        GetU().SetTimeDoFNumber(local_to_global[0], it);
+        u_old = GetU().GetSpacialVector();
+        //Transfer to current mesh if needed!
+        this->GetProblem()->GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[0], local_to_global[1]);
+
+        this->GetIntegrator().AddDomainData("last_time_state",&u_old);
+
+        this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
+        GetU().SetTimeDoFNumber(local_to_global[1], it);
+        this->GetOutputHandler()->SetIterationNumber(local_to_global[1], "Time");
+        //dwrc.ReInit(); // ReInit should be outside of the time loop
+        dwrc.SetTime(local_to_global[1]);
+
+        //some output
+        this->GetOutputHandler()->Write("Computing Error Indicators:",
+                                        4 + this->GetBasePriority());
+
+        this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+        //add the primal and (if needed) dual solution to the integrator
+        this->GetIntegrator().AddDomainData("state",
+                                            &(GetU().GetSpacialVector()));
+        if (dwrc.NeedDual())
+          this->GetIntegrator().AddDomainData("adjoint_for_ee",
+                                              &(GetZForEE().GetSpacialVector()));
+        AddUDD(local_to_global[1], it);
+
+        //Check if some nodal values need to be precomputed, e.g., active set indicators
+        // for the obstacle problem
+
+        if ( need_precomputed_nodal_values != 0 )
+          {
+            for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+              {
+                assert(aux_nodal_values[i] != NULL);
+                aux_nodal_values[i]->SetTimeDoFNumber(local_to_global[1], it);
+                {
+                  //some output
+                  std::stringstream tmp;
+                  tmp << "Precomputation "<<i;
+                  this->GetOutputHandler()->Write(tmp.str(),
+                                                  4 + this->GetBasePriority());
+                }
+
+
+                //Calculate
+                this->SetProblemType("aux_error",i);
+                auto &problem = this->GetProblem()->GetErrorPrecomputations();
+
+                this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
+
+                //Distribute for hanging nodes
+                problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
+                //output (in vtk files)
+                this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
+                                                "Aux_Error_Indicators_"+i,"state");
+                std::stringstream tmp;
+                tmp << "aux_error_"<<i;
+                this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
+
+              }
+          }
+
+        this->SetProblemType("error_evaluation");
+
+        //prepare the weights...
+        dwrc.PrepareWeights(GetU(), GetZForEE());
+
+        //now we finally compute the refinement indicators
+        this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
+                                                          dwrc);
+
+        // release the lock on the refinement indicators (see dwrcontainer.h)
+        dwrc.ReleaseLock();
+
+        const double step_error = dwrc.GetStepError();
+
+        // clear the data
+        dwrc.ClearWeightData();
+        this->GetIntegrator().DeleteDomainData("state");
+        if (dwrc.NeedDual())
+          this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+        DeleteUDD();
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+          this->GetIntegrator());
+        this->GetIntegrator().DeleteDomainData("last_time_state");
+
+
+        //Cleaning auxiliary nodal variables
+        if ( need_precomputed_nodal_values != 0 )
+          {
+            for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+              {
+                std::stringstream tmp;
+                tmp << "aux_error_"<<i;
+                this->GetIntegrator().DeleteDomainData(tmp.str());
+              }
+          }
+
+        std::stringstream out;
+        this->GetOutputHandler()->InitOut(out);
+        out << "Error estimate using " << dwrc.GetName();
+        if (dwrc.NeedDual())
+          out << " for the " << this->GetProblem()->GetFunctionalName();
+        out << " at time "<< times[local_to_global[1]];
+        out << ": " << step_error;
+        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+        this->GetOutputHandler()->WriteElementwise(dwrc.GetStepErrorIndicators( ),
+                                                   "Error_Indicators" + this->GetPostIndex(),
+                                                   this->GetProblem()->GetDoFType());
+
+      }//End of time loop
+    //Cleaning auxiliary nodal variables
+    if ( need_precomputed_nodal_values != 0 )
+      {
+        for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+          {
+            delete aux_nodal_values[i];
+            aux_nodal_values[i] = NULL;
+          }
+      }
+
+  }
 
 
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-  int dealdim>
+           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+           int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ComputeTimeFunctionals(unsigned int step, unsigned int num_steps)
   {
@@ -985,11 +985,11 @@ namespace DOpE
 
   }
 
- /******************************************************/
+  /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dealdim>
+           typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dealdim>
   void
   InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFile(
     const std::vector<double> &v, std::string outfile)
@@ -1063,10 +1063,10 @@ namespace DOpE
 
     if (eval_funcs)
       {
-	TimeIterator it =
-        problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
+        TimeIterator it =
+          problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
         // Functional evaluation in t_0
-	AddUDD(local_to_global[0], it);
+        AddUDD(local_to_global[0], it);
         ComputeTimeFunctionals(0,
                                max_timestep);
         DeleteUDD();
@@ -1090,35 +1090,35 @@ namespace DOpE
                                                          "Time");
             double time = times[local_to_global[i]];
 
-	    //Only set Time for DoFHandler to have the correct unknowns,
-	    //DO NOT call the set Time method of the problem, to avoid
-	    //having the wrong function values!
-	    problem.GetSpaceTimeHandler()->SetInterval(it,local_to_global[i]);
-	    //Transfer old solution to current mesh
-	    bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
+            //Only set Time for DoFHandler to have the correct unknowns,
+            //DO NOT call the set Time method of the problem, to avoid
+            //having the wrong function values!
+            problem.GetSpaceTimeHandler()->SetInterval(it,local_to_global[i]);
+            //Transfer old solution to current mesh
+            bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
 
-	    if(transfer_needed)
-	    {
-	      this->GetOutputHandler()->Write(u_old,
-                                            "Transfered_" + outname + this->GetPostIndex(), problem.GetDoFType());
-	      this->GetNonlinearSolver("state").ReInit(problem);
-	      state_reinit_ = true; //We set reinit=true, so that in the next call,
-	      //reinit is called before handling the first time step.
-	      build_state_matrix_ = true;
-	    }
-	    
+            if (transfer_needed)
+              {
+                this->GetOutputHandler()->Write(u_old,
+                                                "Transfered_" + outname + this->GetPostIndex(), problem.GetDoFType());
+                this->GetNonlinearSolver("state").ReInit(problem);
+                state_reinit_ = true; //We set reinit=true, so that in the next call,
+                //reinit is called before handling the first time step.
+                build_state_matrix_ = true;
+              }
+
             std::stringstream out;
             this->GetOutputHandler()->InitOut(out);
             out << "\t Timestep";
-	    if (transfer_needed)
-	    {
-	      out <<" (MT): ";
-	    }
-	    else
-	    {
-	      out <<": ";   
-	    }
-	    out << local_to_global[i] << " ("
+            if (transfer_needed)
+              {
+                out <<" (MT): ";
+              }
+            else
+              {
+                out <<": ";
+              }
+            out << local_to_global[i] << " ("
                 << times[local_to_global[i - 1]] << " -> " << time
                 << ") using " << problem.GetName();
             problem.GetOutputHandler()->Write(out,
@@ -1127,48 +1127,48 @@ namespace DOpE
             sol.SetTimeDoFNumber(local_to_global[i], it);
             sol.GetSpacialVector() = 0;
 
-	    if (transfer_needed)
-	    {
-	      //Auxiliary vectors need to be interpolated!
-	      this->GetProblem()->AddAuxiliaryToIntegratorWithTemporalTransfer(
-		this->GetIntegrator(),local_to_global[i-1], local_to_global[i]);
-	    }
-	    else
-	    {
-	      this->GetProblem()->AddAuxiliaryToIntegrator(
-		this->GetIntegrator());
-	    }
+            if (transfer_needed)
+              {
+                //Auxiliary vectors need to be interpolated!
+                this->GetProblem()->AddAuxiliaryToIntegratorWithTemporalTransfer(
+                  this->GetIntegrator(),local_to_global[i-1], local_to_global[i]);
+              }
+            else
+              {
+                this->GetProblem()->AddAuxiliaryToIntegrator(
+                  this->GetIntegrator());
+              }
 
             this->GetNonlinearSolver("state").NonlinearLastTimeEvals(problem,
                                                                      u_old, sol.GetSpacialVector());
-	    this->GetOutputHandler()->Write(sol.GetSpacialVector(),
+            this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             "LastTimestep_" + outname + this->GetPostIndex(), problem.GetDoFType());
-	    if (transfer_needed)
-	    {
-	      this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
-		this->GetIntegrator());
-	    }
-	    else
-	    {
-	      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
-		this->GetIntegrator());
-	    }
-	      
+            if (transfer_needed)
+              {
+                this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
+                  this->GetIntegrator());
+              }
+            else
+              {
+                this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+                  this->GetIntegrator());
+              }
+
             problem.SetTime(time, local_to_global[i], it);
 
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
             if (transfer_needed)
-	    {
-	      this->GetProblem()->AddPreviousAuxiliaryToIntegratorWithTemporalTransfer(
-              this->GetIntegrator(),local_to_global[i-1], local_to_global[i]);
-	    }
-	    else
-	    {
-	      this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
-              this->GetIntegrator());
-	    }
-	    //Also rebuild matrix if a mesh transfer happend.
+              {
+                this->GetProblem()->AddPreviousAuxiliaryToIntegratorWithTemporalTransfer(
+                  this->GetIntegrator(),local_to_global[i-1], local_to_global[i]);
+              }
+            else
+              {
+                this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
+                  this->GetIntegrator());
+              }
+            //Also rebuild matrix if a mesh transfer happend.
             build_state_matrix_
               = this->GetNonlinearSolver("state").NonlinearSolve(problem,
                                                                  u_old, sol.GetSpacialVector(), true,
@@ -1177,15 +1177,15 @@ namespace DOpE
             this->GetProblem()->DeleteAuxiliaryFromIntegrator(
               this->GetIntegrator());
             if (transfer_needed)
-	    {
-	      this->GetProblem()->DeletePreviousAuxiliaryFromIntegratorWithTemporalTransfer(
-              this->GetIntegrator());
-	    }
-	    else
-	    {
-	      this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
-              this->GetIntegrator());
-	    }
+              {
+                this->GetProblem()->DeletePreviousAuxiliaryFromIntegratorWithTemporalTransfer(
+                  this->GetIntegrator());
+              }
+            else
+              {
+                this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
+                  this->GetIntegrator());
+              }
             u_old = sol.GetSpacialVector();
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());
@@ -1193,9 +1193,9 @@ namespace DOpE
               {
                 //Functional evaluation in t_n  //if condition to get the type
                 AddUDD(local_to_global[i], it);
-		ComputeTimeFunctionals(local_to_global[i], max_timestep);
-		DeleteUDD();
-		this->SetProblemType("state");
+                ComputeTimeFunctionals(local_to_global[i], max_timestep);
+                DeleteUDD();
+                this->SetProblemType("state");
               }
           }
       }
@@ -1204,8 +1204,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dealdim>
+           typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dealdim>
   template<typename PDE>
   void InstatPDEProblem<NONLINEARSOLVER,
        INTEGRATOR, PROBLEM, VECTOR, dealdim>::
@@ -1273,35 +1273,35 @@ namespace DOpE
                                                          "Time");
             double time = times[local_to_global[j]];
 
-	    //Only set Time for DoFHandler to have the correct unknowns,
-	    //DO NOT call the set Time method of the problem, to avoid
-	    //having the wrong function values!
-	    problem.GetSpaceTimeHandler()->SetInterval(it,local_to_global[j]);
+            //Only set Time for DoFHandler to have the correct unknowns,
+            //DO NOT call the set Time method of the problem, to avoid
+            //having the wrong function values!
+            problem.GetSpaceTimeHandler()->SetInterval(it,local_to_global[j]);
             //Transfer old solution to current mesh
-	    bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
+            bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
 
-	    if(transfer_needed)
-	    {
-	      this->GetOutputHandler()->Write(u_old,
-                                            "Transfered_" + outname + this->GetPostIndex(), problem.GetDoFType());
-	      this->GetNonlinearSolver("adjoint").ReInit(problem);
-	      adjoint_reinit_ = true; //We set reinit=true, so that in the next call,
-	      //reinit is called before handling the first time step.
-	      build_adjoint_matrix_ = true;
-	    }
-	    
+            if (transfer_needed)
+              {
+                this->GetOutputHandler()->Write(u_old,
+                                                "Transfered_" + outname + this->GetPostIndex(), problem.GetDoFType());
+                this->GetNonlinearSolver("adjoint").ReInit(problem);
+                adjoint_reinit_ = true; //We set reinit=true, so that in the next call,
+                //reinit is called before handling the first time step.
+                build_adjoint_matrix_ = true;
+              }
+
             std::stringstream out;
             this->GetOutputHandler()->InitOut(out);
             out << "\t Timestep";
-	    if (transfer_needed)
-	    {
-	      out <<" (MT): ";
-	    }
-	    else
-	    {
-	      out <<": ";   
-	    }
-	    out << local_to_global[j+1] << " ("
+            if (transfer_needed)
+              {
+                out <<" (MT): ";
+              }
+            else
+              {
+                out <<": ";
+              }
+            out << local_to_global[j+1] << " ("
                 << times[local_to_global[j + 1]] << " -> " << time
                 << ") using " << problem.GetName();
             problem.GetOutputHandler()->Write(out,
@@ -1312,31 +1312,31 @@ namespace DOpE
 
 
             if (transfer_needed)
-	    {
-	      //Auxiliary vectors need to be interpolated!
-	      this->GetProblem()->AddAuxiliaryToIntegratorWithTemporalTransfer(
-		this->GetIntegrator(),local_to_global[j+1], local_to_global[j]);
-	    }
-	    else
-	    {
-	      this->GetProblem()->AddAuxiliaryToIntegrator(
-		this->GetIntegrator());
-	    }
-    
-	    this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
+              {
+                //Auxiliary vectors need to be interpolated!
+                this->GetProblem()->AddAuxiliaryToIntegratorWithTemporalTransfer(
+                  this->GetIntegrator(),local_to_global[j+1], local_to_global[j]);
+              }
+            else
+              {
+                this->GetProblem()->AddAuxiliaryToIntegrator(
+                  this->GetIntegrator());
+              }
+
+            this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
                                                                        u_old, sol.GetSpacialVector());
 
             if (transfer_needed)
-	    {
-	      this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
-		this->GetIntegrator());
-	    }
-	    else
-	    {
-	      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
-		this->GetIntegrator());
-	    }
-	      
+              {
+                this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
+                  this->GetIntegrator());
+              }
+            else
+              {
+                this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+                  this->GetIntegrator());
+              }
+
             problem.SetTime(time,local_to_global[j], it);
 
             this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -1371,8 +1371,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dealdim>
+           typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER,
        INTEGRATOR, PROBLEM, VECTOR, dealdim>::
        AllocateAuxiliaryTimeParams(std::string name,
@@ -1399,8 +1399,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-  typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dealdim>
+           typename INTEGRATOR, typename PROBLEM,
+           typename VECTOR, int dealdim>
   std::map<std::string,std::vector<dealii::Vector<double> >>::iterator
                                                           InstatPDEProblem<NONLINEARSOLVER,
                                                                            INTEGRATOR, PROBLEM, VECTOR, dealdim>::
@@ -1413,7 +1413,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-  typename VECTOR, int dealdim>
+           typename VECTOR, int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER,
        INTEGRATOR, PROBLEM, VECTOR, dealdim>::
        CalculatePreFunctional(std::string name,
@@ -1431,12 +1431,12 @@ namespace DOpE
       }
     if (name != "aux_functional")
       {
-        throw DOpEException("Only valid with name `aux_functional` but not: "+name ,
+        throw DOpEException("Only valid with name `aux_functional` but not: "+name,
                             "InstatPDEProblem::CalculatePreFunctional");
       }
     if (postfix == "" || postfix == " ")
       {
-        throw DOpEException("Postfix needs to be a non-empty string" ,
+        throw DOpEException("Postfix needs to be a non-empty string",
                             "InstatPDEProblem::CalculatePreFunctional");
       }
     //Create problem name

@@ -168,7 +168,7 @@ namespace DOpE
                                           const dealii::Vector<double> &u,
                                           const std::vector<bool> &present_in_outflow)
     {
-       throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem::Init_PipeCouplingResidual");
+      throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem::Init_PipeCouplingResidual");
     }
 
     inline void Init_CouplingMatrix(dealii::SparseMatrix<double> &matrix,
@@ -635,9 +635,9 @@ namespace DOpE
   template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementEquation(const EDC &edc,
-                                     dealii::Vector<double> &local_vector, double scale,
-                                     double scale_ico)
+                             dim>::ElementEquation(const EDC &edc,
+                                                   dealii::Vector<double> &local_vector, double scale,
+                                                   double scale_ico)
   {
     throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
@@ -649,10 +649,10 @@ namespace DOpE
   template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementTimeEquation(const EDC &edc,
-                                         dealii::Vector<double> &local_vector, double scale)
+                             dim>::ElementTimeEquation(const EDC &edc,
+                                                       dealii::Vector<double> &local_vector, double scale)
   {
-       throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
 
   /******************************************************/
@@ -662,10 +662,10 @@ namespace DOpE
   template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementTimeEquationExplicit(const EDC &edc,
-                                                 dealii::Vector<double> &local_vector, double scale)
+                             dim>::ElementTimeEquationExplicit(const EDC &edc,
+                                 dealii::Vector<double> &local_vector, double scale)
   {
-       throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
 
   /******************************************************/
@@ -675,10 +675,10 @@ namespace DOpE
   template<typename FDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::FaceEquation(const FDC &fdc,
-                                  dealii::Vector<double> &local_vector, double scale, double scale_ico)
+                             dim>::FaceEquation(const FDC &fdc,
+                                                dealii::Vector<double> &local_vector, double scale, double scale_ico)
   {
-      throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
 
   /******************************************************/
@@ -688,10 +688,10 @@ namespace DOpE
   template<typename FDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::InterfaceEquation(const FDC &fdc,
-                                       dealii::Vector<double> &local_vector, double scale, double scale_ico)
+                             dim>::InterfaceEquation(const FDC &fdc,
+                                                     dealii::Vector<double> &local_vector, double scale, double scale_ico)
   {
-      throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
   /******************************************************/
 
@@ -700,10 +700,10 @@ namespace DOpE
   template<typename FDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::BoundaryEquation(const FDC &fdc,
-                                      dealii::Vector<double> &local_vector, double scale, double scale_ico)
+                             dim>::BoundaryEquation(const FDC &fdc,
+                                                    dealii::Vector<double> &local_vector, double scale, double scale_ico)
   {
-      throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
 
   /******************************************************/
@@ -713,8 +713,8 @@ namespace DOpE
   template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementRhs(const EDC &edc,
-                                dealii::Vector<double> &local_vector, double scale)
+                             dim>::ElementRhs(const EDC &edc,
+                                              dealii::Vector<double> &local_vector, double scale)
   {
     pde_.ElementAuxRhs(edc, local_vector, scale*interval_length_);
   }
@@ -739,8 +739,8 @@ namespace DOpE
   template<typename FDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::FaceRhs(const FDC &fdc,
-                             dealii::Vector<double> &local_vector, double scale)
+                             dim>::FaceRhs(const FDC &fdc,
+                                           dealii::Vector<double> &local_vector, double scale)
   {
     pde_.FaceAuxRhs(fdc, local_vector, scale*interval_length_);
   }
@@ -752,8 +752,8 @@ namespace DOpE
   template<typename FDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::BoundaryRhs(const FDC &fdc,
-                                 dealii::Vector<double> &local_vector, double scale)
+                             dim>::BoundaryRhs(const FDC &fdc,
+                                               dealii::Vector<double> &local_vector, double scale)
   {
     pde_.BoundaryAuxRhs(fdc, local_vector, scale*interval_length_);
   }
@@ -765,22 +765,9 @@ namespace DOpE
   template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementMatrix(const EDC &edc,
-                                   dealii::FullMatrix<double> &local_entry_matrix, double scale,
-                                   double scale_ico)
-  {
-   throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
-  }
-
-  /******************************************************/
-
-  template<typename OPTPROBLEM, typename PDE, typename DD,
-           typename SPARSITYPATTERN, typename VECTOR, int dim>
-  template<typename EDC>
-  void
-  AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementTimeMatrix(const EDC &edc,
-                                       FullMatrix<double> &local_entry_matrix)
+                             dim>::ElementMatrix(const EDC &edc,
+                                                 dealii::FullMatrix<double> &local_entry_matrix, double scale,
+                                                 double scale_ico)
   {
     throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
@@ -792,36 +779,21 @@ namespace DOpE
   template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::ElementTimeMatrixExplicit(const EDC &edc,
-                                               dealii::FullMatrix<double> &local_entry_matrix)
+                             dim>::ElementTimeMatrix(const EDC &edc,
+                                                     FullMatrix<double> &local_entry_matrix)
   {
-   throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
 
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
-  template<typename FDC>
+  template<typename EDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::FaceMatrix(const FDC &fdc,
-                                FullMatrix<double> &local_entry_matrix, double scale,
-                                double scale_ico)
-  {
-   throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
-  }
-
-  /******************************************************/
-
-  template<typename OPTPROBLEM, typename PDE, typename DD,
-           typename SPARSITYPATTERN, typename VECTOR, int dim>
-  template<typename FDC>
-  void
-  AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::InterfaceMatrix(const FDC &fdc,
-                                     FullMatrix<double> &local_entry_matrix, double scale,
-                                     double scale_ico)
+                             dim>::ElementTimeMatrixExplicit(const EDC &edc,
+                                                             dealii::FullMatrix<double> &local_entry_matrix)
   {
     throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }
@@ -833,9 +805,37 @@ namespace DOpE
   template<typename FDC>
   void
   AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-               dim>::BoundaryMatrix(const FDC &fdc,
-                                    FullMatrix<double> &local_matrix, double scale,
-                                    double scale_ico)
+                             dim>::FaceMatrix(const FDC &fdc,
+                                              FullMatrix<double> &local_entry_matrix, double scale,
+                                              double scale_ico)
+  {
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+  }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  template<typename FDC>
+  void
+  AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+                             dim>::InterfaceMatrix(const FDC &fdc,
+                                                   FullMatrix<double> &local_entry_matrix, double scale,
+                                                   double scale_ico)
+  {
+    throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
+  }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  template<typename FDC>
+  void
+  AuxiliaryNodalErrorProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+                             dim>::BoundaryMatrix(const FDC &fdc,
+                                                  FullMatrix<double> &local_matrix, double scale,
+                                                  double scale_ico)
   {
     throw DOpEException("This should never be called!","AuxiliaryNodalErrorProblem");
   }

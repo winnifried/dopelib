@@ -88,7 +88,7 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-// Ggf. in cmake (CMAKELists.txt) die Dimension ebenfalls aendern 
+// Ggf. in cmake (CMAKELists.txt) die Dimension ebenfalls aendern
 // und neues Makefile erzeugen
 const static int DIM = 2;
 
@@ -150,7 +150,7 @@ main(int argc, char **argv)
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -191,9 +191,9 @@ main(int argc, char **argv)
   // Assigning finite elements
   // (1) = polynomial degree - please test (2) for u and phi
   // zweite Zahl: Anzahl der Komponenten
-  FE<DIM> state_fe(FE_Q<DIM>(1), 2, // vector-valued (here dim=2): displacements 
-		   FE_Q<DIM>(1), 1, // scalar-valued phase-field
-    		   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
+  FE<DIM> state_fe(FE_Q<DIM>(1), 2, // vector-valued (here dim=2): displacements
+                   FE_Q<DIM>(1), 1, // scalar-valued phase-field
+                   FE_Q<DIM>(1), 1);  // scalar-valued multiplier for irreversibility
 
   QUADRATURE quadrature_formula(3);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -244,10 +244,10 @@ main(int argc, char **argv)
   /*********************************************************************************/
   // Prescribing boundary values
   // We have 4 components (2D displacements and scalar-valued phase-field and a Lagrange multiplier for the inequality)
-  //                       i.e. u_x, u_y, phi, tau: 
+  //                       i.e. u_x, u_y, phi, tau:
   std::vector<bool> comp_mask(4);
   comp_mask[2] = false; // phase-field component (always hom. Neumann data)
-   
+
   // Fixed boundaries
   DOpEWrapper::ZeroFunction<DIM> zf(4);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
@@ -300,9 +300,9 @@ main(int argc, char **argv)
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&out);
   solver.RegisterExceptionHandler(&ex);
-  
+
   //**************************************************************************************************
- 
+
   try
     {
       //Before solving we have to reinitialize the stateproblem and outputhandler.

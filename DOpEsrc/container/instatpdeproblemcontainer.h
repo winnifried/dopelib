@@ -90,13 +90,13 @@ namespace DOpE
   class InstatPDEProblemContainer : public PDEProblemContainer<PDE,DD,
     SPARSITYPATTERN, VECTOR,dealdim,FE, DH>
 #endif
-    {
+  {
   public:
     InstatPDEProblemContainer(PDE &pde,
                               StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,dealdim> &STH)
-    : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>(
-      pde,STH), ts_state_problem_(NULL)
-  {
+      : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>(
+          pde,STH), ts_state_problem_(NULL)
+    {
     }
 
     ~InstatPDEProblemContainer()
@@ -129,8 +129,8 @@ namespace DOpE
      */
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
-                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
+    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
+    SPARSITYPATTERN, VECTOR, dealdim, FE> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
@@ -138,11 +138,11 @@ namespace DOpE
           PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
           SPARSITYPATTERN, VECTOR, dealdim, FE>(PDEProblemContainer<PDE,DD,
-                                                    SPARSITYPATTERN,VECTOR,dealdim,FE, DH>::GetStateProblem());
+                                                SPARSITYPATTERN,VECTOR,dealdim,FE, DH>::GetStateProblem());
         }
       return *ts_state_problem_;
     }
-    
+
   private:
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,

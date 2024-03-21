@@ -37,7 +37,7 @@ namespace DOpE
     template<bool DH, typename VECTOR, int dealdim> class EDC,
     template<bool DH, typename VECTOR, int dealdim> class FDC,
     bool DH, typename VECTOR, int dopedim, int dealdim>
-    class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
+  class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
     dopedim, dealdim>
 #else
   template<
@@ -127,7 +127,7 @@ namespace DOpE
     void
     ElementValue_Q(
       const EDC<DH, VECTOR, dealdim> &edc,
-                   dealii::Vector<double> &local_vector, double scale) override
+      dealii::Vector<double> &local_vector, double scale) override
     {
       if (this->GetProblemType() == "global_constraint_gradient"
           && this->GetProblemTypeNum() == 0)

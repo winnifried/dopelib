@@ -431,12 +431,12 @@ namespace DOpE
     ParameterReader &param_reader, INTEGRATORDATACONT &idc,
     int base_priority)
     : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), u_(
-      OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
+        OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
         OP->GetSpaceTimeHandler(), state_behavior, param_reader), integrator_(
-          idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-            integrator_, param_reader)
+        idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+        integrator_, param_reader)
   {
-     //PDEProblems should be ReInited
+    //PDEProblems should be ReInited
     {
       state_reinit_ = true;
       adjoint_reinit_ = true;
@@ -451,10 +451,10 @@ namespace DOpE
     ParameterReader &param_reader, INTEGRATORDATACONT &idc,
     INTEGRATORDATACONT &idc2, int base_priority)
     : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), u_(
-      OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
+        OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
         OP->GetSpaceTimeHandler(), state_behavior, param_reader), integrator_(
-          idc, idc2), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-            integrator_, param_reader)
+        idc, idc2), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+        integrator_, param_reader)
   {
     //PDEProblems should be ReInited
     {
@@ -828,7 +828,7 @@ namespace DOpE
                              boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
     pde.VectorResidualModifier = boost::bind<void>(
                                    boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc),boost::placeholders::_1);
-    //first we reinit the dwrdatacontainer 
+    //first we reinit the dwrdatacontainer
     dwrc.ReInit();
     //If we need the dual solution, compute it
     if (dwrc.NeedDual())
@@ -853,33 +853,33 @@ namespace DOpE
     std::vector<StateVector<VECTOR>* > aux_nodal_values;
     unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
     if ( need_precomputed_nodal_values != 0 )
-    {
-      aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
-      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
       {
-	aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
-	{
-	  //some output
-	  std::stringstream tmp;
-	  tmp << "Precomputation "<<i;
-	  this->GetOutputHandler()->Write(tmp.str(),
-					  4 + this->GetBasePriority());
-	}
-	//Calculate
-	this->SetProblemType("aux_error",i);
-	auto &problem = this->GetProblem()->GetErrorPrecomputations();
-	this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
-	//Distribute for hanging nodes
-	problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
-	//output
-	this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
-					"Aux_Error_Indicators_"+i,"state");
-	std::stringstream tmp;
-	tmp << "aux_error_"<<i;
-	this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
+        aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
+        for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+          {
+            aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+            {
+              //some output
+              std::stringstream tmp;
+              tmp << "Precomputation "<<i;
+              this->GetOutputHandler()->Write(tmp.str(),
+                                              4 + this->GetBasePriority());
+            }
+            //Calculate
+            this->SetProblemType("aux_error",i);
+            auto &problem = this->GetProblem()->GetErrorPrecomputations();
+            this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
+            //Distribute for hanging nodes
+            problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
+            //output
+            this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
+                                            "Aux_Error_Indicators_"+i,"state");
+            std::stringstream tmp;
+            tmp << "aux_error_"<<i;
+            this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
+          }
       }
-    }
- 
+
     this->SetProblemType("error_evaluation");
 
     //prepare the weights...
@@ -903,16 +903,16 @@ namespace DOpE
 
     //Cleaning auxiliary nodal variables
     if ( need_precomputed_nodal_values != 0 )
-    {
-      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
       {
-	std::stringstream tmp;
-	tmp << "aux_error_"<<i;
-	this->GetIntegrator().DeleteDomainData(tmp.str());
-	delete aux_nodal_values[i];
-	aux_nodal_values[i] = NULL;
+        for (unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+          {
+            std::stringstream tmp;
+            tmp << "aux_error_"<<i;
+            this->GetIntegrator().DeleteDomainData(tmp.str());
+            delete aux_nodal_values[i];
+            aux_nodal_values[i] = NULL;
+          }
       }
-    }
     std::stringstream out;
     this->GetOutputHandler()->InitOut(out);
     out << "Error estimate using " << dwrc.GetName();
@@ -987,12 +987,12 @@ namespace DOpE
     //Checking input
     if (name != "aux_functional")
       {
-        throw DOpEException("Only valid with name `aux_functional` but not: "+name ,
+        throw DOpEException("Only valid with name `aux_functional` but not: "+name,
                             "StatPDEProblem::CalculatePreFunctional");
       }
     if (postfix == "" || postfix == " ")
       {
-        throw DOpEException("Postfix needs to be a non-empty string" ,
+        throw DOpEException("Postfix needs to be a non-empty string",
                             "StatPDEProblem::CalculatePreFunctional");
       }
     //Create problem name

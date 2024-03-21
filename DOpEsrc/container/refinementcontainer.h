@@ -123,7 +123,7 @@ namespace DOpE
     const dealii::Vector<float> &indicators_;
   };
 
-   /***************************************************************/
+  /***************************************************************/
 
   /**
    * Base class for RefinementContainer with local refinement. This
@@ -145,7 +145,7 @@ namespace DOpE
      * Protected constructor for use in the derived classes
      */
     SpaceTimeLocalRefinement(const std::vector<dealii::Vector<float> > &,
-                    DOpEtypes::RefinementType ref_type);
+                             DOpEtypes::RefinementType ref_type);
   private:
     /**
      * Constructor made private. Should not get used!
@@ -264,7 +264,7 @@ namespace DOpE
      * @param convergence_order Convergence order of the functional of interest.
      */
     SpaceTimeRefineOptimized(const std::vector< dealii::Vector<float> > &indicators,
-                    double convergence_order = 2.);
+                             double convergence_order = 2.);
 
     virtual
     ~ SpaceTimeRefineOptimized()
@@ -279,25 +279,25 @@ namespace DOpE
   };
 
   template<int dim,int spacedim=dim>
-    class RefineByGeometry : public RefinementContainer
-    {
-    public:
+  class RefineByGeometry : public RefinementContainer
+  {
+  public:
 
     RefineByGeometry() : RefinementContainer(DOpEtypes::RefinementType::geometry)
     {
       coarsening_ = false; //No coarsening
     }
-    
+
     virtual void MarkElements(dealii::Triangulation<dim,spacedim> & /*tria*/) const
     {
       throw DOpEException ("Not implemented",
-			   "RefineByGeometry::MarkElements()");
-      
+                           "RefineByGeometry::MarkElements()");
+
     }
     virtual ~RefineByGeometry()
     {}
 
-    };
+  };
 }
 
 #endif /* RefinementContainer_H_ */

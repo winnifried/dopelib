@@ -261,7 +261,7 @@ main(int argc, char **argv)
 #else
           KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
             estimated_error_per_element, component_mask);
 #endif
 
@@ -278,7 +278,7 @@ int
 main(int /*argc*/, char **/*argv*/)
 {
   std::cout<<"This example requires DOpE with Trilinos"<<std::endl;
-    abort();
+  abort();
 }
 #endif //Dopelib with trilinos
 

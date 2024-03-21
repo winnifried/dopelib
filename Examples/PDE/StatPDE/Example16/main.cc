@@ -104,7 +104,7 @@ declare_params(ParameterReader &param_reader)
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
                              "How many iterations?");
   param_reader.declare_entry("post_ref", "1", Patterns::Integer(0),
-      "How many global refinements for reference?");
+                             "How many global refinements for reference?");
   param_reader.declare_entry("quad order", "2", Patterns::Integer(1),
                              "Order of the quad formula?");
   param_reader.declare_entry("facequad order", "2", Patterns::Integer(1),
@@ -119,11 +119,11 @@ int
 main(int argc, char **argv)
 {
   /**
-   * We solve an obstacle method by indtroducing a complementarity function 
+   * We solve an obstacle method by indtroducing a complementarity function
    * for the Lagrange multiplier
    */
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -206,11 +206,11 @@ main(int argc, char **argv)
 
   //Generating Storage for the reference values
   vector<StateVector<VECTOR>*> store(max_iter,NULL);
-  for(int i = 0; i < max_iter; i++)
-  {
-    store[i] = new StateVector<VECTOR>(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
-    (*store[i]) = 0.;
-  }
+  for (int i = 0; i < max_iter; i++)
+    {
+      store[i] = new StateVector<VECTOR>(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
+      (*store[i]) = 0.;
+    }
   vector<double> h1errs(max_iter);
   vector<unsigned int> dofs(max_iter);
 
@@ -220,13 +220,13 @@ main(int argc, char **argv)
         {
           stringstream outp;
 
-	  //Initialize Obstacle
-	  StateVector<VECTOR> obstacle(&DOFH,DOpEtypes::VectorStorageType::fullmem,pr);
-	  local::Obstacle exact_obstacle;
-	  VectorTools::interpolate(DOFH.GetStateDoFHandler().GetDEALDoFHandler(),exact_obstacle,obstacle.GetSpacialVector());
-	  P.AddAuxiliaryState(&obstacle,"obstacle");
-	  //Done with Obstacle
-	  
+          //Initialize Obstacle
+          StateVector<VECTOR> obstacle(&DOFH,DOpEtypes::VectorStorageType::fullmem,pr);
+          local::Obstacle exact_obstacle;
+          VectorTools::interpolate(DOFH.GetStateDoFHandler().GetDEALDoFHandler(),exact_obstacle,obstacle.GetSpacialVector());
+          P.AddAuxiliaryState(&obstacle,"obstacle");
+          //Done with Obstacle
+
           outp << "**************************************************\n";
           outp << "*             Starting Forward Solve             *\n";
           outp << "*   Solving : " << P.GetName() << "\t*\n";
@@ -237,59 +237,59 @@ main(int argc, char **argv)
 
           solver.ComputeReducedFunctionals();
           solver.ComputeRefinementIndicators(resc, LPDE);
-	  P.DeleteAuxiliaryState("obstacle");
+          P.DeleteAuxiliaryState("obstacle");
           outp << "Obstacle-Error estimator: " << sqrt(resc.GetError()) << std::endl;
           out.Write(outp, 1, 1, 1);
 
-	  //Store solution
-	  h1errs[i] = sqrt(resc.GetError());
-	  dofs[i] =  DOFH.GetStateNDoFs();
-	  SolutionExtractor<RP,VECTOR >  a(solver);
-	  store[i]->GetSpacialVector() = a.GetU().GetSpacialVector();
-	}
+          //Store solution
+          h1errs[i] = sqrt(resc.GetError());
+          dofs[i] =  DOFH.GetStateNDoFs();
+          SolutionExtractor<RP,VECTOR >  a(solver);
+          store[i]->GetSpacialVector() = a.GetU().GetSpacialVector();
+        }
       catch (DOpEException &e)
         {
           std::cout
               << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
           std::cout << e.GetErrorMessage() << std::endl;
-	  P.DeleteAuxiliaryState("obstacle");
+          P.DeleteAuxiliaryState("obstacle");
         }
       if (i != max_iter - 1)
         {
           //For global mesh refinement, uncomment the next line
           DOFH.RefineSpace(RefineOptimized(resc.GetErrorIndicators()[0]));
 
-	  solver.ReInit();
+          solver.ReInit();
           out.ReInit();
-	  for(int j = 0; j < max_iter; j++)
-	  {
-	    store[j]->ReInit();
-	  }
+          for (int j = 0; j < max_iter; j++)
+            {
+              store[j]->ReInit();
+            }
         }
     }
   //Postrefinement to get the reference solution
-  for(int i = 0; i< post_ref; i++)
-  {
-    DOFH.RefineSpace(DOpEtypes::RefinementType::global);
-    solver.ReInit();
-    out.ReInit();
-    for(int j = 0; j < max_iter; j++)
+  for (int i = 0; i< post_ref; i++)
     {
-      store[j]->ReInit();
+      DOFH.RefineSpace(DOpEtypes::RefinementType::global);
+      solver.ReInit();
+      out.ReInit();
+      for (int j = 0; j < max_iter; j++)
+        {
+          store[j]->ReInit();
+        }
     }
-  }
   {
     //Calculate reference
     stringstream outp;
-    
+
     //Initialize Obstacle
     StateVector<VECTOR> obstacle(&DOFH,DOpEtypes::VectorStorageType::fullmem,pr);
     local::Obstacle exact_obstacle;
     VectorTools::interpolate(DOFH.GetStateDoFHandler().GetDEALDoFHandler(),exact_obstacle,obstacle.GetSpacialVector());
     P.AddAuxiliaryState(&obstacle,"obstacle");
     //Done with Obstacle
-    
+
     outp << "**************************************************\n";
     outp << "*             Starting Forward Solve             *\n";
     outp << "*             for Reference Solution             *\n";
@@ -298,46 +298,46 @@ main(int argc, char **argv)
     solver.StateSizeInfo(outp);
     outp << "**************************************************";
     out.Write(outp, 1, 1, 1);
-    
+
     solver.ComputeReducedFunctionals();
     P.DeleteAuxiliaryState("obstacle");
     SolutionExtractor<RP, VECTOR > SE(solver);
-    
+
     //Calculate error to reference
     for (int i = 0; i < max_iter; i++)
-    {
+      {
 #if DEAL_II_VERSION_GTE(8,4,0)
-      Vector<float> difference_per_element (DOFH.GetStateDoFHandler().get_triangulation().n_active_cells());
+        Vector<float> difference_per_element (DOFH.GetStateDoFHandler().get_triangulation().n_active_cells());
 #else
-      Vector<float> difference_per_element (DOFH.GetStateDoFHandler().get_tria().n_active_cells());
+        Vector<float> difference_per_element (DOFH.GetStateDoFHandler().get_tria().n_active_cells());
 #endif
-      //First component (of two) for error calculation
-      ComponentSelectFunction<2> select_comp(0,2);
-      //Prepare the error
-      store[i]->GetSpacialVector() -=SE.GetU().GetSpacialVector();
-	VectorTools::integrate_difference( DOFH.GetStateDoFHandler(),
-					   store[i]->GetSpacialVector(),
+        //First component (of two) for error calculation
+        ComponentSelectFunction<2> select_comp(0,2);
+        //Prepare the error
+        store[i]->GetSpacialVector() -=SE.GetU().GetSpacialVector();
+        VectorTools::integrate_difference( DOFH.GetStateDoFHandler(),
+                                           store[i]->GetSpacialVector(),
 #if DEAL_II_VERSION_GTE(9,3,0)
-					   Functions::ZeroFunction<2>(2),
+                                           Functions::ZeroFunction<2>(2),
 #else
-					   ZeroFunction<2>(2),
+                                           ZeroFunction<2>(2),
 #endif
-					   difference_per_element,
-					   QGaussLobatto<2>(5),
-					   VectorTools::H1_norm,
-					   &select_comp);
-	double error = difference_per_element.l2_norm();
-	outp<<"Level "<<i<<" DoFs "<<dofs[i]<<" Estimate: "<<h1errs[i]<<" Error: "<<error<<" Ieff: "<<h1errs[i]/error<<std::endl;
-	out.Write(outp,1,1,1);
-    }
-    
+                                           difference_per_element,
+                                           QGaussLobatto<2>(5),
+                                           VectorTools::H1_norm,
+                                           &select_comp);
+        double error = difference_per_element.l2_norm();
+        outp<<"Level "<<i<<" DoFs "<<dofs[i]<<" Estimate: "<<h1errs[i]<<" Error: "<<error<<" Ieff: "<<h1errs[i]/error<<std::endl;
+        out.Write(outp,1,1,1);
+      }
+
   }
 
   //clean storage
-  for(int i = 0; i < max_iter; i++)
-  {
-    delete store[i];
-  }
+  for (int i = 0; i < max_iter; i++)
+    {
+      delete store[i];
+    }
 
   return 0;
 }

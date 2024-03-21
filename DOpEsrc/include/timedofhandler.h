@@ -120,8 +120,8 @@ namespace DOpE
           //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	  dealii::DoFRenumbering::downstream<1,1>(*this,
-						  dealii::Point<1>(1.), true);
+          dealii::DoFRenumbering::downstream<1,1>(*this,
+                                                  dealii::Point<1>(1.), true);
 #else
           dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*this,
                                                                      dealii::Point<1>(1.), true);

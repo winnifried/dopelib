@@ -117,8 +117,8 @@ namespace DOpE
     inline void
     DeleteParamData(std::string name);
     inline void
-      DeleteAllData();
-    
+    DeleteAllData();
+
   protected:
     inline const std::map<std::string, const dealii::Vector<SCALAR>*> &
     GetParamData() const;
@@ -176,7 +176,7 @@ namespace DOpE
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
-      inline void ComputeNonlinearRhs_Recursive(
+    inline void ComputeNonlinearRhs_Recursive(
       PROBLEM &pde,
       VECTOR &residual,
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -194,11 +194,11 @@ namespace DOpE
      * the same local element. See also deal.ii step-28
      */
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PROBLEM, typename MATRIX, bool DH>
+    template<typename PROBLEM, typename MATRIX, bool DH>
 #else
-template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
+    template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
-  inline void ComputeMatrix_Recursive(
+    inline void ComputeMatrix_Recursive(
       PROBLEM &pde,
       MATRIX &matrix,
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -220,7 +220,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
-      inline SCALAR ComputeDomainScalar_Recursive(
+    inline SCALAR ComputeDomainScalar_Recursive(
       PROBLEM &pde,
 #if DEAL_II_VERSION_GTE(9,3,0)
       typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
@@ -239,7 +239,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #else
     template<typename PROBLEM, template<int, int> class DH>
 #endif
-      inline SCALAR ComputeBoundaryScalar_Recursive(
+    inline SCALAR ComputeBoundaryScalar_Recursive(
       PROBLEM &pde,
 #if DEAL_II_VERSION_GTE(9,3,0)
       typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element_iter,
@@ -993,13 +993,14 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
       }
     param_data_.erase(it);
   }
-  
+
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
            int dim>
   void
-  IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData() {
+  IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData()
+  {
     param_data_.clear();
     domain_data_.clear();
   }
@@ -1031,7 +1032,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
            int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
 #else
-    template<template<int, int> class DH>
+  template<template<int, int> class DH>
 #endif
   void
   IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
@@ -1053,11 +1054,11 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool DH>
+  template<typename PROBLEM, bool DH>
 #else
-    template<typename PROBLEM, template<int, int> class DH>
+  template<typename PROBLEM, template<int, int> class DH>
 #endif
-    void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual_Recursive(
+  void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual_Recursive(
     PROBLEM &pde,
     VECTOR &residual,
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -1177,9 +1178,9 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #else
-	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
 
@@ -1199,7 +1200,7 @@ template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PROBLEM, bool DH>
+  template<typename PROBLEM, bool DH>
 #else
   template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -1310,9 +1311,9 @@ template<typename PROBLEM, bool DH>
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #else
-	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
 
@@ -1334,7 +1335,7 @@ template<typename PROBLEM, bool DH>
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
            int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PROBLEM, typename MATRIX, bool DH>
+  template<typename PROBLEM, typename MATRIX, bool DH>
 #else
   template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 #endif
@@ -1473,9 +1474,9 @@ template<typename PROBLEM, typename MATRIX, bool DH>
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #else
-	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
 
@@ -1496,11 +1497,11 @@ template<typename PROBLEM, typename MATRIX, bool DH>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool DH>
+  template<typename PROBLEM, bool DH>
 #else
   template<typename PROBLEM, template<int, int> class DH>
 #endif
- SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar_Recursive(
+  SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar_Recursive(
     PROBLEM &pde,
 #if DEAL_II_VERSION_GTE(9,3,0)
     typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
@@ -1529,9 +1530,9 @@ template<typename PROBLEM, typename MATRIX, bool DH>
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #else
-	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
         SCALAR ret = 0.;
@@ -1552,7 +1553,7 @@ template<typename PROBLEM, typename MATRIX, bool DH>
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    template<typename PROBLEM, bool DH>
+  template<typename PROBLEM, bool DH>
 #else
   template<typename PROBLEM, template<int, int> class DH>
 #endif
@@ -1597,9 +1598,9 @@ template<typename PROBLEM, typename MATRIX, bool DH>
         unsigned int local_n_dofs = element[coarse_index]->get_fe().dofs_per_cell;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename dealii::DoFHandler<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #else
-	typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
+        typename DH<dim, dim>::cell_iterator dofh_fine = element[fine_index];
 #endif
         typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_element[fine_index];
         SCALAR ret = 0.;

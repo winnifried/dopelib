@@ -35,7 +35,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -53,7 +53,7 @@ public:
 
   // Domain values for elements
   void
-    ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
@@ -109,7 +109,7 @@ public:
   }
 
   void
-    ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
                 FullMatrix<double> &local_matrix, double scale, double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
@@ -174,7 +174,7 @@ public:
 
   // Values for boundary integrals
   void
-   BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
+  BoundaryEquation(const FDC<DH, VECTOR, dealdim> &fdc,
                    dealii::Vector<double> &local_vector, double scale,
                    double /*scale_ico*/) override
   {
@@ -210,7 +210,7 @@ public:
   }
 
   void
-   BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+  BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                  dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/,
                  double/*scale_ico*/) override
   {

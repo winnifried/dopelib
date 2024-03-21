@@ -40,91 +40,91 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class LocalFunctionalTCV : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
-	LocalFunctionalTCV()
-	{
-	}
+  LocalFunctionalTCV()
+  {
+  }
 
-	static void
-	  declare_params(ParameterReader &/*param_reader*/)
-	{
-	}
+  static void
+  declare_params(ParameterReader &/*param_reader*/)
+  {
+  }
 
-	LocalFunctionalTCV(ParameterReader &/*param_reader*/)
-	{
+  LocalFunctionalTCV(ParameterReader &/*param_reader*/)
+  {
 
-	}
+  }
 
-	bool
-	NeedTime() const override
-	{
-		return true;
-	}
+  bool
+  NeedTime() const override
+  {
+    return true;
+  }
 
-	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
-	{
-		const auto &state_fe_values = edc.GetFEValuesState();
-		unsigned int n_q_points = edc.GetNQPoints();
-		double ret = 0.;
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
+  {
+    const auto &state_fe_values = edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    double ret = 0.;
 
-		vector<Vector<double> > uvalues_;
-		vector<vector<Tensor<1, dealdim> > > ugrads_;
+    vector<Vector<double> > uvalues_;
+    vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-		uvalues_.resize(n_q_points, Vector<double>(5));
-		ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
+    uvalues_.resize(n_q_points, Vector<double>(5));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-		edc.GetValuesState("state", uvalues_);
-		edc.GetGradsState("state", ugrads_);
+    edc.GetValuesState("state", uvalues_);
+    edc.GetGradsState("state", ugrads_);
 
-		if(fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
-		{
-		  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-		  {
-		    // displacement gradient
-		    Tensor<1, 2> grad_phi;
-		    grad_phi.clear();
-		    grad_phi[0] = ugrads_[q_point][2][0];
-		    grad_phi[1] = ugrads_[q_point][2][1];
-		    
-		    Tensor<1,2> u_val;
-		    u_val.clear();
-		    u_val[0] = uvalues_[q_point][0];
-		    u_val[1] = uvalues_[q_point][1];
-		    ret += u_val*grad_phi * state_fe_values.JxW(q_point);
-		  }
-		}
-		return ret;
-	}
+    if (fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
+      {
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            // displacement gradient
+            Tensor<1, 2> grad_phi;
+            grad_phi.clear();
+            grad_phi[0] = ugrads_[q_point][2][0];
+            grad_phi[1] = ugrads_[q_point][2][1];
 
-	UpdateFlags
-	GetUpdateFlags() const override
-	{
-		return update_values | update_quadrature_points | update_gradients;
-	}
+            Tensor<1,2> u_val;
+            u_val.clear();
+            u_val[0] = uvalues_[q_point][0];
+            u_val[1] = uvalues_[q_point][1];
+            ret += u_val*grad_phi * state_fe_values.JxW(q_point);
+          }
+      }
+    return ret;
+  }
 
-	string
-	GetType() const override
-	{
-		return "domain timelocal";
-	}
+  UpdateFlags
+  GetUpdateFlags() const override
+  {
+    return update_values | update_quadrature_points | update_gradients;
+  }
 
-	bool HasFaces() const override
-	{
-		return false;
-	}
+  string
+  GetType() const override
+  {
+    return "domain timelocal";
+  }
 
-	string
-	GetName() const override
-	{
-		return "TCV";
-	}
+  bool HasFaces() const override
+  {
+    return false;
+  }
+
+  string
+  GetName() const override
+  {
+    return "TCV";
+  }
 
 };
 
@@ -137,124 +137,124 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
-#endif 
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+#endif
 class LocalFunctionalBulk : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
-	double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_;
-	//constant_kumar_,  ??
+  double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_;
+  //constant_kumar_,  ??
 public:
-	LocalFunctionalBulk()
-{
-}
+  LocalFunctionalBulk()
+  {
+  }
 
-	static void
-	declare_params(ParameterReader &param_reader)
-	{
-		param_reader.SetSubsection("Local PDE parameters");
-		param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
-		//wofuer?
-		//param_reader.declare_entry("constant_kumar", "0.0", Patterns::Double(0));
+  static void
+  declare_params(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
+    //wofuer?
+    //param_reader.declare_entry("constant_kumar", "0.0", Patterns::Double(0));
 
-		param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-		param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
-		//param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
-		//param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
+    param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
+    //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
+    //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
 
-	}
+  }
 
-	LocalFunctionalBulk(ParameterReader &param_reader)
-	{
-		param_reader.SetSubsection("Local PDE parameters");
-		constant_k_ = param_reader.get_double("constant_k");
-		//constant_kumar_ = param_reader.get_double("constant_kumar");
-		double E = param_reader.get_double("Young_modulus");
-		double nu  = param_reader.get_double("Poisson_ratio");
-		
-		//Will give rubish for nu = 0.5 better use LocalFunctionalBulkMixed
-		if(nu == 0.5)
-		  {
-		    std::cout<<"Will give rubish for nu = 0.5 better use LocalFunctionalBulkMixed"<<std::endl;
-		  }
-		lame_coefficient_mu_ = E/(2.*(1+nu));
-		lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
-		
-		//lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
-		//lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
+  LocalFunctionalBulk(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    constant_k_ = param_reader.get_double("constant_k");
+    //constant_kumar_ = param_reader.get_double("constant_kumar");
+    double E = param_reader.get_double("Young_modulus");
+    double nu  = param_reader.get_double("Poisson_ratio");
 
-	}
+    //Will give rubish for nu = 0.5 better use LocalFunctionalBulkMixed
+    if (nu == 0.5)
+      {
+        std::cout<<"Will give rubish for nu = 0.5 better use LocalFunctionalBulkMixed"<<std::endl;
+      }
+    lame_coefficient_mu_ = E/(2.*(1+nu));
+    lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
 
-	bool
-	NeedTime() const override
-	{
-		return true;
-	}
+    //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
+    //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
 
-	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
-	{
-		const auto &state_fe_values = edc.GetFEValuesState();
-		unsigned int n_q_points = edc.GetNQPoints();
-		double local_bulk_energy = 0;
+  }
 
-		vector<Vector<double> > uvalues_;
-		vector<vector<Tensor<1, dealdim> > > ugrads_;
+  bool
+  NeedTime() const override
+  {
+    return true;
+  }
 
-		uvalues_.resize(n_q_points, Vector<double>(5));
-		ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
+  {
+    const auto &state_fe_values = edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    double local_bulk_energy = 0;
 
-		edc.GetValuesState("state", uvalues_);
-		edc.GetGradsState("state", ugrads_);
+    vector<Vector<double> > uvalues_;
+    vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-		if(fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
-		{
-		  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-		  {
-		    // displacement gradient
-		    Tensor<2, 2> grad_u;
-		    grad_u.clear();
-		    grad_u[0][0] = ugrads_[q_point][0][0];
-		    grad_u[0][1] = ugrads_[q_point][0][1];
-		    grad_u[1][0] = ugrads_[q_point][1][0];
-		    grad_u[1][1] = ugrads_[q_point][1][1];
-		    
-		    const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
-		    const double tr_E = trace(E);
-		    double pf = uvalues_[q_point](2);
-		    const double tr_e_2 = trace(E*E);
-		    const double psi_e = 0.5 * lame_coefficient_lambda_ * tr_E*tr_E + lame_coefficient_mu_ * tr_e_2;
-		    
-		    local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) *
-					psi_e * state_fe_values.JxW(q_point);
-		  }
-		}
-		return local_bulk_energy;
-	}
+    uvalues_.resize(n_q_points, Vector<double>(5));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-	UpdateFlags
-	GetUpdateFlags() const override
-	{
-		return update_values | update_quadrature_points | update_gradients;
-	}
+    edc.GetValuesState("state", uvalues_);
+    edc.GetGradsState("state", ugrads_);
 
-	string
-	GetType() const override
-	{
-		return "domain timelocal";
-	}
+    if (fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
+      {
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            // displacement gradient
+            Tensor<2, 2> grad_u;
+            grad_u.clear();
+            grad_u[0][0] = ugrads_[q_point][0][0];
+            grad_u[0][1] = ugrads_[q_point][0][1];
+            grad_u[1][0] = ugrads_[q_point][1][0];
+            grad_u[1][1] = ugrads_[q_point][1][1];
 
-	bool HasFaces() const override
-	{
-		return false;
-	}
+            const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
+            const double tr_E = trace(E);
+            double pf = uvalues_[q_point](2);
+            const double tr_e_2 = trace(E*E);
+            const double psi_e = 0.5 * lame_coefficient_lambda_ * tr_E*tr_E + lame_coefficient_mu_ * tr_e_2;
 
-	string
-	GetName() const override
-	{
-		return "BulkEnergy";
-	}
+            local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) *
+                                 psi_e * state_fe_values.JxW(q_point);
+          }
+      }
+    return local_bulk_energy;
+  }
+
+  UpdateFlags
+  GetUpdateFlags() const override
+  {
+    return update_values | update_quadrature_points | update_gradients;
+  }
+
+  string
+  GetType() const override
+  {
+    return "domain timelocal";
+  }
+
+  bool HasFaces() const override
+  {
+    return false;
+  }
+
+  string
+  GetName() const override
+  {
+    return "BulkEnergy";
+  }
 
 };
 
@@ -267,102 +267,102 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class LocalFunctionalCrack : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
-	double G_c_, alpha_eps_;
+  double G_c_, alpha_eps_;
 
 public:
-	LocalFunctionalCrack()
-{
-}
+  LocalFunctionalCrack()
+  {
+  }
 
-	static void
-	declare_params(ParameterReader &param_reader)
-	{
-		param_reader.SetSubsection("Local PDE parameters");
-		param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-		//	param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
-	}
+  static void
+  declare_params(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
+    //  param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
+  }
 
-	LocalFunctionalCrack(ParameterReader &param_reader,double eps)
-	{
-		param_reader.SetSubsection("Local PDE parameters");
-		G_c_ = param_reader.get_double("G_c");
-		alpha_eps_ = eps;
-		//alpha_eps_ = param_reader.get_double("alpha_eps");
-	}
-	void SetParams(double eps)
-	{
-	  alpha_eps_ = eps;
-	}
-	bool
-	NeedTime() const override
-	{
-		return true;
-	}
+  LocalFunctionalCrack(ParameterReader &param_reader,double eps)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    G_c_ = param_reader.get_double("G_c");
+    alpha_eps_ = eps;
+    //alpha_eps_ = param_reader.get_double("alpha_eps");
+  }
+  void SetParams(double eps)
+  {
+    alpha_eps_ = eps;
+  }
+  bool
+  NeedTime() const override
+  {
+    return true;
+  }
 
-	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
-	{
-		const auto &state_fe_values = edc.GetFEValuesState();
-		unsigned int n_q_points = edc.GetNQPoints();
-		double local_crack_energy = 0;
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
+  {
+    const auto &state_fe_values = edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    double local_crack_energy = 0;
 
-		vector<Vector<double> > uvalues_;
-		vector<vector<Tensor<1, dealdim> > > ugrads_;
+    vector<Vector<double> > uvalues_;
+    vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-		uvalues_.resize(n_q_points, Vector<double>(5));
-		ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
+    uvalues_.resize(n_q_points, Vector<double>(5));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-		edc.GetValuesState("state", uvalues_);
-		edc.GetGradsState("state", ugrads_);
+    edc.GetValuesState("state", uvalues_);
+    edc.GetGradsState("state", ugrads_);
 
-		if(fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
-		{
-		  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-		  {
-		    double pf = uvalues_[q_point](2);
-		    
-		    //phase field gradient
-		    Tensor<1,2> grad_pf;
-		    grad_pf.clear();
-		    grad_pf[0] = ugrads_[q_point][2][0];
-		    grad_pf[1] = ugrads_[q_point][2][1];
-		    
-		    local_crack_energy += G_c_/2.0 * ((pf-1) * (pf-1)/alpha_eps_ + alpha_eps_ * 
-						      (grad_pf[0] * grad_pf[0] + grad_pf[1] * grad_pf[1])) * state_fe_values.JxW(q_point);
-		    
-		  }
-		}
-		return local_crack_energy;
-	}
+    if (fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
+      {
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            double pf = uvalues_[q_point](2);
 
-	UpdateFlags
-	GetUpdateFlags() const override
-	{
-		return update_values | update_quadrature_points | update_gradients;
-	}
+            //phase field gradient
+            Tensor<1,2> grad_pf;
+            grad_pf.clear();
+            grad_pf[0] = ugrads_[q_point][2][0];
+            grad_pf[1] = ugrads_[q_point][2][1];
 
-	string
-	GetType() const override
-	{
-		return "domain timelocal";
-	}
+            local_crack_energy += G_c_/2.0 * ((pf-1) * (pf-1)/alpha_eps_ + alpha_eps_ *
+                                              (grad_pf[0] * grad_pf[0] + grad_pf[1] * grad_pf[1])) * state_fe_values.JxW(q_point);
 
-	bool HasFaces() const override
-	{
-		return false;
-	}
+          }
+      }
+    return local_crack_energy;
+  }
 
-	string
-	GetName() const override
-	{
-		return "CrackEnergy";
-	}
+  UpdateFlags
+  GetUpdateFlags() const override
+  {
+    return update_values | update_quadrature_points | update_gradients;
+  }
+
+  string
+  GetType() const override
+  {
+    return "domain timelocal";
+  }
+
+  bool HasFaces() const override
+  {
+    return false;
+  }
+
+  string
+  GetName() const override
+  {
+    return "CrackEnergy";
+  }
 
 };
 
@@ -375,116 +375,116 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class LocalFunctionalBulkMixed : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
-	double constant_k_, lame_coefficient_mu_;
-	//constant_kumar_,  ??
+  double constant_k_, lame_coefficient_mu_;
+  //constant_kumar_,  ??
 public:
-	LocalFunctionalBulkMixed()
-{
-}
+  LocalFunctionalBulkMixed()
+  {
+  }
 
-	static void
-	declare_params(ParameterReader &param_reader)
-	{
-		param_reader.SetSubsection("Local PDE parameters");
-		param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
-		//wofuer?
-		//param_reader.declare_entry("constant_kumar", "0.0", Patterns::Double(0));
+  static void
+  declare_params(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
+    //wofuer?
+    //param_reader.declare_entry("constant_kumar", "0.0", Patterns::Double(0));
 
-		param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-		param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
-		//param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
-		//param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
+    param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
+    //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
+    //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
 
-	}
+  }
 
-	LocalFunctionalBulkMixed(ParameterReader &param_reader)
-	{
-		param_reader.SetSubsection("Local PDE parameters");
-		constant_k_ = param_reader.get_double("constant_k");
-		//constant_kumar_ = param_reader.get_double("constant_kumar");
-		double E = param_reader.get_double("Young_modulus");
-		double nu  = param_reader.get_double("Poisson_ratio");
-		
-		lame_coefficient_mu_ = E/(2.*(1+nu));
-				
-		//lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
-		//lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
+  LocalFunctionalBulkMixed(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    constant_k_ = param_reader.get_double("constant_k");
+    //constant_kumar_ = param_reader.get_double("constant_kumar");
+    double E = param_reader.get_double("Young_modulus");
+    double nu  = param_reader.get_double("Poisson_ratio");
 
-	}
+    lame_coefficient_mu_ = E/(2.*(1+nu));
 
-	bool
-	NeedTime() const override
-	{
-		return true;
-	}
+    //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
+    //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
 
-	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
-	{
-		const auto &state_fe_values = edc.GetFEValuesState();
-		unsigned int n_q_points = edc.GetNQPoints();
-		double local_bulk_energy = 0;
+  }
 
-		vector<Vector<double> > uvalues_;
-		vector<vector<Tensor<1, dealdim> > > ugrads_;
+  bool
+  NeedTime() const override
+  {
+    return true;
+  }
 
-		uvalues_.resize(n_q_points, Vector<double>(5));
-		ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
+  {
+    const auto &state_fe_values = edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    double local_bulk_energy = 0;
 
-		edc.GetValuesState("state", uvalues_);
-		edc.GetGradsState("state", ugrads_);
+    vector<Vector<double> > uvalues_;
+    vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-		for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-		{
-			// displacement gradient
-			Tensor<2, 2> grad_u;
-			grad_u.clear();
-			grad_u[0][0] = ugrads_[q_point][0][0];
-			grad_u[0][1] = ugrads_[q_point][0][1];
-			grad_u[1][0] = ugrads_[q_point][1][0];
-			grad_u[1][1] = ugrads_[q_point][1][1];
+    uvalues_.resize(n_q_points, Vector<double>(5));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-			const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
-			const double tr_E = trace(E);
-			double p = uvalues_[q_point](3);
-			double pf = uvalues_[q_point](2);
-			const double tr_e_2 = trace(E*E);
-			const double psi_e = 0.5 * p*tr_E + lame_coefficient_mu_ * tr_e_2;
+    edc.GetValuesState("state", uvalues_);
+    edc.GetGradsState("state", ugrads_);
 
-			local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) *
-					psi_e * state_fe_values.JxW(q_point);
-		}
-		return local_bulk_energy;
-	}
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      {
+        // displacement gradient
+        Tensor<2, 2> grad_u;
+        grad_u.clear();
+        grad_u[0][0] = ugrads_[q_point][0][0];
+        grad_u[0][1] = ugrads_[q_point][0][1];
+        grad_u[1][0] = ugrads_[q_point][1][0];
+        grad_u[1][1] = ugrads_[q_point][1][1];
 
-	UpdateFlags
-	GetUpdateFlags() const override
-	{
-		return update_values | update_quadrature_points | update_gradients;
-	}
+        const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
+        const double tr_E = trace(E);
+        double p = uvalues_[q_point](3);
+        double pf = uvalues_[q_point](2);
+        const double tr_e_2 = trace(E*E);
+        const double psi_e = 0.5 * p*tr_E + lame_coefficient_mu_ * tr_e_2;
 
-	string
-	GetType() const override
-	{
-		return "domain timelocal";
-	}
+        local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) *
+                             psi_e * state_fe_values.JxW(q_point);
+      }
+    return local_bulk_energy;
+  }
 
-	bool HasFaces() const override
-	{
-		return false;
-	}
+  UpdateFlags
+  GetUpdateFlags() const override
+  {
+    return update_values | update_quadrature_points | update_gradients;
+  }
 
-	string
-	GetName() const override
-	{
-		return "BulkEnergyMixed";
-	}	
+  string
+  GetType() const override
+  {
+    return "domain timelocal";
+  }
+
+  bool HasFaces() const override
+  {
+    return false;
+  }
+
+  string
+  GetName() const override
+  {
+    return "BulkEnergyMixed";
+  }
 };
 
 /****************************************************************************************/
@@ -525,7 +525,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -584,7 +584,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -651,7 +651,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -672,7 +672,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 /****************************************************************************************/
 
@@ -683,9 +683,9 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class PointFunctionalDispXBottom : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
@@ -721,7 +721,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -742,7 +742,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 
 /****************************************************************************************/
@@ -754,9 +754,9 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class PointFunctionalDispYLeft : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
@@ -783,7 +783,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -813,9 +813,9 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class PointFunctionalDispYRight : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
@@ -842,7 +842,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -871,9 +871,9 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class PointFunctionalDispYTop : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
@@ -909,7 +909,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -930,7 +930,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 /****************************************************************************************/
 
@@ -941,9 +941,9 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class PointFunctionalDispYBottom : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
@@ -979,7 +979,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -1000,7 +1000,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 
 /** Functional for the error in phi in the energy norm **/
@@ -1013,26 +1013,26 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class LocalFunctionalEnergyNorm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   double constant_k_, lame_coefficient_mu_,alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalEnergyNorm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1047,7 +1047,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
   void SetParams(double eps)
   {
@@ -1073,7 +1073,7 @@ public:
     uvalues_.resize(n_q_points, Vector<double>(5));
     ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-    //state is the current solution on the finest grid 
+    //state is the current solution on the finest grid
     edc.GetValuesState("state", uvalues_);
     edc.GetGradsState("state", ugrads_);
 
@@ -1094,28 +1094,28 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
 
-	double press = uvalues_[q_point](3);
+        double press = uvalues_[q_point](3);
 
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	// displacement gradient on the coarser mesh because this enters in the error measure  
+
+        // displacement gradient on the coarser mesh because this enters in the error measure
         Tensor<2, 2> refgrad_u;
         refgrad_u.clear();
         refgrad_u[0][0] = refgrads_[q_point][0][0];
@@ -1124,20 +1124,20 @@ public:
         refgrad_u[1][1] = refgrads_[q_point][1][1];
 
         const Tensor<2,2> E = 0.5 * (refgrad_u + transpose(refgrad_u));
-      
-	Tensor<2,2> stress_term;
+
+        Tensor<2,2> stress_term;
         stress_term.clear();
-	stress_term = press * Identity + 2 * lame_coefficient_mu_ * E;
-			
-	
-	double weightEnergy;
-	weightEnergy = scalar_product(stress_term, E);
+        stress_term = press * Identity + 2 * lame_coefficient_mu_ * E;
 
-	// it is the square of the enery norm
-	local_energy_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
-			      + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
 
-	
+        double weightEnergy;
+        weightEnergy = scalar_product(stress_term, E);
+
+        // it is the square of the enery norm
+        local_energy_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
+                              + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
+
       }
     return local_energy_norm;
   }
@@ -1162,7 +1162,7 @@ public:
   string
   GetName() const override
   {
-     stringstream out;
+    stringstream out;
     out<<"EnergyNorm-"<<ref_string_;
     return out.str();
   }
@@ -1188,18 +1188,18 @@ class LocalFunctionalEnergyVarNorm : public FunctionalInterface<EDC, FDC, DH, VE
 {
   double constant_k_, lame_coefficient_mu_, alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalEnergyVarNorm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1215,7 +1215,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
 
   void SetParams(double eps)
@@ -1241,7 +1241,7 @@ public:
     uvalues_.resize(n_q_points, Vector<double>(5));
     ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-    //state is the current solution on the finest grid 
+    //state is the current solution on the finest grid
     edc.GetValuesState("state", uvalues_);
     edc.GetGradsState("state", ugrads_);
 
@@ -1262,28 +1262,28 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
 
-	double press = uvalues_[q_point](3);
+        double press = uvalues_[q_point](3);
 
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	// displacement gradient on the coarser mesh because this enters in the error measure  
+
+        // displacement gradient on the coarser mesh because this enters in the error measure
         Tensor<2, 2> grad_u;
         grad_u.clear();
         grad_u[0][0] = ugrads_[q_point][0][0];
@@ -1293,19 +1293,19 @@ public:
 
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
 
-	Tensor<2,2> stress_term;
+        Tensor<2,2> stress_term;
         stress_term.clear();
-	stress_term = press * Identity + 2 * lame_coefficient_mu_ * E;
+        stress_term = press * Identity + 2 * lame_coefficient_mu_ * E;
 
-       	
-	double weightEnergy;
-	weightEnergy = scalar_product(stress_term, E);
 
-	// it is the square of the enery norm
-	local_energyVar_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
-			      + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+        double weightEnergy;
+        weightEnergy = scalar_product(stress_term, E);
 
-	
+        // it is the square of the enery norm
+        local_energyVar_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
+                                 + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
+
       }
     return local_energyVar_norm;
   }
@@ -1330,7 +1330,7 @@ public:
   string
   GetName() const override
   {
-     stringstream out;
+    stringstream out;
     out<<"EnergyVarNorm-"<<ref_string_;
     return out.str();
   }
@@ -1357,18 +1357,18 @@ class LocalFunctionalWeightedL2Norm : public FunctionalInterface<EDC, FDC, DH, V
 {
   double constant_k_, lame_coefficient_mu_, alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalWeightedL2Norm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1382,7 +1382,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
 
   void SetParams(double eps)
@@ -1403,10 +1403,10 @@ public:
     double local_weightedL2_norm = 0;
 
     vector<Vector<double> > uvalues_;
-    
+
     uvalues_.resize(n_q_points, Vector<double>(5));
     edc.GetValuesState("state", uvalues_);
-    
+
     vector<Vector<double> > refvalues_;
     vector<vector<Tensor<1, dealdim> > > refgrads_;
 
@@ -1423,16 +1423,16 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
-	
-	double press = uvalues_[q_point](3);
-	
-	// displacement gradient which we need for reference because this enters in the error measure  
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
+
+        double press = uvalues_[q_point](3);
+
+        // displacement gradient which we need for reference because this enters in the error measure
         Tensor<2, 2> refgrad_u;
         refgrad_u.clear();
         refgrad_u[0][0] = refgrads_[q_point][0][0];
@@ -1441,17 +1441,17 @@ public:
         refgrad_u[1][1] = refgrads_[q_point][1][1];
 
         const Tensor<2,2> E = 0.5 * (refgrad_u + transpose(refgrad_u));
-     
-	Tensor<2,2> stress_term;
-        stress_term.clear();
-	stress_term = press * Identity + 2 * lame_coefficient_mu_ * E;
 
-     	
-	double weightEnergy;
-	weightEnergy = scalar_product(stress_term, E);
-	
-	local_weightedL2_norm += (((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
-	
+        Tensor<2,2> stress_term;
+        stress_term.clear();
+        stress_term = press * Identity + 2 * lame_coefficient_mu_ * E;
+
+
+        double weightEnergy;
+        weightEnergy = scalar_product(stress_term, E);
+
+        local_weightedL2_norm += (((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
       }
     return local_weightedL2_norm;
   }
@@ -1500,16 +1500,16 @@ template<
 #endif
 class LocalFunctionalL2Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
- 
+
   std::string ref_string_;
-  
+
 public:
-  
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
-    
+
   }
 
   LocalFunctionalL2Norm(ParameterReader &param_reader, std::string ref_string)
@@ -1517,7 +1517,7 @@ public:
     param_reader.SetSubsection("Local PDE parameters");
 
     ref_string_=ref_string;
-    
+
   }
 
   bool
@@ -1534,22 +1534,22 @@ public:
     double local_L2_norm = 0;
 
     vector<Vector<double> > uvalues_;
-    uvalues_.resize(n_q_points, Vector<double>(5));  
+    uvalues_.resize(n_q_points, Vector<double>(5));
     edc.GetValuesState("state", uvalues_);
-   
+
     vector<Vector<double> > refvalues_;
     refvalues_.resize(n_q_points, Vector<double>(5));
 
     edc.GetValuesState(ref_string_, refvalues_);
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
-		
-	local_L2_norm += ((pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
-	
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
+
+        local_L2_norm += ((pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
       }
     return local_L2_norm;
   }
@@ -1599,26 +1599,26 @@ class LocalFunctionalWeightedH1Norm : public FunctionalInterface<EDC, FDC, DH, V
 {
   double alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalWeightedH1Norm(ParameterReader &param_reader, double eps, std::string ref_string)
   {
     param_reader.SetSubsection("Local PDE parameters");
     alpha_eps_ = eps;
-   
+
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
 
   void SetParams(double eps)
@@ -1648,7 +1648,7 @@ public:
 
     edc.GetGradsState(ref_string_, refgrads_);
 
-    
+
     Tensor<2,2> zero_matrix;
     zero_matrix.clear();
 
@@ -1656,27 +1656,27 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
 
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	
-	local_weightedH1_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1])))
-			      * state_fe_values.JxW(q_point);
 
-	
+
+        local_weightedH1_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1])))
+                                 * state_fe_values.JxW(q_point);
+
+
       }
     return local_weightedH1_norm;
   }
@@ -1725,14 +1725,14 @@ template<
 class LocalFunctionalH1Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   std::string ref_string_;
- 
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
-    
+
   }
 
   LocalFunctionalH1Norm(ParameterReader &param_reader,std::string ref_string)
@@ -1740,7 +1740,7 @@ public:
     param_reader.SetSubsection("Local PDE parameters");
 
     ref_string_=ref_string;
-    
+
   }
 
   bool
@@ -1764,27 +1764,27 @@ public:
     refgrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
     edc.GetGradsState(ref_string_, refgrads_);
-   
-          
+
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	
-	local_H1_norm += ((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
-			      * state_fe_values.JxW(q_point);
 
-	
+
+        local_H1_norm += ((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
+                         * state_fe_values.JxW(q_point);
+
+
       }
     return local_H1_norm;
   }

@@ -10,7 +10,7 @@ using namespace dealii;
 
 namespace error_eval
 {
-  double rhs(const Point<2> &/*p*/) 
+  double rhs(const Point<2> &/*p*/)
   {
     return 1.;
   }

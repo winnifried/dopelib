@@ -87,7 +87,7 @@ typedef PDEProblemContainer<
 LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
-  VECTOR, DIM, FE, DOFHANDLER> OP_BASE;
+         VECTOR, DIM, FE, DOFHANDLER> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
@@ -120,7 +120,7 @@ main(int argc, char **argv)
    * The quasi-static Biot problem
    * coupled with the Lame-Navier equations for linear elasticity
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -188,7 +188,7 @@ main(int argc, char **argv)
                                                 times,
                                                 false,
                                                 indexsetter);
-  
+
   OP P(LPDE, DOFH);
 
   //  P.HasFaces();

@@ -37,7 +37,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -553,7 +553,7 @@ public:
   void
   ElementTimeMatrix(
     const EDC<DH, VECTOR, dealdim> &edc,
-                    FullMatrix<double> &local_matrix) override
+    FullMatrix<double> &local_matrix) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();

@@ -35,10 +35,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
+class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
 #else
 template<
@@ -103,7 +103,7 @@ public:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
@@ -162,7 +162,7 @@ public:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
@@ -222,7 +222,7 @@ public:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
 class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
@@ -270,7 +270,7 @@ public:
 
   // compute drag value around cylinder
   double
-    BoundaryValue(const FDC<DH, VECTOR, 2> &fdc) override
+  BoundaryValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -344,7 +344,7 @@ public:
   }
 
   double
-    FaceValue(const FDC<DH, VECTOR, 2> &fdc) override
+  FaceValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
 
     unsigned int material_id = fdc.GetMaterialId();
@@ -449,7 +449,7 @@ private:
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
 class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
@@ -497,7 +497,7 @@ public:
 
   // compute drag value around cylinder
   double
-    BoundaryValue(const FDC<DH, VECTOR, 2> &fdc) override
+  BoundaryValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
@@ -573,7 +573,7 @@ public:
 
   // compute drag value at interface
   double
-    FaceValue(const FDC<DH, VECTOR, 2> &fdc) override
+  FaceValue(const FDC<DH, VECTOR, 2> &fdc) override
   {
 
     unsigned int n_q_points = fdc.GetNQPoints();

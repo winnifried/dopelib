@@ -90,23 +90,23 @@ namespace DOpE
   private:
     //The InverseMatrix, SchurComplement and ApproximateSchurComplement Class are taken from dealii step-20
     template <class MatrixType>
-      class InverseMatrix : public Subscriptor
-  {
-  public:
-  InverseMatrix(const MatrixType &m) : matrix(&m)
-    {}
-    
-    void vmult(Vector<double> &dst, const Vector<double> &src) const
+    class InverseMatrix : public Subscriptor
     {
-      SolverControl solver_control(std::max<unsigned int>(src.size(), 200),
-				   1e-10 * src.l2_norm());
-      SolverCG<>    cg(solver_control);
-      dst = 0;
-      cg.solve(*matrix, dst, src, PreconditionIdentity());
-    }
-  private:
-    const SmartPointer<const MatrixType> matrix;
-  };
+    public:
+      InverseMatrix(const MatrixType &m) : matrix(&m)
+      {}
+
+      void vmult(Vector<double> &dst, const Vector<double> &src) const
+      {
+        SolverControl solver_control(std::max<unsigned int>(src.size(), 200),
+                                     1e-10 * src.l2_norm());
+        SolverCG<>    cg(solver_control);
+        dst = 0;
+        cg.solve(*matrix, dst, src, PreconditionIdentity());
+      }
+    private:
+      const SmartPointer<const MatrixType> matrix;
+    };
 
     class SchurComplement : public Subscriptor
     {
@@ -217,7 +217,7 @@ namespace DOpE
 
       ApproximateSchurComplement approximate_schur_complement (matrix_);
       InverseMatrix<ApproximateSchurComplement> approximative_inverse(approximate_schur_complement);
-      
+
       SolverControl solver_control (solution.block(1).size(),
                                     1e-12*schur_rhs.l2_norm(),false,false);
       SolverCG<>    cg (solver_control);

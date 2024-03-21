@@ -44,11 +44,11 @@ namespace DOpEWrapper
   {
   public:
 #if DEAL_II_VERSION_GTE(9,3,0)
-     FEValues(const DOpEWrapper::Mapping<dim, false> &mapping,
+    FEValues(const DOpEWrapper::Mapping<dim, false> &mapping,
 #else
-     FEValues(const DOpEWrapper::Mapping<dim, dealii::DoFHandler> &mapping,
+    FEValues(const DOpEWrapper::Mapping<dim, dealii::DoFHandler> &mapping,
 #endif
-	     const dealii::FiniteElement<dim, dim> &fe,
+             const dealii::FiniteElement<dim, dim> &fe,
              const dealii::Quadrature<dim> &quadrature,
              const dealii::UpdateFlags update_flags) :
       dealii::FEValues<dim>(mapping, fe, quadrature, update_flags)

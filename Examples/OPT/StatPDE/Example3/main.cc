@@ -132,7 +132,7 @@ main(int argc, char **argv)
    */
 
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -296,7 +296,7 @@ main(int argc, char **argv)
 #else
           KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
             estimated_error_per_element, component_mask);
 #endif
 

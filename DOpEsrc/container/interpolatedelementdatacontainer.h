@@ -37,11 +37,11 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<bool DH, typename VECTOR, int dim>
 #else
-   template<template<int, int> class DH, typename VECTOR, int dim>
+  template<template<int, int> class DH, typename VECTOR, int dim>
 #endif
-   class InterpolatedElementDataContainer : public ElementDataContainer<DH, VECTOR, dim>
-   {
-      public :
+  class InterpolatedElementDataContainer : public ElementDataContainer<DH, VECTOR, dim>
+  {
+  public :
     /**
      * Constructor. Initializes the FEValues objects.
      *
@@ -67,30 +67,30 @@ namespace DOpE
      * @param need_vertices           A flag indicating if vertex information needs to be prepared
      *
      */
-     	 template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-         InterpolatedElementDataContainer(
-			 const FEValuesExtractors::Vector selected_component,
-			 const Mapping<dim>		&map,
-			 const FiniteElement<dim>	&fe_interpolate,
-			 const Quadrature<dim> &quad, UpdateFlags update_flags,
+    template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
+    InterpolatedElementDataContainer(
+      const FEValuesExtractors::Vector selected_component,
+      const Mapping<dim>   &map,
+      const FiniteElement<dim> &fe_interpolate,
+      const Quadrature<dim> &quad, UpdateFlags update_flags,
 #if DEAL_II_VERSION_GTE(9,3,0)
-                         SpaceTimeHandler<FE, false, SPARSITYPATTERN, VECTOR,
+      SpaceTimeHandler<FE, false, SPARSITYPATTERN, VECTOR,
 #else
-               		 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
+      SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
 #endif
-			 dopedim, dealdim>& sth,
-                         const std::vector<
-                         typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
-                         const std::map<std::string, const Vector<double>*> &param_values,
-                         const std::map<std::string, const VECTOR *> &domain_values,
-                         bool need_vertices) : 
-		ElementDataContainer<DH, VECTOR, dim>( quad, update_flags, sth, element, 
-		param_values, domain_values, need_vertices), 
-		interpolated_fe_values_(selected_component, map, sth.GetFESystem("state"), 
-			fe_interpolate, quad, update_flags), element_(element)
+      dopedim, dealdim>& sth,
+      const std::vector<
+      typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
+      const std::map<std::string, const Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      bool need_vertices) :
+      ElementDataContainer<DH, VECTOR, dim>( quad, update_flags, sth, element,
+                                             param_values, domain_values, need_vertices),
+      interpolated_fe_values_(selected_component, map, sth.GetFESystem("state"),
+                              fe_interpolate, quad, update_flags), element_(element)
 
-	 {
-         }
+    {
+    }
     /**
      * Constructor. Initializes the FEValues objects, when only the PDE is used.
      *
@@ -116,47 +116,47 @@ namespace DOpE
      * @param need_vertices           A flag indicating if vertex information needs to be prepared
      *
      */
-         template<template<int, int> class FE, typename SPARSITYPATTERN>
-	 InterpolatedElementDataContainer(
-		const FEValuesExtractors::Vector selected_component,
-		const Mapping<dim>		&map,
-		const FiniteElement<dim>	&fe_interpolate,
-		const Quadrature<dim> &quad, UpdateFlags update_flags,
+    template<template<int, int> class FE, typename SPARSITYPATTERN>
+    InterpolatedElementDataContainer(
+      const FEValuesExtractors::Vector selected_component,
+      const Mapping<dim>    &map,
+      const FiniteElement<dim>  &fe_interpolate,
+      const Quadrature<dim> &quad, UpdateFlags update_flags,
 #if DEAL_II_VERSION_GTE(9,3,0)
-		StateSpaceTimeHandler<FE, false, SPARSITYPATTERN,
+      StateSpaceTimeHandler<FE, false, SPARSITYPATTERN,
 #else
-		StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
+      StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
 #endif
-		VECTOR, dim> &sth,
-		const std::vector<
-		typename dealii::DoFHandler<dim>::active_cell_iterator> &element,
-		const std::map<std::string, const Vector<double>*> &param_values,
-		const std::map<std::string, const VECTOR *> &domain_values,
-		bool need_vertices) :
-		ElementDataContainer<DH, VECTOR, dim>(quad, update_flags, sth, element, param_values, domain_values,
-		need_vertices), 
-		interpolated_fe_values_(selected_component, map, sth.GetFESystem("state"), 
-				fe_interpolate, quad, update_flags), element_(element)
-	 {
- 	 }
+      VECTOR, dim> &sth,
+      const std::vector<
+      typename dealii::DoFHandler<dim>::active_cell_iterator> &element,
+      const std::map<std::string, const Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      bool need_vertices) :
+      ElementDataContainer<DH, VECTOR, dim>(quad, update_flags, sth, element, param_values, domain_values,
+                                            need_vertices),
+      interpolated_fe_values_(selected_component, map, sth.GetFESystem("state"),
+                              fe_interpolate, quad, update_flags), element_(element)
+    {
+    }
 
-         void ReInit()
-  	 {
-      	     ElementDataContainer<DH, VECTOR, dim>::ReInit();
-	     interpolated_fe_values_.reinit(element_[ElementDataContainer<DH, VECTOR, dim>::GetStateIndex()]);
-	 }
+    void ReInit()
+    {
+      ElementDataContainer<DH, VECTOR, dim>::ReInit();
+      interpolated_fe_values_.reinit(element_[ElementDataContainer<DH, VECTOR, dim>::GetStateIndex()]);
+    }
 
-          InterpolatedFEValues<dim> 
-	 GetInterpolatedFEValuesState() const
-	 {
-	    return interpolated_fe_values_;
-	 }
+    InterpolatedFEValues<dim>
+    GetInterpolatedFEValuesState() const
+    {
+      return interpolated_fe_values_;
+    }
 
-         private:
-  	    InterpolatedFEValues<dim>	interpolated_fe_values_;
-	    const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> &element_; 
+  private:
+    InterpolatedFEValues<dim> interpolated_fe_values_;
+    const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> &element_;
 
-   };
+  };
 }
 
 

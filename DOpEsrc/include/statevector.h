@@ -38,29 +38,32 @@ namespace DOpE
    *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    */
   template<typename VECTOR>
-    class StateVector : public SpaceTimeVector<VECTOR>
+  class StateVector : public SpaceTimeVector<VECTOR>
   {
   public:
     //FIXME this is not a real copyconstructor, it just
     //uses the information of ref about size and so on. Is this correct?
-  StateVector(const StateVector<VECTOR> &ref) : SpaceTimeVector<VECTOR>(ref)
-    {  
+    StateVector(const StateVector<VECTOR> &ref) : SpaceTimeVector<VECTOR>(ref)
+    {
     }
     StateVector(const SpaceTimeHandlerBase<VECTOR> *STH,
                 DOpEtypes::VectorStorageType behavior,
                 ParameterReader &param_reader)
       : SpaceTimeVector<VECTOR>(STH,
-				behavior,
-				DOpEtypes::VectorType::state,
-				DOpEtypes::VectorAction::nonstationary,
-				param_reader)
+                                behavior,
+                                DOpEtypes::VectorType::state,
+                                DOpEtypes::VectorAction::nonstationary,
+                                param_reader)
     {
     }
     ~StateVector()
     {
     }
 
-    void operator=(double a) { SpaceTimeVector<VECTOR>::operator=(a); }
+    void operator=(double a)
+    {
+      SpaceTimeVector<VECTOR>::operator=(a);
+    }
   };
 
 }

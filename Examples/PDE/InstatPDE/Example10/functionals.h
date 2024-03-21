@@ -38,7 +38,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, DH,
+class LocalBoundaryFunctionalStressX : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -218,7 +218,7 @@ public:
 
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	// displacement gradient
+        // displacement gradient
         Tensor<2, 2> grad_u;
         grad_u.clear();
         grad_u[0][0] = ugrads_[q_point][0][0];
@@ -230,10 +230,10 @@ public:
         const double tr_E = trace(E);
         double pf = uvalues_[q_point](2);
         const double tr_e_2 = trace(E*E);
-	const double psi_e = 0.5 * lame_coefficient_lambda_ * tr_E*tr_E + lame_coefficient_mu_ * tr_e_2;
+        const double psi_e = 0.5 * lame_coefficient_lambda_ * tr_E*tr_E + lame_coefficient_mu_ * tr_e_2;
 
-        local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) * 
-	psi_e * state_fe_values.JxW(q_point);
+        local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) *
+                             psi_e * state_fe_values.JxW(q_point);
       }
     return local_bulk_energy;
   }
@@ -285,7 +285,7 @@ public:
   LocalFunctionalCrack()
   {
   }
-  
+
   static void
   declare_params(ParameterReader &param_reader)
   {
@@ -327,8 +327,8 @@ public:
       {
         double pf = uvalues_[q_point](2);
 
-        local_crack_energy += G_c_/2.0 * ((pf-1) * (pf-1)/alpha_eps_ + alpha_eps_ * 
-	pf * pf) * state_fe_values.JxW(q_point);
+        local_crack_energy += G_c_/2.0 * ((pf-1) * (pf-1)/alpha_eps_ + alpha_eps_ *
+                                          pf * pf) * state_fe_values.JxW(q_point);
       }
     return local_crack_energy;
   }

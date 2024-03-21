@@ -126,7 +126,7 @@ main(int argc, char **argv)
    *  the outflow boundary. In this case we employ an additional
    *  term on the outflow boundary due the symmetry of the stress tensor.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   //Handling of the param file.

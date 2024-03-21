@@ -243,15 +243,15 @@ namespace DOpE
     bool IsValidTicket(const DOpEtypes::VectorType type, unsigned int &ticket) const
     {
       switch (type)
-      {
-      case DOpEtypes::VectorType::state:
-	return IsValidStateTicket(ticket);
-      case DOpEtypes::VectorType::control:
-	return IsValidControlTicket(ticket);
-      default:
-	assert(false);
-	return false;
-      }
+        {
+        case DOpEtypes::VectorType::state:
+          return IsValidStateTicket(ticket);
+        case DOpEtypes::VectorType::control:
+          return IsValidControlTicket(ticket);
+        default:
+          assert(false);
+          return false;
+        }
     }
 
     /**
@@ -511,31 +511,31 @@ namespace DOpE
       abort();
     }
 
-    void SpatialMeshTransfer(const DOpEtypes::VectorType type, const VECTOR & old_values, VECTOR & new_values, unsigned int time_point= std::numeric_limits<unsigned int>::max()) const
+    void SpatialMeshTransfer(const DOpEtypes::VectorType type, const VECTOR &old_values, VECTOR &new_values, unsigned int time_point= std::numeric_limits<unsigned int>::max()) const
     {
       switch (type)
-      {
-      case DOpEtypes::VectorType::state:
-	SpatialMeshTransferState(old_values,new_values,time_point);
-	return ;
-      case DOpEtypes::VectorType::control:
-	SpatialMeshTransferControl(old_values,new_values);
-	return ;
-      default:
-	assert(false);
-	return ;
-      }
+        {
+        case DOpEtypes::VectorType::state:
+          SpatialMeshTransferState(old_values,new_values,time_point);
+          return ;
+        case DOpEtypes::VectorType::control:
+          SpatialMeshTransferControl(old_values,new_values);
+          return ;
+        default:
+          assert(false);
+          return ;
+        }
     }
-   
+
     /**
      * This functions is used to interpolate Control Vectors between different meshes of different time steps.
      * It expects that the timepoint of the mesh has been initialized correctly prior to
      * calling this function
      *
      * @param new_values  The Vector to be interpolated in the dofs of the mesh at the time from_time_dof
-     * 			  After the function call, it contains the interpolated vector in the dofs of the mesh 
-     *   	          measured at the time to_time_dof
-     * @param from_time_dof 
+     *        After the function call, it contains the interpolated vector in the dofs of the mesh
+     *              measured at the time to_time_dof
+     * @param from_time_dof
      * @param to_time_dof
      *
      * @return a boolean indicating whether a mesh transfer was done.
@@ -546,7 +546,7 @@ namespace DOpE
       abort();
     }
 
-    virtual bool TemporalMeshTransferState(VECTOR & /*new_values*/ , unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    virtual bool TemporalMeshTransferState(VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
     {
       abort();
     }
@@ -575,7 +575,7 @@ namespace DOpE
      * After calling a refinement function a reinitialization is required!
      *
      * @param ref_container   Steers the local mesh refinement. Currently availabe are
-     *                        RefinementContainer (for global refinement) for the 
+     *                        RefinementContainer (for global refinement) for the
      *                        time discretization.
      */
 
@@ -716,7 +716,7 @@ namespace DOpE
     virtual void
     WriteToFileElementwise(const Vector<float> &v, std::string name,
                            std::string outfile, std::string dof_type, std::string filetype, int n_patches) = 0 ;
-    
+
   protected:
     /**
      * Call this function if any StateDoF related stuff has changed to invalidate all previous tickets.

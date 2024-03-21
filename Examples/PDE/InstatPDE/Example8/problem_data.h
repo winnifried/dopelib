@@ -72,25 +72,25 @@ NonHomoDirichletData::value (const Point<2>  &p,
           ExcIndexRange (component, 0, this->n_components));
 
 
-      // Miehe shear
-      if (component == 0)
-	{
-	  return ( ((p(1) == 1.0) )
-		   ?
-		   (-1.0) * localtime *dis_step_per_timestep_ : 0 );
-	}
+  // Miehe shear
+  if (component == 0)
+    {
+      return ( ((p(1) == 1.0) )
+               ?
+               (-1.0) * localtime *dis_step_per_timestep_ : 0 );
+    }
 
-      if (component == 1)
-	{
-	   
-	  return 0.0;
-	}
-      if (component == 2)
-  	{
-    	if(p(1)==1.0)
-      	  return 1.;
-    	return 0.;
-  	}
+  if (component == 1)
+    {
+
+      return 0.0;
+    }
+  if (component == 2)
+    {
+      if (p(1)==1.0)
+        return 1.;
+      return 0.;
+    }
   return 0;
 }
 
@@ -131,11 +131,11 @@ double InitialData::value(const Point<2> &/*p*/, const unsigned int component) c
 
   // Set phase-field to "1" since domain is unbroken at the beginning
   if (component == 2)
-  {
-    //if( (p(0) >= 0.5) && (p(1)==0.5) )
+    {
+      //if( (p(0) >= 0.5) && (p(1)==0.5) )
       //return 0.;
-    return 1.0;
-  }
+      return 1.0;
+    }
   else
     return 0.0;
 }

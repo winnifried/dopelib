@@ -72,7 +72,7 @@ namespace DOpE
 
   template<template<int, int> class DH, typename VECTOR, int dim>
 #endif
-    class ElementDataContainer : public edcinternal::ElementDataContainerInternal<
+  class ElementDataContainer : public edcinternal::ElementDataContainerInternal<
     VECTOR, dim>
   {
   public:
@@ -80,7 +80,7 @@ namespace DOpE
     {
       throw (DOpE::DOpEException(
                "Dummy class, this constructor should never get called.",
-	       "ElementDataContainer<DH , VECTOR, dim>::ElementDataContainer"));
+               "ElementDataContainer<DH , VECTOR, dim>::ElementDataContainer"));
     }
   };
 
@@ -95,9 +95,9 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    class ElementDataContainer<false, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+  class ElementDataContainer<false, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
 #else
-    class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+  class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
 #endif
   {
 
@@ -139,10 +139,10 @@ namespace DOpE
                          bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                                                              domain_values,
-							     sth, element[0], need_vertices),
-	element_(element),
-	state_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), quad, update_flags),
-	control_fe_values_(sth.GetMapping(),(sth.GetFESystem("control")), quad, update_flags)
+                                                             sth, element[0], need_vertices),
+      element_(element),
+      state_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), quad, update_flags),
+      control_fe_values_(sth.GetMapping(),(sth.GetFESystem("control")), quad, update_flags)
     {
       state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
@@ -187,7 +187,7 @@ namespace DOpE
                          bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                                                              domain_values,
-	                                                     sth, element[0], need_vertices),
+                                                             sth, element[0], need_vertices),
       element_(element),
       state_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), quad, update_flags),
       control_fe_values_(sth.GetMapping(),(sth.GetFESystem("state")), quad, update_flags)
@@ -241,7 +241,7 @@ namespace DOpE
     GetStateIndex() const;
     unsigned int
     GetControlIndex() const;
-    
+
   private:
 
     /***********************************************************/
@@ -260,9 +260,9 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    class ElementDataContainer<true, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+  class ElementDataContainer<true, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
 #else
-    class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
+  class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<VECTOR, dim>
 #endif
   {
 
@@ -307,10 +307,10 @@ namespace DOpE
                          bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                                                              domain_values,
-	                                                     sth, element[0], need_vertices),
-	element_(element),
-	state_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), q_collection, update_flags),
-	control_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(q_collection)
+                                                             sth, element[0], need_vertices),
+      element_(element),
+      state_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), q_collection, update_flags),
+      control_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(q_collection)
     {
       state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
@@ -356,7 +356,7 @@ namespace DOpE
                          bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                                                              domain_values,
-							     sth, element[0], need_vertices),
+                                                             sth, element[0], need_vertices),
       element_(element),
       state_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), q_collection, update_flags),
       control_hp_fe_values_(sth.GetMapping(),(sth.GetFESystem("state")), q_collection, update_flags), q_collection_(q_collection)
@@ -451,9 +451,9 @@ namespace DOpE
     unsigned int control_index_;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-    const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> & element_;
+    const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> &element_;
 #else
-    const std::vector<typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & element_;
+    const std::vector<typename dealii::hp::DoFHandler<dim>::active_cell_iterator> &element_;
 #endif
     DOpEWrapper::HpFEValues<dim> state_hp_fe_values_;
     DOpEWrapper::HpFEValues<dim> control_hp_fe_values_;
@@ -479,16 +479,16 @@ namespace DOpE
       control_fe_values_.reinit(element_[this->GetControlIndex()]);
 
     edcinternal::ElementDataContainerInternal<
-      VECTOR, dim>::ReInit(element_[this->GetStateIndex()]);
+    VECTOR, dim>::ReInit(element_[this->GetStateIndex()]);
   }
 
   /***********************************************************************/
   template<typename VECTOR, int dim>
   unsigned int
 #if DEAL_II_VERSION_GTE(9,3,0)
-    ElementDataContainer<false, VECTOR, dim>::GetNDoFsPerElement() const
+  ElementDataContainer<false, VECTOR, dim>::GetNDoFsPerElement() const
 #else
-    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
+  ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
 #endif
   {
     return n_dofs_per_element_;
@@ -660,7 +660,7 @@ namespace DOpE
       control_hp_fe_values_.reinit(element_[this->GetControlIndex()]);
 
     edcinternal::ElementDataContainerInternal<
-      VECTOR, dim>::ReInit(element_[this->GetStateIndex()]);
+    VECTOR, dim>::ReInit(element_[this->GetStateIndex()]);
   }
   /*********************************************/
 
@@ -776,7 +776,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementDataContainer<true, VECTOR, dim>::GetFEValuesState() const 
+  ElementDataContainer<true, VECTOR, dim>::GetFEValuesState() const
 #else
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesState() const
 #endif
@@ -787,9 +787,9 @@ namespace DOpE
   template<typename VECTOR, int dim>
   const DOpEWrapper::FEValues<dim> &
 #if DEAL_II_VERSION_GTE(9,3,0)
-  ElementDataContainer<true, VECTOR, dim>::GetFEValuesControl() const 
+  ElementDataContainer<true, VECTOR, dim>::GetFEValuesControl() const
 #else
-  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const 
+  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
 #endif
   {
     return static_cast<const DOpEWrapper::FEValues<dim>&>(control_hp_fe_values_.get_present_fe_values());

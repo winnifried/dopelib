@@ -304,7 +304,7 @@ namespace DOpE
 
     ConstraintVector<VECTOR> constraints_;
     double p_;
-    ParameterReader & parameter_reader_;
+    ParameterReader &parameter_reader_;
   };
 
   /*************************************************************************/
@@ -333,7 +333,7 @@ namespace DOpE
       control_integrator_(idc),
       nonlinear_gradient_solver_(control_integrator_, param_reader),
       constraints_(OP->GetSpaceTimeHandler(),vector_behavior),
-    parameter_reader_(param_reader)
+      parameter_reader_(param_reader)
   {
     //ReducedProblems should be ReInited
     {

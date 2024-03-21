@@ -48,7 +48,7 @@ template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
 
@@ -63,7 +63,7 @@ public:
     param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
     param_reader.declare_entry("sigma", "1", Patterns::Double(0),
-				"Which sigma in complementarity function");
+                               "Which sigma in complementarity function");
 
   }
 
@@ -82,7 +82,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
     lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
     lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
-    
+
     s_ = param_reader.get_double("sigma");
 
   }
@@ -130,20 +130,20 @@ public:
         grad_u[0][1] = ugrads_[q_point][0][1];
         grad_u[1][0] = ugrads_[q_point][1][0];
         grad_u[1][1] = ugrads_[q_point][1][1];
-	
-	// displacements
+
+        // displacements
         Tensor<1, 2> u;
         u.clear();
         u[0] = uvalues_[q_point](0);
         u[1] = uvalues_[q_point](1);
 
-	// phase field gradient
+        // phase field gradient
         Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	double pf = uvalues_[q_point](2);
+        double pf = uvalues_[q_point](2);
         double old_timestep_pf = max(0.,last_timestep_uvalues_[q_point](2));
 
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
@@ -162,7 +162,7 @@ public:
         if (this->GetTime() > 0.001)
           {
             decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
+                             E, tr_E, zero_matrix, 0.0,
                              lame_coefficient_lambda_,
                              lame_coefficient_mu_, false);
           }
@@ -178,7 +178,7 @@ public:
             //const Tensor<1, 2> phi_i_u = state_fe_values[displacements].value(i,q_point);
             const Tensor<2, 2> phi_i_grads_u = state_fe_values[displacements].gradient(i, q_point);
             const double phi_i_pf = state_fe_values[phasefield].value(i, q_point);
-	    const Tensor<1, 2> phi_i_grads_pf = state_fe_values[phasefield].gradient(i, q_point);
+            const Tensor<1, 2> phi_i_grads_pf = state_fe_values[phasefield].gradient(i, q_point);
 
             // Solid (Fully monolithic)
             local_vector(i) += scale
@@ -197,35 +197,35 @@ public:
                                  + G_c_ * alpha_eps_ * element_diameter * grad_pf * phi_i_grads_pf
                                ) * state_fe_values.JxW(q_point);
 
-	    //Now the inequality constraint.
-	    //Evaluate only in vertices, so we check whether the lambda test function
-	    // is one (i.e. we are in a vertex)
+            //Now the inequality constraint.
+            //Evaluate only in vertices, so we check whether the lambda test function
+            // is one (i.e. we are in a vertex)
 
-	    if(fabs(state_fe_values[multiplier].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	    {
-	      //Weight to account for multiplicity when running over multiple meshes.
-	      unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
-	      double weight = 1./n_neig;
-	      if(n_neig == 4)
-	      {
-		//Equation for multiplier
-		local_vector(i) += scale * weight* (uvalues_[q_point][3]
-						    - std::max(0.,uvalues_[q_point][3]+s_*(pf-old_timestep_pf)));
-		//Add Multiplier to the state equation
-		//find corresponding basis of state
-		for(unsigned int j = 0; j < n_dofs_per_element; j++)
-		{
-		  if(fabs(state_fe_values[phasefield].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-		  {
-		    local_vector(j) += scale * weight* uvalues_[q_point][3];
-		  }
-		}
-	      }
-	      else //Boundary or hanging node (no weight, so it works if hanging)
-	      {
-		local_vector(i) += scale * uvalues_[q_point][3];
-	      }
-	    }
+            if (fabs(state_fe_values[multiplier].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+              {
+                //Weight to account for multiplicity when running over multiple meshes.
+                unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+                double weight = 1./n_neig;
+                if (n_neig == 4)
+                  {
+                    //Equation for multiplier
+                    local_vector(i) += scale * weight* (uvalues_[q_point][3]
+                                                        - std::max(0.,uvalues_[q_point][3]+s_*(pf-old_timestep_pf)));
+                    //Add Multiplier to the state equation
+                    //find corresponding basis of state
+                    for (unsigned int j = 0; j < n_dofs_per_element; j++)
+                      {
+                        if (fabs(state_fe_values[phasefield].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+                          {
+                            local_vector(j) += scale * weight* uvalues_[q_point][3];
+                          }
+                      }
+                  }
+                else //Boundary or hanging node (no weight, so it works if hanging)
+                  {
+                    local_vector(i) += scale * uvalues_[q_point][3];
+                  }
+              }
 
           }
       }
@@ -244,7 +244,7 @@ public:
     unsigned int n_q_points = edc.GetNQPoints();
 
     double element_diameter = edc.GetElementDiameter();
- 
+
     const FEValuesExtractors::Vector displacements(0);
     const FEValuesExtractors::Scalar phasefield(2);
     const FEValuesExtractors::Scalar multiplier(3);
@@ -264,7 +264,7 @@ public:
     std::vector<double> phi_pf(n_dofs_per_element);
     std::vector<Tensor<1, 2> > phi_grads_pf(n_dofs_per_element);
     std::vector<Tensor<2, 2> > E_test(n_dofs_per_element);
-    
+
 
     Tensor<2,2> Identity;
     Identity[0][0] = 1.0;
@@ -281,7 +281,7 @@ public:
 
             phi_u[k] = state_fe_values[displacements].value(k, q_point);
             phi_grads_u[k] = state_fe_values[displacements].gradient(k, q_point);
-	    div_phi_u[k] = state_fe_values[displacements].divergence(k, q_point);
+            div_phi_u[k] = state_fe_values[displacements].divergence(k, q_point);
             phi_pf[k] = state_fe_values[phasefield].value(k, q_point);
             phi_grads_pf[k] = state_fe_values[phasefield].gradient(k, q_point);
 
@@ -307,7 +307,7 @@ public:
         double pf = uvalues_[q_point](2);
         double old_timestep_pf = max(0.,last_timestep_uvalues_[q_point](2));
 
-	const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
+        const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
         const double tr_E = trace(E);
 
         Tensor<2,2> stress_term;
@@ -324,7 +324,7 @@ public:
         if (this->GetTime() > 0.001)
           {
             decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
+                             E, tr_E, zero_matrix, 0.0,
                              lame_coefficient_lambda_,
                              lame_coefficient_mu_, false);
           }
@@ -394,45 +394,45 @@ public:
                                       ) * state_fe_values.JxW(q_point);
 
 
-		
-		//Now the Multiplierpart
-		//only in vertices, so we check whether one of the 
-		//lambda test function
-		// is one (i.e. we are in a vertex)
-		if(
-		  (fabs(state_fe_values[multiplier].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-		  ||
-		  (fabs(state_fe_values[multiplier].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-		  )
-		{
-		  //Weight to account for multiplicity when running over multiple meshes.
-		  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
-		  double weight = 1./n_neig;
 
-		  if(n_neig == 4)
-		  {
-		    //max = 0
-		    if( (uvalues_[q_point][3]+s_*(pf-old_timestep_pf)) <= 0. )
-		    {
-		      local_matrix(i, j) += scale * weight* state_fe_values[multiplier].value(i,q_point)
-			*state_fe_values[multiplier].value(j,q_point);
-		    }
-		    else //max > 0
-		    {
-		      //From Complementarity
-		      local_matrix(i, j) -= scale * weight* s_*state_fe_values[phasefield].value(j,q_point)
-			*state_fe_values[multiplier].value(i,q_point);
-		    }
-		    //From Equation
-		    local_matrix(i, j) += scale * weight* state_fe_values[phasefield].value(i,q_point)
-		      *state_fe_values[multiplier].value(j,q_point);
-		  }
-		  else //Boundary or hanging node no weight so it works when hanging
-		  {
-		    local_matrix(i, j) += scale *  state_fe_values[multiplier].value(i,q_point)
-		      *state_fe_values[multiplier].value(j,q_point);
-		  }
-		}
+                //Now the Multiplierpart
+                //only in vertices, so we check whether one of the
+                //lambda test function
+                // is one (i.e. we are in a vertex)
+                if (
+                  (fabs(state_fe_values[multiplier].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+                  ||
+                  (fabs(state_fe_values[multiplier].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+                )
+                  {
+                    //Weight to account for multiplicity when running over multiple meshes.
+                    unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+                    double weight = 1./n_neig;
+
+                    if (n_neig == 4)
+                      {
+                        //max = 0
+                        if ( (uvalues_[q_point][3]+s_*(pf-old_timestep_pf)) <= 0. )
+                          {
+                            local_matrix(i, j) += scale * weight* state_fe_values[multiplier].value(i,q_point)
+                                                  *state_fe_values[multiplier].value(j,q_point);
+                          }
+                        else //max > 0
+                          {
+                            //From Complementarity
+                            local_matrix(i, j) -= scale * weight* s_*state_fe_values[phasefield].value(j,q_point)
+                                                  *state_fe_values[multiplier].value(i,q_point);
+                          }
+                        //From Equation
+                        local_matrix(i, j) += scale * weight* state_fe_values[phasefield].value(i,q_point)
+                                              *state_fe_values[multiplier].value(j,q_point);
+                      }
+                    else //Boundary or hanging node no weight so it works when hanging
+                      {
+                        local_matrix(i, j) += scale *  state_fe_values[multiplier].value(i,q_point)
+                                              *state_fe_values[multiplier].value(j,q_point);
+                      }
+                  }
               }
           }
       }
@@ -553,8 +553,8 @@ private:
   vector<unsigned int> state_block_component_;
   vector<unsigned int> control_block_component_;
 
-  double constant_k_, alpha_eps_, 
-    G_c_, lame_coefficient_mu_, lame_coefficient_lambda_, s_;
+  double constant_k_, alpha_eps_,
+         G_c_, lame_coefficient_mu_, lame_coefficient_lambda_, s_;
 
 };
 #endif

@@ -171,10 +171,10 @@ namespace DOpE
       // Initialize the data containers.
       idc_.InitializeEDC(pde.GetUpdateFlags(),
                          *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-			 element,
+                         element,
                          this->GetParamData(),
-			 this->GetDomainData(),
-			 pde.HasVertices());
+                         this->GetDomainData(),
+                         pde.HasVertices());
       auto &edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
@@ -294,10 +294,10 @@ namespace DOpE
       // Initialize the data containers.
       idc_.InitializeEDC(pde.GetUpdateFlags(),
                          *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-			 element,
+                         element,
                          this->GetParamData(),
-			 this->GetDomainData(),
-			 pde.HasVertices());
+                         this->GetDomainData(),
+                         pde.HasVertices());
       auto &edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
@@ -428,10 +428,10 @@ namespace DOpE
 
       idc_.InitializeEDC(pde.GetUpdateFlags(),
                          *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-			 element,
+                         element,
                          this->GetParamData(),
-			 this->GetDomainData(),
-			 pde.HasVertices());
+                         this->GetDomainData(),
+                         pde.HasVertices());
       auto &edc = idc_.GetElementDataContainer();
 
       for (; element[0] != endc[0]; element[0]++)
@@ -679,7 +679,7 @@ namespace DOpE
       {
 #if DEAL_II_VERSION_GTE(9,4,0)
 #else
-	boundary_dofs.resize(
+        boundary_dofs.resize(
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->n_dofs());
 #endif
         const std::vector<Point<dimhigh> > &support_points =
@@ -701,10 +701,10 @@ namespace DOpE
                   {
                     current_comp[j] = true;
 #if DEAL_II_VERSION_GTE(9,4,0)
-		    boundary_dofs.clear();
+                    boundary_dofs.clear();
                     //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
                     boundary_dofs = DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
-								    current_comp, boundary_indicators);
+                                                                    current_comp, boundary_indicators);
 #else
                     //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
                     DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
@@ -717,15 +717,15 @@ namespace DOpE
                                                    this->GetDomainData());
 #if DEAL_II_VERSION_GTE(9,4,0)
                 for (types::global_dof_index k : boundary_dofs)
-		{
-		  local_vector = 0.;
-		  DD.value(support_points[k], j, k, local_vector);
-		  for (unsigned int l = 0; l < dofs; ++l)
-		  {
-		    u(l) += scale * local_vector(l);
-		  }
-                  
-		}
+                  {
+                    local_vector = 0.;
+                    DD.value(support_points[k], j, k, local_vector);
+                    for (unsigned int l = 0; l < dofs; ++l)
+                      {
+                        u(l) += scale * local_vector(l);
+                      }
+
+                  }
 #else
                 for (unsigned int k = 0; k < boundary_dofs.size(); k++)
                   {
@@ -826,7 +826,8 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
            int dimhigh>
-  void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::DeleteAllData() {
+  void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::DeleteAllData()
+  {
     param_data_.clear();
     domain_data_.clear();
   }

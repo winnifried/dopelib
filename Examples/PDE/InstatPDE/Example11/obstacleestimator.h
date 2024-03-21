@@ -28,7 +28,7 @@
 
 namespace DOpE
 {
- 
+
   /**************************************************************************/
   /**
    * This class implements the missing pieces of DWRDataContainer for
@@ -40,8 +40,8 @@ namespace DOpE
   {
   public:
     ObstacleResidualErrorContainer(STH &sth, DOpEtypes::VectorStorageType state_behavior,
-                             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
-                               DOpEtypes::EETerms::primal_only) :
+                                   ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
+                                     DOpEtypes::EETerms::primal_only) :
       ResidualErrorContainer<VECTOR>(ee_terms), sth_(sth), PI_h_u_(NULL), PI_h_z_(
         NULL)
     {
@@ -76,8 +76,8 @@ namespace DOpE
     }
 
     void
-      Initialize(unsigned int /*state_n_blocks*/,
-		 std::vector<unsigned int> &/*state_block_component*/)
+    Initialize(unsigned int /*state_n_blocks*/,
+               std::vector<unsigned int> &/*state_block_component*/)
     {
     }
 

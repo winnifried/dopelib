@@ -129,11 +129,11 @@ typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR,
         DIM> RP;
 
 typedef H1ResidualErrorContainer<Rothe_StateSpaceTimeHandler<FE,
-							     DOFHANDLER,
-							     SPARSITYPATTERN,
-							     VECTOR,
-							     DIM>,
-				 VECTOR, DIM> H1_RESC;
+        DOFHANDLER,
+        SPARSITYPATTERN,
+        VECTOR,
+        DIM>,
+        VECTOR, DIM> H1_RESC;
 
 int
 main(int argc, char **argv)
@@ -141,7 +141,7 @@ main(int argc, char **argv)
   /**
    * In this example we solve the two dimensional heat equation on varying meshes in time.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -186,18 +186,18 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times,n_time_steps);
   triangulation.refine_global(4);
   std::vector<unsigned int> Rothe_time_to_dof(n_time_steps+1,0);
-  for(unsigned int i = 0; i < Rothe_time_to_dof.size(); i++)
+  for (unsigned int i = 0; i < Rothe_time_to_dof.size(); i++)
     Rothe_time_to_dof[i]=i%2;
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
-  
+                              DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
+
   OP P(LPDE, DOFH);
-  
+
   P.AddFunctional(&LPF);
-  
+
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
-  
+
   //Here we use zero boundary values
   DOpEWrapper::ZeroFunction<DIM> zf;
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
@@ -213,11 +213,11 @@ main(int argc, char **argv)
   P.SetInitialValues(&initial_data);
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  
+
   //Use one outputhandler for all problems
   DOpEOutputHandler<VECTOR> output(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&output);
-  
+
   P.RegisterOutputHandler(&output);
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&output);
@@ -227,62 +227,62 @@ main(int argc, char **argv)
   unsigned int n_iter=4;
   for (unsigned int j = 0; j < n_iter; j++)
     {
-    try
-      {
+      try
+        {
 
-      solver.ReInit();
-      output.ReInit();
+          solver.ReInit();
+          output.ReInit();
 
-      stringstream outp;
-      {
-        outp << "**************************************************\n";
-        outp << "*             Starting Forward Solve             *\n";
-        outp << "*   Solving : " << P.GetName() << "\t*\n";
-        outp << "*   SDoFs   : ";
-        solver.StateSizeInfo(outp);
-        outp << "**************************************************";
-        //We print this header with priority 1 and 1 empty line in front and after.
-        output.Write(outp, 1, 1, 1);
+          stringstream outp;
+          {
+            outp << "**************************************************\n";
+            outp << "*             Starting Forward Solve             *\n";
+            outp << "*   Solving : " << P.GetName() << "\t*\n";
+            outp << "*   SDoFs   : ";
+            solver.StateSizeInfo(outp);
+            outp << "**************************************************";
+            //We print this header with priority 1 and 1 empty line in front and after.
+            output.Write(outp, 1, 1, 1);
 
-        //We compute the value of the functionals. To this end, we have to solve
-        //the PDE at hand.
-        solver.ComputeReducedFunctionals();
-	solver.ComputeRefinementIndicators(h1resc, LPDE);
-	outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
-	output.Write(outp, 1, 1, 1);
-      }
+            //We compute the value of the functionals. To this end, we have to solve
+            //the PDE at hand.
+            solver.ComputeReducedFunctionals();
+            solver.ComputeRefinementIndicators(h1resc, LPDE);
+            outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
+            output.Write(outp, 1, 1, 1);
+          }
 
-      // The soluction extractor class allows us
-      // to get the solution vector from the solver
-      SolutionExtractor<RP, VECTOR> a(solver);
-      const StateVector<VECTOR> &statevec = a.GetU();
+          // The soluction extractor class allows us
+          // to get the solution vector from the solver
+          SolutionExtractor<RP, VECTOR> a(solver);
+          const StateVector<VECTOR> &statevec = a.GetU();
 
-      double product = statevec * statevec;
-      outp << "Backward euler: u * u = " << product << std::endl;
-      output.Write(outp, 0);
-      }
-     
-    catch (DOpEException &e)
-       {
-        std::cout
-         << "Warning: During execution of `" + e.GetThrowingInstance()
-        + "` the following Problem occurred!" << std::endl;
-        std::cout << e.GetErrorMessage() << std::endl;
-       }
-    //No refinement after the last iteration
-    if (j != n_iter-1)
+          double product = statevec * statevec;
+          outp << "Backward euler: u * u = " << product << std::endl;
+          output.Write(outp, 0);
+        }
+
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      //No refinement after the last iteration
+      if (j != n_iter-1)
         {
           //For global mesh refinement, uncomment the next line
           // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
-	  const std::vector<dealii::Vector<float> > error_ind(h1resc.GetErrorIndicators());
+          const std::vector<dealii::Vector<float> > error_ind(h1resc.GetErrorIndicators());
           DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));
           //There are other mesh refinement strategies implemented, for example
           //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
           //DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
         }
 
-  }
+    }
   return 0;
 }
 

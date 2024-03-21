@@ -884,7 +884,7 @@ namespace DOpE
   {
     return pde_.HasInterfaces();
   }
-  
+
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,

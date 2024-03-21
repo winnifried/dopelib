@@ -40,7 +40,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -50,7 +50,7 @@ class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #endif
 {
 public:
-  
+
   LocalPDE() :
     state_block_component_(2, 0)
   {
@@ -81,54 +81,54 @@ public:
     const FEValuesExtractors::Scalar mult(1);
 
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-    {
-      Tensor<1, 2> vgrads;
-      vgrads.clear();
-      vgrads[0] = ugrads_[q_point][0][0];
-      vgrads[1] = ugrads_[q_point][0][1];
-      
-      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-	const Tensor<1, 2> phi_i_grads_v =
-	  state_fe_values[pde].gradient(i, q_point);
+        Tensor<1, 2> vgrads;
+        vgrads.clear();
+        vgrads[0] = ugrads_[q_point][0][0];
+        vgrads[1] = ugrads_[q_point][0][1];
 
-	//The acual PDE operator, i.e. -\Delta u
-	local_vector(i) += scale
-	  * vgrads * phi_i_grads_v
-	  * state_fe_values.JxW(q_point);
-	//Second equation, only in vertices, so we check whether the lambda test function
-	// is one (i.e. we are in a vertex)
-	//Notice that we don't need to multiply with a testfunction as
-	//its value is known to be one!
-	if(fabs(state_fe_values[mult].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	{
-	  //Weight to account for multiplicity when running over multiple elements.
-	  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
-	  double weight = 1./n_neig;
-	  if(n_neig == 4)
-	  {
-	    //Equation for multiplier, i.e. lambda - max(0,\lambda-(u(x_i)-chi(x_i)))
-	    local_vector(i) += scale * weight* (uvalues_[q_point][1]
-						- std::max(0.,uvalues_[q_point][1]-(uvalues_[q_point][0]-obstacle_[q_point][0])));
-	    //Add Multiplier to the state equation
-	    //To do that, we need to find out to which basis function j for the first equation
-	    //the current index i of the multiplier belongs.
-	    //This is easy, since it must be the one index j where phi^j(x_i) = 1
-	    for(unsigned int j = 0; j < n_dofs_per_element; j++)
-	    {
-	      if(fabs(state_fe_values[pde].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	      {
-		local_vector(j) -= scale * weight* uvalues_[q_point][1];
-	      }
-	    }
-	  }
-	  else //Boundary or hanging node (no weight, so it works if hanging)
-	  {
-	     local_vector(i) += scale * uvalues_[q_point][1];
-	  }
-	}
+        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            const Tensor<1, 2> phi_i_grads_v =
+              state_fe_values[pde].gradient(i, q_point);
+
+            //The acual PDE operator, i.e. -\Delta u
+            local_vector(i) += scale
+                               * vgrads * phi_i_grads_v
+                               * state_fe_values.JxW(q_point);
+            //Second equation, only in vertices, so we check whether the lambda test function
+            // is one (i.e. we are in a vertex)
+            //Notice that we don't need to multiply with a testfunction as
+            //its value is known to be one!
+            if (fabs(state_fe_values[mult].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+              {
+                //Weight to account for multiplicity when running over multiple elements.
+                unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+                double weight = 1./n_neig;
+                if (n_neig == 4)
+                  {
+                    //Equation for multiplier, i.e. lambda - max(0,\lambda-(u(x_i)-chi(x_i)))
+                    local_vector(i) += scale * weight* (uvalues_[q_point][1]
+                                                        - std::max(0.,uvalues_[q_point][1]-(uvalues_[q_point][0]-obstacle_[q_point][0])));
+                    //Add Multiplier to the state equation
+                    //To do that, we need to find out to which basis function j for the first equation
+                    //the current index i of the multiplier belongs.
+                    //This is easy, since it must be the one index j where phi^j(x_i) = 1
+                    for (unsigned int j = 0; j < n_dofs_per_element; j++)
+                      {
+                        if (fabs(state_fe_values[pde].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+                          {
+                            local_vector(j) -= scale * weight* uvalues_[q_point][1];
+                          }
+                      }
+                  }
+                else //Boundary or hanging node (no weight, so it works if hanging)
+                  {
+                    local_vector(i) += scale * uvalues_[q_point][1];
+                  }
+              }
+          }
       }
-    }
   }
 
   void
@@ -151,71 +151,71 @@ public:
 
     uvalues_.resize(n_q_points, Vector<double>(2));
     obstacle_.resize(n_q_points, Vector<double>(2));
-    
-    if(this->problem_type_ == "state")
+
+    if (this->problem_type_ == "state")
       edc.GetValuesState("last_newton_solution", uvalues_);
     else
       edc.GetValuesState("state", uvalues_);
     edc.GetValuesState("obstacle", obstacle_);
-    
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
         for (unsigned int k = 0; k < n_dofs_per_element; k++)
           {
             phi_grads_v[k] = state_fe_values[pde].gradient(k, q_point);
-	    phi_vals[k] = state_fe_values[pde].value(k, q_point);
+            phi_vals[k] = state_fe_values[pde].value(k, q_point);
           }
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
-		//Matrix for -\Delta
+                //Matrix for -\Delta
                 local_matrix(i, j) += scale * (
-		   phi_grads_v[j] * phi_grads_v[i]
-		  )* state_fe_values.JxW(q_point);
+                                        phi_grads_v[j] * phi_grads_v[i]
+                                      )* state_fe_values.JxW(q_point);
 
-		//Second equation, only in vertices, so we check whether one of the 
-		//lambda test function
-		// is one (i.e. we are in a vertex)
-		if(
-		  (fabs(state_fe_values[mult].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-		  ||
-		  (fabs(state_fe_values[mult].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-		  )
-		{
-		  //Weight to account for multiplicity when running over multiple meshes.
-		  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
-		  double weight = 1./n_neig;
+                //Second equation, only in vertices, so we check whether one of the
+                //lambda test function
+                // is one (i.e. we are in a vertex)
+                if (
+                  (fabs(state_fe_values[mult].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+                  ||
+                  (fabs(state_fe_values[mult].value(j,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+                )
+                  {
+                    //Weight to account for multiplicity when running over multiple meshes.
+                    unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+                    double weight = 1./n_neig;
 
-		  if(n_neig == 4)
-		  {
-		    //Derivative is different if the \max in the complementarity function
-		    //is 0 or lambda-(u-\chi) > 0
-		    //max = 0 
-		    if( (uvalues_[q_point][1]-(uvalues_[q_point][0]-obstacle_[q_point][0])) <= 0. )
-		    {
-		      local_matrix(i, j) += scale * weight* state_fe_values[mult].value(i,q_point)
-			*state_fe_values[mult].value(j,q_point);
-		    }
-		    else //max > 0
-		    {
-		      //From Complementarity
-		      local_matrix(i, j) += scale * weight* state_fe_values[pde].value(j,q_point)
-			*state_fe_values[mult].value(i,q_point);
-		    }
-		    //From \lambda_j\phi_i in the first equation
-		    //No need to check for the correct j, since otherwise
-		    //the testfuncction is zero in a vertex!
-		    local_matrix(i, j) -= scale * weight* state_fe_values[pde].value(i,q_point)
-		      *state_fe_values[mult].value(j,q_point);
-		  }
-		  else //Boundary or hanging node no weight so it works when hanging
-		  {
-		    local_matrix(i, j) += scale *  state_fe_values[mult].value(i,q_point)
-		      *state_fe_values[mult].value(j,q_point);
-		  }
-		}
+                    if (n_neig == 4)
+                      {
+                        //Derivative is different if the \max in the complementarity function
+                        //is 0 or lambda-(u-\chi) > 0
+                        //max = 0
+                        if ( (uvalues_[q_point][1]-(uvalues_[q_point][0]-obstacle_[q_point][0])) <= 0. )
+                          {
+                            local_matrix(i, j) += scale * weight* state_fe_values[mult].value(i,q_point)
+                                                  *state_fe_values[mult].value(j,q_point);
+                          }
+                        else //max > 0
+                          {
+                            //From Complementarity
+                            local_matrix(i, j) += scale * weight* state_fe_values[pde].value(j,q_point)
+                                                  *state_fe_values[mult].value(i,q_point);
+                          }
+                        //From \lambda_j\phi_i in the first equation
+                        //No need to check for the correct j, since otherwise
+                        //the testfuncction is zero in a vertex!
+                        local_matrix(i, j) -= scale * weight* state_fe_values[pde].value(i,q_point)
+                                              *state_fe_values[mult].value(j,q_point);
+                      }
+                    else //Boundary or hanging node no weight so it works when hanging
+                      {
+                        local_matrix(i, j) += scale *  state_fe_values[mult].value(i,q_point)
+                                              *state_fe_values[mult].value(j,q_point);
+                      }
+                  }
               }
           }
       }
@@ -249,13 +249,13 @@ public:
       } //endfor qpoint
   }
 
-    void
+  void
   StrongElementResidual(
     const EDC<DH, VECTOR, dealdim> &edc,
     const EDC<DH, VECTOR, dealdim> &edc_w,
     double &sum, double scale) override
-  {   
-    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();       
+  {
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -275,12 +275,12 @@ public:
     //Component 0 is the contact information
     //Component 1 is the mass matrix diagonal
     edc.GetValuesState("aux_error_0", auxvalues_);
-    
+
     const FEValuesExtractors::Scalar pde(0);
-    
-    // weight the residual depending on the contact status 
+
+    // weight the residual depending on the contact status
     int fullContact =0;
-    // need to sum up locally as in sum everything in summed up 
+    // need to sum up locally as in sum everything in summed up
     double elemRes = 0;
     double complRes = 0;
 
@@ -288,30 +288,30 @@ public:
     assert(this->ResidualModifier);
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	// dofs not nodes
-	for (unsigned int i = 0; i < n_dofs_per_element; i++)
-	  {
-	    if(fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	      {
+        // dofs not nodes
+        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            if (fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+              {
 
-		if (fabs(auxvalues_[q_point](0)-1.)< std::numeric_limits<double>::epsilon())
-		  {
-		    //count how many nodes of the element are in full-contact
-		    fullContact += 1;		   
- 
-		  }
-	      }
-	  }
+                if (fabs(auxvalues_[q_point](0)-1.)< std::numeric_limits<double>::epsilon())
+                  {
+                    //count how many nodes of the element are in full-contact
+                    fullContact += 1;
+
+                  }
+              }
+          }
 
         fvalues_[q_point] = local::rhs(state_fe_values.quadrature_point(q_point));
         double res;
         res = fvalues_[q_point] + lap_u_[q_point](0);
 
         //Modify the residual as required by the error estimator
-	this->ResidualModifier(res);
-	
-	elemRes += scale * (res * PI_h_z_[q_point](0))
-	  * state_fe_values.JxW(q_point);
+        this->ResidualModifier(res);
+
+        elemRes += scale * (res * PI_h_z_[q_point](0))
+                   * state_fe_values.JxW(q_point);
       }
     //Only contribute to the error estimator if the element is not in full-contact
     //i.e. fullContact < 4
@@ -320,85 +320,85 @@ public:
     //volume of domain for the basisfunctions
     for (unsigned int q = 0; q < n_q_points; q++)
       {
-	// dofs not nodes
-	for (unsigned int i = 0; i < n_dofs_per_element; i++)
-	  {
-	    // test if q = i (Knoten)
-	    if(fabs(state_fe_values[pde].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
-	      {
-		// if q is no full contact
-		if (fabs(auxvalues_[q](0)-1.)>std::numeric_limits<double>::epsilon())
-		  // but if q is in contact
-		  {
-		    if(uvalues_[q](1) > 0 )
-		      {
-			//we have a semi contact node
-			// real quadrature loop
-			for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-			  {
-			    complRes += (1.0/auxvalues_[q](1))*uvalues_[q](1)*(fabs(obstacle_[q_point][0]-uvalues_[q_point][0]))*state_fe_values[pde].value(i,q_point)*state_fe_values.JxW(q_point);
-			  }
-		      }
-		  }
-	      }
-	  }
+        // dofs not nodes
+        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            // test if q = i (Knoten)
+            if (fabs(state_fe_values[pde].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
+              {
+                // if q is no full contact
+                if (fabs(auxvalues_[q](0)-1.)>std::numeric_limits<double>::epsilon())
+                  // but if q is in contact
+                  {
+                    if (uvalues_[q](1) > 0 )
+                      {
+                        //we have a semi contact node
+                        // real quadrature loop
+                        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+                          {
+                            complRes += (1.0/auxvalues_[q](1))*uvalues_[q](1)*(fabs(obstacle_[q_point][0]-uvalues_[q_point][0]))*state_fe_values[pde].value(i,q_point)*state_fe_values.JxW(q_point);
+                          }
+                      }
+                  }
+              }
+          }
       }
-    
+
     sum += elemRes;
     sum += complRes;
-    
+
   }
 
   void
-    StrongFaceResidual(
-      const FDC<DH, VECTOR, dealdim> &fdc,
-      const FDC<DH, VECTOR, dealdim> &fdc_w,
-      double &sum, double scale) override
+  StrongFaceResidual(
+    const FDC<DH, VECTOR, dealdim> &fdc,
+    const FDC<DH, VECTOR, dealdim> &fdc_w,
+    double &sum, double scale) override
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
     unsigned int n_q_points = fdc.GetNQPoints();
     const  auto &state_fe_values = fdc.GetFEFaceValuesState();
-  
+
     ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(2));
     ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(2));
     PI_h_z_.resize(n_q_points, Vector<double>(2));
     auxvalues_.resize(n_q_points, Vector<double>(2));
 
     fdc.GetFaceValuesState("aux_error_0", auxvalues_);
-      
+
     fdc.GetFaceGradsState("state", ugrads_);
     fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
     fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
     vector<double> jump(n_q_points);
-    
+
     const FEValuesExtractors::Scalar pde(0);
-   
+
 
     // weight the face residual depending on the contact status of the nodes
     int fullContact = 0;
     // need localSum as in sum everything is summed up also the element residual
     double localSum = 0;
- 
+
     for (unsigned int q = 0; q < n_q_points; q++)
       {
         jump[q] = (ugrads_nbr_[q][0][0] - ugrads_[q][0][0])
                   * fdc.GetFEFaceValuesState().normal_vector(q)[0]
                   + (ugrads_nbr_[q][0][1] - ugrads_[q][0][1])
                   * fdc.GetFEFaceValuesState().normal_vector(q)[1];
-      
-	// dofs not nodes
-	for (unsigned int i = 0; i < n_dofs_per_element; i++)
-	  {
-	    if(fabs(state_fe_values[pde].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
-	      {
-		if (fabs(auxvalues_[q](0)-1.)< std::numeric_limits<double>::epsilon())
-		  {
-		    //count how many nodes of the element are in full-contact
-		    fullContact += 1;		   
-		    
-		  }
-	      }
-	  }
+
+        // dofs not nodes
+        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            if (fabs(state_fe_values[pde].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
+              {
+                if (fabs(auxvalues_[q](0)-1.)< std::numeric_limits<double>::epsilon())
+                  {
+                    //count how many nodes of the element are in full-contact
+                    fullContact += 1;
+
+                  }
+              }
+          }
       }
     //make sure the binding of the function has worked
     assert(this->ResidualModifier);
@@ -408,30 +408,30 @@ public:
         //Modify the residual as required by the error estimator
         double res;
         res = jump[q_point];
-	
-	this->ResidualModifier(res);
+
+        this->ResidualModifier(res);
 
         localSum += scale * (res * PI_h_z_[q_point](0))
-               * fdc.GetFEFaceValuesState().JxW(q_point);
+                    * fdc.GetFEFaceValuesState().JxW(q_point);
       }
     localSum = (2.0-fullContact)*localSum;
-    
+
     sum += localSum;
-  
+
   }
 
   void
-    StrongBoundaryResidual(
-      const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-      const FDC<DH, VECTOR, dealdim> &/*fdc_w*/,
-      double &/*sum*/, double /*scale*/) override
+  StrongBoundaryResidual(
+    const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+    const FDC<DH, VECTOR, dealdim> &/*fdc_w*/,
+    double &/*sum*/, double /*scale*/) override
   {
     /*Not needed on homogeneous Dirichlet-boundary*/
   }
 
-    //Auxiliary Values for Error Estimation
+  //Auxiliary Values for Error Estimation
   void ElementAuxRhs(
-    const EDC<DH, VECTOR, dealdim> & edc,
+    const EDC<DH, VECTOR, dealdim> &edc,
     dealii::Vector<double> &local_vector,
     double scale) override
   {
@@ -439,10 +439,10 @@ public:
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
-    
+
     assert(this->problem_type_ == "aux_error");
     assert(this->problem_type_num_ == 0);
-    
+
     uvalues_.resize(n_q_points, Vector<double>(2));
     obstacle_.resize(n_q_points, Vector<double>(2));
     edc.GetValuesState("state", uvalues_);
@@ -450,50 +450,50 @@ public:
 
     const FEValuesExtractors::Scalar pde(0);
     const FEValuesExtractors::Scalar mult(1);
-    
+
     unsigned int contact_vertices=0;
     //First component is full contact
     //second is mass
-    
+
     //Check if contact vertex
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	for (unsigned int i = 0; i < n_dofs_per_element; i++)
-	{
-	    //Only in vertices, so we check whether the u test function
-	    // is one (i.e. we are in a vertex)
-	    if(fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	    {
-	      //Check if contact vertex
-	      if((uvalues_[q_point][0]-obstacle_[q_point][0]) >= 0.) 
-		contact_vertices++;
-	    }
+        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            //Only in vertices, so we check whether the u test function
+            // is one (i.e. we are in a vertex)
+            if (fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+              {
+                //Check if contact vertex
+                if ((uvalues_[q_point][0]-obstacle_[q_point][0]) >= 0.)
+                  contact_vertices++;
+              }
           }
       }
     //Now assembling the information
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-    {
-      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-	//Both are vertex based, so we check if the corresponding q point is a vertex
-	//For contact, set one if all (4) vertices are in contact.
-	if(fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	{
-	  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
-	  if(n_neig > 0)
-	  {
-	    if(contact_vertices==4)
-	    {
-	      local_vector(i) += scale/n_neig;
-	    }
-	  }
-	}
-	//For Mass: \int_{N(x_i)} \phi_i
-	local_vector(i) += scale * state_fe_values[mult].value(i,q_point)
-	  * state_fe_values.JxW(q_point);
-	    
+        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            //Both are vertex based, so we check if the corresponding q point is a vertex
+            //For contact, set one if all (4) vertices are in contact.
+            if (fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+              {
+                unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+                if (n_neig > 0)
+                  {
+                    if (contact_vertices==4)
+                      {
+                        local_vector(i) += scale/n_neig;
+                      }
+                  }
+              }
+            //For Mass: \int_{N(x_i)} \phi_i
+            local_vector(i) += scale * state_fe_values[mult].value(i,q_point)
+                               * state_fe_values.JxW(q_point);
+
+          }
       }
-    }
   }
 
   void FaceAuxRhs(
@@ -502,7 +502,7 @@ public:
     double /*scale*/) override
   {
   }
-  
+
   void BoundaryAuxRhs(
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
     dealii::Vector<double> &/*local_vector*/,

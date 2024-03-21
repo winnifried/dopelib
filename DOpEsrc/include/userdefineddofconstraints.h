@@ -60,7 +60,7 @@ namespace DOpE
 #else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
 #endif
-    class UserDefinedDoFConstraints
+  class UserDefinedDoFConstraints
   {
   public:
     UserDefinedDoFConstraints()
@@ -100,19 +100,19 @@ namespace DOpE
       dealii::ConstraintMatrix &dof_constraints) const;
 #endif
     void
-  RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH> &mapping)
+    RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH> &mapping)
     {
       mapping_ = &mapping;
     }
 
   protected:
-  const DOpEWrapper::Mapping<dealdim, DH> &
-  GetMapping() const
+    const DOpEWrapper::Mapping<dealdim, DH> &
+    GetMapping() const
     {
       return *mapping_;
     }
   private:
-  const DOpEWrapper::Mapping<dealdim, DH> *mapping_ = nullptr;
+    const DOpEWrapper::Mapping<dealdim, DH> *mapping_ = nullptr;
   };
 
 #if DEAL_II_VERSION_GTE(9,1,1)
@@ -121,14 +121,14 @@ namespace DOpE
 #else
   template<template<int, int> class DH, int dopedim, int dealdim>
 #endif
-    void
-    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+  void
+  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
 #if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::DoFHandler<dealdim> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> & /*dof_handler*/,
 #else
-      const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
 #endif
-      dealii::AffineConstraints<double> & /*dof_constraints*/) const
+    dealii::AffineConstraints<double> & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeStateDoFConstraints");
@@ -140,13 +140,13 @@ namespace DOpE
   template<template<int, int> class DH, int dopedim, int dealdim>
 #endif
   void
-    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
+  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
 #if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
 #else
-      const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
 #endif
-      dealii::AffineConstraints<double> & /*dof_constraints*/) const
+    dealii::AffineConstraints<double> & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeControlDoFConstraints");
@@ -158,13 +158,13 @@ namespace DOpE
   template<template<int, int> class DH, int dopedim, int dealdim>
 #endif
   void
-    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
 #if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::DoFHandler<dealdim> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> & /*dof_handler*/,
 #else
-      const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
 #endif
-      dealii::ConstraintMatrix & /*dof_constraints*/) const
+    dealii::ConstraintMatrix & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeStateDoFConstraints");
@@ -175,14 +175,14 @@ namespace DOpE
 #else
   template<template<int, int> class DH, int dopedim, int dealdim>
 #endif
-    void
-    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
+  void
+  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
 #if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dopedim> & /*dof_handler*/,
 #else
-      const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
 #endif
-      dealii::ConstraintMatrix & /*dof_constraints*/) const
+    dealii::ConstraintMatrix & /*dof_constraints*/) const
   {
     throw DOpEException("Not Implemented.",
                         "UserDefinedDoFConstraints::MakeControlDoFConstraints");

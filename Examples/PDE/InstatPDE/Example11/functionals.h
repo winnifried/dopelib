@@ -40,91 +40,91 @@ template<
   bool DH, typename VECTOR, int dealdim>
 #else
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 #endif
 class LocalFunctionalTCV : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
-	LocalFunctionalTCV()
-	{
-	}
+  LocalFunctionalTCV()
+  {
+  }
 
-	static void
-	  declare_params(ParameterReader &/*param_reader*/)
-	{
-	}
+  static void
+  declare_params(ParameterReader &/*param_reader*/)
+  {
+  }
 
-	LocalFunctionalTCV(ParameterReader &/*param_reader*/)
-	{
+  LocalFunctionalTCV(ParameterReader &/*param_reader*/)
+  {
 
-	}
+  }
 
-	bool
-	NeedTime() const override
-	{
-		return true;
-	}
+  bool
+  NeedTime() const override
+  {
+    return true;
+  }
 
-	double
-	ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
-	{
-		const auto &state_fe_values = edc.GetFEValuesState();
-		unsigned int n_q_points = edc.GetNQPoints();
-		double ret = 0.;
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
+  {
+    const auto &state_fe_values = edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    double ret = 0.;
 
-		vector<Vector<double> > uvalues_;
-		vector<vector<Tensor<1, dealdim> > > ugrads_;
+    vector<Vector<double> > uvalues_;
+    vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-		uvalues_.resize(n_q_points, Vector<double>(4));
-		ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
+    uvalues_.resize(n_q_points, Vector<double>(4));
+    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
 
-		edc.GetValuesState("state", uvalues_);
-		edc.GetGradsState("state", ugrads_);
+    edc.GetValuesState("state", uvalues_);
+    edc.GetGradsState("state", ugrads_);
 
-		if(fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
-		{
-		  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-		  {
-		    // displacement gradient
-		    Tensor<1, 2> grad_phi;
-		    grad_phi.clear();
-		    grad_phi[0] = ugrads_[q_point][2][0];
-		    grad_phi[1] = ugrads_[q_point][2][1];
-		    
-		    Tensor<1,2> u_val;
-		    u_val.clear();
-		    u_val[0] = uvalues_[q_point][0];
-		    u_val[1] = uvalues_[q_point][1];
-		    ret += u_val*grad_phi * state_fe_values.JxW(q_point);
-		  }
-		}
-		return ret;
-	}
+    if (fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
+      {
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            // displacement gradient
+            Tensor<1, 2> grad_phi;
+            grad_phi.clear();
+            grad_phi[0] = ugrads_[q_point][2][0];
+            grad_phi[1] = ugrads_[q_point][2][1];
 
-	UpdateFlags
-	GetUpdateFlags() const override
-	{
-		return update_values | update_quadrature_points | update_gradients;
-	}
+            Tensor<1,2> u_val;
+            u_val.clear();
+            u_val[0] = uvalues_[q_point][0];
+            u_val[1] = uvalues_[q_point][1];
+            ret += u_val*grad_phi * state_fe_values.JxW(q_point);
+          }
+      }
+    return ret;
+  }
 
-	string
-	GetType() const override
-	{
-		return "domain timelocal";
-	}
+  UpdateFlags
+  GetUpdateFlags() const override
+  {
+    return update_values | update_quadrature_points | update_gradients;
+  }
 
-	bool HasFaces() const override
-	{
-		return false;
-	}
+  string
+  GetType() const override
+  {
+    return "domain timelocal";
+  }
 
-	string
-	GetName() const override
-	{
-		return "TCV";
-	}
+  bool HasFaces() const override
+  {
+    return false;
+  }
+
+  string
+  GetName() const override
+  {
+    return "TCV";
+  }
 
 };
 
@@ -152,7 +152,7 @@ public:
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     // param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     // param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
 
@@ -164,10 +164,10 @@ public:
     constant_k_ = param_reader.get_double("constant_k");
     double E = param_reader.get_double("Young_modulus");
     double nu  = param_reader.get_double("Poisson_ratio");
-    if(nu == 0.5)
+    if (nu == 0.5)
       {
-	std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
-	abort();
+        std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
+        abort();
       }
     lame_coefficient_mu_ = E/(2.*(1+nu));
     lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
@@ -198,28 +198,28 @@ public:
     edc.GetValuesState("state", uvalues_);
     edc.GetGradsState("state", ugrads_);
 
-    if(fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
-    {
-      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    if (fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
       {
-	// displacement gradient
-        Tensor<2, 2> grad_u;
-        grad_u.clear();
-        grad_u[0][0] = ugrads_[q_point][0][0];
-        grad_u[0][1] = ugrads_[q_point][0][1];
-        grad_u[1][0] = ugrads_[q_point][1][0];
-        grad_u[1][1] = ugrads_[q_point][1][1];
-	
-        const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
-        const double tr_E = trace(E);
-        double pf = uvalues_[q_point](2);
-        const double tr_e_2 = trace(E*E);
-	const double psi_e = 0.5 * lame_coefficient_lambda_ * tr_E*tr_E + lame_coefficient_mu_ * tr_e_2;
-	
-        local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) * 
-	  psi_e * state_fe_values.JxW(q_point);
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            // displacement gradient
+            Tensor<2, 2> grad_u;
+            grad_u.clear();
+            grad_u[0][0] = ugrads_[q_point][0][0];
+            grad_u[0][1] = ugrads_[q_point][0][1];
+            grad_u[1][0] = ugrads_[q_point][1][0];
+            grad_u[1][1] = ugrads_[q_point][1][1];
+
+            const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
+            const double tr_E = trace(E);
+            double pf = uvalues_[q_point](2);
+            const double tr_e_2 = trace(E*E);
+            const double psi_e = 0.5 * lame_coefficient_lambda_ * tr_E*tr_E + lame_coefficient_mu_ * tr_e_2;
+
+            local_bulk_energy += (( 1 + constant_k_ ) * pf * pf + constant_k_) *
+                                 psi_e * state_fe_values.JxW(q_point);
+          }
       }
-    }
     return local_bulk_energy;
   }
 
@@ -265,7 +265,7 @@ class LocalFunctionalCrack : public FunctionalInterface<EDC, FDC, DH, VECTOR, de
 {
   double G_c_, alpha_eps_;
 
-public: 
+public:
   static void
   declare_params(ParameterReader &param_reader)
   {
@@ -298,7 +298,7 @@ public:
     unsigned int n_q_points = edc.GetNQPoints();
     double local_crack_energy = 0;
 
-    
+
     vector<Vector<double> > uvalues_;
     vector<vector<Tensor<1, dealdim> > > ugrads_;
 
@@ -308,22 +308,22 @@ public:
     edc.GetValuesState("state", uvalues_);
     edc.GetGradsState("state", ugrads_);
 
-    if(fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
-    {
-      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    if (fabs(edc.GetCenter()[0]) < 10 && fabs(edc.GetCenter()[1]) < 10)
       {
-        double pf = uvalues_[q_point](2);
-	
-	//phase field gradient
-	Tensor<1,2> grad_pf;
-        grad_pf.clear();
-        grad_pf[0] = ugrads_[q_point][2][0];
-        grad_pf[1] = ugrads_[q_point][2][1];
-	
-        local_crack_energy += G_c_/2.0 * ((pf-1) * (pf-1)/alpha_eps_ + alpha_eps_ * 
-					  (grad_pf[0] * grad_pf[0] + grad_pf[1] * grad_pf[1])) * state_fe_values.JxW(q_point);
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            double pf = uvalues_[q_point](2);
+
+            //phase field gradient
+            Tensor<1,2> grad_pf;
+            grad_pf.clear();
+            grad_pf[0] = ugrads_[q_point][2][0];
+            grad_pf[1] = ugrads_[q_point][2][1];
+
+            local_crack_energy += G_c_/2.0 * ((pf-1) * (pf-1)/alpha_eps_ + alpha_eps_ *
+                                              (grad_pf[0] * grad_pf[0] + grad_pf[1] * grad_pf[1])) * state_fe_values.JxW(q_point);
+          }
       }
-    }
     return local_crack_energy;
   }
 
@@ -389,7 +389,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -448,7 +448,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -515,7 +515,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -536,7 +536,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 /****************************************************************************************/
 
@@ -585,7 +585,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(0);
   }
 
@@ -606,7 +606,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 
 /****************************************************************************************/
@@ -647,7 +647,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -706,7 +706,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -773,7 +773,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -794,7 +794,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 /****************************************************************************************/
 
@@ -843,7 +843,7 @@ public:
 
     VectorTools::point_value(state_dof_handler, *(it->second), p,
                              tmp_vector);
-    
+
     return tmp_vector(1);
   }
 
@@ -864,7 +864,7 @@ public:
   }
 
 private:
-double d_;
+  double d_;
 };
 
 /****************************************************************************************/
@@ -886,20 +886,20 @@ class LocalFunctionalEnergyNormU : public FunctionalInterface<EDC, FDC, DH, VECT
 {
   double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_, alpha_eps_, G_c_;
   std::string ref_string_;
-    
+
 public:
   static void
-    declare_params(ParameterReader &param_reader)
+  declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalEnergyNormU(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -908,14 +908,14 @@ public:
     constant_k_ = param_reader.get_double("constant_k");
     double E = param_reader.get_double("Young_modulus");
     double nu  = param_reader.get_double("Poisson_ratio");
-    if(nu == 0.5)
+    if (nu == 0.5)
       {
-	std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
-	abort();
+        std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
+        abort();
       }
     lame_coefficient_mu_ = E/(2.*(1+nu));
     lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
-    
+
     //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
     //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
     //alpha_eps_ = param_reader.get_double("alpha_eps");
@@ -924,7 +924,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-  
+
   }
   void SetParams(double eps)
   {
@@ -970,20 +970,20 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
-     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
 
-	// phase fiel variable to weight
-	double refpf = refvalues_[q_point](2);
+        // phase fiel variable to weight
+        double refpf = refvalues_[q_point](2);
 
-	// eigentlich ist das nicht ganz richtig, da wir in der time lagged version
-	// den Wert von phi zum alten Zeitschritt nehmen muessten
-	// wir haben aber nur die aktuellen Werte uebergeben
-	double g_pf;				
-	g_pf = (1-constant_k_)*refpf*refpf + constant_k_;
+        // eigentlich ist das nicht ganz richtig, da wir in der time lagged version
+        // den Wert von phi zum alten Zeitschritt nehmen muessten
+        // wir haben aber nur die aktuellen Werte uebergeben
+        double g_pf;
+        g_pf = (1-constant_k_)*refpf*refpf + constant_k_;
 
-	// displacement gradient  
+        // displacement gradient
         Tensor<2, 2> grad_u;
         grad_u.clear();
         grad_u[0][0] = ugrads_[q_point][0][0];
@@ -991,7 +991,7 @@ public:
         grad_u[1][0] = ugrads_[q_point][1][0];
         grad_u[1][1] = ugrads_[q_point][1][1];
 
-	// displacement gradient on the coarser mesh   
+        // displacement gradient on the coarser mesh
         Tensor<2, 2> refgrad_u;
         refgrad_u.clear();
         refgrad_u[0][0] = refgrads_[q_point][0][0];
@@ -999,23 +999,23 @@ public:
         refgrad_u[1][0] = refgrads_[q_point][1][0];
         refgrad_u[1][1] = refgrads_[q_point][1][1];
 
-	  
+
         const Tensor<2,2> E = 0.5 * ((grad_u-refgrad_u) + transpose(grad_u-refgrad_u));
         const double tr_E = trace(E);
 
-	Tensor<2,2> stress_term;
+        Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-	  + 2 * lame_coefficient_mu_ * E;
+                      + 2 * lame_coefficient_mu_ * E;
 
-    	double Energy;
-	Energy = scalar_product(stress_term, E);
-	
-	local_Uenergy_norm += g_pf*Energy*state_fe_values.JxW(q_point);
-	
-	}
-    
-   return local_Uenergy_norm;
+        double Energy;
+        Energy = scalar_product(stress_term, E);
+
+        local_Uenergy_norm += g_pf*Energy*state_fe_values.JxW(q_point);
+
+      }
+
+    return local_Uenergy_norm;
   }
 
   UpdateFlags
@@ -1041,7 +1041,7 @@ public:
     stringstream out;
     out<<"UEnergyNorm-"<<ref_string_;
     return out.str();
-   }
+  }
 
 };
 
@@ -1065,20 +1065,20 @@ class LocalFunctionalElasticityNorm : public FunctionalInterface<EDC, FDC, DH, V
 {
   double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_, alpha_eps_, G_c_;
   std::string ref_string_;
-    
+
 public:
   static void
-    declare_params(ParameterReader &param_reader)
+  declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalElasticityNorm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1087,23 +1087,23 @@ public:
     constant_k_ = param_reader.get_double("constant_k");
     double E = param_reader.get_double("Young_modulus");
     double nu  = param_reader.get_double("Poisson_ratio");
-    if(nu == 0.5)
+    if (nu == 0.5)
       {
-	std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
-	abort();
+        std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
+        abort();
       }
     lame_coefficient_mu_ = E/(2.*(1+nu));
     lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
-   
+
     //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
     //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
     //alpha_eps_ = param_reader.get_double("alpha_eps");
     alpha_eps_ = eps;
-    
+
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-  
+
   }
   void SetParams(double eps)
   {
@@ -1150,11 +1150,11 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
-     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
 
-	// displacement gradient  
+        // displacement gradient
         Tensor<2, 2> grad_u;
         grad_u.clear();
         grad_u[0][0] = ugrads_[q_point][0][0];
@@ -1162,7 +1162,7 @@ public:
         grad_u[1][0] = ugrads_[q_point][1][0];
         grad_u[1][1] = ugrads_[q_point][1][1];
 
-	// displacement gradient on the coarser mesh   
+        // displacement gradient on the coarser mesh
         Tensor<2, 2> refgrad_u;
         refgrad_u.clear();
         refgrad_u[0][0] = refgrads_[q_point][0][0];
@@ -1170,23 +1170,23 @@ public:
         refgrad_u[1][0] = refgrads_[q_point][1][0];
         refgrad_u[1][1] = refgrads_[q_point][1][1];
 
-	  
+
         const Tensor<2,2> E = 0.5 * ((grad_u-refgrad_u) + transpose(grad_u-refgrad_u));
         const double tr_E = trace(E);
 
-	Tensor<2,2> stress_term;
+        Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-	  + 2 * lame_coefficient_mu_ * E;
+                      + 2 * lame_coefficient_mu_ * E;
 
-    	double Energy;
-	Energy = scalar_product(stress_term, E);
-	
-	local_elasticity_norm += Energy*state_fe_values.JxW(q_point);
-	
-	}
-    
-   return local_elasticity_norm;
+        double Energy;
+        Energy = scalar_product(stress_term, E);
+
+        local_elasticity_norm += Energy*state_fe_values.JxW(q_point);
+
+      }
+
+    return local_elasticity_norm;
   }
 
   UpdateFlags
@@ -1212,7 +1212,7 @@ public:
     stringstream out;
     out<<"ElasticityNorm-"<<ref_string_;
     return out.str();
-   }
+  }
 
 };
 
@@ -1236,21 +1236,21 @@ class LocalFunctionalEnergyNorm : public FunctionalInterface<EDC, FDC, DH, VECTO
 {
   double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_, alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalEnergyNorm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1259,14 +1259,14 @@ public:
     constant_k_ = param_reader.get_double("constant_k");
     double E = param_reader.get_double("Young_modulus");
     double nu  = param_reader.get_double("Poisson_ratio");
-    if(nu == 0.5)
+    if (nu == 0.5)
       {
-	std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
-	abort();
+        std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
+        abort();
       }
     lame_coefficient_mu_ = E/(2.*(1+nu));
     lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
-    
+
     //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
     //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
     //alpha_eps_ = param_reader.get_double("alpha_eps");
@@ -1274,7 +1274,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
   void SetParams(double eps)
   {
@@ -1300,7 +1300,7 @@ public:
     uvalues_.resize(n_q_points, Vector<double>(4));
     ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
 
-    //state is the current solution on the finest grid 
+    //state is the current solution on the finest grid
     edc.GetValuesState("state", uvalues_);
     edc.GetGradsState("state", ugrads_);
 
@@ -1321,26 +1321,26 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
-	
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
+
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	// displacement gradient on the coarser mesh because this enters in the error measure  
+
+        // displacement gradient on the coarser mesh because this enters in the error measure
         Tensor<2, 2> refgrad_u;
         refgrad_u.clear();
         refgrad_u[0][0] = refgrads_[q_point][0][0];
@@ -1351,20 +1351,20 @@ public:
         const Tensor<2,2> E = 0.5 * (refgrad_u + transpose(refgrad_u));
         const double tr_E = trace(E);
 
-	Tensor<2,2> stress_term;
+        Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-	  + 2 * lame_coefficient_mu_ * E;
-	
-	
-	double weightEnergy;
-	weightEnergy = scalar_product(stress_term, E);
+                      + 2 * lame_coefficient_mu_ * E;
 
-	// it is the square of the enery norm
-	local_energy_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
-			      + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
 
-	
+        double weightEnergy;
+        weightEnergy = scalar_product(stress_term, E);
+
+        // it is the square of the enery norm
+        local_energy_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
+                              + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
+
       }
     return local_energy_norm;
   }
@@ -1389,7 +1389,7 @@ public:
   string
   GetName() const override
   {
-     stringstream out;
+    stringstream out;
     out<<"EnergyNorm-"<<ref_string_;
     return out.str();
   }
@@ -1415,21 +1415,21 @@ class LocalFunctionalEnergyVarNorm : public FunctionalInterface<EDC, FDC, DH, VE
 {
   double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_, alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalEnergyVarNorm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1438,14 +1438,14 @@ public:
     constant_k_ = param_reader.get_double("constant_k");
     double E = param_reader.get_double("Young_modulus");
     double nu  = param_reader.get_double("Poisson_ratio");
-    if(nu == 0.5)
+    if (nu == 0.5)
       {
-	std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
-	abort();
+        std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
+        abort();
       }
     lame_coefficient_mu_ = E/(2.*(1+nu));
     lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
-    
+
     //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
     //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
     //alpha_eps_ = param_reader.get_double("alpha_eps");
@@ -1453,7 +1453,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
   void SetParams(double eps)
   {
@@ -1479,7 +1479,7 @@ public:
     uvalues_.resize(n_q_points, Vector<double>(4));
     ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
 
-    //state is the current solution on the finest grid 
+    //state is the current solution on the finest grid
     edc.GetValuesState("state", uvalues_);
     edc.GetGradsState("state", ugrads_);
 
@@ -1500,26 +1500,26 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
-	
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
+
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	// displacement gradient on the coarser mesh because this enters in the error measure  
+
+        // displacement gradient on the coarser mesh because this enters in the error measure
         Tensor<2, 2> grad_u;
         grad_u.clear();
         grad_u[0][0] = ugrads_[q_point][0][0];
@@ -1530,20 +1530,20 @@ public:
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
         const double tr_E = trace(E);
 
-	Tensor<2,2> stress_term;
+        Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-	  + 2 * lame_coefficient_mu_ * E;
-	
-	
-	double weightEnergy;
-	weightEnergy = scalar_product(stress_term, E);
+                      + 2 * lame_coefficient_mu_ * E;
 
-	// it is the square of the enery norm
-	local_energyVar_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
-			      + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
 
-	
+        double weightEnergy;
+        weightEnergy = scalar_product(stress_term, E);
+
+        // it is the square of the enery norm
+        local_energyVar_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
+                                 + ((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
+
       }
     return local_energyVar_norm;
   }
@@ -1568,7 +1568,7 @@ public:
   string
   GetName() const override
   {
-     stringstream out;
+    stringstream out;
     out<<"EnergyVarNorm-"<<ref_string_;
     return out.str();
   }
@@ -1595,21 +1595,21 @@ class LocalFunctionalWeightedL2Norm : public FunctionalInterface<EDC, FDC, DH, V
 {
   double constant_k_, lame_coefficient_mu_, lame_coefficient_lambda_, alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     param_reader.declare_entry("constant_k", "0.0", Patterns::Double(0));
     param_reader.declare_entry("Young_modulus", "1.0", Patterns::Double(0));
-    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));	
+    param_reader.declare_entry("Poisson_ratio", "0.2", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_mu", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("lame_coefficient_lambda", "0.0", Patterns::Double(0));
     //param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalWeightedL2Norm(ParameterReader &param_reader,double eps, std::string ref_string)
@@ -1618,14 +1618,14 @@ public:
     constant_k_ = param_reader.get_double("constant_k");
     double E = param_reader.get_double("Young_modulus");
     double nu  = param_reader.get_double("Poisson_ratio");
-    if(nu == 0.5)
+    if (nu == 0.5)
       {
-	std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
-	abort();
+        std::cout<<"not yet implemented for \nu = 0.5"<<std::endl;
+        abort();
       }
     lame_coefficient_mu_ = E/(2.*(1+nu));
     lame_coefficient_lambda_ = nu*E/((1+nu)*(1-2*nu));
-    
+
     //lame_coefficient_mu_ = param_reader.get_double("lame_coefficient_mu");
     //lame_coefficient_lambda_ = param_reader.get_double("lame_coefficient_lambda");
     //alpha_eps_ = param_reader.get_double("alpha_eps");
@@ -1633,7 +1633,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
   void SetParams(double eps)
   {
@@ -1654,10 +1654,10 @@ public:
     double local_weightedL2_norm = 0;
 
     vector<Vector<double> > uvalues_;
-    
+
     uvalues_.resize(n_q_points, Vector<double>(4));
     edc.GetValuesState("state", uvalues_);
-    
+
     vector<Vector<double> > refvalues_;
     vector<vector<Tensor<1, dealdim> > > refgrads_;
 
@@ -1674,15 +1674,15 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
-	
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
 
-	// displacement gradient which we need for reference because this enters in the error measure  
+
+        // displacement gradient which we need for reference because this enters in the error measure
         Tensor<2, 2> refgrad_u;
         refgrad_u.clear();
         refgrad_u[0][0] = refgrads_[q_point][0][0];
@@ -1693,16 +1693,16 @@ public:
         const Tensor<2,2> E = 0.5 * (refgrad_u + transpose(refgrad_u));
         const double tr_E = trace(E);
 
-	Tensor<2,2> stress_term;
+        Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-	  + 2 * lame_coefficient_mu_ * E;
-	
-	double weightEnergy;
-	weightEnergy = scalar_product(stress_term, E);
-	
-	local_weightedL2_norm += (((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
-	
+                      + 2 * lame_coefficient_mu_ * E;
+
+        double weightEnergy;
+        weightEnergy = scalar_product(stress_term, E);
+
+        local_weightedL2_norm += (((G_c_/alpha_eps_) + (1-constant_k_)*weightEnergy)*(pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
       }
     return local_weightedL2_norm;
   }
@@ -1751,16 +1751,16 @@ template<
 #endif
 class LocalFunctionalL2Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
- 
+
   std::string ref_string_;
-  
+
 public:
-  
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
-    
+
   }
 
   LocalFunctionalL2Norm(ParameterReader &param_reader, std::string ref_string)
@@ -1768,7 +1768,7 @@ public:
     param_reader.SetSubsection("Local PDE parameters");
 
     ref_string_=ref_string;
-    
+
   }
 
   bool
@@ -1785,22 +1785,22 @@ public:
     double local_L2_norm = 0;
 
     vector<Vector<double> > uvalues_;
-    uvalues_.resize(n_q_points, Vector<double>(4));  
+    uvalues_.resize(n_q_points, Vector<double>(4));
     edc.GetValuesState("state", uvalues_);
-   
+
     vector<Vector<double> > refvalues_;
     refvalues_.resize(n_q_points, Vector<double>(4));
 
     edc.GetValuesState(ref_string_, refvalues_);
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field variable for both solutions
-	double pf = uvalues_[q_point](2);
-	double refpf = refvalues_[q_point](2);
-		
-	local_L2_norm += ((pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
-	
+        //phase field variable for both solutions
+        double pf = uvalues_[q_point](2);
+        double refpf = refvalues_[q_point](2);
+
+        local_L2_norm += ((pf-refpf)*(pf-refpf))* state_fe_values.JxW(q_point);
+
       }
     return local_L2_norm;
   }
@@ -1850,16 +1850,16 @@ class LocalFunctionalWeightedH1Norm : public FunctionalInterface<EDC, FDC, DH, V
 {
   double alpha_eps_, G_c_;
   std::string ref_string_;
-  
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
     //param_reader.declare_entry("alpha_eps", "0.0", Patterns::Double(0));
     param_reader.declare_entry("G_c", "0.0", Patterns::Double(0));
-    
+
   }
 
   LocalFunctionalWeightedH1Norm(ParameterReader &param_reader, double eps, std::string ref_string)
@@ -1870,7 +1870,7 @@ public:
     G_c_ = param_reader.get_double("G_c");
 
     ref_string_=ref_string;
-    
+
   }
 
   bool
@@ -1896,7 +1896,7 @@ public:
 
     edc.GetGradsState(ref_string_, refgrads_);
 
-    
+
     Tensor<2,2> zero_matrix;
     zero_matrix.clear();
 
@@ -1904,27 +1904,27 @@ public:
     Identity[0][0] = 1.0;
     Identity[1][1] = 1.0;
 
-      
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
 
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	
-	local_weightedH1_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1])))
-			      * state_fe_values.JxW(q_point);
 
-	
+
+        local_weightedH1_norm += (G_c_*alpha_eps_*((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1])))
+                                 * state_fe_values.JxW(q_point);
+
+
       }
     return local_weightedH1_norm;
   }
@@ -1973,14 +1973,14 @@ template<
 class LocalFunctionalH1Norm : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
   std::string ref_string_;
- 
+
 public:
- 
+
   static void
   declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Local PDE parameters");
-    
+
   }
 
   LocalFunctionalH1Norm(ParameterReader &param_reader,std::string ref_string)
@@ -1988,7 +1988,7 @@ public:
     param_reader.SetSubsection("Local PDE parameters");
 
     ref_string_=ref_string;
-    
+
   }
 
   bool
@@ -2012,27 +2012,27 @@ public:
     refgrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
 
     edc.GetGradsState(ref_string_, refgrads_);
-   
-          
+
+
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	//phase field gradient
-	Tensor<1,2> grad_pf;
+        //phase field gradient
+        Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q_point][2][0];
         grad_pf[1] = ugrads_[q_point][2][1];
 
-	//phase field gradient to compare with
-	Tensor<1,2> refgrad_pf;
+        //phase field gradient to compare with
+        Tensor<1,2> refgrad_pf;
         refgrad_pf.clear();
         refgrad_pf[0] = refgrads_[q_point][2][0];
         refgrad_pf[1] = refgrads_[q_point][2][1];
-        
-	
-	local_H1_norm += ((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
-			      * state_fe_values.JxW(q_point);
 
-	
+
+        local_H1_norm += ((grad_pf[0]-refgrad_pf[0])*(grad_pf[0]-refgrad_pf[0]) + (grad_pf[1]-refgrad_pf[1])*(grad_pf[1]-refgrad_pf[1]))
+                         * state_fe_values.JxW(q_point);
+
+
       }
     return local_H1_norm;
   }

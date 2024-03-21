@@ -35,52 +35,65 @@ using namespace DOpE;
 /****************************************************************************************/
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalX
   : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
-template<template <int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template <int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template <int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template <int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalX
-    : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
+  : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 #endif
 {
 public:
-  LocalPointFunctionalX() { assert(dealdim == 3); }
+  LocalPointFunctionalX()
+  {
+    assert(dealdim == 3);
+  }
 
   double PointValue(
 #if DEAL_II_VERSION_GTE(9,3,0)
-      const DOpEWrapper::DoFHandler<dealdim> & /*control_dof_handler*/,
-      const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
+    const DOpEWrapper::DoFHandler<dealdim> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
 #else
-      const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
-      const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 #endif
-      const std::map<std::string, const dealii::Vector<double> *>
-          & /*param_values*/,
-      const std::map<std::string, const VECTOR *> &domain_values) override {
+    const std::map<std::string, const dealii::Vector<double> *>
+    & /*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values) override
+  {
     Point<dealdim> p1(0.5, 0.5, 0.5);
 
     typename map<string, const VECTOR *>::const_iterator it =
-        domain_values.find("state");
+      domain_values.find("state");
     Vector<double> tmp_vector(3);
     tmp_vector = std::numeric_limits<double>::min();
 
-    try {
-      VectorTools::point_value(state_dof_handler, *(it->second), p1,
-                               tmp_vector);
-    } catch (dealii::VectorTools::ExcPointNotAvailableHere &e) {
-    }
+    try
+      {
+        VectorTools::point_value(state_dof_handler, *(it->second), p1,
+                                 tmp_vector);
+      }
+    catch (dealii::VectorTools::ExcPointNotAvailableHere &e)
+      {
+      }
 
     return dealii::Utilities::MPI::max(tmp_vector(0), MPI_COMM_WORLD);
   }
 
-  string GetType() const override { return "point"; }
-  string GetName() const override { return "Point value in X"; }
+  string GetType() const override
+  {
+    return "point";
+  }
+  string GetName() const override
+  {
+    return "Point value in X";
+  }
 };
 
 #endif

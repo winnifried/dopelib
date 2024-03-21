@@ -38,7 +38,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDELaplace : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDELaplace : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -54,7 +54,7 @@ public:
   }
 
   void
-    ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
                   dealii::Vector<double> &local_vector, double scale,
                   double/*scale_ico*/) override
   {
@@ -89,8 +89,8 @@ public:
   }
 
   void
-   StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
-			 const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale) override
+  StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
+                        const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale) override
   {
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -123,8 +123,8 @@ public:
   }
 
   void
-   StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> &edc,
-			   const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale) override
+  StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> &edc,
+                          const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale) override
   {
     unsigned int n_q_points = edc.GetNQPoints();
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -271,7 +271,7 @@ public:
   }
 
   void
-   ElementEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
+  ElementEquation_U(const EDC<DH, VECTOR, dealdim> &edc,
                     dealii::Vector<double> &local_vector, double scale,
                     double/*scale_ico*/) override
   {

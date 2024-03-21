@@ -222,7 +222,7 @@ namespace DOpE
 
         if (iter > nonlinear_maxiter_)
           {
-	    GetIntegrator().DeleteAllData();
+            GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","NewtonSolverMixedDims::NonlinearSolve");
           }
 
@@ -230,7 +230,7 @@ namespace DOpE
 
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
         bool was_build = build_matrix;
-	build_matrix = false;
+        build_matrix = false;
         //Linesearch
         {
           solution += du;
@@ -250,14 +250,14 @@ namespace DOpE
               out<<algo_level + " Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                  << "\t LineSearch {"<<lineiter<<"} ";
-	      if(was_build)
-		    out<<"M ";
+              if (was_build)
+                out<<"M ";
               pde.GetOutputHandler()->Write(out,priority+1);
 
               lineiter++;
               if (lineiter > line_maxiter_)
                 {
-		  GetIntegrator().DeleteAllData();
+                  GetIntegrator().DeleteAllData();
                   throw DOpEIterationException("Line-Iteration count exceeded bounds!","NewtonSolverMixedDims::NonlinearSolve");
                 }
               solution.add(alpha*(rho-1.),du);
@@ -279,8 +279,8 @@ namespace DOpE
           out<<algo_level + " Newton step: " <<iter<<"\t Residual (rel.): "
              << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
              << "\t LineSearch {"<<lineiter<<"} ";
-	  if(was_build)
-		    out<<"M ";
+          if (was_build)
+            out<<"M ";
           pde.GetOutputHandler()->Write(out,priority);
 
         }//End of Linesearch

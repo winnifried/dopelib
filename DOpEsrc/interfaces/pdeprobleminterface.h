@@ -124,7 +124,7 @@ namespace DOpE
                 std::string dof_type, std::string filetype) override
     {
       if (dof_type != "state")
-            throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFile");
+        throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFile");
       else
         GetProblem()->GetSpaceTimeHandler()->WriteToFile(v, name, outfile, dof_type, filetype);
     }
@@ -135,9 +135,9 @@ namespace DOpE
                            std::string filetype, int n_patches) override
     {
       if (dof_type != "state")
-            throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFileElementwise");
+        throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFileElementwise");
       else
-	this->GetProblem()->GetSpaceTimeHandler()->WriteToFileElementwise(v, name, outfile, dof_type, filetype,n_patches);
+        this->GetProblem()->GetSpaceTimeHandler()->WriteToFileElementwise(v, name, outfile, dof_type, filetype,n_patches);
     }
 
     /**

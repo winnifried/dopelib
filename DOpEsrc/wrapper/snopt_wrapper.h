@@ -76,11 +76,11 @@ namespace DOpEWrapper
    */
   boost::function1<int, SNOPT_FUNC_DATA &> SNOPT_A_userfunc_interface;
   void SNOPT_A_userfunc_(int    *Status, int *n,    double x[],
-                        int    *needF,  int *neF,  double F[],
-                        int    *needG,  int *neG,  double G[],
-                        char       *cu,     int *lencu,
-                        int    iu[],    int *leniu,
-                        double ru[],    int *lenru )
+                         int    *needF,  int *neF,  double F[],
+                         int    *needG,  int *neG,  double G[],
+                         char       *cu,     int *lencu,
+                         int    iu[],    int *leniu,
+                         double ru[],    int *lenru )
   {
     SNOPT_FUNC_DATA data;
     data.Status = Status;

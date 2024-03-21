@@ -124,7 +124,7 @@ namespace DOpE
            int dealdim, template<int, int> class FE = dealii::FESystem,
            template<int, int> class DH = dealii::DoFHandler>
 #endif
-    class PDEProblemContainer : public ProblemContainerInternal<PDE>
+  class PDEProblemContainer : public ProblemContainerInternal<PDE>
   {
   public:
     PDEProblemContainer(PDE &pde,
@@ -160,7 +160,7 @@ namespace DOpE
         }
       return *state_problem_;
     }
-    
+
     /**
      * Returns a description of the PDE_Adjoint PDE for Error Estimation
      */
@@ -182,8 +182,8 @@ namespace DOpE
      * Returns a description to potentially needed precomputations for the error evaluation
      */
     AuxiliaryNodalErrorProblem<
-     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-     DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+    DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
     GetErrorPrecomputations()
     {
       if (aux_nodal_error_problem_ == NULL)
@@ -419,7 +419,7 @@ namespace DOpE
     void
     AddFunctional(
       FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
-      VECTOR, dealdim>* F)
+      VECTOR, dealdim> *F)
     {
       aux_functionals_.push_back(F);
       if (functional_position_.find(F->GetName())
@@ -631,21 +631,21 @@ namespace DOpE
     /*****************************************************************/
     /**
     * Adds the auxiliary Vectors from the integrator, so that their values are
-    * available for the integrated object. In this method, an additional 
+    * available for the integrated object. In this method, an additional
     * mesh transfer is included.
     *
     * @param integrator         The integrator in which the vecors should be available
-    * @param from_time_dof      The (global) Time DoF number from which the mesh transfer is 
-    *                           starting. Must be the time-dof to which the Vector objects 
+    * @param from_time_dof      The (global) Time DoF number from which the mesh transfer is
+    *                           starting. Must be the time-dof to which the Vector objects
     *                           have been set previously!
-    * @param to_time_dof        The (global) Time DoF number to which DoFs the vector should 
+    * @param to_time_dof        The (global) Time DoF number to which DoFs the vector should
     *                           be transferd.
     *
     */
 
-  template<typename INTEGRATOR>
-  void
-  AddAuxiliaryToIntegratorWithTemporalTransfer(INTEGRATOR &integrator,unsigned int from_time_dof, unsigned int to_time_dof)
+    template<typename INTEGRATOR>
+    void
+    AddAuxiliaryToIntegratorWithTemporalTransfer(INTEGRATOR &integrator,unsigned int from_time_dof, unsigned int to_time_dof)
     {
       assert((to_time_dof == from_time_dof+1) || (to_time_dof == from_time_dof-1));
       typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
@@ -712,40 +712,40 @@ namespace DOpE
       }
     }
 
-      /*****************************************************************/
+    /*****************************************************************/
     /**
     * Adds the auxiliary Vectors from the integrator, so that their values are
     * available for the integrated object. Takes the values from the previous (in
     * natural time direction)
-    * time step to the integrator.In this method, an additional 
+    * time step to the integrator.In this method, an additional
     * mesh transfer is included.
     *
     * This adds only the vector named "state" and no other vectors!
-    * 
+    *
     * @param integrator         The integrator in which the vecors should be available
-    * @param from_time_dof      The (global) Time DoF number from which the mesh transfer is 
-    *                           starting. Must be the time-dof to which the Vector objects 
+    * @param from_time_dof      The (global) Time DoF number from which the mesh transfer is
+    *                           starting. Must be the time-dof to which the Vector objects
     *                           have been set previously!
-    * @param to_time_dof        The (global) Time DoF number to which DoFs the vector should 
+    * @param to_time_dof        The (global) Time DoF number to which DoFs the vector should
     *                           be transferd.
     *
     */
 
-  template<typename INTEGRATOR>
-  void
-  AddPreviousAuxiliaryToIntegratorWithTemporalTransfer(INTEGRATOR &integrator,unsigned int from_time_dof, unsigned int to_time_dof)
+    template<typename INTEGRATOR>
+    void
+    AddPreviousAuxiliaryToIntegratorWithTemporalTransfer(INTEGRATOR &integrator,unsigned int from_time_dof, unsigned int to_time_dof)
     {
       assert((to_time_dof == from_time_dof+1) || (to_time_dof == from_time_dof-1));
       typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
-          auxiliary_state_.find("state");
-        if (it != auxiliary_state_.end())
+        auxiliary_state_.find("state");
+      if (it != auxiliary_state_.end())
         {
           integrator.AddDomainData("state_i-1",
                                    &(it->second->GetPreviousSpacialVectorWithTemporalTransfer(from_time_dof, to_time_dof)));
         }
     }
 
-   /*****************************************************************/
+    /*****************************************************************/
     /**
      * Adds the auxiliary Vectors from the integrator, so that their values are
      * available for the integrated object. Takes the values from the previous (in
@@ -768,11 +768,11 @@ namespace DOpE
         if (it != auxiliary_state_.end())
           {
             integrator.DeleteDomainData("state_i-1");
-	    it->second->UnLockCopy();
+            it->second->UnLockCopy();
           }
       }
     }
-  
+
     /*****************************************************************/
     /**
      * Deletes the auxiliary Vectors from the integrator, so that their values are
@@ -848,7 +848,7 @@ namespace DOpE
 
     /******************************************************/
     /**
-    * Deletes the auxiliary Vectors from the integrator, simultaneously 
+    * Deletes the auxiliary Vectors from the integrator, simultaneously
     * unlocking a copy made for mesh transfer
     *
     * @param integrator         The integrator in which the vecors should be available
@@ -863,7 +863,7 @@ namespace DOpE
       for (; it != auxiliary_state_.end(); it++)
         {
           integrator.DeleteDomainData(it->first);
-	  it->second->UnLockCopy();
+          it->second->UnLockCopy();
         }
     }
 
@@ -930,7 +930,7 @@ namespace DOpE
 
     std::vector<
     FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
-                        VECTOR, dealdim>*> aux_functionals_;
+                        VECTOR, dealdim> *> aux_functionals_;
     std::map<std::string, unsigned int> functional_position_;
 
     unsigned int functional_for_ee_num_;
@@ -973,19 +973,19 @@ namespace DOpE
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-  int dealdim, template<int, int> class FE, bool DH>
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool DH>
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::PDEProblemContainer(
     PDE &pde,
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH) :
 #else
-template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::PDEProblemContainer(
     PDE &pde,
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH) :
 #endif
-  ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
+    ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
     adjoint_for_ee_problem_(NULL), aux_nodal_error_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
@@ -1003,15 +1003,15 @@ template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-  int dealdim, template<int, int> class FE, bool DH>
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool DH>
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::~PDEProblemContainer()
 #else
-template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::~PDEProblemContainer()
 #endif
-   {
+  {
     if (zero_dirichlet_values_ != NULL)
       {
         delete zero_dirichlet_values_;
@@ -1034,12 +1034,12 @@ template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, bool DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ReInit(
 #else
-template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ReInit(
@@ -1585,16 +1585,16 @@ template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
         return false;
       }
     else if (this->GetType() == "error_evaluation")
-    {
-      return true; //Always true, for face contributions
-    }
+      {
+        return true; //Always true, for face contributions
+      }
     else
       {
         throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
                             "PDEProblemContainer::HasInterfaces");
       }
   }
-  
+
   /******************************************************/
 
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -1614,9 +1614,9 @@ template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
         return false;
       }
     else if (this->GetType() == "error_evaluation")
-    {
-      return this->GetPDE().HasVertices();
-    }
+      {
+        return this->GetPDE().HasVertices();
+      }
     else
       {
         throw DOpEException("Unknown Type: '" + this->GetType() + "'!",

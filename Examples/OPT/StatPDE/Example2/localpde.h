@@ -35,7 +35,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -460,9 +460,9 @@ public:
   {
     assert(local_matrix.m() == local_matrix.n());
     for (unsigned int i = 0; i < local_matrix.m(); i++)
-    {
-      local_matrix(i, i) += scale * 1.;
-    }
+      {
+        local_matrix(i, i) += scale * 1.;
+      }
   }
 
   UpdateFlags

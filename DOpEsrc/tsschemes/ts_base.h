@@ -190,7 +190,7 @@ namespace DOpE
     {
       return OP_.HasInterfaces();
     }
-  
+
     /******************************************************/
     /**
      * Returns whether vertex information is needed

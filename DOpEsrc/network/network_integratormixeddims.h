@@ -479,19 +479,19 @@ namespace DOpE
         // Begin integration
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-	const std::vector<const DOpEWrapper::DoFHandler<dimhigh>*> &dof_handler =   pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        const std::vector<const DOpEWrapper::DoFHandler<dimhigh>*> &dof_handler =   pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 #else
-	const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler =   pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler =   pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>  element(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>  element(dof_handler.size());
 #else
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_element_iterator>  element(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_element_iterator>  element(dof_handler.size());
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   endc(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   endc(dof_handler.size());
 #else
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   endc(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   endc(dof_handler.size());
 #endif
 
         for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
@@ -503,17 +503,17 @@ namespace DOpE
         // Generate the data containers.
 #if DEAL_II_VERSION_GTE(9,3,0)
         FaceDataContainer<false, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-						      pde.GetFaceUpdateFlags(),
-						      *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-						      element,
-						      this->GetParamData(), this->GetDomainData());
+                                                      pde.GetFaceUpdateFlags(),
+                                                      *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                                                      element,
+                                                      this->GetParamData(), this->GetDomainData());
 #else
         FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
                                                                    pde.GetFaceUpdateFlags(),
                                                                    *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                                                                    this->GetParamData(), this->GetDomainData());
 #endif
-	
+
         std::vector<unsigned int> boundary_functional_colors =
           pde.GetBoundaryFunctionalColors();
         bool need_boundary_integrals = (boundary_functional_colors.size() > 0);
@@ -569,19 +569,19 @@ namespace DOpE
 
         // Begin integration
 #if DEAL_II_VERSION_GTE(9,3,0)
-	const std::vector<const DOpEWrapper::DoFHandler<dimhigh>*> &dof_handler =    pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        const std::vector<const DOpEWrapper::DoFHandler<dimhigh>*> &dof_handler =    pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 #else
-	const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler =    pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*> &dof_handler =    pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   element(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   element(dof_handler.size());
 #else
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   element(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   element(dof_handler.size());
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   endc(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh>::active_element_iterator>   endc(dof_handler.size());
 #else
-	std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   endc(dof_handler.size());
+        std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>   endc(dof_handler.size());
 #endif
 
         for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
@@ -592,17 +592,17 @@ namespace DOpE
         // Generate the data containers.
 #if DEAL_II_VERSION_GTE(9,3,0)
         FaceDataContainer<false, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-						      pde.GetFaceUpdateFlags(),
-						      *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-						      element,
-						      this->GetParamData(), this->GetDomainData());
+                                                      pde.GetFaceUpdateFlags(),
+                                                      *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                                                      element,
+                                                      this->GetParamData(), this->GetDomainData());
 #else
         FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
                                                                    pde.GetFaceUpdateFlags(),
                                                                    *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                                                                    this->GetParamData(), this->GetDomainData());
 #endif
-	
+
         bool need_faces = pde.HasFaces();
         if (!need_faces)
           {
@@ -797,11 +797,12 @@ namespace DOpE
       param_data_.erase(it);
     }
 
-   /*******************************************************************************************/
+    /*******************************************************************************************/
 
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
              int dimhigh>
-      void Network_IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::DeleteAllData() {
+    void Network_IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::DeleteAllData()
+    {
       param_data_.clear();
       domain_data_.clear();
     }

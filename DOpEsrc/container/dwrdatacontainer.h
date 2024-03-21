@@ -85,10 +85,10 @@ namespace DOpE
     GetName() const = 0;
 
     /**
-     * This sets the vector to a given time-dof. 
+     * This sets the vector to a given time-dof.
      */
     void SetTime(unsigned int time_dof);
-    
+
     /**
      * This initializes the vector of the error indicators and locks them.
      * The vector of the error indicators can only get returned if the lock
@@ -96,14 +96,14 @@ namespace DOpE
      */
     template<typename STH>
     void
-    ReInit(STH& sth);
+    ReInit(STH &sth);
 
     /**
      * Releases the lock and fills the vector of error indicators
      * accordingly to the previously given EETerms-enum (see dopetypes.h).
      * It basically sums up the primal and dual error indicators using
      * the rule given by EETerms.
-     * Only the lock for the given time is released, so it must be called 
+     * Only the lock for the given time is released, so it must be called
      * for all time_dofs to be accessed.
      */
     void
@@ -116,57 +116,57 @@ namespace DOpE
         {
         case DOpEtypes::primal_only:
           time_step_error_primal_[current_time_dof_]=0.;
-	  for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
-	  {
-	    tmp = GetPrimalErrorIndicators()(i);
-	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
-	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
-	  }
+          for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
+            {
+              tmp = GetPrimalErrorIndicators()(i);
+              time_step_error_[current_time_dof_]+=tmp;
+              error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
+              time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
+            }
           break;
         case DOpEtypes::dual_only:
           time_step_error_dual_[current_time_dof_]=0.;
-	  for ( unsigned int i = 0; i < GetDualErrorIndicators().size(); i++)
-	  {
-	    tmp = GetDualErrorIndicators()(i);
-	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
-	    time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
-	  }
+          for ( unsigned int i = 0; i < GetDualErrorIndicators().size(); i++)
+            {
+              tmp = GetDualErrorIndicators()(i);
+              time_step_error_[current_time_dof_]+=tmp;
+              error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
+              time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
+            }
           break;
         case DOpEtypes::mixed:
           time_step_error_primal_[current_time_dof_]=0.;
-	  time_step_error_dual_[current_time_dof_]=0.;
-	  assert(GetPrimalErrorIndicators().size() == GetDualErrorIndicators().size());
-	  for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
-	  {
-	    tmp = 0.5 *GetPrimalErrorIndicators()(i);
-	    tmp += 0.5 * GetDualErrorIndicators()(i);
-	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
-	    
-	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
-	    time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
-	  }
+          time_step_error_dual_[current_time_dof_]=0.;
+          assert(GetPrimalErrorIndicators().size() == GetDualErrorIndicators().size());
+          for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
+            {
+              tmp = 0.5 *GetPrimalErrorIndicators()(i);
+              tmp += 0.5 * GetDualErrorIndicators()(i);
+              time_step_error_[current_time_dof_]+=tmp;
+              error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
+
+              time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
+              time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
+            }
           break;
         case DOpEtypes::mixed_control:
- 	  time_step_error_primal_[current_time_dof_]=0.;
-	  time_step_error_dual_[current_time_dof_]=0.;
-	  time_step_error_control_[current_time_dof_]=0.;
-	  assert(GetPrimalErrorIndicators().size() == GetDualErrorIndicators().size());
-	  assert(GetPrimalErrorIndicators().size() == GetControlErrorIndicators().size());
-	  for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
-	  {
-	    tmp = 0.5 *GetPrimalErrorIndicators()(i);
-	    tmp += 0.5 * GetDualErrorIndicators()(i);
-	    tmp += 0.5 * GetControlErrorIndicators()(i);
-	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
+          time_step_error_primal_[current_time_dof_]=0.;
+          time_step_error_dual_[current_time_dof_]=0.;
+          time_step_error_control_[current_time_dof_]=0.;
+          assert(GetPrimalErrorIndicators().size() == GetDualErrorIndicators().size());
+          assert(GetPrimalErrorIndicators().size() == GetControlErrorIndicators().size());
+          for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
+            {
+              tmp = 0.5 *GetPrimalErrorIndicators()(i);
+              tmp += 0.5 * GetDualErrorIndicators()(i);
+              tmp += 0.5 * GetControlErrorIndicators()(i);
+              time_step_error_[current_time_dof_]+=tmp;
+              error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
 
-	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
-	    time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
-	    time_step_error_control_[current_time_dof_]+=GetControlErrorIndicators()(i);
-	  }
+              time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
+              time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
+              time_step_error_control_[current_time_dof_]+=GetControlErrorIndicators()(i);
+            }
           break;
         default:
           throw DOpEException("Unknown DOpEtypes::EEterms.",
@@ -175,34 +175,34 @@ namespace DOpE
         }
       //Adding to global space-time summs
       switch (this->GetEETerms())
-      {
-      case DOpEtypes::primal_only:
-	primal_error_ += time_step_error_primal_[current_time_dof_];
-	break;
-      case DOpEtypes::dual_only:
-	dual_error_ += time_step_error_dual_[current_time_dof_];
-	break;
-      case DOpEtypes::mixed:
-	primal_error_ += time_step_error_primal_[current_time_dof_];
-	dual_error_ += time_step_error_dual_[current_time_dof_];
-	break;
-      case DOpEtypes::mixed_control:
-	primal_error_ += time_step_error_primal_[current_time_dof_];
-	dual_error_ += time_step_error_dual_[current_time_dof_];
-	control_error_ += time_step_error_control_[current_time_dof_];
-	break;
-      default:
-	throw DOpEException("Unknown DOpEtypes::EEterms.",
-			    "DWRDataContainer::ReleaseLock");
-	break;
-      }
+        {
+        case DOpEtypes::primal_only:
+          primal_error_ += time_step_error_primal_[current_time_dof_];
+          break;
+        case DOpEtypes::dual_only:
+          dual_error_ += time_step_error_dual_[current_time_dof_];
+          break;
+        case DOpEtypes::mixed:
+          primal_error_ += time_step_error_primal_[current_time_dof_];
+          dual_error_ += time_step_error_dual_[current_time_dof_];
+          break;
+        case DOpEtypes::mixed_control:
+          primal_error_ += time_step_error_primal_[current_time_dof_];
+          dual_error_ += time_step_error_dual_[current_time_dof_];
+          control_error_ += time_step_error_control_[current_time_dof_];
+          break;
+        default:
+          throw DOpEException("Unknown DOpEtypes::EEterms.",
+                              "DWRDataContainer::ReleaseLock");
+          break;
+        }
       error_ += time_step_error_[current_time_dof_];
       //Check if global lock can be released
       lock_ = false;
       for ( unsigned int i = 0; i<= n_time_points_; i++)
-      {
-	lock_ = lock_||locks_[i];
-      }
+        {
+          lock_ = lock_||locks_[i];
+        }
     }
     /**
      * Returns the global space-time error (according to the chosen EETerms).
@@ -213,15 +213,15 @@ namespace DOpE
     double
     GetError() const
     {
-      if(lock_)
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetError");
-      }
+      if (lock_)
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetError");
+        }
       else
-      {
-	return error_;
-      }
+        {
+          return error_;
+        }
     }
 
     /**
@@ -234,15 +234,15 @@ namespace DOpE
     GetPrimalError() const
     {
       assert(this->GetEETerms() != DOpEtypes::dual_only);
-      if(lock_)
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetPrimalError");
-      }
+      if (lock_)
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetPrimalError");
+        }
       else
-      {
-	return primal_error_;
-      }
+        {
+          return primal_error_;
+        }
     }
 
     /**
@@ -254,16 +254,16 @@ namespace DOpE
     double
     GetDualError() const
     {
-     assert(this->GetEETerms() != DOpEtypes::primal_only);
-      if(lock_)
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetDualError");
-      }
+      assert(this->GetEETerms() != DOpEtypes::primal_only);
+      if (lock_)
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetDualError");
+        }
       else
-      {
-	return dual_error_;
-      }
+        {
+          return dual_error_;
+        }
     }
 
     /**
@@ -276,17 +276,17 @@ namespace DOpE
     GetControlError() const
     {
       assert(this->GetEETerms() == DOpEtypes::mixed_control);
-      if(lock_)
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetControlError");
-      }
+      if (lock_)
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetControlError");
+        }
       else
-      {
-	return control_error_;
-      }
+        {
+          return control_error_;
+        }
     }
-    
+
     /**
      * Returns the global error (according to the chosen EETerms) at the current time step.
      * ReleaseLock() must have been called.
@@ -296,15 +296,15 @@ namespace DOpE
     double
     GetStepError() const
     {
-      if(locks_[current_time_dof_])
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetStepError");
-      }
+      if (locks_[current_time_dof_])
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetStepError");
+        }
       else
-      {
-	return time_step_error_[current_time_dof_];
-      }
+        {
+          return time_step_error_[current_time_dof_];
+        }
     }
 
     /**
@@ -317,15 +317,15 @@ namespace DOpE
     GetPrimalStepError() const
     {
       assert(this->GetEETerms() != DOpEtypes::dual_only);
-      if(locks_[current_time_dof_])
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetPrimalStepError");
-      }
+      if (locks_[current_time_dof_])
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetPrimalStepError");
+        }
       else
-      {
-	return time_step_error_primal_[current_time_dof_];
-      }
+        {
+          return time_step_error_primal_[current_time_dof_];
+        }
     }
 
     /**
@@ -337,16 +337,16 @@ namespace DOpE
     double
     GetDualStepError() const
     {
-     assert(this->GetEETerms() != DOpEtypes::primal_only);
-      if(locks_[current_time_dof_])
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetDualStepError");
-      }
+      assert(this->GetEETerms() != DOpEtypes::primal_only);
+      if (locks_[current_time_dof_])
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetDualStepError");
+        }
       else
-      {
-	return time_step_error_dual_[current_time_dof_];
-      }
+        {
+          return time_step_error_dual_[current_time_dof_];
+        }
     }
 
     /**
@@ -359,15 +359,15 @@ namespace DOpE
     GetControlStepError() const
     {
       assert(this->GetEETerms() != DOpEtypes::mixed_control);
-      if(locks_[current_time_dof_])
-      {
-	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetControlStepError");
-      }
+      if (locks_[current_time_dof_])
+        {
+          throw DOpEException("Error indicators are still locked.",
+                              "DWRDataContainer::GetControlStepError");
+        }
       else
-      {
-	return time_step_error_control_[current_time_dof_];
-      }
+        {
+          return time_step_error_control_[current_time_dof_];
+        }
     }
 
     /**
@@ -376,7 +376,7 @@ namespace DOpE
      *
      * @return  Vector of raw absolute value of error indicators
      */
-    const std::vector<Vector<float> >&
+    const std::vector<Vector<float> > &
     GetErrorIndicators() const
     {
       if (lock_)
@@ -391,13 +391,13 @@ namespace DOpE
     }
 
     /**
-     * Returns the vector of the error indicators at the 
+     * Returns the vector of the error indicators at the
      * current time point. You have to
      * call ReleaseLock() prior to this function.
      *
-     * @return  Vector of absolute value of error indicators 
+     * @return  Vector of absolute value of error indicators
      */
-    const Vector<float>&
+    const Vector<float> &
     GetStepErrorIndicators() const
     {
       if (locks_[current_time_dof_])
@@ -412,7 +412,7 @@ namespace DOpE
     }
 
     /**
-     * Returns the vector of the error indicators. 
+     * Returns the vector of the error indicators.
      *
      * @return  Vector of raw primal error indicators (i.e. with sign)
      */
@@ -429,7 +429,7 @@ namespace DOpE
     }
 
     /**
-     * Returns the vector of the dual error indicators. 
+     * Returns the vector of the dual error indicators.
      *
      * @return  Vector of raw dual error indicators (i.e. with sign)
      */
@@ -463,7 +463,7 @@ namespace DOpE
     }
 
     /**
-     * Returns the vector of the error indicators. 
+     * Returns the vector of the error indicators.
      *
      * @return  Vector of raw error indicators given by the index
     *           0 = primal, 1 = dual, 2 = control
@@ -700,112 +700,112 @@ namespace DOpE
   };
 
   template<typename VECTOR>
-    template<typename STH>
-    void
-    DWRDataContainerBase<VECTOR>::ReInit(STH& sth)
+  template<typename STH>
+  void
+  DWRDataContainerBase<VECTOR>::ReInit(STH &sth)
   {
     n_time_points_ = sth.GetMaxTimePoint();
     error_ind_.resize(n_time_points_+1);
-    lock_ = true; 
+    lock_ = true;
     locks_.clear();
     locks_.resize(n_time_points_+1,true);
     time_step_error_.resize(n_time_points_+1);
     //Initialize global in space time-step-vectors if needed
     switch (GetEETerms())
-    {
-    case DOpEtypes::primal_only:
-      time_step_error_primal_.resize(n_time_points_+1);
-      break;
-    case DOpEtypes::dual_only:
-      time_step_error_dual_.resize(n_time_points_+1);
-      break;
-    case DOpEtypes::mixed:
-      time_step_error_primal_.resize(n_time_points_+1);
-      time_step_error_dual_.resize(n_time_points_+1);
-      break;
-    case DOpEtypes::mixed_control:
-      time_step_error_primal_.resize(n_time_points_+1);
-      time_step_error_dual_.resize(n_time_points_+1);
-      time_step_error_control_.resize(n_time_points_+1);
-      break;
-    default:
-      throw DOpEException("Unknown DOpEtypes::EETerms!",
-			  "DWRDataContainerBase::ReInit");
-      break;
-    }
-    //Resize the time-point vectors (if needed)
-    for(unsigned int i = 0; i <= n_time_points_; i++)
-    {
-#if DEAL_II_VERSION_GTE(8,4,0)
-      const unsigned int n_elements =
-	sth.GetStateDoFHandler(i).get_triangulation().n_active_cells();
-#else
-      const unsigned int n_elements =
-	sth.GetStateDoFHandler(i).get_tria().n_active_cells();
-#endif
-      error_ind_[i].reinit(n_elements);
-      if ( i == 0 )
       {
-	switch (GetEETerms())
-	{
-	case DOpEtypes::primal_only:
-	  GetPrimalErrorIndicators().reinit(n_elements);
-	  GetDualErrorIndicators().reinit(n_elements);
-	  break;
-	case DOpEtypes::dual_only:
-	  GetPrimalErrorIndicators().reinit(n_elements);
-	  GetDualErrorIndicators().reinit(n_elements);
-	  break;
-	case DOpEtypes::mixed:
-	  GetPrimalErrorIndicators().reinit(n_elements);
-	  GetDualErrorIndicators().reinit(n_elements);
-	  break;
-	case DOpEtypes::mixed_control:
-	  GetPrimalErrorIndicators().reinit(n_elements);
-	  GetDualErrorIndicators().reinit(n_elements);
-	  GetControlErrorIndicators().reinit(n_elements);
-	  break;
-	default:
-	  throw DOpEException("Unknown DOpEtypes::EETerms!",
-			      "DWRDataContainerBase::ReInit");
-	  break;
-	}
+      case DOpEtypes::primal_only:
+        time_step_error_primal_.resize(n_time_points_+1);
+        break;
+      case DOpEtypes::dual_only:
+        time_step_error_dual_.resize(n_time_points_+1);
+        break;
+      case DOpEtypes::mixed:
+        time_step_error_primal_.resize(n_time_points_+1);
+        time_step_error_dual_.resize(n_time_points_+1);
+        break;
+      case DOpEtypes::mixed_control:
+        time_step_error_primal_.resize(n_time_points_+1);
+        time_step_error_dual_.resize(n_time_points_+1);
+        time_step_error_control_.resize(n_time_points_+1);
+        break;
+      default:
+        throw DOpEException("Unknown DOpEtypes::EETerms!",
+                            "DWRDataContainerBase::ReInit");
+        break;
       }
-    }
+    //Resize the time-point vectors (if needed)
+    for (unsigned int i = 0; i <= n_time_points_; i++)
+      {
+#if DEAL_II_VERSION_GTE(8,4,0)
+        const unsigned int n_elements =
+          sth.GetStateDoFHandler(i).get_triangulation().n_active_cells();
+#else
+        const unsigned int n_elements =
+          sth.GetStateDoFHandler(i).get_tria().n_active_cells();
+#endif
+        error_ind_[i].reinit(n_elements);
+        if ( i == 0 )
+          {
+            switch (GetEETerms())
+              {
+              case DOpEtypes::primal_only:
+                GetPrimalErrorIndicators().reinit(n_elements);
+                GetDualErrorIndicators().reinit(n_elements);
+                break;
+              case DOpEtypes::dual_only:
+                GetPrimalErrorIndicators().reinit(n_elements);
+                GetDualErrorIndicators().reinit(n_elements);
+                break;
+              case DOpEtypes::mixed:
+                GetPrimalErrorIndicators().reinit(n_elements);
+                GetDualErrorIndicators().reinit(n_elements);
+                break;
+              case DOpEtypes::mixed_control:
+                GetPrimalErrorIndicators().reinit(n_elements);
+                GetDualErrorIndicators().reinit(n_elements);
+                GetControlErrorIndicators().reinit(n_elements);
+                break;
+              default:
+                throw DOpEException("Unknown DOpEtypes::EETerms!",
+                                    "DWRDataContainerBase::ReInit");
+                break;
+              }
+          }
+      }
     error_=primal_error_=dual_error_=control_error_=0.;
     current_time_dof_=std::numeric_limits<unsigned int>::max();
     SetTime(0);
   }
 
   template<typename VECTOR>
-    void
-    DWRDataContainerBase<VECTOR>::SetTime(unsigned int time_dof)
+  void
+  DWRDataContainerBase<VECTOR>::SetTime(unsigned int time_dof)
   {
     assert(time_dof <= n_time_points_);
-    if( current_time_dof_ != time_dof)
-    {
-      //FIXME - the time should be used to steer access to vectors!
-      current_time_dof_=time_dof;
-      GetPrimalErrorIndicators().reinit(error_ind_[time_dof].size());
-      GetDualErrorIndicators().reinit(error_ind_[time_dof].size());
-      if (this->GetEETerms() == DOpEtypes::primal_only
-	  || this->GetEETerms() == DOpEtypes::mixed
-	  || this->GetEETerms() == DOpEtypes::mixed_control)
+    if ( current_time_dof_ != time_dof)
       {
-	GetPI_h_z().SetTimeDoFNumber(time_dof);
+        //FIXME - the time should be used to steer access to vectors!
+        current_time_dof_=time_dof;
+        GetPrimalErrorIndicators().reinit(error_ind_[time_dof].size());
+        GetDualErrorIndicators().reinit(error_ind_[time_dof].size());
+        if (this->GetEETerms() == DOpEtypes::primal_only
+            || this->GetEETerms() == DOpEtypes::mixed
+            || this->GetEETerms() == DOpEtypes::mixed_control)
+          {
+            GetPI_h_z().SetTimeDoFNumber(time_dof);
+          }
+        if (this->GetEETerms() == DOpEtypes::dual_only
+            || this->GetEETerms() == DOpEtypes::mixed
+            || this->GetEETerms() == DOpEtypes::mixed_control)
+          {
+            GetPI_h_u().SetTimeDoFNumber(time_dof);
+          }
+        if ( this->GetEETerms() == DOpEtypes::mixed_control)
+          {
+            GetControlErrorIndicators().reinit(error_ind_[time_dof].size());
+            GetPI_h_q().SetTimeDoFNumber(time_dof);
+          }
       }
-      if (this->GetEETerms() == DOpEtypes::dual_only
-	  || this->GetEETerms() == DOpEtypes::mixed
-	  || this->GetEETerms() == DOpEtypes::mixed_control)
-      {
-	GetPI_h_u().SetTimeDoFNumber(time_dof);
-      }
-      if ( this->GetEETerms() == DOpEtypes::mixed_control)
-      {
-	GetControlErrorIndicators().reinit(error_ind_[time_dof].size());
-	GetPI_h_q().SetTimeDoFNumber(time_dof);
-      }
-    }
   }
   /**
    * Adds just the pure virtual functions GetElementWeight() and GetFaceWeight().

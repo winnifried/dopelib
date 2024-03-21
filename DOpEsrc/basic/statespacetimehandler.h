@@ -131,7 +131,7 @@ namespace DOpE
 #else
     virtual const DOpEWrapper::DoFHandler<dealdim, DH> &
 #endif
-      GetStateDoFHandler (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const =0;
+    GetStateDoFHandler (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const =0;
 
     /******************************************************/
 
@@ -166,17 +166,17 @@ namespace DOpE
      */
     std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-      typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator>
 #else
-      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
 #endif
     GetDoFHandlerBeginActive () const
     {
       std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator> ret (
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret (
 #endif
         this->GetDoFHandler ().size ());
       for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
@@ -195,17 +195,17 @@ namespace DOpE
 
     std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator>
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
 #endif
     GetDoFHandlerEnd () const
     {
       std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim>::active_cell_iterator> ret (
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret (
 #endif
         this->GetDoFHandler ().size ());
       for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
@@ -227,17 +227,17 @@ namespace DOpE
      */
     std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator>
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
 #endif
     GetDoFHandlerBeginActiveAllLevels () const
     {
       std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator> ret (
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret (
 #endif
         this->GetDoFHandler ().size ());
       for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
@@ -259,17 +259,17 @@ namespace DOpE
 
     std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator>
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
 #endif
     GetDoFHandlerEndAllLevels () const
     {
       std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-	typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim>::cell_iterator> ret (
 #else
-	typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret (
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret (
 #endif
         this->GetDoFHandler ().size ());
       for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
@@ -342,7 +342,7 @@ namespace DOpE
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
                          unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override
     {
-       switch (type)
+      switch (type)
         {
         case DOpEtypes::VectorType::state:
           return GetStateDoFHandler (time_point).GetDEALDoFHandler().locally_owned_dofs();
@@ -356,7 +356,7 @@ namespace DOpE
         default:
           abort ();
           return dealii::IndexSet ();
-        } 
+        }
     }
 
     /**
@@ -371,27 +371,27 @@ namespace DOpE
                             unsigned int time_point = std::numeric_limits<unsigned int>::max()) const override
     {
       switch (type)
-      {
-      case DOpEtypes::VectorType::state:
-      {
-	dealii::IndexSet result;
-	DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
-						 result);
-	return result;
-      }
+        {
+        case DOpEtypes::VectorType::state:
+        {
+          dealii::IndexSet result;
+          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
+                                                   result);
+          return result;
+        }
 
-      case DOpEtypes::VectorType::constraint:
-      case DOpEtypes::VectorType::local_constraint:
-      case DOpEtypes::VectorType::control:
-	assert(false);
-	return IndexSet ();
-	
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+        case DOpEtypes::VectorType::control:
+          assert(false);
+          return IndexSet ();
+
         default:
           abort ();
           return dealii::IndexSet ();
-      } 
+        }
     }
-    
+
     /******************************************************/
     /*
      //  * Experimental status for MG prec
@@ -457,15 +457,15 @@ namespace DOpE
      * Returns the list of the number of neighbouring elements to the vertices
      */
 
-    virtual const std::vector<unsigned int>* GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) = 0;
-        
+    virtual const std::vector<unsigned int> *GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) = 0;
+
     /******************************************************/
 
     /**
      * Computes the current sparsity pattern for the state variable
      */
     virtual void
-      ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
+    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
 
     /******************************************************/
 
@@ -531,11 +531,11 @@ namespace DOpE
 
     virtual void
     WriteToFileElementwise(const Vector<float> &v,
-			   std::string name,
+                           std::string name,
                            std::string outfile,
-			   std::string dof_type,
-			   std::string filetype,
-			   int n_patches) override;
+                           std::string dof_type,
+                           std::string filetype,
+                           int n_patches) override;
 
   protected:
     //we need this here, because we know the type of the DoFHandler in use.
@@ -561,13 +561,13 @@ namespace DOpE
   template <template <int, int> class FE, template <int, int> class DH,
             typename SPARSITYPATTERN, typename VECTOR, int dealdim>
 #endif
-    void
-    StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFile (
-      const VECTOR &v,
-      std::string name,
-      std::string outfile,
-      std::string dof_type,
-      std::string filetype)
+  void
+  StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFile (
+    const VECTOR &v,
+    std::string name,
+    std::string outfile,
+    std::string dof_type,
+    std::string filetype)
   {
     // TODO remove MPI_COMM_WORLD
     const bool parallel = dealii::Utilities::MPI::n_mpi_processes (
@@ -581,12 +581,12 @@ namespace DOpE
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 #if DEAL_II_VERSION_GTE(9,4,0)
-	data_out.add_data_vector (v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
-#else	//Deal Version in [9.3.0,9.4.0)
-	data_out.add_data_vector (v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
+        data_out.add_data_vector (v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_dof_data);
+#else //Deal Version in [9.3.0,9.4.0)
+        data_out.add_data_vector (v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
 #endif
 #else  //Deal Version < 9.3.0
-	data_out.add_data_vector (v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
+        data_out.add_data_vector (v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
 #endif
         data_out.build_patches ();
         // From statpdeproblem.h:
@@ -661,7 +661,7 @@ namespace DOpE
   }
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-  template <template <int, int> class FE, bool DH, 
+  template <template <int, int> class FE, bool DH,
             typename SPARSITYPATTERN, typename VECTOR, int dealdim>
 #else
   template <template <int, int> class FE, template <int, int> class DH,
@@ -676,19 +676,19 @@ namespace DOpE
     std::string filetype,
     int n_patches)
   {
-       if (dof_type == "state")
+    if (dof_type == "state")
       {
         auto &data_out = GetDataOut ();
         data_out.attach_dof_handler(GetStateDoFHandler());
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 #if DEAL_II_VERSION_GTE(9,4,0)
-	data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
-#else	//Deal Version in [9.3.0,9.4.0) 
-	data_out.add_data_vector(v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
+        data_out.add_data_vector(v, name,DataOut_DoFData<dealdim,dealdim>::DataVectorType::type_cell_data);
+#else //Deal Version in [9.3.0,9.4.0) 
+        data_out.add_data_vector(v, name,DataOut_DoFData<dealii::DoFHandler<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
 #endif
 #else  //Deal Version < 9.3.0
-	data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
+        data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
 #endif
         data_out.build_patches(n_patches);
 

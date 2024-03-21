@@ -100,7 +100,7 @@ int
 main(int argc, char **argv)
 {
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-    
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -143,7 +143,7 @@ main(int argc, char **argv)
 #else
   DOpEWrapper::Mapping<DIM,DOFHANDLER> mapping(1,true);
 #endif
-  
+
   LocalFunctional<EDC,FDC,DOFHANDLER, VECTOR, DIM> LF;
 
   STH DOFH(triangulation, mapping, state_fe);

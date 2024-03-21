@@ -38,10 +38,10 @@ namespace DOpE
     template<bool DH, typename VECTOR, int dealdim> class EDC,
     template<bool DH, typename VECTOR, int dealdim> class FDC,
     bool DH, typename VECTOR, int dopedim, int dealdim>
-    class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
+  class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
     dopedim, dealdim>
 #else
-    template<
+  template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
@@ -112,7 +112,7 @@ namespace DOpE
     void
     ElementValue_U(
       const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
+      dealii::Vector<double> &/*local_vector*/, double /*scale*/) override
     {
     }
 

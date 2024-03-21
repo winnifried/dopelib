@@ -125,7 +125,7 @@ main(int argc, char **argv)
    * Fluid: NSE
    * Structure: INH or STVK
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -219,7 +219,7 @@ main(int argc, char **argv)
 
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times);
-  
+
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFP); // pressure difference

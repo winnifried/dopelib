@@ -140,7 +140,7 @@ main(int argc, char **argv)
    *
    * Additionally we estimate the error in the cost functional.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -185,20 +185,20 @@ main(int argc, char **argv)
   const double alpha = 1.e-3;
 
   LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(alpha);
-  
+
   // New in comparison to pure PDE problems
   COSTFUNCTIONAL LFunc(alpha);
 
   //AuxFunctionals
   LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
   LocalMeanValueFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
-  
+
   triangulation.refine_global(5);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
-  
+
   OP P(LFunc, LPDE, Constraints, DOFH);
 
   P.AddFunctional(&LPF);

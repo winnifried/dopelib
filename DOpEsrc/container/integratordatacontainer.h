@@ -58,7 +58,7 @@ namespace DOpE
     IntegratorDataContainer(const QUADRATURE &quad,
                             const FACEQUADRATURE &face_quad)
       : quad_(&quad), face_quad_(&face_quad), fdc_(NULL), edc_(NULL), mm_fdc_(
-        NULL), mm_edc_(NULL)
+          NULL), mm_edc_(NULL)
     {
     }
 
@@ -95,9 +95,9 @@ namespace DOpE
                   STH &sth,
                   const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
 #else
-		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
 #endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
@@ -119,9 +119,9 @@ namespace DOpE
     InitializeFDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
 #else
-		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
 #endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
@@ -140,13 +140,13 @@ namespace DOpE
                   STH &sth,
                   const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
 #else
-		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
 #endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
-		  bool need_vertices)
+                  bool need_vertices)
     {
       if (edc_ != NULL)
         delete edc_;
@@ -163,13 +163,13 @@ namespace DOpE
     InitializeEDC(UpdateFlags update_flags, STH &sth,
                   const std::vector<
 #if DEAL_II_VERSION_GTE(9,3,0)
-		  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim>::active_cell_iterator>& element,
 #else
-		  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
 #endif
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const VECTOR *> &domain_values,
-		  bool need_vertices)
+                  bool need_vertices)
     {
       InitializeEDC(GetQuad(), update_flags, sth, element, param_values,
                     domain_values, need_vertices);
@@ -182,9 +182,9 @@ namespace DOpE
     void
     InitializeMMFDC(UpdateFlags update_flags, STH &sth,
 #if DEAL_II_VERSION_GTE(9,3,0)
-		    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+                    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
 #else
-		    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+                    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
 #endif
                     const typename std::vector<
                     typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
@@ -206,9 +206,9 @@ namespace DOpE
     void
     InitializeMMEDC(UpdateFlags update_flags, STH &sth,
 #if DEAL_II_VERSION_GTE(9,3,0)
-		    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
+                    const typename std::vector<typename dealii::DoFHandler<dim, dim>::cell_iterator> &element,
 #else
-		    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
+                    const typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
 #endif
                     const typename std::vector<
                     typename dealii::Triangulation<dim>::cell_iterator>& tria_element,

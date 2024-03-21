@@ -128,9 +128,9 @@ main(int argc, char **argv)
    * main feature is the use of the DWR method for error
    * estimation and grid refinement.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -256,33 +256,33 @@ main(int argc, char **argv)
   for (int i = 0; i < max_iter; i++)
     {
       //try
-        {
-          solver.ReInit();
-          out.ReInit();
-          stringstream outp;
+      {
+        solver.ReInit();
+        out.ReInit();
+        stringstream outp;
 
-          outp << "**************************************************\n";
-          outp << "*             Starting Forward Solve             *\n";
-          outp << "*   Solving : " << P.GetName() << "\t*\n";
-          outp << "*   SDoFs   : ";
-          solver.StateSizeInfo(outp);
-          outp << "**************************************************";
-          out.Write(outp, 1, 1, 1);
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve             *\n";
+        outp << "*   Solving : " << P.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver.StateSizeInfo(outp);
+        outp << "**************************************************";
+        out.Write(outp, 1, 1, 1);
 
-          solver.ComputeReducedFunctionals();
-          solver.ComputeRefinementIndicators(dwrc, LPDE);
-          solver.ComputeRefinementIndicators(l2resc, LPDE);
-          solver.ComputeRefinementIndicators(h1resc, LPDE);
+        solver.ComputeReducedFunctionals();
+        solver.ComputeRefinementIndicators(dwrc, LPDE);
+        solver.ComputeRefinementIndicators(l2resc, LPDE);
+        solver.ComputeRefinementIndicators(h1resc, LPDE);
 
-          const double exact_value = 0.441956231972232;
+        const double exact_value = 0.441956231972232;
 
-          double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
-          outp << "Mean value error: " << error << "  Ieff (eh/e)= "
-               << dwrc.GetError() / error << std::endl;
-          outp << "L2-Error estimator: " << sqrt(l2resc.GetError()) << std::endl;
-          outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
-          out.Write(outp, 1, 1, 1);
-        }
+        double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
+        outp << "Mean value error: " << error << "  Ieff (eh/e)= "
+             << dwrc.GetError() / error << std::endl;
+        outp << "L2-Error estimator: " << sqrt(l2resc.GetError()) << std::endl;
+        outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
+        out.Write(outp, 1, 1, 1);
+      }
 //      catch (DOpEException &e)
 //        {
 //          std::cout

@@ -105,7 +105,7 @@ namespace DOpE
     double func_prec_, feas_tol_, opt_tol_,sInf_;
     int max_inner_iter_, max_outer_iter_,nS_,nInf_,start_;
     bool capture_out_;
-    ParameterReader & parameter_reader_;
+    ParameterReader &parameter_reader_;
   };
 
   /***************************************************************************************/
@@ -185,12 +185,12 @@ namespace DOpE
   template<typename PROBLEM, typename VECTOR>
 #ifndef DOPELIB_WITH_SNOPT
   int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &/*q*/,
-						     double /*global_tol*/)
+                                                     double /*global_tol*/)
   {
     throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the DOPELIB_WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
 #else
   int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &q,
-						     double global_tol)
+                                                     double global_tol)
   {
     q.ReInit();
 
@@ -368,7 +368,7 @@ namespace DOpE
       RSAProb.setNeA ( neA );
       RSAProb.setNeG ( neG );
 #endif
-      
+
       DOpEWrapper::SNOPT_A_userfunc_interface = boost::bind<int>(boost::mem_fn(&Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::rsa_func_),boost::ref(*this),boost::placeholders::_1);
 #if SNOPT_VERSION_GTE(7,6)
 #else
@@ -383,12 +383,12 @@ namespace DOpE
       RSAProb.setIntParameter( "Major iterations limit", max_outer_iter_);
 #if SNOPT_VERSION_GTE(7,6)
       ret_val = RSAProb.solve(start_,neF,n,ObjAdd,ObjRow,DOpEWrapper::SNOPT_A_userfunc_,
-			      iAfun,jAvar,A,neA,
-			      iGfun,jGvar,neG,
-			      xlow,xupp,Flow,Fupp,
-			      x, xstate, xmul,
-			      F, Fstate, Fmul,
-			      nS_,nInf_,sInf_);
+                              iAfun,jAvar,A,neA,
+                              iGfun,jGvar,neG,
+                              xlow,xupp,Flow,Fupp,
+                              x, xstate, xmul,
+                              F, Fstate, Fmul,
+                              nS_,nInf_,sInf_);
       start_=2;
 #else
       RSAProb.solve(2);
