@@ -54,7 +54,7 @@ namespace DOpE
     param_reader.declare_entry("filter_iteration","1",Patterns::Integer(1),"Only print every n-th iteration, set to one for every iteration. Use filter_time for timestep filtering");
     param_reader.declare_entry("eps_machine_set_by_user","0.0",Patterns::Double(),"Correlation of the output and machine precision");
     param_reader.declare_entry("number of patches", "0", Patterns::Integer(0));
-    
+
 
   }
 
@@ -73,10 +73,10 @@ namespace DOpE
     //assert(SI);
     if (!SI)
       {
-	if(rank_ == 0)
-	{
-	  std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
-	}
+        if (rank_ == 0)
+          {
+            std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
+          }
         Solver_ = NULL;
       }
     else
@@ -109,7 +109,7 @@ namespace DOpE
     filter_iterations_ =  param_reader.get_integer("filter_iteration");
     user_eps_machine_  = param_reader.get_double("eps_machine_set_by_user");
     n_patches_ = param_reader.get_integer("number of patches");
-    
+
     std::string tmp  = param_reader.get_string("never_write_list");
     ParseString(tmp,never_write_list);
 
@@ -128,10 +128,10 @@ namespace DOpE
     n_reinits_ = 0;
 
     std::string logfilename = results_basedir_+logfile_;
-    if(rank_ == 0)
-    {
-      log_.open(logfilename.c_str(), std::ios::out);
-    }
+    if (rank_ == 0)
+      {
+        log_.open(logfilename.c_str(), std::ios::out);
+      }
     disallow_all_ = false;
     stdout_backup_ = 0;
 
@@ -176,17 +176,17 @@ namespace DOpE
             log_<<"LOG: Allowing IterationCounter `"<<type<<"' for filenames!"<<std::endl;
             pos = ReorderAndInsert(type);
           }
-	if(type=="Time")
-	{
-	  // note ceil(a/b) = a/b + (a%b !=0) for integers a and b
-	  //set iteration value to ceil(a/b)*b hence all intermediate iterations
-	  //are overwritten.
-	  iteration_number_[pos->second] = (iteration/filter_time_ + (iteration%filter_time_ != 0))*filter_time_;
-	}
+        if (type=="Time")
+          {
+            // note ceil(a/b) = a/b + (a%b !=0) for integers a and b
+            //set iteration value to ceil(a/b)*b hence all intermediate iterations
+            //are overwritten.
+            iteration_number_[pos->second] = (iteration/filter_time_ + (iteration%filter_time_ != 0))*filter_time_;
+          }
         else
-	{
-	  iteration_number_[pos->second] = (iteration/filter_iterations_+ (iteration%filter_iterations_ != 0))*filter_iterations_;
-	}
+          {
+            iteration_number_[pos->second] = (iteration/filter_iterations_+ (iteration%filter_iterations_ != 0))*filter_iterations_;
+          }
       }
   }
 
@@ -260,34 +260,34 @@ namespace DOpE
   std::map<std::string,unsigned int>::const_iterator DOpEOutputHandler<VECTOR>::ReorderAndInsert(std::string type)
   {
     assert(iteration_number_.size() == iteration_type_pos_.size());
-    if(type == "Time")
-    {
-      //Time is always last, so that visualization tools can simply run over timesteps
-      iteration_type_pos_[type]  = iteration_number_.size();
-      iteration_number_.push_back(0);
-    }
+    if (type == "Time")
+      {
+        //Time is always last, so that visualization tools can simply run over timesteps
+        iteration_type_pos_[type]  = iteration_number_.size();
+        iteration_number_.push_back(0);
+      }
     else
-    {
-      std::map<std::string,unsigned int>::const_iterator it = iteration_type_pos_.find("Time");
-      if(it != iteration_type_pos_.end())
       {
-	//Insert before the "Time" index
-	//Assert that time is last
-	assert(iteration_type_pos_["Time"]+1 == iteration_number_.size());
-	iteration_type_pos_[type]  = iteration_number_.size()-1;
-	iteration_type_pos_["Time"] = iteration_number_.size();
-	//Insert a zero before the time counter
-	unsigned int time_step = iteration_number_[iteration_number_.size()-1];
-	iteration_number_[iteration_number_.size()-1] = 0;
-	iteration_number_.push_back(time_step);
+        std::map<std::string,unsigned int>::const_iterator it = iteration_type_pos_.find("Time");
+        if (it != iteration_type_pos_.end())
+          {
+            //Insert before the "Time" index
+            //Assert that time is last
+            assert(iteration_type_pos_["Time"]+1 == iteration_number_.size());
+            iteration_type_pos_[type]  = iteration_number_.size()-1;
+            iteration_type_pos_["Time"] = iteration_number_.size();
+            //Insert a zero before the time counter
+            unsigned int time_step = iteration_number_[iteration_number_.size()-1];
+            iteration_number_[iteration_number_.size()-1] = 0;
+            iteration_number_.push_back(time_step);
+          }
+        else
+          {
+            //Insert in the end, since no "Time" counter is given
+            iteration_type_pos_[type]  = iteration_number_.size();
+            iteration_number_.push_back(0);
+          }
       }
-      else
-      {
-	//Insert in the end, since no "Time" counter is given
-	iteration_type_pos_[type]  = iteration_number_.size();
-	iteration_number_.push_back(0);
-      }
-    }
     return iteration_type_pos_.find(type);
   }
 
@@ -304,11 +304,11 @@ namespace DOpE
       }
     else
       {
-        if(rank_ == 0)
-	{
-	  std::cerr<<msg<<std::endl;
-	  log_ <<" ERROR: "<<msg<<std::endl;
-	}
+        if (rank_ == 0)
+          {
+            std::cerr<<msg<<std::endl;
+            log_ <<" ERROR: "<<msg<<std::endl;
+          }
       }
   }
   /*******************************************************/
@@ -454,7 +454,7 @@ namespace DOpE
   {
     if (AllowWrite(name))
       {
-	if (dof_type == "control")
+        if (dof_type == "control")
           GetReducedProblem()->WriteToFile(q,name,ConstructOutputName(name,dof_type),dof_type,control_ending_);
         else if (dof_type == "state")
           GetReducedProblem()->WriteToFile(q,name,ConstructOutputName(name,dof_type),dof_type,ending_);
@@ -477,7 +477,7 @@ namespace DOpE
   {
     if (AllowWrite(name))
       {
-	GetReducedProblem()->WriteToFile(q,ConstructOutputName(name,dof_type));
+        GetReducedProblem()->WriteToFile(q,ConstructOutputName(name,dof_type));
       }
   }
 
@@ -534,11 +534,11 @@ namespace DOpE
       {
         if (dof_type == "control")
           GetReducedProblem()->WriteToFileElementwise(q, name,
-						      ConstructOutputName(name,dof_type),
+                                                      ConstructOutputName(name,dof_type),
                                                       dof_type, control_ending_,n_patches_);
         else if (dof_type == "state")
-          GetReducedProblem()->WriteToFileElementwise(q, name, 
-						      ConstructOutputName(name,dof_type),
+          GetReducedProblem()->WriteToFileElementwise(q, name,
+                                                      ConstructOutputName(name,dof_type),
                                                       dof_type, ending_,n_patches_);
       }
   }
@@ -562,7 +562,7 @@ namespace DOpE
           outfile << control_ending_;
         else if (dof_type == "state")
           outfile << ending_;
-	else if (dof_type == "time")
+        else if (dof_type == "time")
           outfile<<".gpl";
         else
           abort();
@@ -618,7 +618,7 @@ namespace DOpE
     fsetpos(stdout,&std_out_pos_);
 
     std::string logfilename = results_basedir_+logfile_;
-    if(rank_ == 0)
+    if (rank_ == 0)
       log_.open(logfilename.c_str(), std::ios::app|std::ios::out);
   }
   /*******************************************************/
@@ -633,29 +633,29 @@ namespace DOpE
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::PrintCopyrightNotice()
   {
-    if( rank_ == 0 )
-    {
-      std::stringstream out;
-
-      out<<"DOpElib Copyright (C) 2012 - "<<DOpE::VERSION::year<<" DOpElib authors"<<std::endl;
-      out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
-      out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;
-      out<<std::endl;
-      out<<"This is DOpElib Version: "<<DOpE::VERSION::major<<"."<<DOpE::VERSION::minor;
-      out<<"."<<DOpE::VERSION::fix<<" "<<DOpE::VERSION::postfix<<std::endl;
-      out<<"\tStatus as of: "<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::day;
-      out<<"/"<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::month;
-      out<<"/"<<DOpE::VERSION::year<<std::endl;
-      out<<"Using dealii Version: "<<DOpE::VERSION::dealii_major<<"."<<DOpE::VERSION::dealii_minor<<std::endl;
-      if( parallel_ )
+    if ( rank_ == 0 )
       {
-	out<<"Running in parallel with "<<dealii::Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD)<<" MPI-processes"<<std::endl;
+        std::stringstream out;
+
+        out<<"DOpElib Copyright (C) 2012 - "<<DOpE::VERSION::year<<" DOpElib authors"<<std::endl;
+        out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
+        out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;
+        out<<std::endl;
+        out<<"This is DOpElib Version: "<<DOpE::VERSION::major<<"."<<DOpE::VERSION::minor;
+        out<<"."<<DOpE::VERSION::fix<<" "<<DOpE::VERSION::postfix<<std::endl;
+        out<<"\tStatus as of: "<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::day;
+        out<<"/"<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::month;
+        out<<"/"<<DOpE::VERSION::year<<std::endl;
+        out<<"Using dealii Version: "<<DOpE::VERSION::dealii_major<<"."<<DOpE::VERSION::dealii_minor<<std::endl;
+        if ( parallel_ )
+          {
+            out<<"Running in parallel with "<<dealii::Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD)<<" MPI-processes"<<std::endl;
+          }
+        std::cout<<out.str();
+        std::cout.flush();
+        log_<<out.str();
+        log_.flush();
       }
-      std::cout<<out.str();
-      std::cout.flush();
-      log_<<out.str();
-      log_.flush();
-    }
   }
 
 

@@ -131,7 +131,7 @@ void decompose_stress(
       //stress_term_minus = ((lame_coefficient_lambda * tr_E) - (lame_coefficient_lambda * tr_E_positive)) * Identity + lame_coefficient_mu * (tr_E - tr_E_positive) * Identity + 2.0 * lame_coefficient_mu * ((E-E_plus) - 0.5 * (tr_E - tr_E_positive) * Identity);
 
       stress_term_plus = lame_coefficient_lambda * tr_E_positive * Identity
-                        + 2 * lame_coefficient_mu * E_plus;
+                         + 2 * lame_coefficient_mu * E_plus;
 
       stress_term_minus = lame_coefficient_lambda * (tr_E - tr_E_positive) * Identity
                           + 2 * lame_coefficient_mu * (E - E_plus);
@@ -269,7 +269,7 @@ void decompose_stress(
         tr_E_positive_LinU = tr_E_LinU;
 
 
-      
+
       stress_term_plus = lame_coefficient_lambda * tr_E_positive_LinU * Identity
                          + 2 * lame_coefficient_mu * E_plus_LinU;
 

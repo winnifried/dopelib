@@ -127,7 +127,7 @@ main(int argc, char **argv)
    *  In this example we solve the instationary Navier Stokes' equations.
    *  We use the well-known Taylor-Hood element
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
@@ -196,7 +196,7 @@ main(int argc, char **argv)
   // the type of the control, see dopetypes.h for more information.
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   DOFH(triangulation, state_fe, times);
-  
+
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFP);

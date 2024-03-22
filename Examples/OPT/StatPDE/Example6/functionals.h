@@ -32,10 +32,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
+class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 #else
 template<
@@ -52,7 +52,7 @@ public:
   }
 
   double
-ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -95,10 +95,10 @@ private:
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim = dopedim>
-  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<

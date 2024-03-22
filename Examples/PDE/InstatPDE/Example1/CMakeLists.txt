@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 # Set the name of the project and target:
 SET(TARGET "DOpE-PDE-InstatPDE-Example1")
 

@@ -35,10 +35,10 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
-  class MeanValueFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
+class MeanValueFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
@@ -53,7 +53,7 @@ public:
   }
 
   double
-    ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc) override
   {
     unsigned int n_q_points = edc.GetNQPoints();
 

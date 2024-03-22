@@ -345,14 +345,14 @@ namespace DOpE
             //So only write a warning, and continue.
             this->GetExceptionHandler()->HandleException(e,"ReducedNewtonAlgorithm::Solve");
             liniter = -1;
-	    //However, if in this case the step is inconveniently large, i.e., it might
-	    //be an almost singular Hessian, we take the negative gradient instead.
-	    if (dq.Norm("infty") > 10000.*gradient_transposed.Norm("infty"))
-	    {
-   	      this->GetOutputHandler()->WriteError("Step discarded, taking negative Gradient instead.");
-	      dq = gradient_transposed;
-	      dq *= -1.;
-	    }
+            //However, if in this case the step is inconveniently large, i.e., it might
+            //be an almost singular Hessian, we take the negative gradient instead.
+            if (dq.Norm("infty") > 10000.*gradient_transposed.Norm("infty"))
+              {
+                this->GetOutputHandler()->WriteError("Step discarded, taking negative Gradient instead.");
+                dq = gradient_transposed;
+                dq *= -1.;
+              }
           }
         catch (DOpENegativeCurvatureException &e)
           {
@@ -366,14 +366,14 @@ namespace DOpE
         //Linesearch
         try
           {
-	    //Check if dq is a descent direction
-	    double reduction = gradient*dq;
-	    if(reduction > 0)
-	    {
-	      this->GetOutputHandler()->WriteError("Waring: computed direction doesn't seem to be a descend direction! Trying negative gradient instead.");
-	      dq = gradient_transposed;
-	      dq *= -1.;
-	    }
+            //Check if dq is a descent direction
+            double reduction = gradient*dq;
+            if (reduction > 0)
+              {
+                this->GetOutputHandler()->WriteError("Waring: computed direction doesn't seem to be a descend direction! Trying negative gradient instead.");
+                dq = gradient_transposed;
+                dq *= -1.;
+              }
             lineiter = ReducedNewtonLineSearch(dq,gradient,cost,q);
           }
         catch (DOpEIterationException &e)

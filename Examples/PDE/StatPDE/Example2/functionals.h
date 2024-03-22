@@ -36,7 +36,7 @@ using namespace DOpE;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
 template<
-template<bool DH, typename VECTOR, int dealdim> class EDC,
+  template<bool DH, typename VECTOR, int dealdim> class EDC,
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dealdim>
 class LocalBoundaryFunctionalMassFlux : public FunctionalInterface<EDC, FDC,
@@ -57,7 +57,7 @@ public:
   }
 
   double
-    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
+  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     const unsigned int n_q_points = fdc.GetNQPoints();
     const unsigned int color = fdc.GetBoundaryIndicator();

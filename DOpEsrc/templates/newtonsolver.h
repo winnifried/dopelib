@@ -219,7 +219,7 @@ namespace DOpE
         if (iter > nonlinear_maxiter_)
           {
             GetIntegrator().DeleteDomainData("last_newton_solution");
-	    GetIntegrator().DeleteAllData();
+            GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
           }
 
@@ -238,7 +238,7 @@ namespace DOpE
 
           res = residual.linfty_norm();
           int lineiter=0;
-	  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
+          pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
           double rho = linesearch_rho_;
           double alpha=1;
           if ( res > lastres && build_matrix == false)
@@ -257,24 +257,24 @@ namespace DOpE
             }
           else
             {
-	      bool was_build = build_matrix;
+              bool was_build = build_matrix;
               build_matrix = false;
-	      pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
+              pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
               while (res > lastres)
                 {
                   out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
                      <<pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
-		  if(was_build)
-		    out<<"M ";
+                  if (was_build)
+                    out<<"M ";
                   pde.GetOutputHandler()->Write(out,priority+1);
 
                   lineiter++;
-		  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
+                  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
                   if (lineiter > line_maxiter_)
                     {
                       GetIntegrator().DeleteDomainData("last_newton_solution");
-		      GetIntegrator().DeleteAllData();
+                      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
                     }
                   solution.add(alpha*(rho-1.),du);
@@ -283,7 +283,7 @@ namespace DOpE
                   GetIntegrator().ComputeNonlinearResidual(pde,residual);
                   residual *= -1.;
                   pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
-		  pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
+                  pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
 
                   res = residual.linfty_norm();
 
@@ -303,8 +303,8 @@ namespace DOpE
                   << "\t LineSearch {"
                   <<lineiter
                   <<"} ";
-	      if(was_build)
-		out<<"M ";
+              if (was_build)
+                out<<"M ";
 
 
               pde.GetOutputHandler()->Write(out,priority);

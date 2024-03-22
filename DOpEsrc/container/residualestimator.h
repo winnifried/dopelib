@@ -121,8 +121,8 @@ namespace DOpE
     }
 
     void
-      Initialize(unsigned int /*state_n_blocks*/,
-		 std::vector<unsigned int> &/*state_block_component*/)
+    Initialize(unsigned int /*state_n_blocks*/,
+               std::vector<unsigned int> &/*state_block_component*/)
     {
     }
 
@@ -219,7 +219,7 @@ namespace DOpE
      * To assert that the squared norm is calculated
      */
     inline void
-    ResidualModifier(double &res) 
+    ResidualModifier(double &res)
     {
       res = res * res * weight_;
     }
@@ -255,17 +255,17 @@ namespace DOpE
 #endif
     void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
+    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
 #else
-      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
 #endif
                         VECTOR &vals)
     {
       VectorTools::interpolate(sth_.GetMapping(),
 #if DEAL_II_VERSION_GTE(9,3,0)
-			       *(static_cast<const dealii::DoFHandler<dim, dim>*>(dofh)),
+                               *(static_cast<const dealii::DoFHandler<dim, dim>*>(dofh)),
 #else
-			       *(static_cast<const DH<dim, dim>*>(dofh)),
+                               *(static_cast<const DH<dim, dim>*>(dofh)),
 #endif
 #if DEAL_II_VERSION_GTE(9,3,0)
                                Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
@@ -347,8 +347,8 @@ namespace DOpE
     }
 
     void
-      Initialize(unsigned int /*state_n_blocks*/,
-		 std::vector<unsigned int> &/*state_block_component*/)
+    Initialize(unsigned int /*state_n_blocks*/,
+               std::vector<unsigned int> &/*state_block_component*/)
     {
     }
 
@@ -481,9 +481,9 @@ namespace DOpE
 #endif
     void
 #if DEAL_II_VERSION_GTE(9,3,0)
-      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
+    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim> *dofh,
 #else
-      BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
+    BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH> *dofh,
 #endif
                         VECTOR &vals)
     {

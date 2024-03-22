@@ -76,14 +76,14 @@ public:
   }
 
   double value (const Point<2>   &p,
-		const unsigned int /*component*/ = 0) const override
+                const unsigned int /*component*/ = 0) const override
   {
     double y = p[1];
     return mytime*y;
   }
 
   void vector_value (const Point<2> &p,
-		     Vector<double>   &value) const override
+                     Vector<double>   &value) const override
   {
     for (unsigned int c=0; c<this->n_components; ++c)
       value (c) = DirichletValues::value (p, c);

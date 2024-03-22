@@ -32,7 +32,7 @@
 
 namespace DOpEWrapper
 {
-  #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,0)
   /**
    * @class DoFHandler
    *
@@ -85,7 +85,7 @@ namespace DOpEWrapper
      * to allow for dimension independent programming.
      */
     template<int dim>
-      DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/, const bool /*hp_capability_enabled*/=false)
+    DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/, const bool /*hp_capability_enabled*/=false)
       : tmp_dof_handler_ (tmp_tria_)
     {
     }
@@ -124,27 +124,27 @@ namespace DOpEWrapper
 
 
 #else//Dealii older than 9.3.0
-    /**
-   * @class DoFHandler
-   *
-   * Wrapper for the DoFHandler. This Wrapper is required to allow instantiations
-   * of DoFHandlers in dimension 0 as well as between ``normal'' and ``hp''
-   * DoFHandlers.
-   *
-   * @template dim              Dimension of the dofhandler.
-   * @template DOFHANDLER       With this template argument we distinguish
-   *                            between the 'normal' as well as the hp case.
-   *                            The class DOFHANDLER is for dim>0 the base class
-   *                            of DoFHandler. Feasible at the moment are
-   *                            dealii::DoFHandler<dim> and dealii::hp::DoFHandler.
-   *                            It has the default value dealii::DoFHandler<dim>
-   */
+  /**
+  * @class DoFHandler
+  *
+  * Wrapper for the DoFHandler. This Wrapper is required to allow instantiations
+  * of DoFHandlers in dimension 0 as well as between ``normal'' and ``hp''
+  * DoFHandlers.
+  *
+  * @template dim              Dimension of the dofhandler.
+  * @template DOFHANDLER       With this template argument we distinguish
+  *                            between the 'normal' as well as the hp case.
+  *                            The class DOFHANDLER is for dim>0 the base class
+  *                            of DoFHandler. Feasible at the moment are
+  *                            dealii::DoFHandler<dim> and dealii::hp::DoFHandler.
+  *                            It has the default value dealii::DoFHandler<dim>
+  */
   template<int dim,
            template<int DIM, int spacedim> class DOFHANDLER = dealii::DoFHandler>
   class DoFHandler : public DOFHANDLER<dim, dim>
   {
   public:
-  DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       DOFHANDLER<dim, dim>(tria)
     {
     }
@@ -171,7 +171,7 @@ namespace DOpEWrapper
   class DoFHandler<dim, dealii::DoFHandler> : public dealii::DoFHandler<dim>
   {
   public:
-  DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
       dealii::DoFHandler<dim>(tria)
     {
     }

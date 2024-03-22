@@ -77,11 +77,11 @@ typedef BlockSparsityPattern      SPARSITYPATTERN;
 typedef BlockVector<double>       VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
-                            SimpleDirichletData<VECTOR, DIM>,
-                            SPARSITYPATTERN,
-                            VECTOR,
-                            DIM>
-                                                                                          OP;
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR,
+        DIM>
+        OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR, DIM>      IDC;
 typedef Integrator<IDC, VECTOR, double, DIM>                                              INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR>                     LINEARSOLVER;
@@ -97,7 +97,7 @@ main(int argc, char **argv)
    *  E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics,
    Wiley (2003), pp. 386 - 387
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";

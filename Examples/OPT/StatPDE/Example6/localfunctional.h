@@ -36,7 +36,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<

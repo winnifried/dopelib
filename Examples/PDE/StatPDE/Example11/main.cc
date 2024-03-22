@@ -114,9 +114,9 @@ main(int argc, char **argv)
    *  To this end we approximate PI by the computation of the
    *  circumference of a circle. See the deal.II tutorial step 10.
    */
-  
+
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
-  
+
   string paramfile = "dope.prm";
 
   if (argc == 2)

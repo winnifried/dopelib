@@ -43,7 +43,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -411,7 +411,7 @@ private:
           GridTools::find_active_cell_around_point(
             StaticMappingQ1<dealdim>::mapping, dof_handler, point);
 #endif
-    
+
     Quadrature<dealdim> q(
       GeometryInfo<dealdim>::project_to_unit_cell(element_point.second));
 

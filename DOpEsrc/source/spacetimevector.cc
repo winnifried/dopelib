@@ -65,17 +65,17 @@ namespace DOpE
     id_counter_++;
     current_dof_number_ = 0;
     accessor_=0;
-    
+
     ReInit();
   }
 
   /******************************************************/
   template<typename VECTOR>
   SpaceTimeVector<VECTOR>::SpaceTimeVector(const SpaceTimeHandlerBase<VECTOR> *STH,
-					   DOpEtypes::VectorStorageType behavior,
-					   DOpEtypes::VectorType type,
-					   DOpEtypes::VectorAction action,
-					   ParameterReader &param_reader) :
+                                           DOpEtypes::VectorStorageType behavior,
+                                           DOpEtypes::VectorType type,
+                                           DOpEtypes::VectorAction action,
+                                           ParameterReader &param_reader) :
     unique_id_(id_counter_)
   {
     behavior_ = behavior;
@@ -85,36 +85,36 @@ namespace DOpE
     sfh_ticket_ = 0;
     param_reader.SetSubsection("output parameters");
     tmp_dir_ = param_reader.get_string("results_dir") + "tmp_"+DOpEtypesToString(vector_type_)+"/";
-    //Check if expectation on combination of args is given 
+    //Check if expectation on combination of args is given
     if ( GetType() == DOpEtypes::VectorType::state )
-    {
-      if ( GetAction() != DOpEtypes::VectorAction::nonstationary )
       {
-	throw DOpEException("VectorAction: " + DOpEtypesToString(GetAction()) +
-			    " is not compatible with DOpEType: " +
-			    DOpEtypesToString(GetType()),
-			    "SpaceTimeVector<VECTOR>::SpaceTimeVector<VECTOR>");
+        if ( GetAction() != DOpEtypes::VectorAction::nonstationary )
+          {
+            throw DOpEException("VectorAction: " + DOpEtypesToString(GetAction()) +
+                                " is not compatible with DOpEType: " +
+                                DOpEtypesToString(GetType()),
+                                "SpaceTimeVector<VECTOR>::SpaceTimeVector<VECTOR>");
+          }
       }
-    }
     if ( GetType() == DOpEtypes::VectorType::control )
-    {
-      if (GetAction() == DOpEtypes::VectorAction::initial || GetAction() == DOpEtypes::VectorAction::stationary)
       {
-	if (GetBehavior() != DOpEtypes::VectorStorageType::fullmem)
-        {
-          throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
-                              " is not compatible with vector type: " + DOpEtypesToString(GetAction()),
-                              "SpaceTimeVector<VECTOR>::SpaceTimeVector<VECTOR>");
-        }
+        if (GetAction() == DOpEtypes::VectorAction::initial || GetAction() == DOpEtypes::VectorAction::stationary)
+          {
+            if (GetBehavior() != DOpEtypes::VectorStorageType::fullmem)
+              {
+                throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
+                                    " is not compatible with vector type: " + DOpEtypesToString(GetAction()),
+                                    "SpaceTimeVector<VECTOR>::SpaceTimeVector<VECTOR>");
+              }
+          }
+        if (behavior_ == DOpEtypes::VectorStorageType::only_recent)
+          {
+            throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
+                                " makes no sense for VectorType" + DOpEtypesToString(GetType()),
+                                "SpaceTimeVector<VECTOR>::SpaceTimeVector<VECTOR>");
+          }
+
       }
-      if (behavior_ == DOpEtypes::VectorStorageType::only_recent)
-      {
-	throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
-			    " makes no sense for VectorType" + DOpEtypesToString(GetType()),
-			    "SpaceTimeVector<VECTOR>::SpaceTimeVector<VECTOR>");
-      }
-      
-    }
     //Continue initialization
     if (behavior_ == DOpEtypes::VectorStorageType::store_on_disc)
       {
@@ -198,24 +198,24 @@ namespace DOpE
       {
         if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
           {
-	    if (GetAction() == DOpEtypes::VectorAction::initial || GetAction() == DOpEtypes::VectorAction::stationary)
-            {
-              stvector_.resize(1,NULL);
-	      //Always uses DoFs of Mesh at time_dof 0
-              ReSizeSpace (0);
-            }
-          else
-            {
-	      stvector_.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
-	      for (unsigned int t = 0; t
-		     <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
+            if (GetAction() == DOpEtypes::VectorAction::initial || GetAction() == DOpEtypes::VectorAction::stationary)
               {
-                SetTimeDoFNumber(t);
-                ReSizeSpace (t);
+                stvector_.resize(1,NULL);
+                //Always uses DoFs of Mesh at time_dof 0
+                ReSizeSpace (0);
               }
-	      SetTimeDoFNumber(0);
-	    }
-	  }
+            else
+              {
+                stvector_.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
+                for (unsigned int t = 0; t
+                     <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
+                  {
+                    SetTimeDoFNumber(t);
+                    ReSizeSpace (t);
+                  }
+                SetTimeDoFNumber(0);
+              }
+          }
         else
           {
             if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
@@ -281,8 +281,8 @@ namespace DOpE
                                       + tmp_dir_ + "SpaceTimeVector_lock";
                 if (system(command.c_str()) != 0)
                   {
-		    std::cout<<"The command "<< command << "failed! in SpaceTimeVector<VECTOR>::~SpaceTimeVector"<<std::endl;
-		    abort();
+                    std::cout<<"The command "<< command << "failed! in SpaceTimeVector<VECTOR>::~SpaceTimeVector"<<std::endl;
+                    abort();
                   }
               }
             else
@@ -291,17 +291,17 @@ namespace DOpE
                                       + Utilities::int_to_string(unique_id_) + ".dope";
                 if (system(command.c_str()) != 0)
                   {
-		    std::cout<<"The command "<< command << "failed! in SpaceTimeVector<VECTOR>::~SpaceTimeVector"<<std::endl;
-		    abort();
+                    std::cout<<"The command "<< command << "failed! in SpaceTimeVector<VECTOR>::~SpaceTimeVector"<<std::endl;
+                    abort();
                   }
               }
             num_active_--;
           }
         else
-	{
-	  std::cout<<"Unknown Behavior "<< DOpEtypesToString(GetBehavior())<<" in SpaceTimeVector<VECTOR>::~SpaceTimeVector"<<std::endl;
-	  abort();
-	}
+          {
+            std::cout<<"Unknown Behavior "<< DOpEtypesToString(GetBehavior())<<" in SpaceTimeVector<VECTOR>::~SpaceTimeVector"<<std::endl;
+            abort();
+          }
       }
   }
 
@@ -310,45 +310,45 @@ namespace DOpE
   template<typename VECTOR>
   void
   SpaceTimeVector<VECTOR>::SetTimeDoFNumber(unsigned int dof_number,
-                                        const TimeIterator &interval) const
+                                            const TimeIterator &interval) const
   {
     if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
-    {
-      this->SetTimeDoFNumber(dof_number);
-    }
+        || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+      {
+        this->SetTimeDoFNumber(dof_number);
+      }
     else
-    {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
       {
-	assert(GetAction() == DOpEtypes::VectorAction::nonstationary);
-	//check, if we have already loaded the interval
-	if (accessor_index_ == interval.GetIndex())
-	{
-	  if (accessor_ != static_cast<int> (dof_number))
-	  {
-	    //the we have nothing to do, just store the old one
-	    StoreOnDisc();
-	    //and set the accessor_ to the new number.
-	    accessor_ = static_cast<int> (dof_number);
-	  }
-	}
-	else
-	{
-	  //so we have to load everything anew.
-	  StoreOnDisc();
-	  ComputeLocalVectors(interval);
-	  accessor_ = dof_number;
-	  accessor_index_ = interval.GetIndex();
-	  
-	}
+        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+          {
+            assert(GetAction() == DOpEtypes::VectorAction::nonstationary);
+            //check, if we have already loaded the interval
+            if (accessor_index_ == interval.GetIndex())
+              {
+                if (accessor_ != static_cast<int> (dof_number))
+                  {
+                    //the we have nothing to do, just store the old one
+                    StoreOnDisc();
+                    //and set the accessor_ to the new number.
+                    accessor_ = static_cast<int> (dof_number);
+                  }
+              }
+            else
+              {
+                //so we have to load everything anew.
+                StoreOnDisc();
+                ComputeLocalVectors(interval);
+                accessor_ = dof_number;
+                accessor_index_ = interval.GetIndex();
+
+              }
+          }
+        else
+          {
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                "SpaceTimeVector<VECTOR>::SetTimeDoFNumber");
+          }
       }
-      else
-      {
-	throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-			    "SpaceTimeVector<VECTOR>::SetTimeDoFNumber");
-      }
-    }
   }
 
   /******************************************************/
@@ -357,64 +357,64 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
   {
     if (GetAction() == DOpEtypes::VectorAction::nonstationary)
-    {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
-        if ( time_point - current_dof_number_ == 0)
-	{
-	  //nothing to do
-	}
-        else if ( time_point - current_dof_number_ == 1)
-	{
-	  //We moved to the next time point.
-	  accessor_ = (accessor_ + 1)%2;
-	  current_dof_number_ = time_point;
-	  //Resize spatial vector.
-	  ReSizeSpace (time_point);
-	}
+        if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+          {
+            if ( time_point - current_dof_number_ == 0)
+              {
+                //nothing to do
+              }
+            else if ( time_point - current_dof_number_ == 1)
+              {
+                //We moved to the next time point.
+                accessor_ = (accessor_ + 1)%2;
+                current_dof_number_ = time_point;
+                //Resize spatial vector.
+                ReSizeSpace (time_point);
+              }
+            else
+              {
+                //invalid movement in time
+                throw DOpEException("Invalid movement in time. Using the only_recent behavior you may only move forward in time by exatly one time_dof per update. To reset the time to the initial value call the ReInit method of this vector.","SpaceTimeVector::SetTimeDoFNumber");
+              }
+          }
+        else if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+          {
+            accessor_ = static_cast<int> (time_point);
+            assert(accessor_ < static_cast<int>(stvector_.size()));
+          }
         else
-	{
-	  //invalid movement in time
-	  throw DOpEException("Invalid movement in time. Using the only_recent behavior you may only move forward in time by exatly one time_dof per update. To reset the time to the initial value call the ReInit method of this vector.","SpaceTimeVector::SetTimeDoFNumber");
-	}
-      }
-      else if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-      {
-        accessor_ = static_cast<int> (time_point);
-        assert(accessor_ < static_cast<int>(stvector_.size()));
-      }
-      else
-      {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-	{
-	  StoreOnDisc();
-	  accessor_ = time_point;
-	  accessor_index_ = -3;
-	  global_to_local_.clear();
-	  global_to_local_[accessor_] = 0;
-	  ResizeLocalVectors(1);
-	  
-	  GetSpaceTimeHandler ()->ReinitVector (*local_vectors_[0],
-						vector_type_,time_point);
-	  if (FileExists(accessor_))
-	  {
-	    FetchFromDisc(accessor_, *local_vectors_[0]);
-	  }
-	  stvector_information_.at(time_point).size_
-	    = local_vectors_[global_to_local_[accessor_]]->size();
-	}
-        else
-	{
-	  throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-			      "SpaceTimeVector<VECTOR>::SetTimeDoFNumber");
-	}
-      }
-    }//End of nonstationary case
+          {
+            if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+              {
+                StoreOnDisc();
+                accessor_ = time_point;
+                accessor_index_ = -3;
+                global_to_local_.clear();
+                global_to_local_[accessor_] = 0;
+                ResizeLocalVectors(1);
+
+                GetSpaceTimeHandler ()->ReinitVector (*local_vectors_[0],
+                                                      vector_type_,time_point);
+                if (FileExists(accessor_))
+                  {
+                    FetchFromDisc(accessor_, *local_vectors_[0]);
+                  }
+                stvector_information_.at(time_point).size_
+                  = local_vectors_[global_to_local_[accessor_]]->size();
+              }
+            else
+              {
+                throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                    "SpaceTimeVector<VECTOR>::SetTimeDoFNumber");
+              }
+          }
+      }//End of nonstationary case
     else
       //In all other cases, ignore the argument since no timedependence is present!
-    {
-      accessor_ = 0;
-    }
+      {
+        accessor_ = 0;
+      }
   }
 
   /******************************************************/
@@ -423,45 +423,45 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetSpacialVector()
   {
     if (lock_)
-    {
-      throw DOpEException(
-	"Trying to use GetSpacialVector while a copy is in use!",
-	"SpaceTimeVector::GetSpacialVector");
-    }
+      {
+        throw DOpEException(
+          "Trying to use GetSpacialVector while a copy is in use!",
+          "SpaceTimeVector::GetSpacialVector");
+      }
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
-      return *(stvector_[accessor_]);
-    }
+      {
+        return *(stvector_[accessor_]);
+      }
     else
-    {
-      if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-	   || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
-        if (accessor_ >= 0)
-	{
-	  assert(stvector_[accessor_] != NULL);
-	  return *(stvector_[accessor_]);
-	}
+        if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+             || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+          {
+            if (accessor_ >= 0)
+              {
+                assert(stvector_[accessor_] != NULL);
+                return *(stvector_[accessor_]);
+              }
+            else
+              return local_stvector_;
+          }
         else
-          return local_stvector_;
+          {
+            if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+              {
+                if (accessor_ >= 0)
+                  {
+                    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
+                    assert(global_to_local_[accessor_] <local_vectors_.size());
+                    return *(local_vectors_[global_to_local_[accessor_]]);
+                  }
+                else
+                  return local_stvector_;
+              }
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                "SpaceTimeVector<VECTOR>::GetSpacialVector");
+          }
       }
-      else
-      {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-	{
-	  if (accessor_ >= 0)
-	  {
-	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
-	    assert(global_to_local_[accessor_] <local_vectors_.size());
-	    return *(local_vectors_[global_to_local_[accessor_]]);
-	  }
-	  else
-	    return local_stvector_;
-	}
-        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                            "SpaceTimeVector<VECTOR>::GetSpacialVector");
-      }
-    }
   }
 
   /******************************************************/
@@ -470,44 +470,44 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetSpacialVector() const
   {
     if (lock_)
-    {
-      throw DOpEException(
-	"Trying to use GetSpacialVector while a copy is in use!",
-	"SpaceTimeVector::GetSpacialVector");
-    }
+      {
+        throw DOpEException(
+          "Trying to use GetSpacialVector while a copy is in use!",
+          "SpaceTimeVector::GetSpacialVector");
+      }
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
-      return *(stvector_[accessor_]);
-    }
+      {
+        return *(stvector_[accessor_]);
+      }
     else
-    {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-	  || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
-        if (accessor_ >= 0)
-	{
-	  assert(stvector_[accessor_] != NULL);
-	  return *(stvector_[accessor_]);
-	}
+        if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+            || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+          {
+            if (accessor_ >= 0)
+              {
+                assert(stvector_[accessor_] != NULL);
+                return *(stvector_[accessor_]);
+              }
+            else
+              return local_stvector_;
+          }
         else
-          return local_stvector_;
+          {
+            if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+              {
+                if (accessor_ >= 0)
+                  {
+                    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
+                    return *(local_vectors_[global_to_local_[accessor_]]);
+                  }
+                else
+                  return local_stvector_;
+              }
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                "SpaceTimeVector<VECTOR>::GetSpacialVector const");
+          }
       }
-      else
-      {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-	{
-	  if (accessor_ >= 0)
-	  {
-	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
-	    return *(local_vectors_[global_to_local_[accessor_]]);
-	  }
-	  else
-	    return local_stvector_;
-	}
-        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                            "SpaceTimeVector<VECTOR>::GetSpacialVector const");
-      }
-    }
   }
   /******************************************************/
   template<typename VECTOR>
@@ -515,57 +515,57 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer(unsigned int from_time_dof, unsigned int to_time_dof) const
   {
     if (lock_)
-    {
-      throw DOpEException(
-	"Trying to use GetSpacialVectorWithTemporalTransfer while a copy is in use!",
-	"SpaceTimeVector::GetSpacialVectorWithTemporalTransfer");
-    }
+      {
+        throw DOpEException(
+          "Trying to use GetSpacialVectorWithTemporalTransfer while a copy is in use!",
+          "SpaceTimeVector::GetSpacialVectorWithTemporalTransfer");
+      }
     assert((to_time_dof == from_time_dof+1) || (to_time_dof == from_time_dof-1));
     assert(from_time_dof == current_dof_number_);
     //Fill local_stvector_;
-    
+
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
-       local_stvector_ = *(stvector_[accessor_]);
-    }
+      {
+        local_stvector_ = *(stvector_[accessor_]);
+      }
     else
-    {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-	  || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
-        if (accessor_ >= 0)
-	{
-	  assert(stvector_[accessor_] != NULL);
-	  local_stvector_ =  *(stvector_[accessor_]);
-	}
+        if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+            || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+          {
+            if (accessor_ >= 0)
+              {
+                assert(stvector_[accessor_] != NULL);
+                local_stvector_ =  *(stvector_[accessor_]);
+              }
+            else
+              throw DOpEException("Case should not occure!",
+                                  "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+          }
         else
-          throw DOpEException("Case should not occure!",
-                            "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+          {
+            if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+              {
+                if (accessor_ >= 0)
+                  {
+                    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
+                    local_stvector_ =  *(local_vectors_[global_to_local_[accessor_]]);
+                  }
+                else
+                  throw DOpEException("Case should not occure!",
+                                      "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+              }
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+          }
       }
-      else
-      {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-	{
-	  if (accessor_ >= 0)
-	  {
-	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
-	    local_stvector_ =  *(local_vectors_[global_to_local_[accessor_]]);
-	  }
-	  else
-	    throw DOpEException("Case should not occure!",
-                            "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
-	}
-        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                            "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
-      }
-    }
     //Transfer
     bool transfer = GetSpaceTimeHandler()->TemporalMeshTransferState(local_stvector_, from_time_dof, to_time_dof);
     assert(transfer);
-    if(! transfer)
-    {
-      std::cerr<<"Meshtransfer initiated but not needed!"<<std::endl;
-    }
+    if (! transfer)
+      {
+        std::cerr<<"Meshtransfer initiated but not needed!"<<std::endl;
+      }
     lock_ = true;
     return local_stvector_;
   }
@@ -575,60 +575,60 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer(unsigned int from_time_dof, unsigned int to_time_dof) const
   {
     if (lock_)
-    {
-      throw DOpEException(
-	"Trying to use GetPreviousSpacialVectorWithTemporalTransfer while a copy is in use!",
-	"SpaceTimeVector::GetPreviousSpacialVectorWithTemporalTransfer");
-    }
+      {
+        throw DOpEException(
+          "Trying to use GetPreviousSpacialVectorWithTemporalTransfer while a copy is in use!",
+          "SpaceTimeVector::GetPreviousSpacialVectorWithTemporalTransfer");
+      }
     assert((to_time_dof == from_time_dof+1) || (to_time_dof == from_time_dof-1));
     assert(from_time_dof == current_dof_number_);
     //Fill local_stvector_;
-    
+
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
-       throw DOpEException("Can not call GetPreviousSpacialVector in VectorAction case " +
-			    DOpEtypesToString(GetAction()),
-                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer");      
-    }
+      {
+        throw DOpEException("Can not call GetPreviousSpacialVector in VectorAction case " +
+                            DOpEtypesToString(GetAction()),
+                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer");
+      }
     else
-    {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-	  || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
-        if (accessor_ >= 0)
-	{
-	  assert(stvector_[accessor_-1] != NULL);
-	  local_stvector_ =  *(stvector_[accessor_-1]);
-	}
+        if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+            || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+          {
+            if (accessor_ >= 0)
+              {
+                assert(stvector_[accessor_-1] != NULL);
+                local_stvector_ =  *(stvector_[accessor_-1]);
+              }
+            else
+              throw DOpEException("No Previous Vector Available ",
+                                  "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer const");
+          }
         else
-          throw DOpEException("No Previous Vector Available ",
-                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer const");
+          {
+            if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+              {
+                if (accessor_ >= 0)
+                  {
+                    assert(global_to_local_.find(accessor_-1) !=global_to_local_.end());
+                    assert(global_to_local_[accessor_-1] <local_vectors_.size());
+                    local_stvector_ =  *(local_vectors_[global_to_local_[accessor_-1]]);
+                  }
+                else
+                  throw DOpEException("No Previous Vector Available",
+                                      "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer const");
+              }
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer const");
+          }
       }
-      else
-      {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-	{
-	  if (accessor_ >= 0)
-	  {
-	    assert(global_to_local_.find(accessor_-1) !=global_to_local_.end());
-	    assert(global_to_local_[accessor_-1] <local_vectors_.size());
-	    local_stvector_ =  *(local_vectors_[global_to_local_[accessor_-1]]);
-	  }
-	  else
-	    throw DOpEException("No Previous Vector Available",
-                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer const");
-	}
-        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVectorWithTemporalTransfer const");
-      }
-    }
     //Transfer
     bool transfer = GetSpaceTimeHandler()->TemporalMeshTransferState(local_stvector_, from_time_dof, to_time_dof);
     assert(transfer);
-    if(! transfer)
-    {
-      std::cerr<<"Meshtransfer initiated but not needed!"<<std::endl;
-    }
+    if (! transfer)
+      {
+        std::cerr<<"Meshtransfer initiated but not needed!"<<std::endl;
+      }
     lock_ = true;
     return local_stvector_;
   }
@@ -639,11 +639,11 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetNextSpacialVector()
   {
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
+      {
         throw DOpEException("Can not call GetNextSpacialVector in VectorAction case " +
-			    DOpEtypesToString(GetAction()),
-                            "SpaceTimeVector<VECTOR>::GetNextSpacialVector");      
-    }
+                            DOpEtypesToString(GetAction()),
+                            "SpaceTimeVector<VECTOR>::GetNextSpacialVector");
+      }
     if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
          || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
@@ -680,11 +680,11 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetNextSpacialVector() const
   {
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
+      {
         throw DOpEException("Can not call GetNextSpacialVector in VectorAction case " +
-			    DOpEtypesToString(GetAction()),
-                            "SpaceTimeVector<VECTOR>::GetNextSpacialVector");      
-    }
+                            DOpEtypesToString(GetAction()),
+                            "SpaceTimeVector<VECTOR>::GetNextSpacialVector");
+      }
     if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
          || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
@@ -706,7 +706,7 @@ namespace DOpE
                 assert(global_to_local_[accessor_+1] <local_vectors_.size());
                 return *(local_vectors_[global_to_local_[accessor_+1]]);
               }
-	    throw DOpEException("No Next Vector Available ",
+            throw DOpEException("No Next Vector Available ",
                                 "SpaceTimeVector<VECTOR>::GetNextSpacialVector const");
             abort();
           }
@@ -721,11 +721,11 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetPreviousSpacialVector()
   {
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
+      {
         throw DOpEException("Can not call GetPreviousSpacialVector in VectorAction case " +
-			    DOpEtypesToString(GetAction()),
-                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVector");      
-    }
+                            DOpEtypesToString(GetAction()),
+                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVector");
+      }
     if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
          || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
@@ -744,7 +744,7 @@ namespace DOpE
           {
             if (accessor_ > 0 )
               {
-		assert(global_to_local_.find(accessor_-1) !=global_to_local_.end());
+                assert(global_to_local_.find(accessor_-1) !=global_to_local_.end());
                 assert(global_to_local_[accessor_-1] <local_vectors_.size());
                 return *(local_vectors_[global_to_local_[accessor_-1]]);
               }
@@ -762,11 +762,11 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetPreviousSpacialVector() const
   {
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
+      {
         throw DOpEException("Can not call GetPreviousSpacialVector in VectorAction case " +
-			    DOpEtypesToString(GetAction()),
-                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVector");      
-    }
+                            DOpEtypesToString(GetAction()),
+                            "SpaceTimeVector<VECTOR>::GetPreviousSpacialVector");
+      }
     if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
          || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
@@ -803,61 +803,61 @@ namespace DOpE
   SpaceTimeVector<VECTOR>::GetSpacialVectorCopy() const
   {
     if (lock_)
-    {
-      throw DOpEException(
-	"Trying to create a new copy while the old is still in use!",
-	"SpaceTimeVector::GetSpacialVectorCopy");
-    }
+      {
+        throw DOpEException(
+          "Trying to create a new copy while the old is still in use!",
+          "SpaceTimeVector::GetSpacialVectorCopy");
+      }
     lock_ = true;
-    
+
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
-    {
-      copy_stvector_ = *(stvector_[accessor_]);
-      return copy_stvector_;
-    }
+      {
+        copy_stvector_ = *(stvector_[accessor_]);
+        return copy_stvector_;
+      }
     else
-    {
-      assert( GetAction() == DOpEtypes::VectorAction::nonstationary);
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-	  || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
-        if (accessor_ >= 0)
-	{
-	  assert(stvector_[accessor_] != NULL);
-	  copy_stvector_ = *(stvector_[accessor_]);
-	}
+        assert( GetAction() == DOpEtypes::VectorAction::nonstationary);
+        if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+            || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+          {
+            if (accessor_ >= 0)
+              {
+                assert(stvector_[accessor_] != NULL);
+                copy_stvector_ = *(stvector_[accessor_]);
+              }
+            else
+              copy_stvector_ = local_stvector_;
+          }
         else
-          copy_stvector_ = local_stvector_;
+          {
+            if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+              {
+                if (accessor_ >= 0)
+                  {
+                    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
+                    copy_stvector_ = *(local_vectors_[global_to_local_[accessor_]]);
+                  }
+                else
+                  copy_stvector_ = local_stvector_;
+              }
+            else
+              {
+                throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                    "SpaceTimeVector<VECTOR>::GetSpacialVectorCopy");
+              }
+          }
+        return copy_stvector_;
       }
-      else
-      {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-	{
-	  if (accessor_ >= 0)
-	  {
-	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
-	    copy_stvector_ = *(local_vectors_[global_to_local_[accessor_]]);
-	  }
-	  else
-	    copy_stvector_ = local_stvector_;
-	}
-        else
-	{
-	  throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-			      "SpaceTimeVector<VECTOR>::GetSpacialVectorCopy");
-	}
-      }
-      return copy_stvector_;
-    }
   }
-  
+
   /******************************************************/
   template<typename VECTOR>
   void
   SpaceTimeVector<VECTOR>::operator=(double value)
   {
     if (lock_)
-    {
+      {
         throw DOpEException(
           "Trying to use operator= while a copy is in use!",
           "SpaceTimeVector::operator=");
@@ -1338,292 +1338,292 @@ namespace DOpE
           }
       }
   }
-/******************************************************/
+  /******************************************************/
 
-template<typename VECTOR>
-void SpaceTimeVector<VECTOR>::max(const SpaceTimeVector &dq)
-{
-  if (lock_)
+  template<typename VECTOR>
+  void SpaceTimeVector<VECTOR>::max(const SpaceTimeVector &dq)
   {
-      throw DOpEException(
-        "Trying to use add while a copy is in use!",
-        "SpaceTimeVector::max");
-    }
-  if (GetBehavior() != dq.GetBehavior())
-    {
-      throw DOpEException(
-        "Own Behavior does not match dq.Behavior. Own Behavior:"
-        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
-        + DOpEtypesToString(dq.GetBehavior()),
-        "SpaceTimeVector<VECTOR>::max");
-    }
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.stvector_.size() == stvector_.size());
+    if (lock_)
+      {
+        throw DOpEException(
+          "Trying to use add while a copy is in use!",
+          "SpaceTimeVector::max");
+      }
+    if (GetBehavior() != dq.GetBehavior())
+      {
+        throw DOpEException(
+          "Own Behavior does not match dq.Behavior. Own Behavior:"
+          + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+          + DOpEtypesToString(dq.GetBehavior()),
+          "SpaceTimeVector<VECTOR>::max");
+      }
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.stvector_.size() == stvector_.size());
 
-      for (unsigned int i = 0; i < stvector_.size(); i++)
-        {
-          assert(stvector_[i] != NULL);
-          assert(dq.stvector_[i] != NULL);
-          VECTOR &t = *(stvector_[i]);
-          const VECTOR &tn = *(dq.stvector_[i]);
-          assert(t.size() == tn.size());
-          for (unsigned int j = 0; j < t.size() ; j++)
-            {
-              // For Trilinos vectors, we have to explicitly cast them to doubles
-              typename VECTOR::value_type a = t (j);
-              typename VECTOR::value_type b = tn (j);
-              t (j) = std::max (a, b);
-            }
-        }
-      SetTimeDoFNumber(0);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::max");
-    }
-}
-
-
-/******************************************************/
-template<typename VECTOR>
-void SpaceTimeVector<VECTOR>::min(const SpaceTimeVector &dq)
-{
-  if (lock_)
-    {
-      throw DOpEException(
-        "Trying to use add while a copy is in use!",
-        "SpaceTimeVector::min");
-    }
-  if (GetBehavior() != dq.GetBehavior())
-    {
-      throw DOpEException(
-        "Own Behavior does not match dq.Behavior. Own Behavior:"
-        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
-        + DOpEtypesToString(dq.GetBehavior()),
-        "SpaceTimeVector<VECTOR>::min");
-    }
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.stvector_.size() == stvector_.size());
-
-      for (unsigned int i = 0; i < stvector_.size(); i++)
-        {
-          assert(stvector_[i] != NULL);
-          assert(dq.stvector_[i] != NULL);
-          VECTOR &t = *(stvector_[i]);
-          const VECTOR &tn = *(dq.stvector_[i]);
-          assert(t.size() == tn.size());
-          for (unsigned int j = 0; j < t.size() ; j++)
-            {
-              // For Trilinos vectors, we have to explicitly cast them to doubles
-              typename VECTOR::value_type a = t (j);
-              typename VECTOR::value_type b = tn (j);
-              t (j) = std::min (a, b);
-            }
-        }
-      SetTimeDoFNumber(0);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::min");
-    }
-}
-/******************************************************/
-template<typename VECTOR>
-void SpaceTimeVector<VECTOR>::comp_mult(const SpaceTimeVector &dq)
-{
-  if (lock_)
-    {
-      throw DOpEException(
-        "Trying to use add while a copy is in use!",
-        "SpaceTimeVector::comp_mult");
-    }
-  if (GetBehavior() != dq.GetBehavior())
-    {
-      throw DOpEException(
-        "Own Behavior does not match dq.Behavior. Own Behavior:"
-        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
-        + DOpEtypesToString(dq.GetBehavior()),
-        "SpaceTimeVector<VECTOR>::comp_mult");
-    }
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      assert(dq.stvector_.size() == stvector_.size());
-
-      for (unsigned int i = 0; i < stvector_.size(); i++)
-        {
-          assert(stvector_[i] != NULL);
-          assert(dq.stvector_[i] != NULL);
-          VECTOR &t = *(stvector_[i]);
-          const VECTOR &tn = *(dq.stvector_[i]);
-          assert(t.size() == tn.size());
-          for (unsigned int j = 0; j < t.size() ; j++)
-            {
-              t(j) = t(j)*tn(j);
-            }
-        }
-      SetTimeDoFNumber(0);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::comp_mult");
-    }
-}
-
-/******************************************************/
-template<typename VECTOR>
-void SpaceTimeVector<VECTOR>::comp_invert()
-{
-  if (lock_)
-    {
-      throw DOpEException(
-        "Trying to use add while a copy is in use!",
-        "SpaceTimeVector::comp_invert");
-    }
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      for (unsigned int i = 0; i < stvector_.size(); i++)
-        {
-          assert(stvector_[i] != NULL);
-          VECTOR &t = *(stvector_[i]);
-          for (unsigned int j = 0; j < t.size() ; j++)
-            {
-              t(j) = 1./t(j);
-            }
-        }
-      SetTimeDoFNumber(0);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::comp_invert");
-    }
-}
-
-/******************************************************/
-template<typename VECTOR>
-void SpaceTimeVector<VECTOR>::init_by_sign(double smaller, double larger, double unclear, double TOL)
-{
-  if (lock_)
-    {
-      throw DOpEException(
-        "Trying to use add while a copy is in use!",
-        "SpaceTimeVector::init_by_sign");
-    }
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      for (unsigned int i = 0; i < stvector_.size(); i++)
-        {
-          assert(stvector_[i] != NULL);
-          VECTOR &t = *(stvector_[i]);
-          for (unsigned int j = 0; j < t.size() ; j++)
-            {
-              if (t(j) < -TOL)
-                {
-                  t(j) = smaller;
-                }
-              else if (t(j) > TOL)
-                {
-                  t(j) = larger;
-                }
-              else
-                {
-                  t(j) = unclear;
-                }
-            }
-        }
-      SetTimeDoFNumber(0);
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::init_by_sign");
-    }
-}
-
-template<typename VECTOR>
-double SpaceTimeVector<VECTOR>::Norm(std::string name,std::string restriction) const
-{
-  if (lock_)
-    {
-      throw DOpEException(
-        "Trying to use Norm while a copy is in use!",
-        "SpaceTimeVector::Norm");
-    }
-  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-    {
-      double ret = 0.;
-      if (name == "infty")
-        {
-          if ( restriction == "all")
-            {
-              for (unsigned int i = 0; i < stvector_.size(); i++)
-                {
-                  const VECTOR &tmp = *(stvector_[i]);
-                  for ( unsigned int j = 0; j < tmp.size(); j++)
-                    {
-                      ret = std::max(ret,std::fabs(tmp(j)));
-                    }
-                }
-            }
-          else if (restriction == "positive")
-            {
-              for (unsigned int i = 0; i < stvector_.size(); i++)
-                {
-                  const VECTOR &tmp = *(stvector_[i]);
-                  for ( unsigned int j = 0; j < tmp.size(); j++)
-                    {
-                      ret = std::max(ret,std::max(0.,tmp(j)));
-                    }
-                }
-            }
-          else
-            {
-              throw DOpEException("Unknown restriction: " + restriction,"SpaceTimeVector<VECTOR>::Norm");
-            }
-        }
-      else if (name == "l1")
-        {
-          if ( restriction == "all")
-            {
-              for (unsigned int i = 0; i < stvector_.size(); i++)
-                {
-                  const VECTOR &tmp = *(stvector_[i]);
-                  for ( unsigned int j = 0; j < tmp.size(); j++)
-                    {
-                      ret += std::fabs(tmp(j));
-                    }
-                }
-            }
-          else if (restriction == "positive")
-            {
-              for (unsigned int i = 0; i < stvector_.size(); i++)
-                {
-                  const VECTOR &tmp = *(stvector_[i]);
-                  for ( unsigned int j = 0; j < tmp.size(); j++)
-                    {
-                      ret += std::max(0.,tmp(j));
-                    }
-                }
-            }
-          else
-            {
-              throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
-            }
-        }
-      else
-        {
-          throw DOpEException("Unknown type: " + name,"ConstraintVector<VECTOR>::Norm");
-        }
-      return ret;
-    }
-  else
-    {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::Norm");
-    }
-}
+        for (unsigned int i = 0; i < stvector_.size(); i++)
+          {
+            assert(stvector_[i] != NULL);
+            assert(dq.stvector_[i] != NULL);
+            VECTOR &t = *(stvector_[i]);
+            const VECTOR &tn = *(dq.stvector_[i]);
+            assert(t.size() == tn.size());
+            for (unsigned int j = 0; j < t.size() ; j++)
+              {
+                // For Trilinos vectors, we have to explicitly cast them to doubles
+                typename VECTOR::value_type a = t (j);
+                typename VECTOR::value_type b = tn (j);
+                t (j) = std::max (a, b);
+              }
+          }
+        SetTimeDoFNumber(0);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::max");
+      }
+  }
 
 
-  
+  /******************************************************/
+  template<typename VECTOR>
+  void SpaceTimeVector<VECTOR>::min(const SpaceTimeVector &dq)
+  {
+    if (lock_)
+      {
+        throw DOpEException(
+          "Trying to use add while a copy is in use!",
+          "SpaceTimeVector::min");
+      }
+    if (GetBehavior() != dq.GetBehavior())
+      {
+        throw DOpEException(
+          "Own Behavior does not match dq.Behavior. Own Behavior:"
+          + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+          + DOpEtypesToString(dq.GetBehavior()),
+          "SpaceTimeVector<VECTOR>::min");
+      }
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.stvector_.size() == stvector_.size());
+
+        for (unsigned int i = 0; i < stvector_.size(); i++)
+          {
+            assert(stvector_[i] != NULL);
+            assert(dq.stvector_[i] != NULL);
+            VECTOR &t = *(stvector_[i]);
+            const VECTOR &tn = *(dq.stvector_[i]);
+            assert(t.size() == tn.size());
+            for (unsigned int j = 0; j < t.size() ; j++)
+              {
+                // For Trilinos vectors, we have to explicitly cast them to doubles
+                typename VECTOR::value_type a = t (j);
+                typename VECTOR::value_type b = tn (j);
+                t (j) = std::min (a, b);
+              }
+          }
+        SetTimeDoFNumber(0);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::min");
+      }
+  }
+  /******************************************************/
+  template<typename VECTOR>
+  void SpaceTimeVector<VECTOR>::comp_mult(const SpaceTimeVector &dq)
+  {
+    if (lock_)
+      {
+        throw DOpEException(
+          "Trying to use add while a copy is in use!",
+          "SpaceTimeVector::comp_mult");
+      }
+    if (GetBehavior() != dq.GetBehavior())
+      {
+        throw DOpEException(
+          "Own Behavior does not match dq.Behavior. Own Behavior:"
+          + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+          + DOpEtypesToString(dq.GetBehavior()),
+          "SpaceTimeVector<VECTOR>::comp_mult");
+      }
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        assert(dq.stvector_.size() == stvector_.size());
+
+        for (unsigned int i = 0; i < stvector_.size(); i++)
+          {
+            assert(stvector_[i] != NULL);
+            assert(dq.stvector_[i] != NULL);
+            VECTOR &t = *(stvector_[i]);
+            const VECTOR &tn = *(dq.stvector_[i]);
+            assert(t.size() == tn.size());
+            for (unsigned int j = 0; j < t.size() ; j++)
+              {
+                t(j) = t(j)*tn(j);
+              }
+          }
+        SetTimeDoFNumber(0);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::comp_mult");
+      }
+  }
+
+  /******************************************************/
+  template<typename VECTOR>
+  void SpaceTimeVector<VECTOR>::comp_invert()
+  {
+    if (lock_)
+      {
+        throw DOpEException(
+          "Trying to use add while a copy is in use!",
+          "SpaceTimeVector::comp_invert");
+      }
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        for (unsigned int i = 0; i < stvector_.size(); i++)
+          {
+            assert(stvector_[i] != NULL);
+            VECTOR &t = *(stvector_[i]);
+            for (unsigned int j = 0; j < t.size() ; j++)
+              {
+                t(j) = 1./t(j);
+              }
+          }
+        SetTimeDoFNumber(0);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::comp_invert");
+      }
+  }
+
+  /******************************************************/
+  template<typename VECTOR>
+  void SpaceTimeVector<VECTOR>::init_by_sign(double smaller, double larger, double unclear, double TOL)
+  {
+    if (lock_)
+      {
+        throw DOpEException(
+          "Trying to use add while a copy is in use!",
+          "SpaceTimeVector::init_by_sign");
+      }
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        for (unsigned int i = 0; i < stvector_.size(); i++)
+          {
+            assert(stvector_[i] != NULL);
+            VECTOR &t = *(stvector_[i]);
+            for (unsigned int j = 0; j < t.size() ; j++)
+              {
+                if (t(j) < -TOL)
+                  {
+                    t(j) = smaller;
+                  }
+                else if (t(j) > TOL)
+                  {
+                    t(j) = larger;
+                  }
+                else
+                  {
+                    t(j) = unclear;
+                  }
+              }
+          }
+        SetTimeDoFNumber(0);
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::init_by_sign");
+      }
+  }
+
+  template<typename VECTOR>
+  double SpaceTimeVector<VECTOR>::Norm(std::string name,std::string restriction) const
+  {
+    if (lock_)
+      {
+        throw DOpEException(
+          "Trying to use Norm while a copy is in use!",
+          "SpaceTimeVector::Norm");
+      }
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        double ret = 0.;
+        if (name == "infty")
+          {
+            if ( restriction == "all")
+              {
+                for (unsigned int i = 0; i < stvector_.size(); i++)
+                  {
+                    const VECTOR &tmp = *(stvector_[i]);
+                    for ( unsigned int j = 0; j < tmp.size(); j++)
+                      {
+                        ret = std::max(ret,std::fabs(tmp(j)));
+                      }
+                  }
+              }
+            else if (restriction == "positive")
+              {
+                for (unsigned int i = 0; i < stvector_.size(); i++)
+                  {
+                    const VECTOR &tmp = *(stvector_[i]);
+                    for ( unsigned int j = 0; j < tmp.size(); j++)
+                      {
+                        ret = std::max(ret,std::max(0.,tmp(j)));
+                      }
+                  }
+              }
+            else
+              {
+                throw DOpEException("Unknown restriction: " + restriction,"SpaceTimeVector<VECTOR>::Norm");
+              }
+          }
+        else if (name == "l1")
+          {
+            if ( restriction == "all")
+              {
+                for (unsigned int i = 0; i < stvector_.size(); i++)
+                  {
+                    const VECTOR &tmp = *(stvector_[i]);
+                    for ( unsigned int j = 0; j < tmp.size(); j++)
+                      {
+                        ret += std::fabs(tmp(j));
+                      }
+                  }
+              }
+            else if (restriction == "positive")
+              {
+                for (unsigned int i = 0; i < stvector_.size(); i++)
+                  {
+                    const VECTOR &tmp = *(stvector_[i]);
+                    for ( unsigned int j = 0; j < tmp.size(); j++)
+                      {
+                        ret += std::max(0.,tmp(j));
+                      }
+                  }
+              }
+            else
+              {
+                throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
+              }
+          }
+        else
+          {
+            throw DOpEException("Unknown type: " + name,"ConstraintVector<VECTOR>::Norm");
+          }
+        return ret;
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::Norm");
+      }
+  }
+
+
+
   /******************************************************/
   template<typename VECTOR>
   void
@@ -1748,7 +1748,7 @@ double SpaceTimeVector<VECTOR>::Norm(std::string name,std::string restriction) c
             if (!filestream_.fail())
               {
                 DOpEHelper::write (*local_vectors_[global_to_local_[accessor_]],
-                  filestream_);
+                                   filestream_);
                 filestream_.close();
                 stvector_information_.at(accessor_).on_disc_ = true;
               }

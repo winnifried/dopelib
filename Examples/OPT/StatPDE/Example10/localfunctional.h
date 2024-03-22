@@ -36,7 +36,7 @@ template<
   template<bool DH, typename VECTOR, int dealdim> class FDC,
   bool DH, typename VECTOR, int dopedim, int dealdim =
   dopedim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 #else
 template<
@@ -71,7 +71,7 @@ public:
 
   double AlgebraicValue(
     const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/) override
+    const std::map<std::string, const VECTOR *> &/*domain_values*/) override
   {
     assert(this->GetProblemType() == "cost_functional");
     //Search the vector with the precomputed functional values
@@ -81,7 +81,7 @@ public:
   }
 
   double
-BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
+  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc) override
   {
     if ( this->GetProblemType() == "cost_functional_pre" ||
          this->GetProblemType() == "cost_functional_pre_tangent" )

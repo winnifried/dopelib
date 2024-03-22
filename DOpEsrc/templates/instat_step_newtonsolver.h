@@ -300,15 +300,15 @@ namespace DOpE
         if (iter > nonlinear_maxiter_)
           {
             GetIntegrator().DeleteDomainData("last_newton_solution");
-	    GetIntegrator().DeleteAllData();
+            GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
           }
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
 
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
-	bool was_build = build_matrix;
-           
+        bool was_build = build_matrix;
+
         //Linesearch
         {
           solution += du;
@@ -344,15 +344,15 @@ namespace DOpE
                   out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
                      <<pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
-		  if(was_build)
-		    out<<"M ";
+                  if (was_build)
+                    out<<"M ";
                   pde.GetOutputHandler()->Write(out,priority+1);
 
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
                       GetIntegrator().DeleteDomainData("last_newton_solution");
-		      GetIntegrator().DeleteAllData();
+                      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
                     }
                   solution.add(alpha*(rho-1.),du);
@@ -379,8 +379,8 @@ namespace DOpE
                   << "\t LineSearch {"
                   <<lineiter
                   <<"} ";
-	      if(was_build)
-		    out<<"M ";
+              if (was_build)
+                out<<"M ";
               pde.GetOutputHandler()->Write(out,priority);
 
             }//End of Linesearch
@@ -471,22 +471,22 @@ namespace DOpE
         iter++;
         if (iter > nonlinear_maxiter_)
           {
-	    GetIntegrator().DeleteAllData();
+            GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
           }
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
         bool was_build = build_matrix;
-	//Linesearch
+        //Linesearch
         {
           solution += du;
           GetIntegrator().ComputeNonlinearLhs(pde,residual);
           residual -= time_residual;
           residual *= -1.;
           pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
-	  pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
-	  
+          pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
+
           res = residual.linfty_norm();
           int lineiter=0;
           double rho = linesearch_rho_;
@@ -513,13 +513,13 @@ namespace DOpE
                   out<<algo_level<<"\t Linesearch step: " <<lineiter<<"\t Residual (rel.): "
                      <<pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
-		  if(was_build)
-		    out<<"M ";
-		  pde.GetOutputHandler()->Write(out,priority+1);
+                  if (was_build)
+                    out<<"M ";
+                  pde.GetOutputHandler()->Write(out,priority+1);
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
-		      GetIntegrator().DeleteAllData();
+                      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
                     }
                   solution.add(alpha*(rho-1.),du);
@@ -542,9 +542,9 @@ namespace DOpE
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                  << "\t LineSearch {"<<lineiter<<"} ";
-              if(was_build)
-		    out<<"M ";
-	      pde.GetOutputHandler()->Write(out,priority);
+              if (was_build)
+                out<<"M ";
+              pde.GetOutputHandler()->Write(out,priority);
 
             }//End of Linesearch
         }
