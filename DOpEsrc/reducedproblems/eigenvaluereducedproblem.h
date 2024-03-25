@@ -1001,7 +1001,7 @@ namespace DOpE
       }
     this->GetIntegrator().DeleteDomainData("state");
     this->GetIntegrator().DeleteParamData("state_ev");
-    
+
     DeleteUDD();
 
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());

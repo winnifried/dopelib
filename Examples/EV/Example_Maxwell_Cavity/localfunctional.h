@@ -114,7 +114,7 @@ public:
     typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it = param_values.find("state_ev");
     assert(it!=param_values.end());
     double eigenvalue=(*(it->second))[0];
-    
+
     return 0.5*(eigenvalue- target_eigenvalue_)*(eigenvalue - target_eigenvalue_);
 
   }
