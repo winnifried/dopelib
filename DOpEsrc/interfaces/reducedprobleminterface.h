@@ -461,6 +461,8 @@ namespace DOpE
     virtual void
     ComputeReducedFunctionals(const ControlVector<VECTOR> &q)=0;
 
+    /******************************************************/
+
     /**
      * Basic function to compute the reduced gradient solution.
      * We assume that adjoint state z(u(q)) is already computed.

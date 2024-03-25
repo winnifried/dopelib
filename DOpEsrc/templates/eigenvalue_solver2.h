@@ -68,7 +68,7 @@ namespace DOpE
     void GetNormalizedVectorAdjoint(PROBLEM &pde, StateVector<VECTOR> &adjeigenfunction,StateVector<VECTOR> &stateeigenfunction, double value);
 
     template<typename PROBLEM>
-    bool EigenvalueSolve(PROBLEM &pde, std::vector<double> &eigenvalues, std::vector<StateVector<VECTOR>> &eigenfunctions,
+    bool EigenvalueSolve(PROBLEM &pde, dealii::Vector<double> &eigenvalues, std::vector<StateVector<VECTOR>> &eigenfunctions,
                          bool apply_boundary_values=true,
                          bool force_matrix_build=false,
                          int priority = 5, std::string algo_level = "\t\t ");
@@ -158,7 +158,7 @@ namespace DOpE
   template<typename PROBLEM>
   bool EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>
   ::EigenvalueSolve(PROBLEM &pde,
-                    std::vector<double> &eigenvalues,
+                    dealii::Vector<double> &eigenvalues,
                     std::vector<StateVector<VECTOR>> &eigenfunctions,
                     bool /*apply_boundary_values*/,
                     bool force_matrix_build,

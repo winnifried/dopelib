@@ -103,20 +103,25 @@ public:
     return r;
   }
 
-  double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
+  double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                        const std::map<std::string, const VECTOR *> &/*domain_values*/)
   {
     assert(this->GetProblemType() == "cost_functional");
 
+    typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it = param_values.find("state_ev");
+    assert(it!=param_values.end());
+    double eigenvalue=(*(it->second))[0];
     return 0.5*(eigenvalue- target_eigenvalue_)*(eigenvalue - target_eigenvalue_);
 
   }
 
   double AlgebraicValue_U(const EDC<DH, VECTOR, dealdim> &edc,
-                          dealii::Vector<double> &local_vector, double scale, double eigenvalue)
+                          dealii::Vector<double> &local_vector, double scale)
   {
 
-    return eigenvalue - target_eigenvalue_; //TODO Rueckgabe Void
+    std::vector<double> evs(1);
+    edc.GetParamValues("state_ev",evs);
+    return evs[0] - target_eigenvalue_; //TODO Rueckgabe Void
   }
 
   void

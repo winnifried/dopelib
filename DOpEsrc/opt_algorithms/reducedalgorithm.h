@@ -24,7 +24,7 @@
 #ifndef REDUCED_ALGORITHM_H_
 #define REDUCED_ALGORITHM_H_
 
-//#include <container/optproblemcontainer.h>
+#include <container/optproblemcontainer.h>
 #include <interfaces/reducedprobleminterface.h>
 #include <include/dopeexceptionhandler.h>
 #include <include/outputhandler.h>
@@ -58,7 +58,7 @@ namespace DOpE
      * The constructor for the algorithm
      *
      * @param OP              A pointer to the problem container
-     * @param S               The reduced problem. This object handles the eqq_initialuality
+     * @param S               The reduced problem. This object handles the equality
      *                        constraint. For the interface see ReducedProblemInterface.
      * @param param_reader    A parameter reader to access user given runtime parameters.
      * @param Except          The DOpEExceptionHandler. This is used to handle the output
@@ -375,7 +375,6 @@ namespace DOpE
     this->GetReducedProblem()->ComputeReducedCostFunctional(point);
     this->GetReducedProblem()->ComputeReducedGradient(point, gradient,
                                                       gradient_transposed);
-
     double cost_diff = gradient * dq;
     out << "Checking Gradients...." << std::endl;
     out << " Epsilon \t Exact \t Diff.Quot. \t Rel. Error ";
@@ -406,11 +405,14 @@ namespace DOpE
     //Differenzenquotient
     cost_right = this->GetReducedProblem()->ComputeReducedCostFunctional(
                    point);
+
     point.add(-2. * eps, dq);
+
     double cost_left = 0.;
     //Differenzenquotient
     cost_left = this->GetReducedProblem()->ComputeReducedCostFunctional(
                   point);
+
     double diffquot = (cost_right - cost_left) / (2. * eps);
     out << eps << "\t" << exact << "\t" << diffquot << "\t"
         << (exact - diffquot) / exact << std::endl;

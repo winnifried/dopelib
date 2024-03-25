@@ -52,7 +52,7 @@ public:
   }
 
   LocalPDE(ParameterReader &/*param_reader*/) :
-    state_block_component_(3, 0), control_block_component_(2, 0)
+    control_block_component_(2, 0), state_block_component_(3, 0)
   {
     control_block_component_[0] = 0;
     control_block_component_[1] = 0;

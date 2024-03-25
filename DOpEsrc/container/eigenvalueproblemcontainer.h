@@ -2010,13 +2010,13 @@ namespace DOpE
         || (this->GetType() == "cost_functional_pre_tangent"))
       {
         // state values in quadrature points
-        return GetFunctional()->AlgebraicValue(param_values, domain_values, eigenvalue);
+        return GetFunctional()->AlgebraicValue(param_values, domain_values);
       }
     else if (this->GetType() == "aux_functional")
       {
 //      \\ this is changed to the classic AlgebraicValue. Function gets the eigenvalue
         return aux_functionals_[this->GetTypeNum()]->AlgebraicValue(
-                 param_values, domain_values, eigenvalue);
+                 param_values, domain_values);
       }
     else if (this->GetType() == "functional_for_ee")
       // TODO is this correct? Should not be needed.

@@ -404,9 +404,9 @@ namespace DOpE
 //    VECTOR  vecOfEigval_; // gibt einen Vector zurück, mit dem Eigenwert von Position eval_index
 
     std::vector<StateVector<VECTOR>> uvecs_;
-    std::vector<double>  uvals_;
+    dealii::Vector<double>  uvals_;
     std::vector<StateVector<VECTOR>> zvecs_;
-    std::vector<double>  zvals_;
+    dealii::Vector<double>  zvals_;
 
 //    VECTOR  initial_control_;
 
@@ -488,8 +488,8 @@ namespace DOpE
     eval_index_ = param_reader.get_integer("eigenvalue_index");
     target_eigenvalue_ = param_reader.get_double("target_eigenvalue");
 
-    uvals_.resize(num_of_eval_);
-    zvals_.resize(num_of_eval_);
+    uvals_.reinit(num_of_eval_);
+    zvals_.reinit(num_of_eval_);
     for (int i = 0; i< num_of_eval_; i++)
       {
         StateVector<VECTOR> uvec_tmp(OP->GetSpaceTimeHandler(), state_behavior, param_reader);
@@ -532,10 +532,10 @@ namespace DOpE
     num_of_eval_  = param_reader.get_integer ("number_of_eigenvalues");
     eval_index_ = param_reader.get_integer ("eigenvalue_index");
     target_eigenvalue_ = param_reader.get_double("target_eigenvalue");
-    uvals_.clear();
-    zvals_.clear();
-    uvals_.resize(num_of_eval_);
-    zvals_.resize(num_of_eval_);
+    uvals_.reinit(0);
+    zvals_.reinit(0);
+    uvals_.reinit(num_of_eval_);
+    zvals_.reinit(num_of_eval_);
     for (int i = 0; i< num_of_eval_; i++)
       {
         StateVector<VECTOR> uvec_tmp(OP->GetSpaceTimeHandler(), state_behavior, param_reader);
@@ -950,6 +950,7 @@ namespace DOpE
       }
 
     this->GetIntegrator().AddDomainData("state",&(GetUVec(eval_index_).GetSpacialVector()));
+    this->GetIntegrator().AddParamData("state_ev",&uvals_);
     AddUDD();
 
     double ret = 0;
@@ -999,7 +1000,8 @@ namespace DOpE
         this->GetIntegrator().DeleteParamData("cost_functional_pre");
       }
     this->GetIntegrator().DeleteDomainData("state");
-
+    this->GetIntegrator().DeleteParamData("state_ev");
+    
     DeleteUDD();
 
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
@@ -1041,6 +1043,7 @@ namespace DOpE
                             "StatReducedProblem::ComputeReducedFunctionals");
       }
     this->GetIntegrator().AddDomainData("state",&(GetUVec(eval_index_).GetSpacialVector()));
+    this->GetIntegrator().AddParamData("state_ev",&uvals_);
     AddUDD();
 
     for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
@@ -1130,6 +1133,7 @@ namespace DOpE
                             "StatReducedProblem::ComputeReducedFunctionals");
       }
     this->GetIntegrator().DeleteDomainData("state");
+    this->GetIntegrator().DeleteParamData("state_ev");
     DeleteUDD();
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 

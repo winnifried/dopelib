@@ -55,21 +55,13 @@ public:
 
 
   double
-  AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                 const std::map<std::string, const VECTOR *> &/*domain_values*/, double eigenvalue)
+  AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+                 const std::map<std::string, const VECTOR *> &/*domain_values*/)
   {
-//    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-//      edc.GetFEValuesState();
-//    unsigned int n_q_points = edc.GetNQPoints();
-//    {
-//      uvalues_.resize(n_q_points);
-//      edc.GetValuesState("state", uvalues_);
-//    }
-//
-//    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-//      {
-//        r += fabs(uvalues_[q_point]) * state_fe_values.JxW(q_point);
-//      }
+    std::vector<double> evs(1);
+    typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it = param_values.find("state_ev");
+    assert(it!=param_values.end());
+    double eigenvalue=(*(it->second))[0];
     return eigenvalue;
   }
 
