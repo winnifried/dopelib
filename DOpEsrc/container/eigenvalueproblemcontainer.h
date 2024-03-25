@@ -32,7 +32,6 @@
 #include <wrapper/function_wrapper.h>
 #include <basic/spacetimehandler.h>
 #include <problemdata/primaldirichletdata.h>
-#include <problemdata/adjointdirichletdata.h>
 #include <problemdata/tangentdirichletdata.h>
 #include <interfaces/transposeddirichletdatainterface.h>
 #include <problemdata/transposedgradientdirichletdata.h>
@@ -1440,7 +1439,6 @@ namespace DOpE
     std::vector<unsigned int> dirichlet_colors_;
     std::vector<std::vector<bool> > dirichlet_comps_;
     std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
-//    std::vector<AdjointDirichletData<DD, VECTOR, dealdim>*> adjoint_dirichlet_values_;
     std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> tangent_dirichlet_values_;
     const dealii::Function<dealdim> *zero_dirichlet_values_;
 
@@ -3670,9 +3668,6 @@ namespace DOpE
     PrimalDirichletData<DD, VECTOR, dealdim> *data =
       new PrimalDirichletData<DD, VECTOR, dealdim>(*values);
     primal_dirichlet_values_.push_back(data);
-//    AdjointDirichletData<DD, VECTOR, dealdim> *adata =
-//          new AdjointDirichletData<DD, VECTOR, dealdim>(*values);
-//        adjoint_dirichlet_values_.push_back(adata);
     TangentDirichletData<DD, VECTOR, dealdim> *tdata =
       new TangentDirichletData<DD, VECTOR, dealdim>(*values);
     tangent_dirichlet_values_.push_back(tdata);

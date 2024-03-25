@@ -379,6 +379,7 @@ namespace DOpE
         GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(
           state_dof_handler_, state_dof_constraints_);
 
+
       std::vector<unsigned int> dirichlet_colors = DD_state.GetDirichletColors();
       for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {

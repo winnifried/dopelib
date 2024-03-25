@@ -235,7 +235,7 @@ main(int argc, char **argv)
   solver.RegisterOutputHandler(&out);
   solver.RegisterExceptionHandler(&ex);
   solver.ReInit();
-
+  out.ReInit();
 
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q = 0;
@@ -244,7 +244,6 @@ main(int argc, char **argv)
 
   try
     {
-      solver.ReInit();
       Alg.ReInit();
       Alg.Solve(q);
     }

@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 # Set the name of the project and target:
-SET(TARGET "DOpE-EV-Example2")
+SET(TARGET "DOpE-OPT-EV-Example1")
 
 # Declare all source files the target consists of:
 SET(TARGET_SRC
@@ -17,7 +17,7 @@ SET(deal_dimension 2)
 # the dope shipped with the examples - unless we specifically move the 
 # directory
 FIND_PACKAGE(DOpElib QUIET
-  HINTS ${CMAKE_SOURCE_DIR}/../../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
+  HINTS ${CMAKE_SOURCE_DIR}/../../../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
   )
 IF(NOT ${DOpElib_FOUND})
   MESSAGE(FATAL_ERROR "\n"

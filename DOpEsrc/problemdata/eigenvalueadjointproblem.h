@@ -525,7 +525,7 @@ namespace DOpE
 
     std::vector<unsigned int> dirichlet_colors_;
     std::vector<std::vector<bool> > dirichlet_comps_;
-    const dealii::Function<dim> * /* std::vector<AdjointDirichletData<DD, VECTOR, dim>*>*/ adjoint_dirichlet_values_;
+    const dealii::Function<dim> * adjoint_dirichlet_values_;
     std::vector<unsigned int> adjoint_boundary_equation_colors_;
     double interval_length_;
   };
