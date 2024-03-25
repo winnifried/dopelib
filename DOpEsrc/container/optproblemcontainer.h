@@ -174,8 +174,6 @@ namespace DOpE
       return *state_problem_;
     }
 
-
-
     /**
      * Returns a description of the Tangent PDE
      */
@@ -195,7 +193,6 @@ namespace DOpE
         }
       return *tangent_problem_;
     }
-
     /**
      * Returns a description of the Adjoint PDE for error estimation
      */
@@ -215,8 +212,6 @@ namespace DOpE
         }
       return *adjoint_problem_;
     }
-
-
     /**
      * Returns a description of the Adjoint for Hessian PDE for error estimation
      */
@@ -389,7 +384,6 @@ namespace DOpE
       const std::map<std::string, const dealii::Vector<double>*> &values,
       const std::map<std::string, const VECTOR *> &block_values);
 
-
     /**
      * This function returns a residual to an equation that is depending
      * directly on the knowledge of the coordinate vectors of state and control.
@@ -432,13 +426,6 @@ namespace DOpE
                     dealii::Vector<double> &local_vector, double scale,
                     double scale_ico);
 
-
-    // ohne scale_ico für ElementEquation_Q..
-    template<typename DATACONTAINER>
-    void
-    ElementEquation(const DATACONTAINER &edc,
-                    dealii::Vector<double> &local_vector, double scale);
-
     /******************************************************/
 
     /**
@@ -450,12 +437,6 @@ namespace DOpE
     void
     ElementTimeEquation(const DATACONTAINER &dc,
                         dealii::Vector<double> &local_vector, double scale = 1.);
-
-    template<typename DATACONTAINER>
-    void
-    ElementTimeEquation(const DATACONTAINER &edc,
-                        dealii::Vector<double> &local_vector, double scale,
-                        double scale_ico);
 
     /******************************************************/
 
@@ -490,7 +471,6 @@ namespace DOpE
     void
     ElementRhs(const DATACONTAINER &dc,
                dealii::Vector<double> &local_vector, double scale = 1.);
-
 
     /******************************************************/
 
@@ -543,28 +523,12 @@ namespace DOpE
                   dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
                   double scale_ico = 1.);
 
-
-    template<typename DATACONTAINER>
-    void
-    ElementMassMatrix(const DATACONTAINER &dc,
-                      dealii::FullMatrix<double> &local_entry_matrix);
-
     template<typename DATACONTAINER>
     void
     ElementMassMatrix(const DATACONTAINER &dc,
                       dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
                       double scale_ico = 1.);
 
-    template<typename DATACONTAINER>
-    void
-    ElementTimeMatrix(const DATACONTAINER &dc,
-                      dealii::FullMatrix<double> &local_entry_matrix);
-
-    template<typename DATACONTAINER>
-    void
-    ElementTimeMatrix(const DATACONTAINER &dc,
-                      dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-                      double scale_ico = 1.);
     /******************************************************/
 
     /**
@@ -577,29 +541,13 @@ namespace DOpE
      *
      * Moreover, you find an extensive explication in the
      * time step algorithms, e.g., backward_euler_problem.h.
-     *   * by computing the directional derivatives of the time residuum of the PDE
-     * problem under consideration.
-     *
-     * The differentiation between explicit and implicit terms is
-     * equivalent to the ElementTimeEquation. We refer to its documentation.
-     *
-     * Moreover, you find an extensive explication in the
-     * time step algorithms, e.g., backward_euler_problem.h.
      */
-
-//    template<typename DATACONTAINER>
-//    void
-//    ElementTimeMatrix(const DATACONTAINER &dc,
-//                      dealii::FullMatrix<double> &local_entry_matrix);
-//
-//    template<typename DATACONTAINER>
-//    void
-//    ElementTimeMatrix(const DATACONTAINER &dc,
-//                  dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-//                  double scale_ico = 1.);
+    template<typename DATACONTAINER>
+    void
+    ElementTimeMatrix(const DATACONTAINER &dc,
+                      dealii::FullMatrix<double> &local_entry_matrix);
 
     /******************************************************/
-
 
     /**
      * Computes the value of the element matrix which is derived
@@ -2009,9 +1957,7 @@ namespace DOpE
       }
   }
 
-
   /******************************************************/
-
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
@@ -2041,40 +1987,7 @@ namespace DOpE
       }
   }
 
-
   /******************************************************/
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-#if DEAL_II_VERSION_GTE(9,3,0)
-           bool DH>
-#else
-           template<int, int> class DH>
-#endif
-  template<typename DATACONTAINER>
-  void
-  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
-                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                        double scale)
-  {
-    if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian") )
-      {
-        // control values in quadrature point
-        this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
-      }
-    else
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementEquation");
-      }
-  }
-
-
-  /******************************************************/
-
-
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
@@ -2195,8 +2108,6 @@ namespace DOpE
                             "OptProblemContainer::ElementBoundaryEquation");
       }
   }
-
-
 
   /******************************************************/
 
@@ -2650,73 +2561,6 @@ namespace DOpE
       }
 
   }
-
-  /********************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-#if DEAL_II_VERSION_GTE(9,3,0)
-           bool DH>
-#else
-           template<int, int> class DH>
-#endif
-  template<typename DATACONTAINER>
-  void
-  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassMatrix(
-                        const DATACONTAINER &edc, FullMatrix<double> &local_entry_matrix)
-  {
-    if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian"))
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementMassMatrix");
-      }
-    else
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementMassMatrix");
-      }
-
-  }
-
-  /******************************************************/
-
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-#if DEAL_II_VERSION_GTE(9,3,0)
-           bool DH>
-#else
-           template<int, int> class DH>
-#endif
-  template<typename DATACONTAINER>
-  void
-  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
-                        const DATACONTAINER &edc,
-                        dealii::FullMatrix<double> &local_entry_matrix, double scale,
-                        double /*scale_ico*/)
-  {
-
-    if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian"))
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementTimeMatrix");
-      }
-    else
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementTimeMatrix");
-      }
-
-  }
-
-
-
 
   /********************************************************/
 
@@ -3226,8 +3070,6 @@ namespace DOpE
         transposed_control_hessian_dirichlet_values_[i]->SetTime(time);
       for (unsigned int i = 0; i < primal_dirichlet_values_.size(); i++)
         primal_dirichlet_values_[i]->SetTime(time);
-//      for (unsigned int i = 0; i < adjoint_dirichlet_values_.size(); i++)
-//              adjoint_dirichlet_values_[i]->SetTime(time);
       for (unsigned int i = 0; i < tangent_dirichlet_values_.size(); i++)
         tangent_dirichlet_values_[i]->SetTime(time);
       for (unsigned int i = 0; i < control_dirichlet_values_.size(); i++)
