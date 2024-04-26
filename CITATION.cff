@@ -18,7 +18,7 @@ identifiers:
   - type: url
     value: 'www.dopelib.net'
 repository-code: 'https://github.com/winnifried/dopelib'
-license: LGPL-2.1-or-later
+license: GPL-3.0
 preferred-citation:
   type: article
   authors:
