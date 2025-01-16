@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+16.01.2024: Added scripts for installation of deal.II with all options utilized by DOpElib
+	    and test scripts for DOpElib with various versions of deal.II
 21.06.2023: Adjustments for deal 9.5.0 and fixed suggest override warnings
 12.05.2023: Fixe in matrix free CG solver in ReducedNewtonAlgorithm
 11.07.2022: Fixes in GMRES and CGLinearSolverWithMatrix. The Preconditioner is
