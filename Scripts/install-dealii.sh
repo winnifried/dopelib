@@ -72,7 +72,7 @@ else
     export FF=gfortran
 fi
 
-if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.6.2" ]|| [ "${dealii_version}" == "9.6.1" ]|| [ "${dealii_version}" == "9.6.0" ]|| [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
+if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.6.2" ] || [ "${dealii_version}" == "9.6.1" ] || [ "${dealii_version}" == "9.6.0" ] || [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
 then
     trilinos_version=13-4-1
     p4est_version=2.0
@@ -84,7 +84,7 @@ then
     
     PYTHON=python3 #Python Version needed by petsc	
 else 
-    if [ "${dealii_version}" == "9.4.2" ] || "${dealii_version}" == "9.4.1" ] || [ "${dealii_version}" == "9.4.0" ] || [ "${dealii_version}" == "9.3.3" ] ||[ "${dealii_version}" == "9.3.2" ] ||[ "${dealii_version}" == "9.3.1" ] || [ "${dealii_version}" == "9.3.0" ] || [ "${dealii_version}" == "9.2.0" ] || [ "${dealii_version}" == "9.1.1" ] || [ "${dealii_version}" == "9.0.1" ] || [ "${dealii_version}" == "8.5.0" ] || [ "${dealii_version}" == "8.4.1" ] || [ "${dealii_version}" == "8.3.0" ]
+    if [ "${dealii_version}" == "9.4.2" ] || "${dealii_version}" == "9.4.1" ] || [ "${dealii_version}" == "9.4.0" ] || [ "${dealii_version}" == "9.3.3" ] || [ "${dealii_version}" == "9.3.2" ] ||[ "${dealii_version}" == "9.3.1" ] || [ "${dealii_version}" == "9.3.0" ] || [ "${dealii_version}" == "9.2.0" ] || [ "${dealii_version}" == "9.1.1" ] || [ "${dealii_version}" == "9.0.1" ] || [ "${dealii_version}" == "8.5.0" ] || [ "${dealii_version}" == "8.4.1" ] || [ "${dealii_version}" == "8.3.0" ]
     then
 	#dealii_version=9.1.1
 	#dealii_version=9.2.0

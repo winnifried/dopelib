@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+17.01.2024: Fix for CMakeMinimumVersion Warning
 16.01.2024: Added scripts for installation of deal.II with all options utilized by DOpElib
 	    and test scripts for DOpElib with various versions of deal.II
 21.06.2023: Adjustments for deal 9.5.0 and fixed suggest override warnings
