@@ -74,7 +74,7 @@ fi
 
 if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.6.2" ] || [ "${dealii_version}" == "9.6.1" ] || [ "${dealii_version}" == "9.6.0" ] || [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
 then
-    trilinos_version=13-4-1
+    trilinos_version=14-4-0
     p4est_version=2.0
     scalapack_version=2.0.2
     
@@ -115,7 +115,7 @@ else
 	fi
 	
     else
-	echo "Unknown deal.ii version "${dealii_version}" must be [git|9.6.0|9.5.2|9.5.1|9.5.0|9.4.2|9.4.1|9.4.0|9.3.3|9.3.2|9.3.1|9.3.0|9.2.0|9.1.1|9.0.1|8.5.0|8.4.1|8.3.0]"
+	echo "Unknown deal.ii version "${dealii_version}" must be [git|9.6.2|9.6.1|9.6.0|9.5.2|9.5.1|9.5.0|9.4.2|9.4.1|9.4.0|9.3.3|9.3.2|9.3.1|9.3.0|9.2.0|9.1.1|9.0.1|8.5.0|8.4.1|8.3.0]"
 	exit 1;
     fi
 fi
