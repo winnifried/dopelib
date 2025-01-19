@@ -84,7 +84,7 @@ then
     
     PYTHON=python3 #Python Version needed by petsc	
 else 
-    if [ "${dealii_version}" == "9.4.2" ] || "${dealii_version}" == "9.4.1" ] || [ "${dealii_version}" == "9.4.0" ] || [ "${dealii_version}" == "9.3.3" ] || [ "${dealii_version}" == "9.3.2" ] ||[ "${dealii_version}" == "9.3.1" ] || [ "${dealii_version}" == "9.3.0" ] || [ "${dealii_version}" == "9.2.0" ] || [ "${dealii_version}" == "9.1.1" ] || [ "${dealii_version}" == "9.0.1" ] || [ "${dealii_version}" == "8.5.0" ] || [ "${dealii_version}" == "8.4.1" ] || [ "${dealii_version}" == "8.3.0" ]
+    if [ "${dealii_version}" == "9.4.2" ] || ["${dealii_version}" == "9.4.1" ] || [ "${dealii_version}" == "9.4.0" ] || [ "${dealii_version}" == "9.3.3" ] || [ "${dealii_version}" == "9.3.2" ] || [ "${dealii_version}" == "9.3.1" ] || [ "${dealii_version}" == "9.3.0" ] || [ "${dealii_version}" == "9.2.0" ] || [ "${dealii_version}" == "9.1.1" ] || [ "${dealii_version}" == "9.0.1" ] 
     then
 	#dealii_version=9.1.1
 	#dealii_version=9.2.0
@@ -115,7 +115,7 @@ else
 	fi
 	
     else
-	echo "Unknown deal.ii version "${dealii_version}" must be [git|9.6.2|9.6.1|9.6.0|9.5.2|9.5.1|9.5.0|9.4.2|9.4.1|9.4.0|9.3.3|9.3.2|9.3.1|9.3.0|9.2.0|9.1.1|9.0.1|8.5.0|8.4.1|8.3.0]"
+	echo "Unknown deal.ii version "${dealii_version}" must be [git|9.6.2|9.6.1|9.6.0|9.5.2|9.5.1|9.5.0|9.4.2|9.4.1|9.4.0|9.3.3|9.3.2|9.3.1|9.3.0|9.2.0|9.1.1|9.0.1]"
 	exit 1;
     fi
 fi
