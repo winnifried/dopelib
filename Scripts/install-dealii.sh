@@ -103,7 +103,7 @@ if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.6.2" ] || [ "
 then
     trilinos_version=14-4-0
     p4est_version=2.0
-    scalapack_version=2.0.2
+    scalapack_version=2.2.2
     
     petsc_version=3.20.0
     petsc_debug=1  #build debug version of PETSc (1 recommended)
@@ -120,7 +120,7 @@ else
 	#trilinos_version=12-18-1
 	trilinos_version=12-12-1
 	p4est_version=2.0
-	scalapack_version=2.0.2
+	scalapack_version=2.2.2
 	
 	#petsc_version=3.9.4
 	#petsc_version=3.12.4
