@@ -9,7 +9,7 @@ fi
 dir=`pwd`
 n_procs=1
 
-while getopts 'hd:j:apv:' flag; do
+while getopts 'hd:j:apv:m:' flag; do
     case "${flag}" in
 	h) helpflag=1 ;;
 	d) dir=`realpath ${OPTARG}` ;;
@@ -17,6 +17,7 @@ while getopts 'hd:j:apv:' flag; do
 	a) fullinstall=1 ;;
 	p) plaininstall=1 ;;
 	v) dealii_version="${OPTARG}" ;;
+	m) mpi_package="${OPTARG}" ;;
 	*) echo "Unknown option ${flag}."
 	   echo "Run 'compile-tests.sh -h' for help."
 	   exit 1 ;;
@@ -32,6 +33,7 @@ then
                Trilinos, Petsc, Slepc, P4est, MPI"
     echo "-p : if dealii should be installed without third-party libraries"
     echo "-v : Specify Version of deal.ii to be installed, e.g., [git|9.3.0|...]"
+    echo "-m : Specify MPI package [openmpi,mpich,system]"
     echo "-j : Number of Processes to be used"
     exit 0
 fi
@@ -46,23 +48,48 @@ then
     echo "You must specify full or plain install"
     exit 1
 fi
+
 if (( ${fullinstall} ))
 then
     dealii_install_type=full
-    if [ `uname` == "Darwin" ]
+    if [ "${mpi_package}" == "mpich" ]
     then
-	export CXX=mpicxx-mpich-mp
-	export CC=mpicc-mpich-mp
-	export FC=mpif90-mpich-mp
-	export FF=mpif77-mpich-mp
-	export F77=mpif77-mpich-mp
-	export MPIEXEC=mpiexec-mpich-mp
-    else
-	export CXX=mpicxx.mpich
-	export CC=mpicc.mpich
-	export FC=mpif90.mpich
-	export FF=mpif77.mpich
-	export MPIEXEC=mpiexec.mpich
+	echo "Selecting mpich"
+	if [ `uname` == "Darwin" ]
+	then
+	    export CXX=mpicxx-mpich-mp
+	    export CC=mpicc-mpich-mp
+	    export FC=mpif90-mpich-mp
+	    export FF=mpif77-mpich-mp
+	    export F77=mpif77-mpich-mp
+	    export MPIEXEC=mpiexec-mpich-mp
+	else
+	    export CXX=mpicxx.mpich
+	    export CC=mpicc.mpich
+	    export FC=mpif90.mpich
+	    export FF=mpif77.mpich
+	    export MPIEXEC=mpiexec.mpich
+	fi
+    else if [ "${mpi_package}" == "openmpi" ]
+	 then
+	     echo "Selecting openmpi"
+	     export CXX=mpicxx.openmpi
+	     export CC=mpicc.openmpi
+	     export FC=mpif90.openmpi
+	     export FF=mpif77.openmpi
+	     export MPIEXEC=mpiexec.openmpi
+	 else if [ "${mpi_package}" == "system" ]
+	      then 
+		  echo "Selecting system default mpi"
+		  export CXX=mpicxx
+		  export CC=mpicc
+		  export FC=mpif90
+		  export FF=mpif77
+		  export MPIEXEC=mpiexec
+	      else
+		  echo "Unknown mpi compiler ${mpi_package}"
+	      fi	     
+	 fi
     fi
 else
     dealii_install_type=plain

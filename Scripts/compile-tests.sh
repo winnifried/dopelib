@@ -37,7 +37,7 @@ function SET_ENV_VAR {
 	echo ${CXX} ${CC} ${FC} ${FF}
 	echo "Set Environment to g++/gcc"
     else
-	if [ $1 == "mpi-gcc" ]
+	if [ $1 == "mpich-gcc" ]
 	then
 	    if [ `uname` == "Darwin" ]
 	    then
@@ -51,10 +51,26 @@ function SET_ENV_VAR {
 		export FC=mpif90.mpich
 		export FF=mpif77.mpich
 	    fi
-	echo "Set Environment to MPI with g++/gcc"
-	else
-	    echo "Unknown case "$1 
-	    exit 1
+	    echo "Set Environment to MPICH with g++/gcc"
+	else if [ $1 == "openmpi-gcc" ]
+	     then
+	     	 export CXX=mpicxx.openmpi
+		 export CC=mpicc.openmpi
+		 export FC=mpif90.openmpi
+		 export FF=mpif77.openmpi
+		 echo "Set Environment to OPENMPI with g++/gcc"
+	     else if [ $1 == "mpi-gcc" ]
+	     	  then
+		      export CXX=mpicxx.openmpi
+		      export CC=mpicc.openmpi
+		      export FC=mpif90.openmpi
+		      export FF=mpif77.openmpi
+		      echo "Set Environment to Default-MPI with g++/gcc"
+		  else
+		      echo "Unknown case "$1 
+		      exit 1
+		  fi
+	     fi
 	fi
     fi
 }
@@ -67,7 +83,7 @@ fi
 
 n_procs=1
 
-while getopts 'hd:i:s:j:co' flag; do
+while getopts 'hd:i:s:j:com:' flag; do
     case "${flag}" in
 	h) helpflag=1 ;;
 	d) dir=`realpath ${OPTARG}` ;;
@@ -76,6 +92,7 @@ while getopts 'hd:i:s:j:co' flag; do
 	j) n_procs="${OPTARG}" ;;
 	c) candi_test=1 ;;
 	o) nocandi_test=1 ;;
+	m) mpi_package="${OPTARG}" ;;
 	*) echo "Unknown option ${flag}."
 	   echo "Run 'compile-tests.sh -h' for help."
 	   exit 1 ;;
@@ -92,6 +109,7 @@ then
     echo "-j : Number of Processes to be used"
     echo "-c : Run tests using candi for the newest dealii version"
     echo "-o : Run tests for older dealii versions (without candi)"
+    echo "-m : Specify MPI package [openmpi,mpich,system]"
     exit 0
 fi
 
@@ -244,7 +262,7 @@ then
 	    echo "No deal.ii install script found"
 	    exit 1
 	fi
-	(./install-dealii.sh -d ${dir} -a -v $i -j${n_procs} 2>&1) | tee -a ${log}
+	(./install-dealii.sh -d ${dir} -a -v $i -m ${mpi_package} -j${n_procs} 2>&1) | tee -a ${log}
 	if [ ${PIPESTATUS[0]} -eq 0 ]
 	then
 	    echo "Example Build passed for dealii "${i}" full" | tee -a ${log}
