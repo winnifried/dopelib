@@ -311,7 +311,8 @@ then
 	cd sources
 	if [[ ! -f scalapack-${scalapack_version}.tgz  ]]
 	then
-	    wget http://www.netlib.org/scalapack/scalapack-${scalapack_version}.tgz
+	    wget https://github.com/Reference-ScaLAPACK/scalapack/archive/refs/tags/v${scalapack_version}.tar.gz
+	    mv v${scalapack_version}.tar.gz scalapack-${scalapack_version}.tgz
 	fi
 	if [[ ! -f scalapack-${scalapack_version}.tgz  ]]
 	then
