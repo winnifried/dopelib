@@ -176,7 +176,7 @@ namespace DOpE
       {
         //...then loop over all faces.
         for (unsigned int face = 0;
-             face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+             face < element->n_faces(); ++face)
           {
             int boundary_indicator = element->face(face)->boundary_id();
 
@@ -219,7 +219,7 @@ namespace DOpE
            dof_handler.begin_active(); element != dof_handler.end(); ++element)
       {
         for (unsigned int face = 0;
-             face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+             face < element->n_faces(); ++face)
           {
             int boundary_indicator = element->face(face)->boundary_id();
             //Now loop over the remaining dofs, i.e. the ones with an odd boundary_indicator

@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+07.02.2025: Update to MappingWrapper to allow alternative mappings from deal.II
 03.02.2025: Fixed missing const qualifiers in linearsolvers
 17.01.2024: Fix for CMakeMinimumVersion Warning
 16.01.2024: Added scripts for installation of deal.II with all options utilized by DOpElib

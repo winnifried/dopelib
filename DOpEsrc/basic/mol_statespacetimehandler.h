@@ -609,7 +609,7 @@ namespace DOpE
 #endif
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_; //TODO is there a reason that this is not a reference?
-    const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
+    const DOpEWrapper::Mapping<dealdim, DH>* mapping_;
 
     std::vector<Point<dealdim> > support_points_;
 #if DEAL_II_VERSION_GTE(9,3,0)

@@ -79,7 +79,7 @@ namespace DOpE
       state_dof_handler_(state_triangulation_),
       control_fe_(&control_fe),
       state_fe_(&state_fe),
-      mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+      mapping_(&DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
       constraints_(),
       control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
@@ -105,7 +105,7 @@ namespace DOpE
       state_dof_handler_(state_triangulation_),
       control_fe_(&control_fe),
       state_fe_(&state_fe),
-      mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+      mapping_(&DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
       constraints_(),
       control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
@@ -131,7 +131,7 @@ namespace DOpE
       state_dof_handler_(state_triangulation_),
       control_fe_(&control_fe),
       state_fe_(&state_fe),
-      mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+      mapping_(&DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
       constraints_(c),
       control_mesh_transfer_(NULL),
       state_mesh_transfer_(NULL),
@@ -160,7 +160,7 @@ namespace DOpE
       state_dof_handler_(state_triangulation_),
       control_fe_(&control_fe),
       state_fe_(&state_fe),
-      mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+      mapping_(&DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
       constraints_(c), control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
@@ -399,7 +399,7 @@ namespace DOpE
 
     GetMapping() const override
     {
-      return mapping_;
+      return *mapping_;
     }
 
     /**
@@ -1075,7 +1075,7 @@ namespace DOpE
     const dealii::SmartPointer<const FE<dim, dim>> control_fe_;
     const dealii::SmartPointer<const FE<dim, dim>> state_fe_;
 
-    DOpEWrapper::Mapping<dim, DH> mapping_;
+    const DOpEWrapper::Mapping<dim, DH>* mapping_;
 
     std::vector<Point<dim> > support_points_;
 

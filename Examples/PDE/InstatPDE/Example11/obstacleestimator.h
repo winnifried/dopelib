@@ -224,11 +224,11 @@ namespace DOpE
 #endif
     {
 #if DEAL_II_VERSION_GTE(9,4,0)
-      VectorTools::interpolate(sth_.GetMapping(),
+      VectorTools::interpolate(sth_.GetMapping()[0],
                                dofh->GetDEALDoFHandler(),
                                dealii::Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
 #else
-      VectorTools::interpolate(sth_.GetMapping(),
+      VectorTools::interpolate(sth_.GetMapping()[0],
                                dofh->GetDEALDoFHandler(),
                                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
 #endif
