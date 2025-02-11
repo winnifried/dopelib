@@ -102,7 +102,7 @@ fi
 if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.6.2" ] || [ "${dealii_version}" == "9.6.1" ] || [ "${dealii_version}" == "9.6.0" ] || [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
 then
     trilinos_version=14-4-0
-    p4est_version=2.0
+    p4est_version=2.2
     scalapack_version=2.2.2
     
     petsc_version=3.20.0
