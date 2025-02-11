@@ -105,9 +105,9 @@ then
     p4est_version=2.2
     scalapack_version=2.2.2
     
-    petsc_version=3.20.0
+    petsc_version=3.22.0
     petsc_debug=1  #build debug version of PETSc (1 recommended)
-    slepc_version=3.20.0 #must be compatible, see http://slepc.upv.es/download/changes.htm
+    slepc_version=3.22.0 #must be compatible, see http://slepc.upv.es/download/changes.htm
     
     PYTHON=python3 #Python Version needed by petsc	
 else 
