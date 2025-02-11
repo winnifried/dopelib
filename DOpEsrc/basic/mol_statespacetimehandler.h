@@ -30,6 +30,7 @@
 #include <include/userdefineddofconstraints.h>
 #include <basic/sth_internals.h>
 #include <container/refinementcontainer.h>
+#include <wrapper/solutiontransfer_wrapper.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_renumbering.h>
@@ -453,14 +454,11 @@ namespace DOpE
           delete state_mesh_transfer_;
           state_mesh_transfer_ = NULL;
         }
+      state_mesh_transfer_ =
 #if DEAL_II_VERSION_GTE(9,3,0)
-#if DEAL_II_VERSION_GTE(9,4,0)
-      state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR,dealdim>(state_dof_handler_);
-#else //Deal Version in [9.3.0,9.4.0)
-      state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, dealii::DoFHandler<dealdim, dealdim> >(state_dof_handler_);
-#endif
-#else  //Deal Version < 9.3.0
-      state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handler_);
+        new DOpEWrapper::SolutionTransfer<dealdim, VECTOR> (state_dof_handler_);
+#else
+        new DOpEWrapper::SolutionTransfer<dealdim, VECTOR, DH> (state_dof_handler_);
 #endif
 
       switch (ref_type)
@@ -613,9 +611,9 @@ namespace DOpE
 
     std::vector<Point<dealdim> > support_points_;
 #if DEAL_II_VERSION_GTE(9,3,0)
-    dealii::SolutionTransfer<dealdim, VECTOR> *state_mesh_transfer_;
+    DOpEWrapper::SolutionTransfer<dealdim, VECTOR> *state_mesh_transfer_;
 #else
-    dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;
+    DOpEWrapper::SolutionTransfer<dealdim, VECTOR,DH> *state_mesh_transfer_;
 #endif
 
     std::vector<unsigned int> n_neighbour_to_vertex_;
