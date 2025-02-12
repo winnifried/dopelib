@@ -261,7 +261,7 @@ namespace DOpE
 #endif
                         VECTOR &vals)
     {
-      VectorTools::interpolate(sth_.GetMapping(),
+      VectorTools::interpolate(sth_.GetMapping()[0],
 #if DEAL_II_VERSION_GTE(9,3,0)
                                *(static_cast<const dealii::DoFHandler<dim, dim>*>(dofh)),
 #else
@@ -487,7 +487,7 @@ namespace DOpE
 #endif
                         VECTOR &vals)
     {
-      VectorTools::interpolate(sth_.GetMapping(),
+      VectorTools::interpolate(sth_.GetMapping()[0],
                                dofh->GetDEALDoFHandler(),
 #if DEAL_II_VERSION_GTE(9,3,0)
                                Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);

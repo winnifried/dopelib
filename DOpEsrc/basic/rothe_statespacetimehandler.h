@@ -30,6 +30,7 @@
 #include <include/userdefineddofconstraints.h>
 #include <basic/sth_internals.h>
 #include <container/refinementcontainer.h>
+#include <wrapper/solutiontransfer_wrapper.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_renumbering.h>
@@ -562,9 +563,9 @@ namespace DOpE
               state_mesh_transfers_[i] = NULL;
             }
 #if DEAL_II_VERSION_GTE(9,3,0)
-          state_mesh_transfers_[i] = new dealii::SolutionTransfer<dealdim, VECTOR>(*state_dof_handlers_[i]);
+          state_mesh_transfers_[i] = new DOpEWrapper::SolutionTransfer<dealdim, VECTOR> (*state_dof_handlers_[i]);
 #else
-          state_mesh_transfers_[i] = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(*state_dof_handlers_[i]);
+          state_mesh_transfers_[i] = new DOpEWrapper::SolutionTransfer<dealdim, VECTOR, DH> (*state_dof_handlers_[i]);
 #endif
           if ( ref_type == DOpEtypes::RefinementType::global)
             {
@@ -871,13 +872,13 @@ namespace DOpE
 #endif
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;
-    const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
+    const DOpEWrapper::Mapping<dealdim, DH>* mapping_;
 
     std::vector<std::vector<Point<dealdim> > > support_points_;
 #if DEAL_II_VERSION_GTE(9,3,0)
-    std::vector<dealii::SolutionTransfer<dealdim, VECTOR> *> state_mesh_transfers_;
+    std::vector<DOpEWrapper::SolutionTransfer<dealdim, VECTOR> *> state_mesh_transfers_;
 #else
-    std::vector<dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *> state_mesh_transfers_;
+    std::vector<DOpEWrapper::SolutionTransfer<dealdim, VECTOR,DH> *> state_mesh_transfers_;
 #endif
 
     std::vector<std::vector<unsigned int> > n_neighbour_to_vertex_;

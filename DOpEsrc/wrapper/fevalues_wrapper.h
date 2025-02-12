@@ -51,7 +51,7 @@ namespace DOpEWrapper
              const dealii::FiniteElement<dim, dim> &fe,
              const dealii::Quadrature<dim> &quadrature,
              const dealii::UpdateFlags update_flags) :
-      dealii::FEValues<dim>(mapping, fe, quadrature, update_flags)
+      dealii::FEValues<dim>(mapping[0], fe, quadrature, update_flags)
     {
     }
 
@@ -101,7 +101,7 @@ namespace DOpEWrapper
       const dealii::FiniteElement<dim, dim> &fe,
       const dealii::Quadrature<dim - 1> &quadrature,
       const dealii::UpdateFlags update_flags) :
-      dealii::FEFaceValues<dim>(mapping, fe, quadrature, update_flags)
+      dealii::FEFaceValues<dim>(mapping[0], fe, quadrature, update_flags)
     {
     }
 
@@ -145,7 +145,7 @@ namespace DOpEWrapper
       const dealii::FiniteElement<dim, dim> &fe,
       const dealii::Quadrature<dim - 1> &quadrature,
       const dealii::UpdateFlags update_flags) :
-      dealii::FESubfaceValues<dim>(mapping, fe, quadrature, update_flags)
+      dealii::FESubfaceValues<dim>(mapping[0], fe, quadrature, update_flags)
     {
     }
 

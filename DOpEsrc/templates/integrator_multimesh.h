@@ -799,7 +799,7 @@ namespace DOpE
 //
 //                if(need_faces)
 //                  {
-//                    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+//                    for (unsigned int face=0; face < element[0]->n_faces(); ++face)
 //                      {
 //                        if (element[0]->neighbor_index(face) != -1)
 //                          {
@@ -1108,7 +1108,7 @@ namespace DOpE
 
         if (need_boundary_integrals && element[b_index]->at_boundary())
           {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            for (unsigned int face=0; face < element[0]->n_faces(); ++face)
               {
                 if (element[b_index]->face(face)->at_boundary()
                     &&
@@ -1123,7 +1123,7 @@ namespace DOpE
           }
         //     if(need_faces)
         //       {
-        //         for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+        //         for (unsigned int face=0; face < element[0]->n_faces(); ++face)
         //           {
         //             if (element[0]->neighbor_index(face) != -1)
         //               {
@@ -1135,7 +1135,7 @@ namespace DOpE
         //       }
         //     if( need_interfaces)
         //       {
-        //         for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+        //         for (unsigned int face=0; face < element[0]->n_faces(); ++face)
         //           {
         //             fdc.ReInit(face);
         //             if (element[0]->neighbor_index(face) != -1
@@ -1258,7 +1258,7 @@ namespace DOpE
 
         if (need_boundary_integrals && element[b_index]->at_boundary())
           {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            for (unsigned int face=0; face < element[0]->n_faces(); ++face)
               {
                 if (element[b_index]->face(face)->at_boundary()
                     &&
@@ -1272,7 +1272,7 @@ namespace DOpE
           }
         //     if(need_faces)
         //       {
-        //         for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+        //         for (unsigned int face=0; face < element[0]->n_faces(); ++face)
         //           {
         //             if (element[0]->neighbor_index(face) != -1)
         //               {
@@ -1385,7 +1385,7 @@ namespace DOpE
         if (need_boundary_integrals && element[b_index]->at_boundary())
           {
 
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            for (unsigned int face=0; face < element[0]->n_faces(); ++face)
               {
                 if (element[b_index]->face(face)->at_boundary()
                     &&
@@ -1399,7 +1399,7 @@ namespace DOpE
           }
         //  if(need_faces)
         //    {
-        //      for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+        //      for (unsigned int face=0; face < element[0]->n_faces(); ++face)
         //        {
         //          if (element[0]->neighbor_index(face) != -1)
         //            {
@@ -1410,7 +1410,7 @@ namespace DOpE
         //    }
         //  if( need_interfaces)
         //    {
-        //      for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+        //      for (unsigned int face=0; face < element[0]->n_faces(); ++face)
         //        {
         //          fdc.ReInit(face);
         //          if (element[0]->neighbor_index(face) != -1
@@ -1574,7 +1574,7 @@ namespace DOpE
         std::vector<unsigned int> boundary_functional_colors = pde.GetBoundaryFunctionalColors();
         unsigned int b_index = fine_index%2; //This takes care that if fine_index ==2 then we select the
         //zeros entry in the element vector
-        for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+        for (unsigned int face=0; face < element[0]->n_faces(); ++face)
           {
             if (element[b_index]->face(face)->at_boundary()
                 &&

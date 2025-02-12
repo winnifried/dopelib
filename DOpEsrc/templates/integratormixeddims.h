@@ -206,7 +206,7 @@ namespace DOpE
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -219,7 +219,7 @@ namespace DOpE
             }
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->neighbor_index(face) != -1)
                     {
@@ -329,7 +329,7 @@ namespace DOpE
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -342,7 +342,7 @@ namespace DOpE
             }
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->neighbor_index(face) != -1)
                     {
@@ -540,7 +540,7 @@ namespace DOpE
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -620,7 +620,7 @@ namespace DOpE
 
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   fdc.ReInit(face);
                   ret +=pde.FaceFunctional(fdc);

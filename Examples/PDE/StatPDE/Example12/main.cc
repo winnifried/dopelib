@@ -139,9 +139,9 @@ main(int argc, char **argv)
   //We need to state the mapping explicitly, otherwise the divergence of
   //the RT-elements provided by dealii will be NaN.
 #if DEAL_II_VERSION_GTE(9,3,0)
-  DOpEWrapper::Mapping<DIM, false > mapping(1,true);
+  DOpEWrapper::MappingQ<DIM, false > mapping(1,true);
 #else
-  DOpEWrapper::Mapping<DIM,DOFHANDLER> mapping(1,true);
+  DOpEWrapper::MappingQ<DIM,DOFHANDLER> mapping(1,true);
 #endif
 
   LocalFunctional<EDC,FDC,DOFHANDLER, VECTOR, DIM> LF;
