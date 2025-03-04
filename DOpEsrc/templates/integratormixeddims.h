@@ -163,6 +163,9 @@ namespace DOpE
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetControlNDoFs();
 
       dealii::Vector<SCALAR> local_vector(dofs);
+
+      const bool need_point_rhs = pde.HasPoints();
+
       const auto &dof_handler =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
@@ -265,6 +268,15 @@ namespace DOpE
           residual(i) += local_vector(i);
         }
 
+    // check if we need the evaluation of PointRhs
+    if (need_point_rhs)
+      {
+        VECTOR point_rhs;
+        point_rhs.reinit(residual);
+        pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs, -1.);
+        residual += point_rhs;
+      }
+
 //      if (apply_boundary_values)
 //      {
 //        ApplyNewtonBoundaryValues(pde,residual);
@@ -286,6 +298,7 @@ namespace DOpE
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetControlNDoFs();
 
       dealii::Vector<SCALAR> local_vector(dofs);
+      const bool need_point_rhs = pde.HasPoints();
       const auto &dof_handler =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
@@ -372,6 +385,15 @@ namespace DOpE
         {
           ApplyTransposedInitialBoundaryValues(pde,residual, -1.);
         }
+
+      // check if we need the evaluation of PointRhs
+      if (need_point_rhs)
+      {
+        VECTOR point_rhs;
+        point_rhs.reinit(residual);
+        pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs, 1.);
+        residual += point_rhs;
+      }
       //Check if some preset righthandside exists.
       local_vector = 0;
       AddPresetRightHandSide(-1.,local_vector);
