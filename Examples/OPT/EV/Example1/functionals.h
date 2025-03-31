@@ -56,7 +56,7 @@ public:
 
   double
   AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                 const std::map<std::string, const VECTOR *> &/*domain_values*/)
+                 const std::map<std::string, const VECTOR *> &/*domain_values*/) override
   {
     typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it = param_values.find("state_ev");
     assert(it!=param_values.end());

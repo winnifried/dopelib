@@ -136,7 +136,7 @@ namespace DOpE
      * Further, the flags to build the system matrices are set to true.
      *
      */
-    void ReInit();
+    void ReInit() override;
 
     /******************************************************/
 
@@ -145,7 +145,7 @@ namespace DOpE
      * ReducedProblemInterface
      *
      */
-    bool ComputeReducedConstraints(const ControlVector<VECTOR> &q, ConstraintVector<VECTOR> &g);
+    bool ComputeReducedConstraints(const ControlVector<VECTOR> &q, ConstraintVector<VECTOR> &g) override;
 
     /******************************************************/
 
@@ -154,7 +154,7 @@ namespace DOpE
      * ReducedProblemInterface,
      *
      */
-    void GetControlBoxConstraints(ControlVector<VECTOR> &lb, ControlVector<VECTOR> &ub);
+    void GetControlBoxConstraints(ControlVector<VECTOR> &lb, ControlVector<VECTOR> &ub) override;
 
     /******************************************************/
 
@@ -163,7 +163,7 @@ namespace DOpE
      * ReducedProblemInterface
      *
      */
-    void ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed);
+    void ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed) override;
 
     /******************************************************/
 
@@ -172,7 +172,7 @@ namespace DOpE
      * ReducedProblemInterface
      *
      */
-    double ComputeReducedCostFunctional(const ControlVector<VECTOR> &q);
+    double ComputeReducedCostFunctional(const ControlVector<VECTOR> &q) override;
 
     /******************************************************/
 
@@ -181,7 +181,7 @@ namespace DOpE
      * ReducedProblemInterface
      *
      */
-    void ComputeReducedFunctionals(const ControlVector<VECTOR> &q);
+    void ComputeReducedFunctionals(const ControlVector<VECTOR> &q) override;
 
 
 
@@ -216,7 +216,7 @@ namespace DOpE
      * ReducedProblemInterface
      *
      */
-    void ComputeReducedHessianVector(const ControlVector<VECTOR> &q, const ControlVector<VECTOR> &direction, ControlVector<VECTOR> &hessian_direction, ControlVector<VECTOR> &hessian_direction_transposed);
+    void ComputeReducedHessianVector(const ControlVector<VECTOR> &q, const ControlVector<VECTOR> &direction, ControlVector<VECTOR> &hessian_direction, ControlVector<VECTOR> &hessian_direction_transposed) override;
 
     /******************************************************/
 
@@ -225,7 +225,7 @@ namespace DOpE
      * ReducedProblemInterface
      *
      */
-    void ComputeReducedGradientOfGlobalConstraints(unsigned int num, const ControlVector<VECTOR> &q, const ConstraintVector<VECTOR> &g, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed);
+    void ComputeReducedGradientOfGlobalConstraints(unsigned int num, const ControlVector<VECTOR> &q, const ConstraintVector<VECTOR> &g, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed) override;
 
     /******************************************************/
     void ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q);//, std::vector<StateVector<VECTOR>> &eigenfunction, std::vector<double> eigenvalue, std::vector<StateVector<VECTOR>> &adjoint_eigenfunction, std::vector<double> adjoint_eigenvalue);
@@ -233,7 +233,7 @@ namespace DOpE
      * Implementation of Virtual Method in Base Class
      * ReducedProblemInterface
      */
-    void StateSizeInfo(std::stringstream &out)
+    void StateSizeInfo(std::stringstream &out) override
     {
       GetUVec(eval_index_).PrintInfos(out);
     }
@@ -248,7 +248,7 @@ namespace DOpE
      *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
      *  @param dof_type    Has the DoF type: state or control.
      */
-    virtual void WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type)
+    virtual void WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type) override
     {
       this->GetOutputHandler()->Write(v.GetSpacialVector(), name, dof_type);
     }
@@ -260,7 +260,7 @@ namespace DOpE
      *  @param outfile     The basic name for the output file to print.
      *  Doesn't make sense here so aborts if called!
      */
-    virtual void WriteToFile(const std::vector<double> &/*v*/, std::string /*outfile*/)
+    virtual void WriteToFile(const std::vector<double> &/*v*/, std::string /*outfile*/) override
     {
       abort();
     }

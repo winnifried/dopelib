@@ -60,7 +60,7 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -107,7 +107,7 @@ public:
   }
 
   double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
-                        const std::map<std::string, const VECTOR *> &/*domain_values*/)
+                        const std::map<std::string, const VECTOR *> &/*domain_values*/) override
   {
     assert(this->GetProblemType() == "cost_functional");
 
@@ -128,7 +128,7 @@ public:
 
   void
   ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
-                 dealii::Vector<double> &local_vector, double scale)
+                 dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -189,19 +189,19 @@ public:
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points | update_JxW_values;
   }
 
   string
-  GetType() const
+  GetType() const override
   {
     return "domain algebraic";
   }
 
   string
-  GetName() const
+  GetName() const override
   {
     return "cost functional";
   }

@@ -43,7 +43,7 @@ namespace DOpEWrapper
     StaticMappingQ1<dim, false >::mapping_q1);
 
   template<int dim>
-  Mapping<dim, false> StaticMappingQ2<dim, false>::mapping_q2 (
+  MappingQ<dim, false> StaticMappingQ2<dim, false>::mapping_q2 (
     2);
 
   template<int dim>

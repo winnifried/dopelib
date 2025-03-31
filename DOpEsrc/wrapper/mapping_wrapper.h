@@ -262,7 +262,7 @@ namespace DOpEWrapper
   struct StaticMappingQ2<dim, false>
   {
   public:
-    static Mapping<dim, false> mapping_q2;
+    static MappingQ<dim, false> mapping_q2;
   };
 
   template<int dim>
@@ -409,7 +409,7 @@ namespace DOpEWrapper
   struct StaticMappingQ2<dim, dealii::DoFHandler>
   {
   public:
-    static Mapping<dim, dealii::DoFHandler> mapping_q2;
+    static MappingQ<dim, dealii::DoFHandler> mapping_q2;
   };
 
   template<int dim>

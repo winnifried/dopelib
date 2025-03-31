@@ -62,7 +62,7 @@ public:
   /**********************************************************************************************************/
   /**********************************************************************************************************/
   void ControlElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                              dealii::Vector<double> &local_vector, double scale)
+                              dealii::Vector<double> &local_vector, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -112,7 +112,7 @@ public:
   /**********************************************************************************************************/
 
   void ControlElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                            FullMatrix<double> &local_matrix, double scale)
+                            FullMatrix<double> &local_matrix, double scale) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -155,7 +155,7 @@ public:
 
   void ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
                      FullMatrix<double> &local_matrix, double scale,
-                     double /*scale_ico*/)
+                     double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -235,7 +235,7 @@ public:
   /**********************************************************************************************************/
   void ElementMassMatrix(const EDC<DH, VECTOR, dealdim> &edc,
                          FullMatrix<double> &local_matrix, double scale,
-                         double /*scale_ico*/)
+                         double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -299,7 +299,7 @@ public:
 
   void ElementEquation_Q(const EDC<DH, VECTOR, dealdim> &edc,
                          dealii::Vector<double> &local_vector, double scale,
-                         double /*scale_ico*/)
+                         double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
@@ -421,7 +421,7 @@ public:
 
   void ElementMassEquation_Q(const EDC<DH, VECTOR, dealdim> &edc,
                              dealii::Vector<double> &local_vector, double scale,
-                             double eigenvalue)
+                             double eigenvalue) override
   {
 
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
@@ -528,45 +528,45 @@ public:
   /**********************************************************************************************************/
   /**********************************************************************************************************/
 
-  UpdateFlags GetFaceUpdateFlags() const
+  UpdateFlags GetFaceUpdateFlags() const override
   {
     return update_values | update_gradients | update_normal_vectors
            | update_quadrature_points | update_JxW_values;
   }
 
-  UpdateFlags GetUpdateFlags() const
+  UpdateFlags GetUpdateFlags() const override
   {
     return update_values | update_gradients | update_quadrature_points
            | update_JxW_values;
   }
 
-  unsigned int GetStateNBlocks() const
+  unsigned int GetStateNBlocks() const override
   {
     return 2;
   }
 
-  unsigned int GetControlNBlocks() const
+  unsigned int GetControlNBlocks() const override
   {
     return 1;
   }
 
   vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }
   vector<unsigned int> &
-  GetControlBlockComponent()
+  GetControlBlockComponent() override
   {
     return control_block_component_;
   }
   const vector<unsigned int> &
-  GetControlBlockComponent() const
+  GetControlBlockComponent() const override
   {
     return control_block_component_;
   }
