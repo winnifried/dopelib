@@ -996,7 +996,7 @@ namespace DOpE
     const dealii::SmartPointer<const FE<dealdim, dealdim> > control_fe_;
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;
 
-    const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
+    const DOpEWrapper::Mapping<dealdim, DH>* mapping_;
     std::vector<Point<dealdim> > support_points_;
 
     Constraints constraints_;

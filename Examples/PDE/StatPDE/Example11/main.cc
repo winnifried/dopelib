@@ -169,9 +169,9 @@ main(int argc, char **argv)
   BoundaryFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> BF;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-  DOpEWrapper::Mapping<DIM, false > mapping(order_mapping);
+  DOpEWrapper::MappingQ<DIM, false > mapping(order_mapping);
 #else
-  DOpEWrapper::Mapping<DIM, DOFHANDLER > mapping(order_mapping);
+  DOpEWrapper::MappingQ<DIM, DOFHANDLER > mapping(order_mapping);
 #endif
   STH DOFH(triangulation, mapping, state_fe);
   STH DOFH_q1(triangulation_q1, state_fe);

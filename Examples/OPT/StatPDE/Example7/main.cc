@@ -157,7 +157,7 @@ main(int argc, char **argv)
     //Set Dirichlet Boundary!
     for (Triangulation<DIM>::active_cell_iterator element =
            triangulation.begin_active(); element != triangulation.end(); ++element)
-      for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
+      for (unsigned int f = 0; f < element->n_faces(); ++f)
         {
           if (element->face(f)->at_boundary())
             {
@@ -234,7 +234,7 @@ main(int argc, char **argv)
             //Set Dirichlet Boundary!
             for (Triangulation<DIM>::active_cell_iterator element =
                    triangulation.begin_active(); element != triangulation.end(); ++element)
-              for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
+              for (unsigned int f = 0; f < element->n_faces(); ++f)
                 {
                   if (element->face(f)->at_boundary())
                     {

@@ -127,7 +127,7 @@ ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
   Triangulation<2>::cell_iterator element = coarse_grid.begin();
   Triangulation<2>::cell_iterator endc = coarse_grid.end();
   for (; element != endc; ++element)
-    for (unsigned int face = 0; face < GeometryInfo<2>::faces_per_cell; ++face)
+    for (unsigned int face = 0; face < element->n_faces(); ++face)
       {
         if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
           {

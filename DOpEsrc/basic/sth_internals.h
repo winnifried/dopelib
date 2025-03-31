@@ -63,7 +63,7 @@ namespace DOpE
 
 //        MappingQ1 < dealdim > mapping;
 
-      DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
+      DoFTools::map_dofs_to_support_points(mapping[0], dh, support_points);
     }
 
     /**

@@ -30,6 +30,8 @@
 #endif
 #include <deal.II/hp/mapping_collection.h>
 #include <deal.II/fe/mapping_q.h>
+#include <deal.II/fe/mapping_fe.h>
+#include <deal.II/fe/fe.h>
 
 namespace DOpEWrapper
 {
@@ -60,15 +62,75 @@ namespace DOpEWrapper
     }
 
   };
+  /************************************************************************************/
+  /**
+   * @class MappingQ
+   * A wrapper for the dealii::MappingQ
+   */
+  template<int dim, bool hp>
+  class MappingQ : public Mapping<dim,hp>
+  {
+  private:
+    MappingQ()
+    {
+    }
 
+    ~MappingQ()
+    {
+    }
+
+  };
+  /************************************************************************************/
+  /**
+   * @class MappingFE
+   * A wrapper for the dealii::MappingFE
+   */
+  template<int dim, bool hp>
+  class MappingFE : public Mapping<dim,hp>
+  {
+  private:
+    MappingFE()
+    {
+    }
+
+    ~MappingFE()
+    {
+    }
+
+  };
+  
   /************************************************************************************/
 
   template<int dim>
-  class Mapping<dim, false> : public dealii::MappingQ<dim>
+  class Mapping<dim, false> 
   {
   public:
-    Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
-              false) :
+    Mapping()
+    {
+    }
+
+    virtual ~Mapping()
+    {
+    }
+
+   /**
+     * This function is needed for a workaround
+     * linked to the hp-version (i.e. deal.ii is not
+     * consistent at the current stage using Mappings
+     * or MappingCollections in the hp-framework).
+     */
+    virtual const typename dealii::Mapping<dim> &
+    operator[](const unsigned int /*index*/) const = 0;
+  };
+
+/************************************************************************************/
+
+  template<int dim>
+  class MappingQ<dim, false> : public Mapping<dim,false>, public dealii::MappingQ<dim>
+  {
+  public:
+    MappingQ(const unsigned int p, const bool use_mapping_q_on_all_elements =
+	     false) : Mapping<dim,false>(),
       dealii::MappingQ<dim>(p
 #if ! DEAL_II_VERSION_GTE(9,4,0)
                             , use_mapping_q_on_all_elements
@@ -78,12 +140,12 @@ namespace DOpEWrapper
       (void)use_mapping_q_on_all_elements;
     }
 
-    Mapping(const dealii::MappingQ<dim> &mapping) :
+    MappingQ(const dealii::MappingQ<dim> &mapping) :
       dealii::MappingQ<dim>(mapping)
     {
     }
 
-    ~Mapping()
+    ~MappingQ()
     {
     }
 
@@ -94,7 +156,7 @@ namespace DOpEWrapper
      * or MappingCollections in the hp-framework).
      */
     const typename dealii::MappingQ<dim> &
-    operator[](const unsigned int /*index*/) const
+    operator[](const unsigned int /*index*/) const override
     {
       //assert(index == 0);
       return *this;
@@ -102,6 +164,40 @@ namespace DOpEWrapper
 
   };
 
+  /************************************************************************************/
+
+  template<int dim>
+  class MappingFE<dim, false> : public Mapping<dim,false>, public dealii::MappingFE<dim>
+  {
+  public:
+    MappingFE(const dealii::FiniteElement<dim> &fe) : Mapping<dim,false>(),
+      dealii::MappingFE<dim>(fe)
+    {
+    }
+
+    MappingFE(const dealii::MappingFE<dim> &mapping) :
+      dealii::MappingFE<dim>(mapping)
+    {
+    }
+
+    ~MappingFE()
+    {
+    }
+
+    /**
+     * This function is needed for a workaround
+     * linked to the hp-version (i.e. deal.ii is not
+     * consistent at the current stage using Mappings
+     * or MappingCollections in the hp-framework).
+     */
+    const typename dealii::MappingFE<dim> &
+    operator[](const unsigned int /*index*/) const override
+    {
+      //assert(index == 0);
+      return *this;
+    }
+
+  };
 
   /************************************************************************************/
 
@@ -145,7 +241,7 @@ namespace DOpEWrapper
   struct StaticMappingQ1<dim, false>
   {
   public:
-    static Mapping<dim, false> mapping_q1;
+    static MappingQ<dim, false> mapping_q1;
   };
 
   template<int dim>

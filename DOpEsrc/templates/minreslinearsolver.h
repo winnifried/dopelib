@@ -90,7 +90,7 @@ namespace DOpE
      *
      */
     template<typename PROBLEM, typename INTEGRATOR>
-    void Solve(PROBLEM &pde, INTEGRATOR &integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
+    void Solve(PROBLEM &pde, INTEGRATOR &integr, const VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
 
   protected:
 
@@ -148,7 +148,7 @@ namespace DOpE
   template<typename PROBLEM, typename INTEGRATOR>
   void MinResLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM &pde,
       INTEGRATOR &integr,
-      VECTOR &rhs,
+      const VECTOR &rhs,
       VECTOR &solution,
       bool force_matrix_build)
   {

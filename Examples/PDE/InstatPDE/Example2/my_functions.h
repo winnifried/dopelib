@@ -52,7 +52,7 @@ public:
   }
 
   void
-  SetTime(double t) const
+  SetTime(double t) const override
   {
     mytime = t;
   }

@@ -573,7 +573,7 @@ namespace DOpE
             if (need_boundary_integrals && element[0]->at_boundary())
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
 #if DEAL_II_VERSION_GTE(8, 3, 0)
                     if (element[0]->face(face)->at_boundary() &&
@@ -599,7 +599,7 @@ namespace DOpE
             if (need_faces && !need_interfaces)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     if (element[0]->neighbor_index(face) != -1)
                       {
@@ -614,7 +614,7 @@ namespace DOpE
               {
 
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     // auto face_it = element[0]->face(face);
                     // first, check if we are at an interface, i.e. not the neighbour
@@ -771,7 +771,7 @@ namespace DOpE
             if (need_boundary_integrals)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
 #if DEAL_II_VERSION_GTE(8, 3, 0)
                     if (element[0]->face(face)->at_boundary() &&
@@ -795,7 +795,7 @@ namespace DOpE
             if (need_faces && !need_interfaces)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     if (element[0]->neighbor_index(face) != -1)
                       {
@@ -809,7 +809,7 @@ namespace DOpE
               {
 
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     // auto face_it = element[0]->face(face);
                     // first, check if we are at an interface, i.e. not the neighbour
@@ -955,7 +955,7 @@ namespace DOpE
             if (need_boundary_integrals)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
 #if DEAL_II_VERSION_GTE(8, 3, 0)
                     if (element[0]->face(face)->at_boundary() &&
@@ -979,7 +979,7 @@ namespace DOpE
             if (need_faces)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     if (element[0]->neighbor_index(face) != -1)
                       {
@@ -1080,7 +1080,7 @@ namespace DOpE
             if (need_boundary_integrals)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
 #if DEAL_II_VERSION_GTE(8, 3, 0)
                     if (element[0]->face(face)->at_boundary() &&
@@ -1104,7 +1104,7 @@ namespace DOpE
             if (need_faces && !need_interfaces)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     if (element[0]->neighbor_index(face) != -1)
                       {
@@ -1117,7 +1117,7 @@ namespace DOpE
             if (need_interfaces)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     // auto face_it = element[0]->face(face);
                     // first, check if we are at an interface, i.e. not the neighbour
@@ -1336,7 +1336,7 @@ namespace DOpE
             if (need_boundary_integrals)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
 #if DEAL_II_VERSION_GTE(8, 3, 0)
                     if (element[0]->face(face)->at_boundary() &&
@@ -1412,7 +1412,7 @@ namespace DOpE
             if (need_faces)
               {
                 for (unsigned int face = 0;
-                     face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                     face < element[0]->n_faces(); ++face)
                   {
                     if (element[0]->neighbor_index(face) != -1)
                       {
@@ -1682,7 +1682,7 @@ namespace DOpE
     std::vector<double> face_init(n_error_comps, -1e20);
     for (; element_it != endc[0]; element_it++)
       {
-        for (unsigned int face_no = 0; face_no < GeometryInfo<dim>::faces_per_cell;
+        for (unsigned int face_no = 0; face_no < element[0]->n_faces();
              ++face_no)
           {
 #if deal_II_dimension > 1
@@ -1753,7 +1753,7 @@ namespace DOpE
             // coarser element, if both neigbors of the face are on the same
             // level, we pick the one with the lower index
             for (unsigned int face = 0;
-                 face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                 face < element[0]->n_faces(); ++face)
               {
                 auto face_it = element[0]->face(face);
 
@@ -1916,7 +1916,7 @@ namespace DOpE
         if (element[0]->is_locally_owned())
           {
             for (unsigned int face_no = 0;
-                 face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
+                 face_no < element[0]->n_faces(); ++face_no)
               {
 #if deal_II_dimension > 1
                 Assert(face_integrals.find(element[0]->face(face_no)) !=
@@ -2012,7 +2012,7 @@ namespace DOpE
     std::vector<double> face_init(2, -1e20);
     for (; element_it != endc[0]; element_it++)
       {
-        for (unsigned int face_no = 0; face_no < GeometryInfo<dim>::faces_per_cell;
+        for (unsigned int face_no = 0; face_no < element[0]->n_faces();
              ++face_no)
           {
 #if deal_II_dimension > 1
@@ -2068,7 +2068,7 @@ namespace DOpE
             // level, we pick the one with the lower index
 
             for (unsigned int face = 0;
-                 face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                 face < element[0]->n_faces(); ++face)
               {
                 auto face_it = element[0]->face(face);
 
@@ -2234,7 +2234,7 @@ namespace DOpE
       if (element[0]->is_locally_owned())
         {
           for (unsigned int face_no = 0;
-               face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
+               face_no < element[0]->n_faces(); ++face_no)
             {
 #if deal_II_dimension > 1
               Assert(face_integrals.find(element[0]->face(face_no)) !=

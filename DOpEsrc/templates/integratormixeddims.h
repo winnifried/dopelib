@@ -163,6 +163,9 @@ namespace DOpE
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetControlNDoFs();
 
       dealii::Vector<SCALAR> local_vector(dofs);
+
+      const bool need_point_rhs = pde.HasPoints();
+
       const auto &dof_handler =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
@@ -206,7 +209,7 @@ namespace DOpE
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -219,7 +222,7 @@ namespace DOpE
             }
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->neighbor_index(face) != -1)
                     {
@@ -265,6 +268,15 @@ namespace DOpE
           residual(i) += local_vector(i);
         }
 
+    // check if we need the evaluation of PointRhs
+    if (need_point_rhs)
+      {
+        VECTOR point_rhs;
+        point_rhs.reinit(residual);
+        pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs, -1.);
+        residual += point_rhs;
+      }
+
 //      if (apply_boundary_values)
 //      {
 //        ApplyNewtonBoundaryValues(pde,residual);
@@ -286,6 +298,7 @@ namespace DOpE
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetControlNDoFs();
 
       dealii::Vector<SCALAR> local_vector(dofs);
+      const bool need_point_rhs = pde.HasPoints();
       const auto &dof_handler =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
@@ -329,7 +342,7 @@ namespace DOpE
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -342,7 +355,7 @@ namespace DOpE
             }
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->neighbor_index(face) != -1)
                     {
@@ -372,6 +385,15 @@ namespace DOpE
         {
           ApplyTransposedInitialBoundaryValues(pde,residual, -1.);
         }
+
+      // check if we need the evaluation of PointRhs
+      if (need_point_rhs)
+      {
+        VECTOR point_rhs;
+        point_rhs.reinit(residual);
+        pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs, 1.);
+        residual += point_rhs;
+      }
       //Check if some preset righthandside exists.
       local_vector = 0;
       AddPresetRightHandSide(-1.,local_vector);
@@ -540,7 +562,7 @@ namespace DOpE
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -620,7 +642,7 @@ namespace DOpE
 
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
+              for (unsigned int face=0; face < element[0]->n_faces(); ++face)
                 {
                   fdc.ReInit(face);
                   ret +=pde.FaceFunctional(fdc);
