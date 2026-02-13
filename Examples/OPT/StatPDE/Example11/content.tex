@@ -1,0 +1,42 @@
+\subsubsection{General problem description}
+This example was presented in~\cite{HehlKhiminNeitzelSimonWickWollner:2023} and is based on a coefficient controlled
+PDE-constrained optimal control problem discussed in~\cite{DeckelnickHinze:2011}.
+It solves a tracking type optimal control problem governed by an obstacle problem. The problem is defined on domain
+$\Omega = (-1, 1)^2 \subset \mathbb{R}^2$ and given by
+\begin{equation*}
+    \begin{aligned}
+        \min_{q \in L^2(\Omega, \mathbb{R}^{2 \times 2}_{\text{sym}}),u \in H_0^1 \left( \Omega \right) } ~ &\|u - u_d \|^2 + \frac{\alpha}{2} \| q \|^2 + \beta B(q) && \\
+        \text{s.t. } &- \nabla \cdot \left( q \nabla u \right) = f - \lambda, &&  \text{ in } L^2 \left( \Omega \right),\\
+        &u \leq \psi, && \text{ q.e. in } \Omega,\\
+        &\lambda \geq 0, && \text{ in } L^2 \left( \Omega \right),\\
+        &\left( \lambda, u-\psi \right) = 0,
+    \end{aligned}
+\end{equation*}
+with $\psi = 0.6$, $\alpha = 0.01$ and $\beta = 10^{-5}$. Further, we have
+\begin{equation*}
+    f(x_1,x_2)=\left( 1 - x_2^2 \right) \left( 6x_1^2 + 2 \right) + 2
+    \left( 1-x_1^2 \right).
+\end{equation*}
+In this problem, the desired state is given by
+  \begin{equation*}
+    \begin{aligned}
+      u_d(x_1, x_2) &= (1-x_1^2)(1-x_2^2).
+    \end{aligned}
+  \end{equation*}
+Note that we require the control $q$ to be positive definite, i.e. $q \in Q^{\textrm{ad}}$, with
+\begin{equation*}
+    \begin{aligned}
+        Q^{\textrm{ad}} &= \left\{ q \in L^{2} \left( \Omega; \mathbb{R}_{\textrm{sym}}^{2 \times 2} \right)
+              : q_{\min} \textrm{I} \preccurlyeq q(x) \preccurlyeq q_{\max}
+              \textrm{I} \text{ a.e. on } \Omega \right\}.
+    \end{aligned}
+\end{equation*}
+To enforce the semidefinite ordering, we monitor the trace of the control to ensure it remains positive and combine
+this with a logarithmic barrier term, given by
+  \begin{align*}
+    B(q) &= - \int_\Omega \log \left( \textrm{det} \left( q - q_{\min} I
+      \right) \right) + \log \left( \textrm{det} \left( q_{\max} I - q
+      \right) \right) ~\textrm{d}x.
+  \end{align*}
+Finally, to handle the multiplier $\lambda$ and its associated test functions, we utilize dual basis techniques based
+on those specified in Example~\ref{PDE_obstacle}.
