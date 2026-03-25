@@ -223,6 +223,9 @@ namespace DOpE
               unsigned int color = dirichlet_colors[i];
               std::vector<bool> comp_mask = DD.GetDirichletCompMask(color);
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+	      this->ApplyCurlDivConformingDirichletValues(comp_mask,color,*(state_dof_handlers_[j]),GetFESystem("state"),GetMapping()[0],state_dof_constraints_[j]);
+#endif
               //TODO: mapping[0] is a workaround, as deal does not support interpolate
               // boundary_values with a mapping collection at this point.
 #if DEAL_II_VERSION_GTE(9,0,0)

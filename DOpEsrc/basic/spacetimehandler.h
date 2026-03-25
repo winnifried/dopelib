@@ -39,6 +39,7 @@
 #endif
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_tools.h>
+#include <deal.II/numerics/vector_tools.h>
 
 // Multi-level routines
 //#include <deal.II/multigrid/mg_constrained_dofs.h>
@@ -732,6 +733,7 @@ namespace DOpE
 
   };
 
+      
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<template<int, int> class FE, bool DH, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim>

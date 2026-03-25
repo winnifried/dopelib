@@ -294,7 +294,11 @@ namespace DOpE
             {
               unsigned int color = dirichlet_colors[i];
               std::vector<bool> comp_mask = DD_control.GetDirichletCompMask(color);
-
+//Check if elements require standard interpolation or curl/div conforming
+	      //values
+#if DEAL_II_VERSION_GTE(9,3,0)
+	      this->ApplyCurlDivConformingDirichletValues(comp_mask,color,control_dof_handler_,GetFESystem("control"),GetMapping()[0],control_dof_constraints_);
+#endif
               //TODO: mapping[0] is a workaround, as deal does not support interpolate
               // boundary_values with a mapping collection at this point.
 #if DEAL_II_VERSION_GTE(9,0,0)
@@ -386,6 +390,11 @@ namespace DOpE
           unsigned int color = dirichlet_colors[i];
           std::vector<bool> comp_mask = DD_state.GetDirichletCompMask(color);
 
+	  //Check if elements require standard interpolation or curl/div conforming
+	  //values
+#if DEAL_II_VERSION_GTE(9,3,0)
+	  this->ApplyCurlDivConformingDirichletValues(comp_mask,color,state_dof_handler_,GetFESystem("state"),GetMapping()[0],state_dof_constraints_);
+#endif
           //TODO: mapping[0] is a workaround, as deal does not support interpolate
           // boundary_values with a mapping collection at this point.
 #if DEAL_II_VERSION_GTE(9,0,0)
@@ -945,6 +954,7 @@ namespace DOpE
     ResetTriangulation(const dealii::Triangulation<dealdim> &tria);
 
   private:
+    
 #if DEAL_II_VERSION_GTE(9,3,0)
     const SparsityMaker<dealdim> *
 #else
@@ -1115,7 +1125,8 @@ namespace DOpE
                                  true, dealii::SparsityPattern,
                                  dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
                                    const dealii::Triangulation<deal_II_dimension> &tria);
-#else
+  
+#else //older than 9.3.0
   template<>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<
@@ -1146,6 +1157,7 @@ namespace DOpE
                                  dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
                                    const dealii::Triangulation<deal_II_dimension> &tria);
 
+  
 #endif
 }
 

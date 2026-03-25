@@ -81,7 +81,7 @@
 #include "localpde.h"
 #include "localfunctional.h"
 #include "deformation_functions.h"
-#include <basic/test_mol_spacetimehandler.h>
+#include <basic/mol_spacetimehandler.h>
 #include "functionals.h"
 
 using namespace std;
@@ -199,10 +199,11 @@ main(int argc, char **argv)
   std::vector<bool> comp_mask(3);
 
   comp_mask[0] = true;
+  comp_mask[1] = true;
+  comp_mask[2] = true;
   DOpEWrapper::ZeroFunction<DIM> zf(3);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
-//TODO in  mol space time handler angepasst für NedelecRB
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
