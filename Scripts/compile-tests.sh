@@ -19,7 +19,8 @@ dealii_versions_plain="git 9.5.2 9.6.2 9.7.0"
 #"8.5.0 8.4.1 8.3.0"
 dealii_versions_full="git 9.5.2 9.6.2 9.7.0"
 #dealii_versions_full="git 9.0.1 9.1.1 9.2.0 9.3.3 9.4.2 9.5.2 9.6.2 9.7.0"
-newest_dealii=9.6.2
+newest_dealii=9.7.0
+
 trilinos_version=12-12-1
 p4est_version=2.0
 scalapack_version=2.0.2
