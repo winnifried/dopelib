@@ -150,9 +150,14 @@ main(int argc, char **argv)
   BoundaryParabel boundary_parabel;
   SimpleDirichletData<VECTOR, DIM> DD2(boundary_parabel);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(5, true);
+  comp_mask.set(2,false);
+#else
   std::vector<bool> comp_mask(5, true);
   comp_mask[2] = false;
-
+#endif
+  
   // Inflow boundary (at left)
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);

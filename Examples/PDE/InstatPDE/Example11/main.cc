@@ -285,17 +285,25 @@ main(int argc, char **argv)
   // Prescribing boundary values
   // We have 3 components (2D displacements and scalar-valued phase-field)
   // 4 components with u(x), u(y), phi(x), p(x): pressure ist new component!
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(4,true);
+  //All Boundaries no displacement
+  comp_mask.set(0,true);
+  comp_mask.set(1,true);
+  comp_mask.set(2,false); // phase-field component (always hom. Neumann data)
+  comp_mask.set(3,false); // hydro-static pressure
+#else
   std::vector<bool> comp_mask(4);
+  //All Boundaries no displacement
+  comp_mask[0] = true;
+  comp_mask[1] = true;
   comp_mask[2] = false; // phase-field component (always hom. Neumann data)
   comp_mask[3] = false; // hydro-static pressure
-
+#endif
   // Fixed boundaries
   DOpEWrapper::ZeroFunction<DIM> zf(4);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
-  //All Boundaries no displacement
-  comp_mask[0] = true;
-  comp_mask[1] = true;
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);

@@ -189,9 +189,13 @@ main(int argc, char **argv)
   P.AddFunctional(&LPF);
   P.AddFunctional(&LPF2);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(1,true);
+#else
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
-
+#endif
+  
   //Here we use zero boundary values
   DOpEWrapper::ZeroFunction<DIM> zf;
   SimpleDirichletData<VECTOR, DIM> DD1(zf);

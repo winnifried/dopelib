@@ -746,9 +746,13 @@ namespace DOpE
       it.get_time_dof_indices(local_to_global);
       return (find(local_to_global.begin(),local_to_global.end(),time_dof_number)!=local_to_global.end());
     }
-        #if DEAL_II_VERSION_GTE(9,3,0)
+#if DEAL_II_VERSION_GTE(9,3,0)
     template<int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+    void ApplyCurlDivConformingDirichletValues(dealii::ComponentMask& comp_mask,
+#else
     void ApplyCurlDivConformingDirichletValues(std::vector<bool>& comp_mask,
+#endif
 					       unsigned int color,
 					       const DOpEWrapper::DoFHandler<dim>& dof_handler,
 					       const FESystem<dim, dim> & finite_element,
@@ -788,7 +792,11 @@ namespace DOpE
 	      //Don't apply regular boundary values
 	      for(unsigned int comps=0; comps<dim; comps++)
 	      {
-		comp_mask[first_component+comps] = false; 
+#if DEAL_II_VERSION_GTE(9,7,0)
+		comp_mask.set(first_component+comps,false);
+#else
+		comp_mask[first_component+comps] = false;
+#endif
 	      }
 	    }
 	    
@@ -819,7 +827,11 @@ namespace DOpE
 	      //Don't apply regular boundary values
 	      for(unsigned int comps=0; comps<dim; comps++)
 	      {
-		comp_mask[first_component+comps] = false; 
+#if DEAL_II_VERSION_GTE(9,7,0)
+		comp_mask.set(first_component+comps,false);
+#else
+		comp_mask[first_component+comps] = false;
+#endif
 	      }
 	    }
 	    
@@ -836,7 +848,11 @@ namespace DOpE
       }
     }
     template<int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+    void ApplyCurlDivConformingDirichletValues(dealii::ComponentMask& comp_mask,
+#else
     void ApplyCurlDivConformingDirichletValues(std::vector<bool>& comp_mask,
+#endif
 					       unsigned int color,
 					       const DOpEWrapper::DoFHandler<dim>& dof_handler,
 					       const hp::FECollection<dim,dim> & finite_element,

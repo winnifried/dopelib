@@ -186,9 +186,14 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(80);
   P.SetBoundaryFunctionalColors(81);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(5, true);
+  comp_mask.set(2,false);
+#else
   std::vector<bool> comp_mask(5, true);
   comp_mask[2] = false;
-
+#endif
+  
   DOpEWrapper::ZeroFunction<DIM> zf(5);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 

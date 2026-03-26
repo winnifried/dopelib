@@ -207,12 +207,17 @@ main(int argc, char **argv)
   // which has the boundary color 80.
   P.SetBoundaryFunctionalColors(80);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  std::vector<bool> comp_mask(3,true);
+  comp_mask.set(2,false);
+#else
   std::vector<bool> comp_mask(3);
 
   comp_mask[0] = true;
   comp_mask[1] = true;
   comp_mask[2] = false;
-
+#endif
+  
   // Define the noslip boundary conditions...
   DOpEWrapper::ZeroFunction<DIM> zf(3);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);

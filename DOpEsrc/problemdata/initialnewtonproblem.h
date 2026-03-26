@@ -257,7 +257,11 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
+#if DEAL_II_VERSION_GTE(9,7,0)
+    inline const dealii::ComponentMask &
+#else
     inline const std::vector<bool> &
+#endif
     GetDirichletCompMask(unsigned int color) const;
     /**
     * Functions providing the required information for the integrator.
@@ -623,7 +627,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBEM, typename PDE, typename VECTOR, int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+  const dealii::ComponentMask &
+#else
   const std::vector<bool> &
+#endif
   InitialNewtonProblem<OPTPROBEM, PDE, VECTOR, dim>::GetDirichletCompMask(
     unsigned int color) const
   {

@@ -234,6 +234,17 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(80);
   P.SetBoundaryFunctionalColors(81);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(7,true);
+
+  comp_mask.set(0,true); // vx
+  comp_mask.set(1,true); // vy
+  comp_mask.set(2,true); // ux
+  comp_mask.set(3,true); // uy
+  comp_mask.set(4,false); // pressure
+  comp_mask.set(5,false); // wx
+  comp_mask.set(6,false); // wy
+#else
   std::vector<bool> comp_mask(7);
 
   comp_mask[0] = true; // vx
@@ -243,7 +254,8 @@ main(int argc, char **argv)
   comp_mask[4] = false; // pressure
   comp_mask[5] = false; // wx
   comp_mask[6] = false; // wy
-
+#endif
+  
   DOpEWrapper::ZeroFunction<DIM> zf(7);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
@@ -252,8 +264,13 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2); // inflow boundary
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1); // rigid walls
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(5,true); // wx
+  comp_mask.set(6,true); // wy
+#else
   comp_mask[5] = true; // wx
   comp_mask[6] = true; // wy
+#endif
   P.SetDirichletBoundaryColors(80, comp_mask, &DD1); // cylinder
   P.SetDirichletBoundaryColors(81, comp_mask, &DD1); // cylinder attached to flag
 

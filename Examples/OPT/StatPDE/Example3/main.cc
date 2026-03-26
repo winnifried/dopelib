@@ -218,10 +218,13 @@ main(int argc, char **argv)
   // Due to regularization
   P.SetBoundaryFunctionalColors(50);
   P.SetBoundaryFunctionalColors(51);
-
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(3, true);
+  comp_mask.set(2,false);
+#else
   std::vector<bool> comp_mask(3, true);
   comp_mask[2] = false;
-
+#endif
   DOpEWrapper::ZeroFunction<DIM> zf(3);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 

@@ -267,7 +267,11 @@ namespace DOpE
       if (dopedim==dealdim)
         {
           control_hn_constraints_.clear ();
-          control_hn_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
+          control_hn_constraints_.reinit(
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    this->GetLocallyOwnedDoFs (DOpEtypes::VectorType::control),
+#endif
+	    this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
           DoFTools::make_hanging_node_constraints (
 #if DEAL_II_VERSION_GTE(9,3,0)
             static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_),
@@ -277,7 +281,11 @@ namespace DOpE
             control_hn_constraints_);
 
           control_dof_constraints_.clear ();
-          control_dof_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
+          control_dof_constraints_.reinit(
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    this->GetLocallyOwnedDoFs (DOpEtypes::VectorType::control),
+#endif
+	    this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
           DoFTools::make_hanging_node_constraints (
 #if DEAL_II_VERSION_GTE(9,3,0)
             static_cast<dealii::DoFHandler<dopedim, dopedim>&>(control_dof_handler_),
@@ -293,7 +301,11 @@ namespace DOpE
           for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
             {
               unsigned int color = dirichlet_colors[i];
+#if DEAL_II_VERSION_GTE(9,7,0)
+	  dealii::ComponentMask comp_mask = DD_control.GetDirichletCompMask(color);
+#else
               std::vector<bool> comp_mask = DD_control.GetDirichletCompMask(color);
+#endif
 //Check if elements require standard interpolation or curl/div conforming
 	      //values
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -359,7 +371,10 @@ namespace DOpE
 
       state_hn_constraints_.clear();
       state_hn_constraints_.reinit (
-        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+#if DEAL_II_VERSION_GTE(9,7,0)
+        this->GetLocallyOwnedDoFs (DOpEtypes::VectorType::state),
+#endif
+	this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints(
 #if DEAL_II_VERSION_GTE(9,3,0)
         static_cast<dealii::DoFHandler<dealdim, dealdim>&>(state_dof_handler_),
@@ -370,6 +385,9 @@ namespace DOpE
 
       state_dof_constraints_.clear();
       state_dof_constraints_.reinit (
+#if DEAL_II_VERSION_GTE(9,7,0)
+        this->GetLocallyOwnedDoFs (DOpEtypes::VectorType::state),
+#endif
         this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints(
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -388,8 +406,12 @@ namespace DOpE
       for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {
           unsigned int color = dirichlet_colors[i];
-          std::vector<bool> comp_mask = DD_state.GetDirichletCompMask(color);
-
+#if DEAL_II_VERSION_GTE(9,7,0)
+	  dealii::ComponentMask comp_mask = DD_state.GetDirichletCompMask(color);
+#else
+	  std::vector<bool> comp_mask = DD_state.GetDirichletCompMask(color);
+#endif
+	  
 	  //Check if elements require standard interpolation or curl/div conforming
 	  //values
 #if DEAL_II_VERSION_GTE(9,3,0)

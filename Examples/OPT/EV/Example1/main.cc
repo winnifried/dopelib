@@ -199,11 +199,17 @@ main(int argc, char **argv)
   LocalEigenvalueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> EVF;
   P.AddFunctional(&EVF);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(3,true);
+  //Curl-Conforming values are automatically applied 
+  //to elements with only Hcurl conformity
+#else
   std::vector<bool> comp_mask(3);
 
   comp_mask[0] = true;
   comp_mask[1] = true; //Curl-Conforming values are automatically applied 
   comp_mask[2] = true; //to elements with only Hcurl conformity
+#endif 
   DOpEWrapper::ZeroFunction<DIM> zf(3);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
@@ -212,15 +218,24 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask_c(2,true);
+  comp_mask_c.set(1,false);
+#else 
   std::vector<bool> comp_mask_c(2);
   comp_mask_c[0] = true;
   comp_mask_c[1] = false;
+#endif
   DOpEWrapper::ZeroFunction<CDIM> zf_c(2);
   P.SetControlDirichletBoundaryColors(0, comp_mask_c, &zf_c);
   P.SetControlDirichletBoundaryColors(1, comp_mask_c, &zf_c);
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask_c.set(0,false);
+  comp_mask_c.set(1,true);
+#else
   comp_mask_c[0] = false;
   comp_mask_c[1] = true;
-
+#endif
   P.SetControlDirichletBoundaryColors(2, comp_mask_c, &zf_c);
   P.SetControlDirichletBoundaryColors(3, comp_mask_c, &zf_c);
 

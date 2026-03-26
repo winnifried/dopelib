@@ -495,9 +495,14 @@ namespace DOpE
         {
         case DOpEtypes::VectorType::state:
         {
+#if DEAL_II_VERSION_GTE(9,7,0)
+          dealii::IndexSet result;
+          result = DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler());
+#else 
           dealii::IndexSet result;
           DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
+#endif
           return result;
         }
 
@@ -508,9 +513,14 @@ namespace DOpE
 
         case DOpEtypes::VectorType::control:
         {
+#if DEAL_II_VERSION_GTE(9,7,0)
+          dealii::IndexSet result;
+          result = DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler (time_point).GetDEALDoFHandler());
+#else
           dealii::IndexSet result;
           DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
+#endif
           return result;
         }
 

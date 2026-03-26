@@ -461,7 +461,11 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
+#if DEAL_II_VERSION_GTE(9,7,0)
+    inline const dealii::ComponentMask &
+#else
     inline const std::vector<bool> &
+#endif
     GetDirichletCompMask(unsigned int color) const;
     /**
     * Functions providing the required information for the integrator.
@@ -577,7 +581,11 @@ namespace DOpE
     OPTPROBLEM &opt_problem_;
 
     std::vector<unsigned int> dirichlet_colors_;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    std::vector<dealii::ComponentMask> dirichlet_comps_;
+#else   
     std::vector<std::vector<bool> > dirichlet_comps_;
+#endif
     std::vector<TangentDirichletData<DD, VECTOR, dim>*>
     tangent_dirichlet_values_;
     std::vector<unsigned int> state_boundary_equation_colors_;
@@ -960,7 +968,11 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+  const dealii::ComponentMask &
+#else
   const std::vector<bool> &
+#endif
   TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletCompMask(
     unsigned int color) const
   {
