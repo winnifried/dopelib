@@ -208,7 +208,7 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(80);
 
 #if DEAL_II_VERSION_GTE(9,7,0)
-  std::vector<bool> comp_mask(3,true);
+  dealii::ComponentMask comp_mask(3,true);
   comp_mask.set(2,false);
 #else
   std::vector<bool> comp_mask(3);

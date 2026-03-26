@@ -278,11 +278,11 @@ namespace DOpE
      *
      * @return                          The value of the functional
      */
-    template <typename PROBLEM> SCALAR ComputeAlgebraicScalar(PROBLEM &pde, double eigenvalue);
+    template <typename PROBLEM> SCALAR ComputeAlgebraicScalar(PROBLEM &pde);
 
 
 
-    template <typename PROBLEM> SCALAR ComputeAlgebraicScalar_U(PROBLEM &pde,  double eigenvalue);
+    template <typename PROBLEM> SCALAR ComputeAlgebraicScalar_U(PROBLEM &pde);
 
     /**
      * This method applies inhomogeneous dirichlet boundary values.
@@ -460,7 +460,11 @@ namespace DOpE
                               const unsigned int color,
                               const dealii::Function<dim> &function,
                               std::map<unsigned int, SCALAR> &boundary_values,
+#if DEAL_II_VERSION_GTE(9,7,0)
+			      const dealii::ComponentMask &comp_mask) const;
+#else
                               const std::vector<bool> &comp_mask) const;
+#endif
 
     //        /**
     //         * Given a vector of active element iterators and a facenumber,
@@ -1604,10 +1608,10 @@ namespace DOpE
   template <typename PROBLEM>
   SCALAR
   Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeAlgebraicScalar(
-    PROBLEM &pde,  double eigenvalue)
+    PROBLEM &pde)
   {
     SCALAR ret = 0.;
-    ret = pde.AlgebraicFunctional(this->GetParamData(), this->GetDomainData(), eigenvalue);
+    ret = pde.AlgebraicFunctional(this->GetParamData(), this->GetDomainData());
     return ret;
   }
   /*******************************************************************************************/
@@ -1617,11 +1621,11 @@ namespace DOpE
   template <typename PROBLEM>
   SCALAR
   Integrator_eigenval<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeAlgebraicScalar_U(
-    PROBLEM &pde,  double eigenvalue)
+    PROBLEM &pde)
   {
     //TODO
     SCALAR ret = 0.;
-//  ret = pde.AlgebraicFunctional_U(this->GetParamData(), this->GetDomainData(), eigenvalue);
+//  ret = pde.AlgebraicFunctional_U(this->GetParamData(), this->GetDomainData());
     return ret;
   }
 
@@ -1683,7 +1687,11 @@ namespace DOpE
     for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
       {
         unsigned int color = dirichlet_colors[i];
+#if DEAL_II_VERSION_GTE(9,7,0)
+	dealii::ComponentMask comp_mask = pde.GetDirichletCompMask(color);
+#else
         std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
+#endif
         std::map<unsigned int, SCALAR> boundary_values;
 
         InterpolateBoundaryValues(
@@ -2502,7 +2510,11 @@ namespace DOpE
 #endif
     const unsigned int color, const dealii::Function<dim> &function,
     std::map<unsigned int, SCALAR> &boundary_values,
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &comp_mask) const
+#else
     const std::vector<bool> &comp_mask) const
+#endif
   {
     // TODO: mapping[0] is a workaround, as deal does not support
     // interpolate

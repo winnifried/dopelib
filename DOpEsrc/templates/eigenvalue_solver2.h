@@ -244,7 +244,7 @@ namespace DOpE
 
   template <typename INTEGRATOR, typename VECTOR, typename MATRIX>
   template<typename PROBLEM>
-  void EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &pde,  StateVector<VECTOR> &stateeigenfunction)
+  void EigenvalueSolver2<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &/*pde*/,  StateVector<VECTOR> &stateeigenfunction)
   {
 
     state_for_normalization.clear();

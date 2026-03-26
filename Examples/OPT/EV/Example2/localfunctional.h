@@ -148,7 +148,6 @@ public:
     Tensor<2, 2> DF;
     double detDF = 0;
     double detDFdq;
-    double detDFINVdq;
 
     vector<Tensor<1, dealdim> > phi_q(n_dofs_per_element);
     vector<Tensor<dealdim, dealdim> > grad_phi_v(n_dofs_per_element);

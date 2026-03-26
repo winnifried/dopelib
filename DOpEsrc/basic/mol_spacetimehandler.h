@@ -302,7 +302,7 @@ namespace DOpE
             {
               unsigned int color = dirichlet_colors[i];
 #if DEAL_II_VERSION_GTE(9,7,0)
-	  dealii::ComponentMask comp_mask = DD_control.GetDirichletCompMask(color);
+	      dealii::ComponentMask comp_mask = DD_control.GetDirichletCompMask(color);
 #else
               std::vector<bool> comp_mask = DD_control.GetDirichletCompMask(color);
 #endif

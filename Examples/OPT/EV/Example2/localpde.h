@@ -453,13 +453,9 @@ public:
     Tensor<1, 2> u;
     Tensor<1, 2> z;
 
-    double curl_u = 0;
-    double curl_z = 0;
-
     double detDF = 0;
     double detDFdq;
 
-    double detDFINVdq = 0;
     Tensor<2, 2> DF;
     Tensor<2, 2> DFdq;
     Tensor<2, 2> DF_Inverse;
@@ -498,15 +494,11 @@ public:
         z[0] = zvalues_[q_point][1];
         z[1] = zvalues_[q_point][2];
 
-        curl_u = ugrads_[q_point][2][0] - ugrads_[q_point][1][1];
-        curl_z = zgrads_[q_point][2][0] - zgrads_[q_point][1][1];
-
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             grad_phi_v[i] = control_fe_values[dv].gradient(i, q_point);
 
             detDFdq = determinante_DF_dq_(qgrads, grad_phi_v[i]);
-            detDFINVdq = determinante_DF_inv_dq_(qgrads, grad_phi_v[i]);
 
             DF_Inverse_Tdq = DF_inv_T_dq_(qgrads, grad_phi_v[i]);
             DF_Inversedq = DF_inv_dq_(qgrads, grad_phi_v[i]);

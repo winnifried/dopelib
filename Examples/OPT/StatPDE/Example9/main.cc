@@ -318,8 +318,12 @@ main(int argc, char **argv)
           solution = gu.GetSpacialVector();
           Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+	  dealii::ComponentMask component_mask(5, true);
+#else
           std::vector<bool> component_mask(5, true);
-
+#endif
+	  
 #if DEAL_II_VERSION_GTE(9,1,1)
           KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),

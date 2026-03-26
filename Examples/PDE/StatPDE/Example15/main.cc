@@ -305,8 +305,12 @@ main(int argc, char **argv)
             Vector<float> estimated_error_per_element(
               triangulation.n_active_cells());
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    dealii::ComponentMask component_mask(3, true);
+#else
             std::vector<bool> component_mask(3, true);
-
+#endif
+	    
             //..and estimate the error with the help of the KellyErrorEstimator
 #if DEAL_II_VERSION_GTE(9,1,1)
             KellyErrorEstimator<DIM>::estimate(
@@ -391,7 +395,11 @@ main(int argc, char **argv)
             Vector<float> estimated_error_per_element(
               triangulation.n_active_cells());
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    dealii::ComponentMask component_mask(3, true);
+#else
             std::vector<bool> component_mask(3, true);
+#endif
 
 #if DEAL_II_VERSION_GTE(9,1,1)
             KellyErrorEstimator<DIM>::estimate(
