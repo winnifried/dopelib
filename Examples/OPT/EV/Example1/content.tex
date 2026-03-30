@@ -1,1 +1,59 @@
-TODO: Add description of Example, this was Rect\_2
+This example implements a shape optimization problem governed by Maxwell's eigenvalue problem.
+
+In an abstract form the problem is given by 
+\begin{equation*}
+	\begin{aligned}
+		\min\quad J(q,\lambda)\\
+		\text{s.t.} \quad k(q;u,\psi) &= \lambda \, m(q;u,\psi) \qquad \forall \; \psi \in V,\\
+		m(q;u,u) &= 1;	
+	\end{aligned}	
+\end{equation*}
+where $q\colon \Omega \rightarrow \mathbb{R}^2$ is a domain deformation to be determined and the bilinearforms $k(q;\cdot,\cdot)$ and $m(q;\cdot,\cdot)$
+are obtained by transforming a, generalized, eigenvalue problem $Ku=\lambda Mu$ on the domain $\Omega_q = (\operatorname{Id}+q)\Omega$
+onto the reference domain $\Omega$.
+
+In contrast to previous examples the state now consists of, selected, eigenfunctions $u$ and eigenvalues $\lambda$. These are stored internally in
+\begin{verbatim}
+EigenvalueReducedProblem
+\end{verbatim}
+the eigenvalue to be selected is given in the param-file in the section \texttt{eigenvaluereducedproblem}.
+
+As usual the constraint
+\[
+k(q;u,\psi) = \lambda \, m(q;u,\psi) \qquad \forall \; \psi \in V,
+\]
+is implemented in \texttt{localpde.h}. However, in contrast to PDE constrained problems we need the
+methods
+\begin{itemize}
+\item \texttt{ElementMatrix} to implement the form $k(q;u,\psi)$.
+\item \texttt{ElementMassMatrix} to implement the form $m(q;u,\psi)$. 
+\end{itemize}
+from these the eigenvalue solver constructs the relevant information to solve the generalized eigenvalue problem.
+For the optimization, specifically to compute the reduced gradient of the objective function, we also need the first derivatives
+with respect to the control. These are
+\begin{itemize}
+\item \texttt{ElementEquation\_Q} to implement the form $k'_q(q,dq;u,z)$ for given primal eigenvector $u$ and adjoint eigenvector $z$ and direction (test-function) $dq$.
+\item \texttt{ElementMassEquation\_Q} to implement the form $m'_q(q,dq;u,z)$. 
+\end{itemize}
+
+The concrete eigenvalue problem to be solved is Maxwells eigenvalue problem, given on the physical domain $\Omega_q$ as
+\begin{equation*}
+\begin{aligned}
+(\nabla \times u,\nabla \times v)_{\Omega_q} + (\nabla \psi,v)_{\Omega_q} &= \lambda (u,v)_{\Omega_q}& \forall v&\in H_0(\operatorname{curl};\Omega_q),\\
+(u,\nabla \phi)_{\Omega_q} &=0 & \forall \phi &\in H^1_0(\Omega_q).
+\end{aligned}
+\end{equation*}
+the integrals are then transformed by the covariant Piola transformation to the
+reference domain.
+The discretization is done using \texttt{FE\_Nedelec} elements for the space $H_0(\operatorname{curl})$
+and \texttt{FE\_Q} elements for the multiplier in $H^1_0$. The homogeneous boundary data are imposed, as always, via
+\texttt{SetDirichletBoundaryColors} in \texttt{main.cc}. Internally \texttt{DOpElib} filter the element types and apply 'curl-conforming'
+boundary conditions for the \texttt{FE\_Nedelec}.
+
+The costfunctional looks as follows
+\[
+        J(q,u) = \frac{1}{2} |\lambda-\lambda^d|^2 + \frac{1}{2}\int_{\Omega}q(x)^2+|\nabla q(x)|^2 \,\mathrm{d}x - \beta \int_{\Omega} \log(\det(\operatorname{Id}+\nabla q(x)))\,\mathrm{d}x. 
+\]
+The first summand is computed as an \texttt{AlgebraicValue}, here access to the eigenvalue is obtained by the label \texttt{state\_ev} in the \texttt{param\_values} argument.
+The second and third summand are usual domain integrals. 
+

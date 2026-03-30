@@ -51,22 +51,22 @@ to the triangulation.
 
 To be able to solve the adjoint equation for the error estimation one needs to implement some methods regarding the equation as well es the functional of interest:
 \begin{itemize}
-\item In {\verb pdeinterface.h }
+\item In {\verb!pdeinterface.h!}
 \begin{itemize}
-\item {\verb ElementEquation_U }: Weak form of the adjoint equation.
-\item {\verb ElementMatrix_T }: The FE matrix for the adjoint problem.
-\item {\verb FaceEquation_U }: This one is needed in this case here because we have a functional of interest that lives on faces. 
+\item {\verb!ElementEquation_U!}: Weak form of the adjoint equation.
+\item {\verb!ElementMatrix_T!}: The FE matrix for the adjoint problem.
+\item {\verb!FaceEquation_U!}: This one is needed in this case here because we have a functional of interest that lives on faces. 
 \end{itemize}
-\item {\verb functionalinterface.h }
+\item {\verb!functionalinterface.h!}
 \begin{itemize}
-\item {\verb FaceValue_U }: This is the right hand side of the adjoint equation.
+\item {\verb!FaceValue_U!}: This is the right hand side of the adjoint equation.
 \end{itemize}
 \end{itemize}
 During the  evaluation of \eqref{dwr.error_identity}, the following methods are needed
 \begin{itemize}
-\item {\verb StrongElementResidual }: The element residual, see \eqref{dwr.element_residual}.
-\item {\verb StrongFaceResidual }: The terms in \eqref{dwr.error_identity} that lies in the interior (i.e. the jumps).
-\item {\verb StrongBoundaryResidual }:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
+\item {\verb!StrongElementResidual!}: The element residual, see \eqref{dwr.element_residual}.
+\item {\verb!StrongFaceResidual!}: The terms in \eqref{dwr.error_identity} that lies in the interior (i.e. the jumps).
+\item {\verb!StrongBoundaryResidual!}:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
 \end{itemize}
 
 Note that in the above three functions we always apply the method \texttt{ResidualModifier} both to the 
@@ -91,9 +91,9 @@ This container takes care of the computation of the weights.
 
 To build this, we need the following:
 \begin{itemize}
-\item {\verb DOFH_higher_order }: With some higher order Finite Elements and the already defined triangulation, we build this \texttt{SpaceTimeHandler}. This is needed because  we want to use the patch-wise higher order interpolation of the weights.
-\item {\verb idc_high }: A \texttt{IntegratorDataContainer} in which we put some (face)quadrature formulas for the evaluation of the error Identity.
-\item A string which indicates how we want to store the weight-vectors (here: { \verb "fullmem" }).
+\item {\verb!DOFH_higher_order!}: With some higher order Finite Elements and the already defined triangulation, we build this \texttt{SpaceTimeHandler}. This is needed because  we want to use the patch-wise higher order interpolation of the weights.
+\item {\verb!idc_high!}: A \texttt{IntegratorDataContainer} in which we put some (face)quadrature formulas for the evaluation of the error Identity.
+\item A string which indicates how we want to store the weight-vectors (here: { \verb!"fullmem"!}).
 \item \texttt{pr}: The \texttt{ParameterReader} which we have already defined.
 \item An enum of type \texttt{EETerms} that tells the container, which error terms we want to compute (primal error indicators vs. dual error indicators, see \cite{BR03}).  
 \end{itemize}
