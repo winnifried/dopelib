@@ -386,6 +386,8 @@ then
 			expected_errors=$((${expected_errors} + 1))
 			#Example PDE/StatPDE/Example15 fails due to missing trilinos
 			expected_errors=$((${expected_errors} + 1))
+			#Example OPT/EV/Example1 fails due to missing PETSC/SLEPC
+			expected_errors=$((${expected_errors} + 1))
 		    else if [ "${dv}" == "8.5.0" ]
 			 then
 			     #Example PDE/StatPDE/Example15 fails due to old deal.II

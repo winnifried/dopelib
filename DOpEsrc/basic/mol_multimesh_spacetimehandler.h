@@ -1102,8 +1102,8 @@ namespace DOpE
     dealii::ConstraintMatrix state_dof_constraints_;
 #endif
 
-    const dealii::SmartPointer<const FE<dim, dim>> control_fe_;
-    const dealii::SmartPointer<const FE<dim, dim>> state_fe_;
+    const FE<dim, dim>* control_fe_;
+    const FE<dim, dim>* state_fe_;
 
     const DOpEWrapper::Mapping<dim, DH>* mapping_;
 

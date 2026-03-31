@@ -303,15 +303,14 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<const dealii::FESystem<dim> >
+    inline const dealii::FESystem<dim>*
     GetFESystem() const;
 
     /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<
-    const dealii::hp::FECollection<dim> >
+    inline const dealii::hp::FECollection<dim>*
     GetFECollection() const;
 
     /**
@@ -874,7 +873,7 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
-  const SmartPointer<const dealii::FESystem<dim> >
+  const dealii::FESystem<dim>*
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFESystem() const
   {
     return opt_problem_.GetSpaceTimeHandler()->GetFESystem("state");
@@ -883,7 +882,7 @@ namespace DOpE
   /******************************************************/
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
-  const SmartPointer<const dealii::hp::FECollection<dim> >
+  const dealii::hp::FECollection<dim>*
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFECollection() const
   {
     return opt_problem_.GetSpaceTimeHandler()->GetFECollection("state");

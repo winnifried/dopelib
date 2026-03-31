@@ -148,7 +148,7 @@ namespace DOpE
      *
      * @return A const pointer to the FESystem()
      */
-    const dealii::SmartPointer<const dealii::FESystem<dealdim> >
+    const dealii::FESystem<dealdim>*
     GetFESystem() const
     {
       return OP_.GetFESystem();

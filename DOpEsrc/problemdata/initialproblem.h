@@ -174,14 +174,14 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<const dealii::FESystem<dim> >
+    inline const dealii::FESystem<dim>*
     GetFESystem() const;
 
     /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<const dealii::hp::FECollection<dim> >
+    inline const dealii::hp::FECollection<dim>*
     GetFECollection() const;
 
     /**
@@ -469,7 +469,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-  const SmartPointer<const dealii::FESystem<dim> >
+  const dealii::FESystem<dim>*
   InitialProblem<PDE, VECTOR, dim>::GetFESystem() const
   {
     return pde_.GetFESystem();
@@ -477,7 +477,7 @@ namespace DOpE
 
   /******************************************************/
   template<typename PDE, typename VECTOR, int dim>
-  const SmartPointer<const dealii::hp::FECollection<dim> >
+  const dealii::hp::FECollection<dim>*
   InitialProblem<PDE, VECTOR, dim>::GetFECollection() const
   {
     return pde_.GetFECollection();

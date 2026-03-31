@@ -65,15 +65,17 @@
 #include <templates/cglinearsolver.h>
 #include <templates/eigenvalue_solver.h>
 
+#ifdef DOPELIB_WITH_PETSC
 #include <deal.II/lac/petsc_sparse_matrix.h>
 #include <deal.II/lac/petsc_full_matrix.h>
+
 #if DEAL_II_VERSION_GTE(9,4,0)
 #include <deal.II/lac/petsc_vector.h>
 #else
 #include <deal.II/lac/petsc_parallel_vector.h>
 #endif
 #include <deal.II/lac/petsc_precondition.h>
-
+#endif
 
 #include "localpde.h"
 #include "localfunctional.h"
@@ -100,7 +102,12 @@ const static int CDIM = 2;
 typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
 
+
+#ifdef DOPELIB_WITH_PETSC
 typedef PETScWrappers::SparseMatrix MATRIX;
+#else
+typedef SparseMatrix<double> MATRIX;
+#endif
 typedef SparseMatrix<double> MATRIXFORLINSOLVE;
 typedef SparsityPattern SPARSITYPATTERN;
 

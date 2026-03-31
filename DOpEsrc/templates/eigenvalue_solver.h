@@ -45,10 +45,13 @@
 #include <fstream>
 #include <iomanip>
 
+#if DOPELIB_WITH_PETSC
 #include <petscconf.h>
 #include <petscksp.h>
+#endif
+#if DOPELIB_WITH_SLEPC
 #include <slepceps.h>
-
+#endif
 
 
 
@@ -88,9 +91,9 @@ namespace DOpE
     Mat */ matrixMprecon_;
 
     IndexSet eigenfunction_index_set;
+#ifdef DOPELIB_WITH_PETSC
     std::vector<PETScWrappers::MPI::Vector> eigenvectors_;
 
-#ifdef DOPELIB_WITH_PETSC
     PETScWrappers::MPI::Vector state_for_normalization;
     PETScWrappers::MPI::Vector adjoint_for_normalization;
 #endif
@@ -203,10 +206,10 @@ namespace DOpE
                     std::string /*algo_level*/
                    )
   {
+    bool build_matrix = force_matrix_build;
 #ifdef DOPELIB_WITH_PETSC
 #ifdef DOPELIB_WITH_SLEPC
 
-    bool build_matrix = force_matrix_build;
     if (force_matrix_build)
       {
         this->ReInit(pde);

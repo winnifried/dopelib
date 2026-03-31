@@ -35,7 +35,7 @@ ENDIF()
 
 IF(NOT DEAL_II_WITH_SLEPC)
   MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
-    DEAL_II_WITH_PETSC = ON. You may not use slepc related solvers within your code."
+    DEAL_II_WITH_SLEPC = ON. You may not use slepc related solvers within your code."
     )
 ELSE()
 	MESSAGE(STATUS "Configured for use of slepc")
