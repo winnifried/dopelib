@@ -138,7 +138,7 @@ namespace DOpE
 #ifndef DOPELIB_WITH_PETSC
     throw DOpEException("To use this algorithm you need to deal.II compiled with petsc!","EigenvalueSolver");
 #endif
-#ifndef DOPELIB_WITH_SELPC
+#ifndef DOPELIB_WITH_SLEPC
     throw DOpEException("To use this algorithm you need to deal.II compiled with slepc!","EigenvalueSolver");
 #endif
 
