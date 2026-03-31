@@ -26,13 +26,18 @@
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/numerics/vector_tools.h>
-#include <deal.II/lac/slepc_solver.h>
-
 #include <include/parameterreader.h>
+
+#if DOPELIB_WITH_SLEPC
+#include <deal.II/lac/slepc_solver.h>
+#endif
+
+#if DOPELIB_WITH_PETSC
 #if DEAL_II_VERSION_GTE(9,4,0)
 #include <deal.II/lac/petsc_vector.h>
 #else
 #include <deal.II/lac/petsc_parallel_vector.h>
+#endif
 #endif
 
 #include <vector>
@@ -85,16 +90,19 @@ namespace DOpE
     IndexSet eigenfunction_index_set;
     std::vector<PETScWrappers::MPI::Vector> eigenvectors_;
 
+#ifdef DOPELIB_WITH_PETSC
     PETScWrappers::MPI::Vector state_for_normalization;
     PETScWrappers::MPI::Vector adjoint_for_normalization;
+#endif
     std::vector<double> eigenvalues_;
     bool build_matrix_ = true;
 
     int maxiter_;
     double target_eigenvalue_, tol_, matshift_;
     bool first_iteration = true;
-    PetscScalar target_ ;
-
+#ifdef DOPELIB_WITH_PETSC
+   PetscScalar target_ ;
+#endif
 
     std::string epstype_, sttype_, ksptype_, pctype_;
     const char *char_epstype_, *char_sttype_, *char_ksptype_, *char_pctype_ ;
@@ -124,6 +132,13 @@ namespace DOpE
   ::EigenvalueSolver(INTEGRATOR &integrator, ParameterReader &param_reader)
     : integrator_(integrator)
   {
+#ifndef DOPELIB_WITH_PETSC
+    throw DOpEException("To use this algorithm you need to deal.II compiled with petsc!","EigenvalueSolver");
+#endif
+#ifndef DOPELIB_WITH_SELPC
+    throw DOpEException("To use this algorithm you need to deal.II compiled with slepc!","EigenvalueSolver");
+#endif
+
     param_reader.SetSubsection("eigenvalue_solver parameters");
     tol_ = param_reader.get_double ("tol");
     maxiter_ = param_reader.get_integer ("maxiter");
@@ -154,9 +169,8 @@ namespace DOpE
   void EigenvalueSolver<INTEGRATOR, VECTOR, MATRIX>
   ::ReInit(PROBLEM &pde)
   {
-
-
-
+#ifdef DOPELIB_WITH_PETSC
+#ifdef DOPELIB_WITH_SLEPC
     matrixK_.clear();
     matrixK_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
                     pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
@@ -172,6 +186,8 @@ namespace DOpE
 
     eigenvectors_.clear();
     eigenvalues_.clear();
+#endif
+#endif
   }
 
   /*******************************************************************************************/
@@ -187,6 +203,8 @@ namespace DOpE
                     std::string /*algo_level*/
                    )
   {
+#ifdef DOPELIB_WITH_PETSC
+#ifdef DOPELIB_WITH_SLEPC
 
     bool build_matrix = force_matrix_build;
     if (force_matrix_build)
@@ -259,7 +277,9 @@ namespace DOpE
     MatShift(matrixK_, -matshift_);
     MatShift(matrixMprecon_, -matshift_);
     EPSDestroy(&eps);
-
+#endif
+#endif  
+    
     return build_matrix;
   }
 
@@ -267,6 +287,7 @@ namespace DOpE
   template<typename PROBLEM>
   void EigenvalueSolver<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorState(PROBLEM &/*pde*/,  StateVector<VECTOR> &stateeigenfunction)
   {
+#ifdef DOPELIB_WITH_PETSC
 
     state_for_normalization.clear();
     state_for_normalization.reinit(eigenfunction_index_set, MPI_COMM_WORLD);
@@ -281,7 +302,7 @@ namespace DOpE
     scalar_factor[0] = sqrt(scalar_factor[0]);
     state_for_normalization/= scalar_factor[0];
     stateeigenfunction.GetSpacialVector() = state_for_normalization;
-
+#endif
   }
 
 
@@ -289,6 +310,7 @@ namespace DOpE
   template<typename PROBLEM>
   void EigenvalueSolver<INTEGRATOR, VECTOR, MATRIX>::GetNormalizedVectorAdjoint(PROBLEM &pde,  StateVector<VECTOR> &adjointeigenfunction, StateVector<VECTOR> &stateeigenfunction, double value)
   {
+#ifdef DOPELIB_WITH_PETSC
 
     state_for_normalization.clear();
     adjoint_for_normalization.clear();
@@ -309,7 +331,7 @@ namespace DOpE
     adjoint_for_normalization/= (scalar_factor[0]);
     adjoint_for_normalization *= value;
     adjointeigenfunction.GetSpacialVector() = adjoint_for_normalization;
-
+#endif
   }
 
 
