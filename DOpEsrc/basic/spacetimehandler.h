@@ -39,6 +39,7 @@
 #endif
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_tools.h>
+#include <deal.II/numerics/vector_tools.h>
 
 // Multi-level routines
 //#include <deal.II/multigrid/mg_constrained_dofs.h>
@@ -494,9 +495,14 @@ namespace DOpE
         {
         case DOpEtypes::VectorType::state:
         {
+#if DEAL_II_VERSION_GTE(9,7,0)
+          dealii::IndexSet result;
+          result = DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler());
+#else 
           dealii::IndexSet result;
           DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
+#endif
           return result;
         }
 
@@ -507,9 +513,14 @@ namespace DOpE
 
         case DOpEtypes::VectorType::control:
         {
+#if DEAL_II_VERSION_GTE(9,7,0)
+          dealii::IndexSet result;
+          result = DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler (time_point).GetDEALDoFHandler());
+#else
           dealii::IndexSet result;
           DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
+#endif
           return result;
         }
 
@@ -732,6 +743,7 @@ namespace DOpE
 
   };
 
+      
 #if DEAL_II_VERSION_GTE(9,3,0)
   template<template<int, int> class FE, bool DH, typename SPARSITYPATTERN,
            typename VECTOR, int dopedim, int dealdim>

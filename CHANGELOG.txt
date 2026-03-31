@@ -1,5 +1,10 @@
 Changelog DOpE
 ==============
+31.03.2026: Adjustments for deal 9.8.0pre
+26.03.2026: Fixing deprecated function warnings with deal 9.7.0
+25.03.2026: Added detection of (only) curl/div conforming elements to space time handler
+	    and adjusted application of (homogeneous) dirichlet boundary values for these
+	    elements
 11.02.2025: Fix in DOpEWrapper::SolutionTransfer to work with deal.II Version 9.7.0.pre
 07.02.2025: Update to MappingWrapper to allow alternative mappings from deal.II
 03.02.2025: Fixed missing const qualifiers in linearsolvers

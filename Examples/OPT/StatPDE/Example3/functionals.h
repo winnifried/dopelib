@@ -290,22 +290,7 @@ public:
             grad_v[1][0] = ufacegrads[q_point][1][0];
             grad_v[1][1] = ufacegrads[q_point][1][1];
 
-            Tensor<2, 2> F;
-            F[0][0] = 1.0 + ufacegrads[q_point][3][0];
-            F[0][1] = ufacegrads[q_point][3][1];
-            F[1][0] = ufacegrads[q_point][4][0];
-            F[1][1] = 1.0 + ufacegrads[q_point][4][1];
-
-            Tensor<2, 2> F_Inverse;
-            F_Inverse = invert(F);
-
-            Tensor<2, 2> F_T;
-            F_T = transpose(F);
-
-            Tensor<2, 2> F_Inverse_T;
-            F_Inverse_T = transpose(F_Inverse);
-
-            Tensor<2, 2> cauchy_stress_fluid;
+	    Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid = (-pI
                                    + density_fluid_ * viscosity_ * (grad_v + transpose(grad_v)));
 

@@ -143,7 +143,11 @@ namespace DOpE
 #endif
       const unsigned int color, const dealii::Function<dim> &function,
       std::map<unsigned int, SCALAR> &boundary_values,
+#if DEAL_II_VERSION_GTE(9,7,0)
+      const dealii::ComponentMask &comp_mask) const;
+#else
       const std::vector<bool> &comp_mask) const;
+#endif 
 
     /**
      * Used by to ComputeNonlinearResidual to loop until both variables are on
@@ -880,7 +884,11 @@ namespace DOpE
     for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
       {
         unsigned int color = dirichlet_colors[i];
+#if DEAL_II_VERSION_GTE(9,7,0)
+	dealii::ComponentMask comp_mask = pde.GetDirichletCompMask(color);
+#else
         std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
+#endif
         std::map<unsigned int, SCALAR> boundary_values;
 
         InterpolateBoundaryValues(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0], color, pde.GetDirichletValues(color, this->GetParamData(),
@@ -1043,7 +1051,11 @@ namespace DOpE
 #endif
     const unsigned int color, const dealii::Function<dim> &function,
     std::map<unsigned int, SCALAR> &boundary_values,
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &comp_mask) const
+#else
     const std::vector<bool> &comp_mask) const
+#endif
   {
     dealii::VectorTools::interpolate_boundary_values(
       dof_handler->GetDEALDoFHandler(), color, function,

@@ -206,6 +206,9 @@ namespace DOpE
           //DoFConstraints including Dirichlet constraints
           state_dof_constraints_[j]->clear();
           state_dof_constraints_[j]->reinit (
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    this->GetLocallyOwnedDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]),
+#endif
             this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]));
           DoFTools::make_hanging_node_constraints (
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -221,8 +224,15 @@ namespace DOpE
           for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
             {
               unsigned int color = dirichlet_colors[i];
+#if DEAL_II_VERSION_GTE(9,7,0)
+	      dealii::ComponentMask comp_mask = DD.GetDirichletCompMask(color);
+#else
               std::vector<bool> comp_mask = DD.GetDirichletCompMask(color);
-
+#endif
+	      
+#if DEAL_II_VERSION_GTE(9,3,0)
+	      this->ApplyCurlDivConformingDirichletValues(comp_mask,color,*(state_dof_handlers_[j]),GetFESystem("state"),GetMapping()[0],*state_dof_constraints_[j]);
+#endif
               //TODO: mapping[0] is a workaround, as deal does not support interpolate
               // boundary_values with a mapping collection at this point.
 #if DEAL_II_VERSION_GTE(9,0,0)
@@ -239,7 +249,10 @@ namespace DOpE
           //Only Hanging Node DoFConstraints for interpolation!
           state_hn_constraints_[j]->clear();
           state_hn_constraints_[j]->reinit (
-            this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]));
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    this->GetLocallyOwnedDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]),
+#endif
+	    this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]));
           DoFTools::make_hanging_node_constraints (
 #if DEAL_II_VERSION_GTE(9,3,0)
             static_cast<dealii::DoFHandler<dealdim, dealdim>&> (*state_dof_handlers_[j]),
@@ -871,7 +884,7 @@ namespace DOpE
     std::vector<dealii::ConstraintMatrix *> state_hn_constraints_;
 #endif
 
-    const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;
+    const FE<dealdim, dealdim>* state_fe_;
     const DOpEWrapper::Mapping<dealdim, DH>* mapping_;
 
     std::vector<std::vector<Point<dealdim> > > support_points_;

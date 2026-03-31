@@ -4,6 +4,7 @@ lib
 ThirdPartyLibs/ipopt
 ThirdPartyLibs/snopt
 Examples/???/*PDE/Example*/DOpE*Example*
+Examples/???/EV/Example*/DOpE*Example*
 *~
 *.synctex.gz
 *.aux

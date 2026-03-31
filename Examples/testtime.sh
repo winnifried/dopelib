@@ -75,7 +75,7 @@ do echo "Trying "$bd
     if [ -d $bd ]
     then
 	cd $bd
-	for sd in StatPDE InstatPDE
+	for sd in StatPDE InstatPDE EV
 	do echo "Trying "$bd"/"$sd
 	    if [ -d $sd ]
 	    then

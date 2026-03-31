@@ -105,7 +105,7 @@ namespace DOpE
         cg.solve(*matrix, dst, src, PreconditionIdentity());
       }
     private:
-      const SmartPointer<const MatrixType> matrix;
+      const MatrixType* matrix;
     };
 
     class SchurComplement : public Subscriptor
@@ -125,8 +125,8 @@ namespace DOpE
       }
 
     private:
-      const SmartPointer<const BlockSparseMatrix<double> > system_matrix;
-      const SmartPointer<const InverseMatrix<SparseMatrix<double> > > m_inverse;
+      const BlockSparseMatrix<double>* system_matrix;
+      const InverseMatrix<SparseMatrix<double> >* m_inverse;
 
       mutable Vector<double> tmp1, tmp2;
     };
@@ -151,7 +151,7 @@ namespace DOpE
       }
 
     private:
-      const SmartPointer<const BlockSparseMatrix<double> > system_matrix;
+      const BlockSparseMatrix<double>* system_matrix;
 
       mutable Vector<double> tmp1, tmp2;
     };
@@ -323,8 +323,8 @@ namespace DOpE
       }
 
     private:
-      const SmartPointer<const BlockSparseMatrix<double> > system_matrix;
-      const SmartPointer<const IterativeInverse<Vector<double> > > m_inverse;
+      const BlockSparseMatrix<double>* system_matrix;
+      const IterativeInverse<Vector<double> >* m_inverse;
 
       mutable Vector<double> tmp1, tmp2;
     };
@@ -349,7 +349,7 @@ namespace DOpE
       }
 
     private:
-      const SmartPointer<const BlockSparseMatrix<double> > system_matrix;
+      const BlockSparseMatrix<double>* system_matrix;
 
       mutable Vector<double> tmp1, tmp2;
     };

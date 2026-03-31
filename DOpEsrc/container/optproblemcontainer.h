@@ -739,14 +739,23 @@ namespace DOpE
 
     void
     SetControlDirichletBoundaryColors(unsigned int color,
-                                      const std::vector<bool> &comp_mask,
+#if DEAL_II_VERSION_GTE(9,7,0)
+				      const dealii::ComponentMask &comp_mask,
+#else
+				      const std::vector<bool> &comp_mask,
+#endif
                                       const DOpEWrapper::Function<dealdim> *values);
 
     /******************************************************/
 
     void
     SetDirichletBoundaryColors(unsigned int color,
-                               const std::vector<bool> &comp_mask, const DD *values);
+#if DEAL_II_VERSION_GTE(9,7,0)
+			       const dealii::ComponentMask &comp_mask,
+#else
+                               const std::vector<bool> &comp_mask,
+#endif
+			       const DD *values);
 
     /******************************************************/
 
@@ -754,11 +763,17 @@ namespace DOpE
     GetDirichletColors() const;
     const std::vector<unsigned int> &
     GetTransposedDirichletColors() const;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &
+    GetDirichletCompMask(unsigned int color) const;
+    const dealii::ComponentMask &
+    GetTransposedDirichletCompMask(unsigned int color) const;
+#else
     const std::vector<bool> &
     GetDirichletCompMask(unsigned int color) const;
     const std::vector<bool> &
     GetTransposedDirichletCompMask(unsigned int color) const;
-
+#endif
     /******************************************************/
 
     const dealii::Function<dealdim> &
@@ -1401,7 +1416,11 @@ namespace DOpE
 
     std::vector<unsigned int> control_dirichlet_colors_;
     std::vector<unsigned int> control_transposed_dirichlet_colors_;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    std::vector<dealii::ComponentMask> control_dirichlet_comps_;
+#else
     std::vector<std::vector<bool> > control_dirichlet_comps_;
+#endif
     std::vector<const DOpEWrapper::Function<dealdim>*> control_dirichlet_values_;
     std::vector<
     TransposedGradientDirichletData<DD, VECTOR, dealdim> *> transposed_control_gradient_dirichlet_values_;
@@ -1409,7 +1428,11 @@ namespace DOpE
     TransposedHessianDirichletData<DD, VECTOR, dealdim> *> transposed_control_hessian_dirichlet_values_;
 
     std::vector<unsigned int> dirichlet_colors_;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    std::vector<dealii::ComponentMask> dirichlet_comps_;
+#else
     std::vector<std::vector<bool> > dirichlet_comps_;
+#endif
     std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
     std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> tangent_dirichlet_values_;
     const dealii::Function<dealdim> *zero_dirichlet_values_;
@@ -3590,7 +3613,12 @@ namespace DOpE
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetControlDirichletBoundaryColors(
-                        unsigned int color, const std::vector<bool> &comp_mask,
+                        unsigned int color,
+#if DEAL_II_VERSION_GTE(9,7,0)
+			const dealii::ComponentMask &comp_mask,
+#else
+			const std::vector<bool> &comp_mask,
+#endif
                         const DOpEWrapper::Function<dealdim> *values)
   {
     assert(values);
@@ -3629,7 +3657,12 @@ namespace DOpE
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetDirichletBoundaryColors(
-                        unsigned int color, const std::vector<bool> &comp_mask,
+                        unsigned int color,
+#if DEAL_II_VERSION_GTE(9,7,0)
+			const dealii::ComponentMask &comp_mask,
+#else
+			const std::vector<bool> &comp_mask,
+#endif
                         const DD *values)
   {
     assert(values);
@@ -3734,7 +3767,11 @@ namespace DOpE
 #else
            template<int, int> class DH>
 #endif
+#if DEAL_II_VERSION_GTE(9,7,0)
+  const dealii::ComponentMask &
+#else
   const std::vector<bool> &
+#endif
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
                         unsigned int color) const
@@ -3776,7 +3813,11 @@ namespace DOpE
 #else
            template<int, int> class DH>
 #endif
+#if DEAL_II_VERSION_GTE(9,7,0)
+  const dealii::ComponentMask &
+#else
   const std::vector<bool> &
+#endif
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletCompMask(
                         unsigned int color) const

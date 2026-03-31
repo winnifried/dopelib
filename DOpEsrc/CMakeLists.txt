@@ -24,6 +24,24 @@ ELSE()
 	ADD_DEFINITIONS(-DDOPELIB_WITH_TRILINOS)	
 ENDIF()
 
+IF(NOT DEAL_II_WITH_PETSC)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_PETSC = ON. You may not use petsc related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of petsc")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_PETSC)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_SLEPC)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_SLEPC = ON. You may not use slepc related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of slepc")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_SLEPC)	
+ENDIF()
+
 IF(NOT DEAL_II_WITH_MPI)
   MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
     DEAL_II_WITH_MPI = ON. You may not use MPI functionality in your code"

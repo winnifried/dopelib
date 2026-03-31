@@ -245,9 +245,13 @@ main(int argc, char **argv)
   // Prescribing boundary values
   // We have 4 components (2D displacements and scalar-valued phase-field and a Lagrange multiplier for the inequality)
   //                       i.e. u_x, u_y, phi, tau:
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(4,true);
+  comp_mask.set(2,false); // phase-field component (always hom. Neumann data)
+#else
   std::vector<bool> comp_mask(4);
   comp_mask[2] = false; // phase-field component (always hom. Neumann data)
-
+#endif
   // Fixed boundaries
   DOpEWrapper::ZeroFunction<DIM> zf(4);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
@@ -256,28 +260,53 @@ main(int argc, char **argv)
   NonHomoDirichletData dirichlet_data(pr);
   SimpleDirichletData<VECTOR, DIM> DD2(dirichlet_data);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false);
+  comp_mask.set(1,true);
+#else
   comp_mask[0] = false;
   comp_mask[1] = true;
+#endif
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false);
+  comp_mask.set(1,true);
+#else
   comp_mask[0] = false;
   comp_mask[1] = true;
+#endif
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,true);
+  comp_mask.set(1,true);
+#else
   comp_mask[0] = true;
   comp_mask[1] = true;
+#endif
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
 
-  // Top boundary (shear force via non-homo. Dirichlet)
+  // Top boundary (shear force via non-homo. Dirichlet) 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,true);
+  comp_mask.set(1,true);
+#else
   comp_mask[0] = true;
   comp_mask[1] = true;
+#endif
   //comp_mask[2] = true; // phase field =1 on top boundary
   P.SetDirichletBoundaryColors(3, comp_mask, &DD2);
 
 
   // Lower boundary of the slit
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false);
+  comp_mask.set(1,true);
+#else
   comp_mask[0] = false;
   comp_mask[1] = true;
+#endif
   P.SetDirichletBoundaryColors(4, comp_mask, &DD1);
 
 

@@ -28,6 +28,7 @@
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
 #include <deal.II/base/index_set.h>
+#include <deal.II/numerics/vector_tools.h>
 
 #include <vector>
 #include <iostream>
@@ -41,6 +42,8 @@
 #include <basic/dopetypes.h>
 #include <include/parallel_vectors.h>
 #include <include/helper.h>
+#include <wrapper/dofhandler_wrapper.h>
+#include <wrapper/mapping_wrapper.h>
 
 namespace DOpE
 {
@@ -743,6 +746,129 @@ namespace DOpE
       it.get_time_dof_indices(local_to_global);
       return (find(local_to_global.begin(),local_to_global.end(),time_dof_number)!=local_to_global.end());
     }
+#if DEAL_II_VERSION_GTE(9,3,0)
+    template<int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+    void ApplyCurlDivConformingDirichletValues(dealii::ComponentMask& comp_mask,
+#else
+    void ApplyCurlDivConformingDirichletValues(std::vector<bool>& comp_mask,
+#endif
+					       unsigned int color,
+					       const DOpEWrapper::DoFHandler<dim>& dof_handler,
+					       const FESystem<dim, dim> & finite_element,
+					       const dealii::Mapping<dim> &mapping,
+					       dealii::AffineConstraints<double>& dof_constraints
+      )
+    {
+      if(dim > 1)
+      {
+	unsigned int first_component = 0;
+	for(unsigned int el = 0; el < finite_element.n_base_elements(); el++)
+	{
+	  if(finite_element.base_element(el).conforms(FiniteElementData<dim>::Hcurl) && !finite_element.base_element(el).conforms(FiniteElementData<dim>::H1))
+	  {//Hcurl Conforming
+	    //Must be vectorvalued (components = dimension)
+	    assert(finite_element.base_element(el).n_components()==dim);
+	    //TODO: Multiplicity larger 1 
+	    assert(finite_element.element_multiplicity(el)==1);
+	    bool apply_values=true;
+	    bool consistency_check=false;
+	    assert(first_component+dim <= comp_mask.size());
+	    for(unsigned int comps=0; comps<dim; comps++)
+	    {
+	      apply_values = apply_values && comp_mask[first_component+comps];
+	      consistency_check = consistency_check || comp_mask[first_component+comps]; 
+	    }
+	    //If any component in the mask was true
+	    //(consistency_check == true) than all components
+	    //must be true (apply_values==true) otherwise the
+	    //mask is not consistent with the vector
+	    assert(consistency_check == apply_values);
+	    if(apply_values)
+	    {
+	      //Apply Curl-Boundary Values
+	      VectorTools::project_boundary_values_curl_conforming_l2(dof_handler.GetDEALDoFHandler(), first_component,
+								      dealii::Functions::ZeroFunction<dim>(comp_mask.size()), color, dof_constraints, mapping);
+	      //Don't apply regular boundary values
+	      for(unsigned int comps=0; comps<dim; comps++)
+	      {
+#if DEAL_II_VERSION_GTE(9,7,0)
+		comp_mask.set(first_component+comps,false);
+#else
+		comp_mask[first_component+comps] = false;
+#endif
+	      }
+	    }
+	    
+	  }
+	  if(finite_element.base_element(el).conforms(FiniteElementData<dim>::Hdiv) && !finite_element.base_element(el).conforms(FiniteElementData<dim>::H1))
+	  {//Hdiv Conforming
+	    //Must be vectorvalued (components = dimension)
+	    assert(finite_element.base_element(el).n_components()==dim);
+	    //TODO: Multiplicity larger 1 
+	    assert(finite_element.element_multiplicity(el)==1);
+	    bool apply_values=true;
+	    bool consistency_check=false;
+	    for(unsigned int comps=0; comps<dim; comps++)
+	    {
+	      apply_values = apply_values && comp_mask[first_component+comps];
+	      consistency_check = consistency_check || comp_mask[first_component+comps]; 
+	    }
+	    //If any component in the mask was true
+	    //(consistency_check == true) than all components
+	    //must be true (apply_values==true) otherwise the
+	    //mask is not consistent with the vector
+	    assert(consistency_check == apply_values);
+	    if(apply_values)
+	    {
+	      //Apply Curl-Boundary Values
+	      VectorTools::project_boundary_values_div_conforming(dof_handler.GetDEALDoFHandler(), first_component,
+								  dealii::Functions::ZeroFunction<dim>(comp_mask.size()), color, dof_constraints, mapping);
+	      //Don't apply regular boundary values
+	      for(unsigned int comps=0; comps<dim; comps++)
+	      {
+#if DEAL_II_VERSION_GTE(9,7,0)
+		comp_mask.set(first_component+comps,false);
+#else
+		comp_mask[first_component+comps] = false;
+#endif
+	      }
+	    }
+	    
+	  }
+	  //counting first component of next element
+	  first_component+=finite_element.base_element(el).n_components()*finite_element.element_multiplicity(el);
+	  
+	}
+	if(first_component != comp_mask.size())
+	{
+	  std::cout<<first_component<<" not "<<comp_mask.size()<<std::endl;
+	  abort();
+	}
+      }
+    }
+    template<int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+    void ApplyCurlDivConformingDirichletValues(dealii::ComponentMask& comp_mask,
+#else
+    void ApplyCurlDivConformingDirichletValues(std::vector<bool>& comp_mask,
+#endif
+					       unsigned int color,
+					       const DOpEWrapper::DoFHandler<dim>& dof_handler,
+					       const hp::FECollection<dim,dim> & finite_element,
+					       const dealii::Mapping<dim> &mapping,
+					       dealii::AffineConstraints<double>& dof_constraints
+      )
+    {
+      if(dim > 1)
+      {
+	//TODO: This might need a fix to match the actual selection!
+	const FESystem<dim,dim>& fe = static_cast<const FESystem<dim,dim> &>(finite_element[0]);
+	ApplyCurlDivConformingDirichletValues(comp_mask,color,dof_handler,fe,mapping,dof_constraints);
+      }
+    }
+#endif
+
   private:
     mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
     mutable TimeIterator interval_;

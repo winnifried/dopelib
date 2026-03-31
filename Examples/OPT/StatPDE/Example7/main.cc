@@ -190,12 +190,19 @@ main(int argc, char **argv)
 
   OP P(LFunc, LPDE, LC, DOFH);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2,false);
+  comp_mask.set(1,true);
+  dealii::ComponentMask comp_mask_2(2,true);
+  comp_mask_2.set(1,false);
+#else
   std::vector<bool> comp_mask(2);
   comp_mask[0] = false;
   comp_mask[1] = true;
   std::vector<bool> comp_mask_2(2);
   comp_mask_2[0] = true;
   comp_mask_2[1] = false;
+#endif
   DOpEWrapper::ZeroFunction<DIM> zf(2);
   DD DD_1(zf);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD_1);

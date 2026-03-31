@@ -7,13 +7,22 @@ namespace DOpE
   {
   public:
     DirichletDescriptor(const std::vector<unsigned int> &dirichlet_colors,
+#if DEAL_II_VERSION_GTE(9,7,0)
+			const std::vector<dealii::ComponentMask > &dirichlet_comps
+#else
                         const std::vector<std::vector<bool> > &dirichlet_comps
+#endif
                        )
       : dirichlet_colors_(dirichlet_colors), dirichlet_comps_(dirichlet_comps)
     {
 
     }
+
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &
+#else
     const std::vector<bool> &
+#endif
     GetDirichletCompMask(unsigned int color) const
     {
       unsigned int comp = dirichlet_colors_.size();
@@ -42,8 +51,12 @@ namespace DOpE
 
   private:
     const std::vector<unsigned int> &dirichlet_colors_;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const std::vector<dealii::ComponentMask> &dirichlet_comps_;
+#else
     const std::vector<std::vector<bool> > &dirichlet_comps_;
-
+#endif
+    
   };
 
 }

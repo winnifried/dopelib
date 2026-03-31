@@ -155,9 +155,12 @@ main(int argc, char **argv)
                 DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
-
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2, true);
+#else
   std::vector<bool> comp_mask(2, true);
-
+#endif
+  
   LocalDirichletData<VECTOR, DIM> DD;
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD);

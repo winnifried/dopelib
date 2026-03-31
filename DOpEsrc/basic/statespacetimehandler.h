@@ -375,8 +375,12 @@ namespace DOpE
         case DOpEtypes::VectorType::state:
         {
           dealii::IndexSet result;
+#if DEAL_II_VERSION_GTE(9,7,0)
+          result = DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler());
+#else
           DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
+#endif 
           return result;
         }
 

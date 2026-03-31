@@ -195,38 +195,72 @@ main(int argc, char **argv)
   P.AddFunctional(&LPFP1); // p1
   P.AddFunctional(&LPFP2); // p2
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(3,false);
+#else
   std::vector<bool> comp_mask(3);
+#endif
   DOpEWrapper::ZeroFunction<DIM> zf(3);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,true); // ux
+  comp_mask.set(1,false); // uy
+  comp_mask.set(2,false); // p
+#else
   comp_mask[0] = true; // ux
   comp_mask[1] = false; // uy
   comp_mask[2] = false; // p
-
+#endif
+  
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false); // ux
+  comp_mask.set(1,true); // uy
+  comp_mask.set(2,false); // p
+#else
   comp_mask[0] = false; // ux
   comp_mask[1] = true; // uy
   comp_mask[2] = false; // p
-
+#endif
+  
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false); // ux
+  comp_mask.set(1,false); // uy
+  comp_mask.set(2,true); // p
+#else
   comp_mask[0] = false; // ux
   comp_mask[1] = false; // uy
   comp_mask[2] = true; // p
-
+#endif
+  
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false); // ux
+  comp_mask.set(1,false); // uy
+  comp_mask.set(2,true); // p
+#else
   comp_mask[0] = false; // ux
   comp_mask[1] = false; // uy
   comp_mask[2] = true; // p
-
+#endif
+  
   P.SetDirichletBoundaryColors(11, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false); // ux
+  comp_mask.set(1,false); // uy
+  comp_mask.set(2,false); // p
+#else
   comp_mask[0] = false; // ux
   comp_mask[1] = false; // uy
   comp_mask[2] = false; // p
-
+#endif
+  
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
   P.SetBoundaryEquationColors(3); // top boundary

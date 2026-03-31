@@ -296,9 +296,12 @@ namespace DOpE
     IndexSet locally_relevant;
     IndexSet locally_owned =
       dof_handler.GetDEALDoFHandler ().locally_owned_dofs ();
+#if DEAL_II_VERSION_GTE(9,7,0)
+    locally_relevant = DoFTools::extract_locally_relevant_dofs (dof_handler.GetDEALDoFHandler ());
+#else
     DoFTools::extract_locally_relevant_dofs (dof_handler.GetDEALDoFHandler (),
                                              locally_relevant);
-
+#endif
     const auto block_owned = DOpEHelper::split_blockwise (locally_owned,
                                                           blocks);
     const auto block_relevant = DOpEHelper::split_blockwise (locally_relevant,
@@ -361,9 +364,13 @@ namespace DOpE
     IndexSet locally_relevant;
     IndexSet locally_owned =
       dof_handler.GetDEALDoFHandler ().locally_owned_dofs ();
+#if DEAL_II_VERSION_GTE(9,7,0)
+    locally_relevant = DoFTools::extract_locally_relevant_dofs (dof_handler.GetDEALDoFHandler ());
+#else
     DoFTools::extract_locally_relevant_dofs (dof_handler.GetDEALDoFHandler (),
                                              locally_relevant);
-
+#endif
+    
     sparsity.reinit (locally_owned, locally_owned, locally_relevant,
                      mpi_comm);
 

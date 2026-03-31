@@ -158,8 +158,12 @@ main(int argc, char **argv)
 
   DOpEWrapper::ZeroFunction<DIM> zf(2);
   SimpleDirichletData<VECTOR, DIM> DD(zf);
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2, true);
+#else
   std::vector<bool> comp_mask(2, true);
-
+#endif
+  
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);

@@ -1048,7 +1048,7 @@ namespace DOpE
      *
      * @return A const pointer to the QuadratureFormula()
      */
-    const dealii::SmartPointer<const dealii::Quadrature<dealdim> >
+    const dealii::Quadrature<dealdim>*
     GetQuadratureFormula() const
     {
       return OP_.GetQuadratureFormula();
@@ -1061,7 +1061,7 @@ namespace DOpE
      *
      * @return A const pointer to the FaceQuadratureFormula()
      */
-    const dealii::SmartPointer<const dealii::Quadrature<dealdim - 1> >
+    const dealii::Quadrature<dealdim - 1>*
     GetFaceQuadratureFormula() const
     {
       return OP_.GetFaceQuadratureFormula();
@@ -1074,7 +1074,7 @@ namespace DOpE
      *
      * @return A const pointer to the FESystem()
      */
-    const dealii::SmartPointer<const dealii::FESystem<dealdim> >
+    const dealii::FESystem<dealdim>*
     GetFESystem() const
     {
       return OP_.GetFESystem();
@@ -1168,7 +1168,11 @@ namespace DOpE
      *
      * @return Returns a component mask for each boundary color.
      */
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &
+#else
     const std::vector<bool> &
+#endif 
     GetDirichletCompMask(unsigned int color) const
     {
       return OP_.GetDirichletCompMask(color);

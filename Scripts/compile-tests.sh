@@ -13,13 +13,14 @@ plain_deal_dir="dealii-candi-noaddons"
 full_deal_dir="dealii-candi"
 n_procs=1
 base_errors=0
-#with gcc 13 deal.ii versions before 9.5 seem to faul due to error in tbb/tasks
-dealii_versions_plain="git 9.5.2 9.6.2"
-#dealii_versions_plain="git 9.0.1 9.1.1 9.2.0 9.3.3 9.4.2 9.5.2 9.6.2"
+#with gcc 13 deal.ii versions before 9.5 seem to fail due to error in tbb/tasks
+dealii_versions_plain="git 9.5.2 9.6.2 9.7.0"
+#dealii_versions_plain="git 9.0.1 9.1.1 9.2.0 9.3.3 9.4.2 9.5.2 9.6.2 9.7.0"
 #"8.5.0 8.4.1 8.3.0"
-dealii_versions_full="git 9.5.2 9.6.2"
-#dealii_versions_full="git 9.0.1 9.1.1 9.2.0 9.3.3 9.4.2 9.5.2 9.6.2"
-newest_dealii=9.6.2
+dealii_versions_full="git 9.5.2 9.6.2 9.7.0"
+#dealii_versions_full="git 9.0.1 9.1.1 9.2.0 9.3.3 9.4.2 9.5.2 9.6.2 9.7.0"
+newest_dealii=9.7.0
+
 trilinos_version=12-12-1
 p4est_version=2.0
 scalapack_version=2.0.2
@@ -384,6 +385,8 @@ then
 			#Example PDE/StatPDE/Example10 fails due to missing trilinos
 			expected_errors=$((${expected_errors} + 1))
 			#Example PDE/StatPDE/Example15 fails due to missing trilinos
+			expected_errors=$((${expected_errors} + 1))
+			#Example OPT/EV/Example1 fails due to missing PETSC/SLEPC
 			expected_errors=$((${expected_errors} + 1))
 		    else if [ "${dv}" == "8.5.0" ]
 			 then
