@@ -217,7 +217,7 @@ main(int argc, char **argv) {
 #else
     std::vector<bool> comp_mask(2, true);
     comp_mask[1] = false;
-#else
+#endif
     DOpEWrapper::ZeroFunction<DIM> const zf(2);
     SimpleDirichletData<VECTOR, DIM> const DD(zf);
     //Set dirichlet boundary values all around
