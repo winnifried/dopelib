@@ -164,9 +164,14 @@ main(int argc, char **argv)
   //we want to impose the dirichlet conditions and give all
   //these informations to the problemcontainer P. Note that we
   //do not impose any boundary condition on the outflow boundary (number 1).
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(3, true);
+  comp_mask.set(DIM,false);
+#else
   std::vector<bool> comp_mask(3, true);
   comp_mask[DIM] = false;
-
+#endif
+  
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2);
 
   //We define the stateproblem, which steers the solution process.

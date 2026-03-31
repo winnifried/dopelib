@@ -182,8 +182,13 @@ main(int argc, char **argv)
   OP P(LPDE, DOFH);
   P.AddFunctional(&LFF);
   //Boundary conditions************************************************
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2,true);
+  comp_mask.set(1,false);
+#else
   std::vector<bool> comp_mask(2,true);
   comp_mask[1] = false;
+#endif
   DOpEWrapper::ZeroFunction<DIM> zf(2);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
   //Set dirichlet boundary values all around

@@ -146,6 +146,37 @@ namespace DOpE
                           "PDEInterface::StrongElementResidual");
     }
 
+    //ElementMassEquation for Eigenvalue Optimization
+
+    virtual void
+    ElementMassEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMassEquation");
+    }
+
+
+    virtual void
+    ElementMassEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/, double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMassEquation_U");
+    }
+
+
+
+    virtual void
+    ElementMassEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/,
+                          double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMassEquation_Q");
+    }
+
     /******************************************************/
 
     /**
@@ -819,6 +850,18 @@ namespace DOpE
     }
 
     /******************************************************/
+    // For eigenvalue optimization
+
+    virtual void
+    ElementMassMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                      dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                      double /*scale*/,
+                      double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMassMatrix");
+    }
+
+    /******************************************************/
     /**
      * This implements the element integral used to calculate the
      * matrix for the primal PDE corresponding to the time derivatives
@@ -930,6 +973,31 @@ namespace DOpE
     }
 
     /******************************************************/
+
+    virtual void
+    ElementMassMatrix_T(const EDC<DH, VECTOR, dealdim> &edc,
+                        dealii::FullMatrix<double> &local_entry_matrix,
+                        double scale,
+                        double scale_ico)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+
+      //FIXME is this the right behaviour in the instationary case? or what
+      //are the correct values for scale and scale_ico?
+      ElementMassMatrix(edc, tmp_mat, scale, scale_ico);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+        {
+          for (unsigned int j = 0; j < n_dofs_per_element; j++)
+            {
+              local_entry_matrix(j, i) += tmp_mat(i, j);
+            }
+        }
+    }
+
+
     /**
      * This implements the element integral used to calculate the
      * stiffness matrix for the adjoint PDE. It corresponds to

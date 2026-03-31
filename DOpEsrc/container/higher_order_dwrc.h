@@ -99,7 +99,11 @@ namespace DOpE
     Initialize(STH2 *sth, unsigned int state_n_blocks,
                std::vector<unsigned int> &state_block_component,
                const std::vector<unsigned int> *sdcol,
+#if DEAL_II_VERSION_GTE(9,7,0)
+               const std::vector<dealii::ComponentMask> *sdcomp)
+#else
                const std::vector<std::vector<bool> > *sdcomp)
+#endif
     {
       sth_ = dynamic_cast<STH *>(sth);
       state_n_blocks_ = state_n_blocks;
@@ -336,8 +340,11 @@ namespace DOpE
     unsigned int state_n_blocks_;
     std::vector<unsigned int> *state_block_component_;
     const std::vector<unsigned int> *state_dirichlet_colors_;
-    const std::vector<std::vector<bool> > *state_dirichlet_comps_;
-
+#if DEAL_II_VERSION_GTE(9,7,0)
+  const std::vector<dealii::ComponentMask> *state_dirichlet_comps_;
+#else
+  const std::vector<std::vector<bool> > *state_dirichlet_comps_;
+#endif
     STH &sth_higher_order_;
     STH *sth_;
     IDC &idc_higher_order_;

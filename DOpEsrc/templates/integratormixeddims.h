@@ -710,18 +710,33 @@ namespace DOpE
         for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
           {
             unsigned int color = dirichlet_colors[i];
+#if DEAL_II_VERSION_GTE(9,7,0)
+	    dealii::ComponentMask comp_mask = pde.GetTransposedDirichletCompMask(color);
+	    dealii::ComponentMask current_comp(comp_mask.size(), false);
+#else
             std::vector<bool> comp_mask = pde.GetTransposedDirichletCompMask(color);
             std::vector<bool> current_comp(comp_mask.size(), false);
+#endif 
             std::set<types::boundary_id> boundary_indicators;
 
             boundary_indicators.insert(color);
             for (unsigned int j = 0; j < comp_mask.size(); j++)
               {
                 if (j > 0)
+		{
+#if DEAL_II_VERSION_GTE(9,7,0)
+		  current_comp.set(j-1,false);
+#else
                   current_comp[j - 1] = false;
+#endif
+		}
                 if (comp_mask[j])
                   {
+#if DEAL_II_VERSION_GTE(9,7,0)
+                    current_comp.set(j,true);
+#else
                     current_comp[j] = true;
+#endif
 #if DEAL_II_VERSION_GTE(9,4,0)
                     boundary_dofs.clear();
                     //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten

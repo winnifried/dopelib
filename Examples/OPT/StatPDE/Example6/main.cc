@@ -167,7 +167,11 @@ main(int argc, char **argv)
   P.AddFunctional(&LPF);
   P.AddFunctional(&LMF);
   //Dirichlet data
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(1, true);
+#else
   std::vector<bool> comp_mask(1, true);
+#endif
   DOpEWrapper::ZeroFunction<DIM> zf(1);
   DD DD_1(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD_1);

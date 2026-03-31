@@ -211,9 +211,12 @@ main(int argc, char **argv)
   OP P(LPDE, DOFH);
   P.AddFunctional(&LFF);
   //Boundary conditions************************************************
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(1,true);
+#else
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
-
+#endif
   ExactSolution ex_sol;
 
   SimpleDirichletData<VECTOR, DIM> DD1(ex_sol);

@@ -184,7 +184,11 @@ main(int argc, char **argv)
   P.AddFunctional(&LBFMF);
   P.SetBoundaryFunctionalColors(1);
   //Boundary conditions************************************************
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2, true);
+#else
   std::vector<bool> comp_mask(2, true);
+#endif
   DOpEWrapper::ZeroFunction<DIM> zf(2);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
   //Set zero dirichlet at the hole in the middle of the domain

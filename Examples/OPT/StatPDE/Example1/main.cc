@@ -204,8 +204,13 @@ main(int argc, char **argv)
   P.AddFunctional(&LPF);
   P.AddFunctional(&LMF);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  ComponentMask comp_mask(1,false);
+  comp_mask.set(0,true);
+#else
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
+#endif
   DOpEWrapper::ZeroFunction<2> zf(1);
 
   SimpleDirichletData<VECTOR, DIM> DD(zf);

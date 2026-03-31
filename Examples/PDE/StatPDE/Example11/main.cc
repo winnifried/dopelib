@@ -185,10 +185,13 @@ main(int argc, char **argv)
   P_q1.AddFunctional(&BF);
   P_q1.SetBoundaryFunctionalColors(0);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(1,true);
+#else
   std::vector<bool> comp_mask(1);
-
   comp_mask[0] = true;
-
+#endif
+  
   ExactSolution ex_sol;
   DOpEWrapper::ConstantFunction<DIM> cs(1., 1);
   SimpleDirichletData<VECTOR, DIM> DD1(cs);

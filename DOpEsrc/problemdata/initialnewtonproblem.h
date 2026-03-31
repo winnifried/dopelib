@@ -175,14 +175,14 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<const dealii::FESystem<dim> >
+    inline const dealii::FESystem<dim>*
     GetFESystem() const;
 
     /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<const dealii::hp::FECollection<dim> >
+    inline const dealii::hp::FECollection<dim>*
     GetFECollection() const;
 
     /**
@@ -257,7 +257,11 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
+#if DEAL_II_VERSION_GTE(9,7,0)
+    inline const dealii::ComponentMask &
+#else
     inline const std::vector<bool> &
+#endif
     GetDirichletCompMask(unsigned int color) const;
     /**
     * Functions providing the required information for the integrator.
@@ -518,15 +522,14 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBEM, typename PDE, typename VECTOR, int dim>
-  const SmartPointer<const dealii::FESystem<dim> >
-  InitialNewtonProblem<OPTPROBEM, PDE, VECTOR, dim>::GetFESystem() const
+  const dealii::FESystem<dim>*  InitialNewtonProblem<OPTPROBEM, PDE, VECTOR, dim>::GetFESystem() const
   {
     return pde_.GetFESystem();
   }
 
   /******************************************************/
   template<typename OPTPROBEM, typename PDE, typename VECTOR, int dim>
-  const SmartPointer<const dealii::hp::FECollection<dim> >
+  const dealii::hp::FECollection<dim>*
   InitialNewtonProblem<OPTPROBEM, PDE, VECTOR, dim>::GetFECollection() const
   {
     return pde_.GetFECollection();
@@ -623,7 +626,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBEM, typename PDE, typename VECTOR, int dim>
+#if DEAL_II_VERSION_GTE(9,7,0)
+  const dealii::ComponentMask &
+#else
   const std::vector<bool> &
+#endif
   InitialNewtonProblem<OPTPROBEM, PDE, VECTOR, dim>::GetDirichletCompMask(
     unsigned int color) const
   {

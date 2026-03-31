@@ -381,7 +381,12 @@ namespace DOpE
 
     void
     SetDirichletBoundaryColors(unsigned int color,
-                               const std::vector<bool> &comp_mask, const DD *values);
+#if DEAL_II_VERSION_GTE(9,7,0)
+			       const dealii::ComponentMask &comp_mask,
+#else
+			       const std::vector<bool> &comp_mask,
+#endif
+			       const DD *values);
 
     /******************************************************/
 
@@ -937,7 +942,11 @@ namespace DOpE
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> *STH_;
 
     std::vector<unsigned int> dirichlet_colors_;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    std::vector<dealii::ComponentMask> dirichlet_comps_;
+#else
     std::vector<std::vector<bool> > dirichlet_comps_;
+#endif
     std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
     const dealii::Function<dealdim> *zero_dirichlet_values_;
 
@@ -1637,7 +1646,12 @@ namespace DOpE
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetDirichletBoundaryColors(
 #endif
-    unsigned int color, const std::vector<bool> &comp_mask,
+    unsigned int color,
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &comp_mask,
+#else
+    const std::vector<bool> &comp_mask,
+#endif
     const DD *values)
   {
     assert(values);

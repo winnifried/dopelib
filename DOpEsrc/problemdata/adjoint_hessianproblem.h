@@ -303,15 +303,14 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<const dealii::FESystem<dim> >
+    inline const dealii::FESystem<dim>*
     GetFESystem() const;
 
     /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
-    inline const dealii::SmartPointer<
-    const dealii::hp::FECollection<dim> >
+    inline const dealii::hp::FECollection<dim>*
     GetFECollection() const;
 
     /**
@@ -397,7 +396,11 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
+#if DEAL_II_VERSION_GTE(9,7,0)
+    inline const dealii::ComponentMask &
+#else
     inline const std::vector<bool> &
+#endif
     GetDirichletCompMask(unsigned int color) const;
     /**
     * Functions providing the required information for the integrator.
@@ -510,7 +513,11 @@ namespace DOpE
     OPTPROBLEM &opt_problem_;
 
     std::vector<unsigned int> dirichlet_colors_;
+#if DEAL_II_VERSION_GTE(9,7,0)
+    std::vector<dealii::ComponentMask> dirichlet_comps_;
+#else   
     std::vector<std::vector<bool> > dirichlet_comps_;
+#endif
     const dealii::Function<dim> *adjoint_dirichlet_values_;
     std::vector<unsigned int> adjoint_boundary_equation_colors_;
     double interval_length_;
@@ -866,7 +873,7 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
-  const SmartPointer<const dealii::FESystem<dim> >
+  const dealii::FESystem<dim>*
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFESystem() const
   {
     return opt_problem_.GetSpaceTimeHandler()->GetFESystem("state");
@@ -875,7 +882,7 @@ namespace DOpE
   /******************************************************/
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
-  const SmartPointer<const dealii::hp::FECollection<dim> >
+  const dealii::hp::FECollection<dim>*
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFECollection() const
   {
     return opt_problem_.GetSpaceTimeHandler()->GetFECollection("state");
@@ -1013,7 +1020,11 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
-  const std::vector<bool> &
+#if DEAL_II_VERSION_GTE(9,7,0)
+    const dealii::ComponentMask &
+#else
+    const std::vector<bool> &
+#endif
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletCompMask(
     unsigned int color) const
   {

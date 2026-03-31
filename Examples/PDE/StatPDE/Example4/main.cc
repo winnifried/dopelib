@@ -128,11 +128,15 @@ main(int argc, char **argv)
 
   P.AddFunctional(&LPFX);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2,true);
+#else
   std::vector<bool> comp_mask(2);
 
   comp_mask[0] = true;
   comp_mask[1] = true;
-
+#endif
+  
   DOpEWrapper::ZeroFunction<DIM> zf(2);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 

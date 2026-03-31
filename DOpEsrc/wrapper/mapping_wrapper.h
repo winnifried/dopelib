@@ -250,6 +250,27 @@ namespace DOpEWrapper
   public:
     static Mapping<dim, true> mapping_q1;
   };
+
+  /************************************************************************************/
+
+  template<int dim, bool hp>
+  struct StaticMappingQ2
+  {
+  };
+
+  template<int dim>
+  struct StaticMappingQ2<dim, false>
+  {
+  public:
+    static MappingQ<dim, false> mapping_q2;
+  };
+
+  template<int dim>
+  struct StaticMappingQ2<dim, true>
+  {
+  public:
+    static Mapping<dim, true> mapping_q2;
+  };
 #else
   /**
    * @class Mapping
@@ -376,6 +397,26 @@ namespace DOpEWrapper
   {
   public:
     static Mapping<dim, dealii::hp::DoFHandler> mapping_q1;
+  };
+  /************************************************************************************/
+
+  template<int dim, template<int, int> class DH>
+  struct StaticMappingQ2
+  {
+  };
+
+  template<int dim>
+  struct StaticMappingQ2<dim, dealii::DoFHandler>
+  {
+  public:
+    static MappingQ<dim, dealii::DoFHandler> mapping_q2;
+  };
+
+  template<int dim>
+  struct StaticMappingQ2<dim, dealii::hp::DoFHandler>
+  {
+  public:
+    static Mapping<dim, dealii::hp::DoFHandler> mapping_q2;
   };
 #endif //Older than 9.3.0
 }

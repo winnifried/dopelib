@@ -168,7 +168,11 @@ main(int argc, char **argv)
 
   DOpEWrapper::ZeroFunction<DIM> zf(1);
   SimpleDirichletData<VECTOR, DIM> DD(zf);
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(1, true);
+#else
   std::vector<bool> comp_mask(1, true);
+#endif
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
@@ -230,9 +234,12 @@ main(int argc, char **argv)
               solution = 0;
               solution = gu.GetSpacialVector();
               Vector<float> estimated_error_per_element(triangulation.n_active_cells());
-
+#if DEAL_II_VERSION_GTE(9,7,0)
+	      dealii::ComponentMask component_mask(1,true);
+#else
               std::vector<bool> component_mask(1, true);
-
+#endif
+	      
 #if DEAL_II_VERSION_GTE(9,1,1)
               KellyErrorEstimator<DIM>::estimate(
                 static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
@@ -255,7 +262,11 @@ main(int argc, char **argv)
               solution = q.GetSpacialVector();
               Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
-              std::vector<bool> component_mask(1, true);
+#if DEAL_II_VERSION_GTE(9,7,0)
+	      dealii::ComponentMask component_mask(1,true);
+#else
+	      std::vector<bool> component_mask(1, true);
+#endif 
 
 #if DEAL_II_VERSION_GTE(9,1,1)
               KellyErrorEstimator<DIM>::estimate(

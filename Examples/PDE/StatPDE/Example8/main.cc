@@ -168,13 +168,24 @@ main(int argc, char **argv)
 
   DOpEWrapper::ZeroFunction<DIM> zf_1(2);
   SimpleDirichletData<VECTOR, DIM> DD1(zf_1);
+#if DEAL_II_VERSION_GTE(9,7,0)
+  dealii::ComponentMask comp_mask(2,false);
+  comp_mask.set(0,true);
+  comp_mask.set(1,false);
+#else
   std::vector<bool> comp_mask(2);
   comp_mask[0] = true;
   comp_mask[1] = false;
+#endif
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
 
+#if DEAL_II_VERSION_GTE(9,7,0)
+  comp_mask.set(0,false);
+  comp_mask.set(1,true);
+#else
   comp_mask[0] = false;
   comp_mask[1] = true;
+#endif
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetBoundaryEquationColors(3);
 

@@ -878,7 +878,7 @@ namespace DOpE
 #else
       DOpEWrapper::DoFHandler<dopedim, DH> control_dof_handler_;
 #endif
-      const dealii::SmartPointer<const FE<dealdim, dealdim> > control_fe_;
+      const FE<dealdim, dealdim>* control_fe_;
 
       std::vector<unsigned int> control_dofs_per_block_;
 #if DEAL_II_VERSION_GTE(9,1,1)
