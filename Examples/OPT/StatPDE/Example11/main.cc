@@ -211,8 +211,13 @@ main(int argc, char **argv) {
 
     //Boundary conditions*************************************************
     //CompMask is set so that the multiplier is not subject to the boundary constraints
+#if DEAL_II_VERSION_GTE(9,7,0)
+    dealii::ComponentMask comp_mask(2, true);
+    comp_mask.set(1,false);
+#else
     std::vector<bool> comp_mask(2, true);
     comp_mask[1] = false;
+#else
     DOpEWrapper::ZeroFunction<DIM> const zf(2);
     SimpleDirichletData<VECTOR, DIM> const DD(zf);
     //Set dirichlet boundary values all around
