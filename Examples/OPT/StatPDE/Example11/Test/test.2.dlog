@@ -1,0 +1,93 @@
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 27/08/2018
+Using dealii Version: 9.7
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	867
+	*  SDoFs : 	578
+	**************************************************
+
+LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
+	CostFunctional: 0.06099
+		 Newton step: 0	 Residual (abs.): 0.07269
+		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	
+	CostFunctional: 5.9910e-02
+		 Newton step: 1	 Residual (rel.):   9.8564e-01	 LinearIters [1]	 LineSearch {1} 
+	CostFunctional: 5.8738e-02
+		 Newton step: 2	 Residual (rel.):   8.8932e-01	 LinearIters [1]	 LineSearch {1} 
+	CostFunctional: 5.7663e-02
+		 Newton step: 3	 Residual (rel.):   8.0224e-01	 LinearIters [4]	 LineSearch {1} 
+	CostFunctional: 5.6709e-02
+		 Newton step: 4	 Residual (rel.):   7.2433e-01	 LinearIters [5]	 LineSearch {1} 
+	CostFunctional: 5.5857e-02
+		 Newton step: 5	 Residual (rel.):   6.5456e-01	 LinearIters [6]	 LineSearch {1} 
+	CostFunctional: 5.5099e-02
+		 Newton step: 6	 Residual (rel.):   5.9146e-01	 LinearIters [6]	 LineSearch {1} 
+	CostFunctional: 5.4419e-02
+		 Newton step: 7	 Residual (rel.):   5.3453e-01	 LinearIters [9]	 LineSearch {1} 
+	CostFunctional: 5.3812e-02
+		 Newton step: 8	 Residual (rel.):   4.8310e-01	 LinearIters [11]	 LineSearch {1} 
+	CostFunctional: 5.3273e-02
+		 Newton step: 9	 Residual (rel.):   4.3660e-01	 LinearIters [11]	 LineSearch {1} 
+	CostFunctional: 5.2796e-02
+		 Newton step: 10	 Residual (rel.):   3.9450e-01	 LinearIters [13]	 LineSearch {1} 
+	CostFunctional: 5.2365e-02
+		 Newton step: 11	 Residual (rel.):   3.5634e-01	 LinearIters [21]	 LineSearch {1} 
+	CostFunctional: 5.1987e-02
+		 Newton step: 12	 Residual (rel.):   3.2183e-01	 LinearIters [22]	 LineSearch {1} 
+	CostFunctional: 5.1652e-02
+		 Newton step: 13	 Residual (rel.):   2.9057e-01	 LinearIters [34]	 LineSearch {1} 
+	CostFunctional: 5.1362e-02
+		 Newton step: 14	 Residual (rel.):   2.6234e-01	 LinearIters [33]	 LineSearch {1} 
+	CostFunctional: 5.1111e-02
+		 Newton step: 15	 Residual (rel.):   2.3683e-01	 LinearIters [30]	 LineSearch {1} 
+	CostFunctional: 5.0873e-02
+		 Newton step: 16	 Residual (rel.):   2.4183e-01	 LinearIters [33]	 LineSearch {1} 
+	CostFunctional: 5.0660e-02
+		 Newton step: 17	 Residual (rel.):   2.1825e-01	 LinearIters [32]	 LineSearch {1} 
+	CostFunctional: 5.0477e-02
+		 Newton step: 18	 Residual (rel.):   1.9695e-01	 LinearIters [33]	 LineSearch {1} 
+	CostFunctional: 5.0321e-02
+		 Newton step: 19	 Residual (rel.):   1.7771e-01	 LinearIters [32]	 LineSearch {1} 
+	CostFunctional: 5.0188e-02
+		 Newton step: 20	 Residual (rel.):   1.6032e-01	 LinearIters [33]	 LineSearch {1} 
+	CostFunctional: 5.0075e-02
+		 Newton step: 21	 Residual (rel.):   1.4461e-01	 LinearIters [33]	 LineSearch {1} 
+	CostFunctional: 4.9973e-02
+		 Newton step: 22	 Residual (rel.):   1.4895e-01	 LinearIters [30]	 LineSearch {1} 
+	CostFunctional: 4.9421e-02
+		 Newton step: 23	 Residual (rel.):   4.1485e-02	 LinearIters [40]	 LineSearch {0} 
+	CostFunctional: 4.9401e-02
+		 Newton step: 24	 Residual (rel.):   1.3989e-02	 LinearIters [50]	 LineSearch {0} 
+	CostFunctional: 4.9401e-02
+		 Newton step: 25	 Residual (rel.):   4.2796e-03	 LinearIters [40]	 LineSearch {0} 
+	CostFunctional: 4.9401e-02
+		 Newton step: 26	 Residual (rel.):   8.3131e-04	 LinearIters [41]	 LineSearch {0} 
+	CostFunctional: 4.9401e-02
+		 Newton step: 27	 Residual (rel.):   6.4103e-05	 LinearIters [46]	 LineSearch {0} 
+	CostFunctional: 4.9401e-02
+		 Newton step: 28	 Residual (rel.):   5.2591e-07	 LinearIters [59]	 LineSearch {0} 
+	CostFunctional: 4.9401e-02
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after     28  Iterations           *
+	*             with rel. Residual   5.2591e-07          *
+	**************************************************
+
+
+		 Computed: 0.0494006
+
+
+	  Refinementlevel: 4
+	  Tychonoff Weight: 0.01
+	  Barrier Weight: 1e-05
+	
+
