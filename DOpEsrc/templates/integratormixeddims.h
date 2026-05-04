@@ -441,8 +441,8 @@ namespace DOpE
   {
     {
       SCALAR ret = 0.;
-      const unsigned int n_q_points = this->GetQuadratureFormula()->size();
 
+      
       const auto &dof_handler =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
@@ -484,18 +484,11 @@ namespace DOpE
   template<typename PROBLEM>
   SCALAR IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ComputePointScalar(PROBLEM &pde)
   {
-    if (pde.GetFEValuesNeededToBeInitialized())
-      {
-        this->InitializeFEValues();
-      }
-
-    {
       SCALAR ret = 0.;
 
       ret += pde.PointFunctional(this->GetParamData(), this->GetDomainData());
 
       return ret;
-    }
   }
   /*******************************************************************************************/
 

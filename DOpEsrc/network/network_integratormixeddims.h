@@ -453,18 +453,11 @@ namespace DOpE
     template<typename PROBLEM>
     SCALAR Network_IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ComputePointScalar(PROBLEM &pde)
     {
-      if (pde.GetFEValuesNeededToBeInitialized())
-        {
-          this->InitializeFEValues();
-        }
-
-      {
         SCALAR ret = 0.;
 
         ret += pde.PointFunctional(this->GetParamData(), this->GetDomainData());
 
         return ret;
-      }
     }
     /*******************************************************************************************/
 
@@ -501,18 +494,12 @@ namespace DOpE
           }
 
         // Generate the data containers.
-#if DEAL_II_VERSION_GTE(9,3,0)
-        FaceDataContainer<false, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                      pde.GetFaceUpdateFlags(),
-                                                      *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-                                                      element,
-                                                      this->GetParamData(), this->GetDomainData());
-#else
-        FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                                   pde.GetFaceUpdateFlags(),
-                                                                   *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                                   this->GetParamData(), this->GetDomainData());
-#endif
+	idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
+			   *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+			   element,
+			   this->GetParamData(),
+			   this->GetDomainData());
+	auto &fdc = idc_.GetFaceDataContainer();
 
         std::vector<unsigned int> boundary_functional_colors =
           pde.GetBoundaryFunctionalColors();
@@ -590,18 +577,12 @@ namespace DOpE
             endc[dh] = dof_handler[dh]->end();
           }
         // Generate the data containers.
-#if DEAL_II_VERSION_GTE(9,3,0)
-        FaceDataContainer<false, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                      pde.GetFaceUpdateFlags(),
-                                                      *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-                                                      element,
-                                                      this->GetParamData(), this->GetDomainData());
-#else
-        FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                                   pde.GetFaceUpdateFlags(),
-                                                                   *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                                   this->GetParamData(), this->GetDomainData());
-#endif
+	idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
+			   *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+			   element,
+			   this->GetParamData(),
+			   this->GetDomainData());
+	auto &fdc = idc_.GetFaceDataContainer();
 
         bool need_faces = pde.HasFaces();
         if (!need_faces)

@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+04.05.2026: Fix unused function calls
 31.03.2026: Adjustments for deal 9.8.0pre
 26.03.2026: Fixing deprecated function warnings with deal 9.7.0
 25.03.2026: Added detection of (only) curl/div conforming elements to space time handler
