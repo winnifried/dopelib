@@ -172,8 +172,7 @@ public:
     vector<Tensor<2, dealdim> > phi_grads_U(n_dofs_per_element);
     vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
     vector<Tensor<2, dealdim> > psi_grads_q(n_dofs_per_element);
-    /*vector<typename internal::CurlType<dealdim>::type>*/
-    vector<double > phi_curl_u( n_dofs_per_element);
+    vector<typename internal::CurlType<dealdim>::type> phi_curl_u( n_dofs_per_element);
 
     const FEValuesExtractors::Scalar psi(0);
     const FEValuesExtractors::Vector E(1);
@@ -211,7 +210,8 @@ public:
             phi_grads_U[i] = state_fe_values[E].gradient(i, q_point);
 
 
-            phi_curl_u[i] = phi_grads_U[i][1][0]-phi_grads_U[i][0][1];//state_fe_values[E].curl(i, q_point);
+            //phi_curl_u[i] = phi_grads_U[i][1][0]-phi_grads_U[i][0][1];
+	    phi_curl_u[i] = state_fe_values[E].curl(i, q_point);
             phi_u[i] = state_fe_values[E].value(i, q_point);
           }
 
@@ -250,8 +250,8 @@ public:
 
     vector<Tensor<1, dealdim> > phi_grads_u(n_dofs_per_element);
     vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
-/*    vector<typename internal::CurlType<dealdim>::type> phi_curl_u(n_dofs_per_element);*/
-     vector<double> phi_curl_u(n_dofs_per_element);
+    vector<typename internal::CurlType<dealdim>::type> phi_curl_u(n_dofs_per_element);
+
     const FEValuesExtractors::Scalar psi(0);
     const FEValuesExtractors::Vector E(1);
     double detDF;
