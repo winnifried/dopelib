@@ -250,8 +250,8 @@ public:
 
     vector<Tensor<1, dealdim> > phi_grads_u(n_dofs_per_element);
     vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
-    vector<typename internal::CurlType<dealdim>::type> phi_curl_u(
-      n_dofs_per_element);
+/*    vector<typename internal::CurlType<dealdim>::type> phi_curl_u(n_dofs_per_element);*/
+     vector<double> phi_curl_u(n_dofs_per_element);
     const FEValuesExtractors::Scalar psi(0);
     const FEValuesExtractors::Vector E(1);
     double detDF;
