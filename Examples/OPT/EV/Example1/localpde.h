@@ -172,8 +172,12 @@ public:
     vector<Tensor<2, dealdim> > phi_grads_U(n_dofs_per_element);
     vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
     vector<Tensor<2, dealdim> > psi_grads_q(n_dofs_per_element);
+#if DEAL_II_VERSION_GTE(9,8,0)
+    vector<double> phi_curl_u(n_dofs_per_element);     
+#else
     vector<typename internal::CurlType<dealdim>::type> phi_curl_u( n_dofs_per_element);
-
+#endif
+    
     const FEValuesExtractors::Scalar psi(0);
     const FEValuesExtractors::Vector E(1);
     const FEValuesExtractors::Vector controlextractor(0);
@@ -250,8 +254,11 @@ public:
 
     vector<Tensor<1, dealdim> > phi_grads_u(n_dofs_per_element);
     vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
+#if DEAL_II_VERSION_GTE(9,8,0)
+    vector<double> phi_curl_u(n_dofs_per_element);     
+#else
     vector<typename internal::CurlType<dealdim>::type> phi_curl_u(n_dofs_per_element);
-
+#endif
     const FEValuesExtractors::Scalar psi(0);
     const FEValuesExtractors::Vector E(1);
     double detDF;
