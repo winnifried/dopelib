@@ -99,7 +99,7 @@ else
     export FF=gfortran
 fi
 
-if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.7.0" ] || [ "${dealii_version}" == "9.6.2" ] || [ "${dealii_version}" == "9.6.1" ] || [ "${dealii_version}" == "9.6.0" ] || [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
+if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.8.0" ] || [ "${dealii_version}" == "9.7.0" ] || [ "${dealii_version}" == "9.6.2" ] || [ "${dealii_version}" == "9.6.1" ] || [ "${dealii_version}" == "9.6.0" ] || [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
 then
     trilinos_version=14-4-0
     p4est_version=2.2
