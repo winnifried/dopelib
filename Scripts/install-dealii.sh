@@ -99,9 +99,18 @@ else
     export FF=gfortran
 fi
 
+#Determine Compiler Version (assuming gcc!!!)
+export GCC_MAJOR_VERSION=`${CXX} --version | grep [1-9][0-9]\.[0-9]\.[0-9] | tail -c 7 | head -c 2`
+
+
 if [ "${dealii_version}" == "git" ] || [ "${dealii_version}" == "9.8.0" ] || [ "${dealii_version}" == "9.7.0" ] || [ "${dealii_version}" == "9.6.2" ] || [ "${dealii_version}" == "9.6.1" ] || [ "${dealii_version}" == "9.6.0" ] || [ "${dealii_version}" == "9.5.2" ]|| [ "${dealii_version}" == "9.5.1" ] || [ "${dealii_version}" == "9.5.0" ] 
 then
-    trilinos_version=14-4-0
+    if [ "${GCC_MAJOR_VERSION}" -lt "15" ]
+    then 
+	trilinos_version=14-4-0
+    else
+	trilinos_version=16-2-2
+    fi
     p4est_version=2.2
     scalapack_version=2.2.2
     
