@@ -33,7 +33,7 @@ namespace DOpE
    * This class is designed to allow all components of the program to use the same
    * parameter file.
    */
-  class ParameterReader : public Subscriptor
+  class ParameterReader
   {
   public:
     inline ParameterReader();

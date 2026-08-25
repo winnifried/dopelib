@@ -90,7 +90,7 @@ namespace DOpE
   private:
     //The InverseMatrix, SchurComplement and ApproximateSchurComplement Class are taken from dealii step-20
     template <class MatrixType>
-    class InverseMatrix : public Subscriptor
+    class InverseMatrix 
     {
     public:
       InverseMatrix(const MatrixType &m) : matrix(&m)
@@ -108,7 +108,7 @@ namespace DOpE
       const MatrixType* matrix;
     };
 
-    class SchurComplement : public Subscriptor
+    class SchurComplement 
     {
     public:
       SchurComplement (const BlockSparseMatrix<double> &A,
@@ -130,7 +130,7 @@ namespace DOpE
 
       mutable Vector<double> tmp1, tmp2;
     };
-    class ApproximateSchurComplement : public Subscriptor
+    class ApproximateSchurComplement 
     {
     public:
       ApproximateSchurComplement (const BlockSparseMatrix<double> &A)
@@ -306,7 +306,7 @@ namespace DOpE
 
   private:
     //The SchurComplement and ApproximateSchurComplement Class are taken from dealii step-20
-    class SchurComplement : public Subscriptor
+    class SchurComplement 
     {
     public:
       SchurComplement (const BlockSparseMatrix<double> &A,
@@ -328,7 +328,7 @@ namespace DOpE
 
       mutable Vector<double> tmp1, tmp2;
     };
-    class ApproximateSchurComplement : public Subscriptor
+    class ApproximateSchurComplement 
     {
     public:
       ApproximateSchurComplement (const BlockSparseMatrix<double> &A)
